@@ -1,0 +1,280 @@
+﻿;-------------------------------------------------
+;콘피그의 초기설정
+;-------------------------------------------------
+@INIT_CONFIG_DAILY
+DAILY_EVENT_COUNT = 2
+KOJO_DAILY_EVENT_COUNT = 2
+DAILY_EVENT_ODDS = 1
+KOJO_DAILY_EVENT_ODDS = 1
+
+;-------------------------------------------------
+;ＳＬＧ부분에 관한 설정
+;-------------------------------------------------
+@CONFIG_EVENT_DAILY
+#DIM 콘피그소속, DAILY_GENRE_NUM, 299
+#DIM 이벤트수, DAILY_GENRE_NUM
+#DIM 표시, DAILY_GENRE_NUM
+#DIMS CONST 장르명 = "호색가", "고용", "트래이너", "외교", "특수 세력", "그 외"
+#DIM 선택항목
+#DIM 선택번호
+#DIMS EVENT_NAME_ENG
+#DIMS EVENT_NAME_JAP
+#DIM FIRST_LINE
+VARSET 콘피그소속, -1
+VARSET 이벤트수
+VARSET 표시
+FOR LOCAL, 0, VARSIZE("DAILY_EVENT_NAME_ENG", 1)
+	EVENT_NAME_ENG = %DAILY_DISABLE_NAME:LOCAL%
+	TRYCCALLFORM EVENT_DAILY_%EVENT_NAME_ENG%_GENRE
+	콘피그소속:RESULT:(이벤트수:RESULT) = LOCAL
+	이벤트수:RESULT++
+	DEBUGPRINTFORML %EVENT_NAME_ENG%:{RESULT}
+	CATCH
+		DEBUGPRINTFORML %EVENT_NAME_ENG%발견되지 않고
+	ENDCATCH
+NEXT
+
+
+FIRST_LINE = LINECOUNT
+
+$SHOW_LOOP
+
+CALL SINGLE_DRAWLINE
+PRINTFORML 데일리의 콘피그를 설정합니다
+PRINTFORML 해당 이벤트가 온이어도 데일리이벤트 세부설정에 따라 발생하지 않을 수 있습니다.
+CALL SINGLE_DRAWLINE
+
+FOR LOCAL, 0, DAILY_GENRE_NUM
+	PRINTFORM ◇　%장르명:LOCAL, 10, LEFT% 
+	PRINTBUTTON @"[변환]", LOCAL * 300 + 99
+	PRINTFORM %TOSTR_SPACE(5)%
+	PRINTBUTTON @"[모두 오프]", LOCAL * 300 + 98
+	PRINTFORM %TOSTR_SPACE(5)%
+	PRINTBUTTON @"[모두   온]", LOCAL * 300 + 97
+	PRINTL
+	SIF 표시:LOCAL == 0
+		CONTINUE
+	FOR LOCAL:1, 0, VARSIZE("콘피그소속", 1)
+		SIF 콘피그소속:LOCAL:(LOCAL:1) == -1
+			BREAK
+		SIF GET_DAILY_INDEX_FROM_ENG(데일리_통상, DAILY_DISABLE_NAME:(콘피그소속:LOCAL:(LOCAL:1))) == -1
+			CONTINUE
+		EVENT_NAME_JAP = %DAILY_EVENT_NAME:데일리_통상:GET_DAILY_INDEX_FROM_ENG(데일리_통상, DAILY_DISABLE_NAME:(콘피그소속:LOCAL:(LOCAL:1)))%
+		IF DAILY_DISABLE:(콘피그소속:LOCAL:(LOCAL:1))
+			SETCOLOR 칼라_선택불가
+		ENDIF
+		PRINTBUTTON @"\@ DAILY_DISABLE:(콘피그소속:LOCAL:(LOCAL:1)) ? [오프] # [온] \@", LOCAL * 300 + LOCAL:1
+		PRINTFORM %TOSTR_SPACE(5)%
+		PRINTFORM %EVENT_NAME_JAP, 30, LEFT%
+		PRINTL
+		RESETCOLOR
+	NEXT
+NEXT
+CALL SINGLE_DRAWLINE
+PRINTFORML [9980] 데일리 세부 설정
+PRINTFORML [9990] 데일리 발생 배율 - {DAILY_EVENT_ODDS}
+PRINTFORML [9991] 데일리 발생 개수 - {DAILY_EVENT_COUNT}
+PRINTFORML [9992] 구상 데일리 배율 - {KOJO_DAILY_EVENT_ODDS}
+PRINTFORML [9993] 구상 데일리 개수 - {KOJO_DAILY_EVENT_COUNT}
+PRINTFORML [9999] 돌아온다
+INPUT
+IF RESULT == 9999
+	RETURN
+ELSEIF GROUPMATCH(RESULT, 9980, 9990, 9991, 9992, 9993)
+	SELECTCASE RESULT
+		CASE 9980
+			CALL DAILY_EVENT_GENRE_DETAIL
+		CASE 9990
+			DAILY_EVENT_ODDS = ROUND_INCREMENT(DAILY_EVENT_ODDS, 0, 10)
+		CASE 9991
+			DAILY_EVENT_COUNT = ROUND_INCREMENT(DAILY_EVENT_COUNT, 0, 10)
+		CASE 9992
+			KOJO_DAILY_EVENT_ODDS = ROUND_INCREMENT(KOJO_DAILY_EVENT_ODDS, 0, 10)
+		CASE 9993
+			KOJO_DAILY_EVENT_COUNT = ROUND_INCREMENT(KOJO_DAILY_EVENT_COUNT, 0, 10)
+	ENDSELECT
+ELSE
+	선택항목 = RESULT / 300
+	선택번호 = RESULT % 300
+	PRINTFORML {선택항목}
+	PRINTFORML {선택번호}
+	IF !INRANGE(선택항목, 0, VARSIZE("콘피그소속", 0))
+		CLEARLINE LINECOUNT - FIRST_LINE
+		GOTO SHOW_LOOP
+	ENDIF
+	IF 선택번호 == 99
+		표시:선택항목 = !표시:선택항목
+	ELSEIF 선택번호 == 98 || 선택번호 == 97
+		FOR LOCAL:1, 0, VARSIZE("콘피그소속", 1)
+			SIF 콘피그소속:선택항목:(LOCAL:1) == -1
+				BREAK
+			DAILY_DISABLE:(콘피그소속:선택항목:(LOCAL:1)) = 선택번호 - 97
+		NEXT
+	ELSEIF 콘피그소속:선택항목:선택번호 == -1
+	ELSE
+		DAILY_DISABLE:(콘피그소속:선택항목:선택번호) = !DAILY_DISABLE:(콘피그소속:선택항목:선택번호)
+	ENDIF
+	CLEARLINE LINECOUNT - FIRST_LINE
+	GOTO SHOW_LOOP
+ENDIF
+
+;죽어 분기
+CLEARLINE LINECOUNT - FIRST_LINE
+GOTO SHOW_LOOP
+
+;==============================================================
+; 데일리이벤트 장르 세부설정 - 레몬녹차
+; NTR 기능 끄기 위해 만들었음
+;==============================================================
+@DAILY_EVENT_GENRE_DETAIL
+#DIM FIRST_LINE
+FIRST_LINE = LINECOUNT
+
+$SHOW_LOOP
+
+CALL SINGLE_DRAWLINE
+PRINTFORML 
+PRINTFORML ☆데일리 이벤트 세부 설정
+PRINTFORML 
+PRINTFORM [1001] NTR계열 데일리 이벤트 - 
+IF FLAG:데일리이벤트_NTR == 0
+	PRINTFORML OFF
+ELSEIF FLAG:데일리이벤트_NTR == 1
+	PRINTFORML ON
+ELSE
+	PRINTFORML ERROR
+ENDIF
+PRINTFORM [1002] 인간남성 등장 이벤트(미완성) - 
+IF FLAG:데일리이벤트_인간남성 == 0
+	PRINTFORML OFF
+ELSEIF FLAG:데일리이벤트_인간남성 == 1
+	PRINTFORML ON
+ELSE
+	PRINTFORML ERROR
+ENDIF
+PRINTFORM [1003] 에로계열 데일리 이벤트(미완성) - 
+IF FLAG:데일리이벤트_에로 == 0
+	PRINTFORML OFF
+ELSEIF FLAG:데일리이벤트_에로 == 1
+	PRINTFORML ON
+ELSE
+	PRINTFORML ERROR
+ENDIF
+PRINTFORM [1004] 미검수·환상향 데일리 이벤트 - 
+IF FLAG:데일리이벤트_미검수 == 0
+	PRINTFORML OFF
+ELSEIF FLAG:데일리이벤트_미검수 == 1
+	PRINTFORML ON
+ELSE
+	PRINTFORML ERROR
+ENDIF
+IF HAS_VAGINA(MASTER)
+	PRINTFORM [1005] 여주인공 위험 이벤트 - 
+	IF FLAG:데일리이벤트_여주위험 == 0
+		PRINTFORML OFF
+	ELSEIF FLAG:데일리이벤트_여주위험 == 1
+		PRINTFORML ON
+	ELSE
+		PRINTFORML ERROR
+	ENDIF
+ENDIF
+PRINTFORML [9999] 돌아온다
+
+
+INPUT
+IF RESULT == 9999
+	RETURN
+ELSE
+	SELECTCASE RESULT
+		CASE 1001
+			CALL SINGLE_DRAWLINE
+			PRINTFORML ☆ NTR계열 데일리 이벤트
+			PRINTFORML 
+			PRINTFORML NTR계열의 이벤트의 등장 여부입니다. NTR을 원치 않으시다면 OFF로 해두시기 바랍니다.
+			PRINTFORML NTR계열 이벤트 OFF시 일부 이벤트가 등장하지 않고, 일부 이벤트의 선택지, 전개 등이 달라집니다.
+			PRINTFORML [인간남성 등장] 설정을 함께 켜시는 것을 추천합니다. 
+			PRINTFORML
+			CALL SINGLE_DRAWLINE
+			CALL ASK_MULTI("ON", "OFF")
+			IF RESULT == 1
+				PRINTFORMW NTR계열 데일리 이벤트가 일어나지 않습니다.
+				FLAG:데일리이벤트_NTR = 0
+			ELSEIF RESULT == 0
+				PRINTFORMW NTR계열 데일리 이벤트가 일어납니다.
+				FLAG:데일리이벤트_NTR = 1
+			ENDIF
+		CASE 1002
+			CALL SINGLE_DRAWLINE
+			PRINTFORML ☆ 인간남성 등장 데일리 이벤트
+			PRINTFORML 
+			PRINTFORML 데일리 이벤트에 인간 남성이 등장하는지 여부입니다.
+			PRINTFORML 인간남성이 등장하는 만큼 에로계열의 이벤트가 많습니다.
+			PRINTFORML
+			CALL SINGLE_DRAWLINE
+			CALL ASK_MULTI("ON", "OFF")
+			IF RESULT == 1
+				PRINTFORMW 인간남성 이벤트가 등장하지 않습니다.
+				FLAG:데일리이벤트_인간남성 = 0
+			ELSEIF RESULT == 0
+				PRINTFORMW 인간남성 이벤트가 등장합니다.
+				FLAG:데일리이벤트_인간남성 = 1
+			ENDIF
+		CASE 1003
+			CALL SINGLE_DRAWLINE
+			PRINTFORML ☆ 에로계열 데일리 이벤트
+			PRINTFORML 
+			PRINTFORML 데일리 이벤트의 에로 전개 여부를 설정할 수 있습니다.
+			PRINTFORML OFF시 에로계열 이벤트가 등장하지 않거나 특정 이벤트에서 에로한 전개로 가지 않습니다.
+			PRINTFORML
+			CALL SINGLE_DRAWLINE
+			CALL ASK_MULTI("ON", "OFF")
+			IF RESULT == 1
+				PRINTFORMW 에로계열 이벤트가 등장하지 않습니다.
+				FLAG:데일리이벤트_에로 = 0
+			ELSEIF RESULT == 0
+				PRINTFORMW 에로계열 이벤트가 등장합니다.
+				FLAG:데일리이벤트_에로 = 1
+			ENDIF
+		CASE 1004
+			CALL SINGLE_DRAWLINE
+			PRINTFORML ☆ 미검수·환상향 데일리 이벤트
+			PRINTFORML 
+			PRINTFORML 아직 몰루K로 검수되지 않은 이벤트의 등장 여부를 설정할 수 있습니다. 
+			PRINTFORML 파생·특수세력 포함 약 100개정도의 이벤트가 해당됩니다.
+			PRINTFORML 검수가 끝나지 않은 만큼, NTR·인간남성 등의 데일리 이벤트 필터가 걸리지 않을 수 있습니다.
+			PRINTFORML
+			CALL SINGLE_DRAWLINE
+			CALL ASK_MULTI("ON", "OFF")
+			IF RESULT == 1
+				PRINTFORMW 에로계열 이벤트가 등장하지 않습니다.
+				FLAG:데일리이벤트_미검수 = 0
+			ELSEIF RESULT == 0
+				PRINTFORMW 에로계열 이벤트가 등장합니다.
+				FLAG:데일리이벤트_미검수 = 1
+			ENDIF
+		CASE 1005
+			IF HAS_VAGINA(MASTER)
+				CALL SINGLE_DRAWLINE
+				PRINTFORML ☆ 여주인공 위험 이벤트
+				PRINTFORML 
+				PRINTFORML 여주인공이 끔찍한 꼴을 당하는 이벤트가 등장합니다.
+				PRINTFORML 강제 이벤트, 타락 등이 포함되어 있습니다.
+				PRINTFORML [인간남성 등장] 설정을 함께 켜시는 것을 추천합니다. 
+				PRINTFORML
+				CALL SINGLE_DRAWLINE
+				CALL ASK_MULTI("ON", "OFF")
+				IF RESULT == 1
+					PRINTFORMW 여주인공 위험 이벤트가 등장하지 않습니다.
+					FLAG:데일리이벤트_여주위험 = 0
+				ELSEIF RESULT == 0
+					PRINTFORMW 여주인공 위험 이벤트가 등장합니다.
+					FLAG:데일리이벤트_여주위험 = 1
+				ENDIF
+			ELSE
+				GOTO SHOW_LOOP
+			ENDIF
+	ENDSELECT
+ENDIF
+
+CLEARLINE LINECOUNT - FIRST_LINE
+GOTO SHOW_LOOP

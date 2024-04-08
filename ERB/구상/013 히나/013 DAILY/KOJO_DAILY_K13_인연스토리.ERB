@@ -1,0 +1,418 @@
+﻿; 구상 제작자 : DanB
+; 구상 조건 : 히나가 플레이어와 같은 소속일때 + 포로가 아닐때 + 호감도가 300 이상일때
+; 구상 설명
+;
+;	1. 랜덤 확률로 등장 (초기 확률은 20%) 호감도에 따라 증감 호감도 800일때 최대 100%
+;	/ 일단 40프로로 해놨는데 추후 조정 필요
+;	1.2 추후 모모톡 추가되면 모모톡으로 조건 변경할 수도 있음
+;	2. 순차적으로 진행해서 4회차로 끝 이후 더이상 등장하지 않음
+;	3. 데일리 종료시 플레이어와 히나의 호감도, 각종 경험치가 오름 
+;	/ 딱 한번만 등장하는 데일리라 성장하는 능력치가 높게 설정됨 밸런스 조절 필요
+;	4. 원작게임 인연스토리에서 많이 가져옴 
+;
+;---------------------
+;기본적인 발생 확률(1000분 율 100으로 10%)
+;이것에 콘피그 항목의 발생 빈도를 걸칠 수 있으므로, 반드시 이 대로는 되지 않는다
+;---------------------
+@KOJO_DAILY_K13_CONNECTION_STORY_RATE(대상)
+#DIM 대상
+RETURN 200 + MIN(CFLAG:대상:2 , 800)
+
+;---------------------
+;확률 이외의 발생 판정
+;0기 이후가 되면 발생한다든가, 데일리측에서 이용하고 있는 변수가-1이라면 일으키지 않는다  같은 튕기는 방법을 할 경우에 사용한다
+;---------------------
+@KOJO_DAILY_K13_CONNECTION_STORY_DECISION(대상)
+#DIM 대상
+IF CFLAG:대상:소속 == CFLAG:MASTER:소속 && CFLAG:대상:포로처 == 0
+	SIF KDVAR:대상:히나_인연스토리_진행도 == 4
+		RETURN 0
+	SIF CFLAG:대상:호감도 <= 300
+		RETURN 0
+	;3번째 스토리 진행할 차례에 호감도 1000이하면 스킵
+	SIF KDVAR:대상:히나_인연스토리_진행도 == 2 && CFLAG:대상:2 <= 1000
+		RETURN 0
+	RETURN CHECK_KOJO_DAILY_HAPPEN(대상, 1, 0)
+ENDIF
+RETURN 0
+
+
+
+
+;---------------------
+;장르
+;콘피그 설정으로 사용
+;---------------------
+@KOJO_DAILY_K13_CONNECTION_STORY_GENRE(대상)
+#DIM 대상
+RETURN 데일리_장르_그외
+
+;---------------------
+;본체
+;이벤트가 발생했을 경우는 1, 발생하지 않았던 경우는 0을 돌려준다
+;발생하지 않았다는 것은 예를 들면, 특정 조건을 채우는 캐릭터로부터 랜덤에 한사람 선택하는 데일리로, 원래 그 조건을 채우는 캐릭터가 한사람도 없는 것 같은 때
+;구사양으로 만든 적 있는 사람용으로 말하면 「구사양의 데일리 본체 첫머리에서-1을 돌려주는 것 같은 상황」
+;---------------------
+@KOJO_DAILY_K13_CONNECTION_STORY(대상)
+#DIM 대상
+#DIM DYNAMIC 경험치종류
+#DIM DYNAMIC 경험치량
+#DIM DYNAMIC 호감도증감
+
+IF TALENT:MASTER:선생 == 1
+	LOCALS:0 = 선생님
+ELSE
+	LOCALS:0 = %ANAME(MASTER)%
+ENDIF
+;인연스토리 1
+IF KDVAR:대상:히나_인연스토리_진행도 == 0
+	PRINTFORMW 게헨나 자치구의 변경 지역 시내, 한밤중이라 주변에 아무도 없다
+	PRINTFORML
+	CALL FACE_IMAGE_N("표정_13_일반_1")
+	PRINTFORMW 「⋯%LOCALS:0%」
+	PRINTFORML 
+	CALL ASK_YN("히나 짱 안녕~", "먼저 와 있었네?")
+	IF RESULT == 0
+		CALL FACE_IMAGE_N("표정_13_일반_11")
+		PRINTFORMW 「쨔,쨩이라니」
+		PRINTFORMW 「듣기 곤란하니까 그런 말투는 그만둬.」
+		CALL FACE_IMAGE_N("표정_13_일반_14")
+	ELSEIF RESULT == 1
+		CALL FACE_IMAGE_N("표정_13_일반_99")
+		PRINTFORMW (끄덕)
+		CALL FACE_IMAGE_N("표정_13_일반_14")
+	ENDIF
+	PRINTFORMW 「난 게헨나에선 꽤나 유명인이라 일거수일투족을 관찰당하는 입장이니까.」
+	PRINTFORMW 「괜히 %조사처리(LOCALS:0,"이")%랑 같이있는걸 들키기라도 한다면 곤란할테니」
+	PRINTFORMW 「그래서 이 시간에 불러낸거야.」
+	PRINTFORML 
+	CALL ASK_MULTI("히나는 아이돌 같은 존재구나.")
+	CALL FACE_IMAGE_N("표정_13_일반_11")
+	PRINTFORMW 「아,아이돌⋯?아니, 그거랑은 다르다고 보는데⋯⋯.」
+	CALL FACE_IMAGE_N("표정_13_일반_13")
+	PRINTFORMW 「애초에 난 그런 귀엽고 반짝이는 거랑은 거리도 멀고.」
+	PRINTFORMW 「뭐,개인적인 시간이 없다거나 늘 주변을 신경써야 한다는 부분은 비슷할지도 모르겠네⋯⋯.」
+	PRINTFORML 
+	CALL ASK_MULTI("히나도 귀여워.")
+	CALL FACE_IMAGE_N("표정_13_일반_6")
+	PRINTFORMW 「⋯그런 입에 발린 말을 함부로 하고 다니니까 %LOCALS:0%의 평판이 좋지않은거야!」
+	IF TALENT:MASTER:선생 == 1
+		PRINTFORMW 「나는 어른이라고 대충 넘어갈 생각은 없으니까 적당히 해둬!」
+	ENDIF
+	PRINTFORML 
+	CALL ASK_MULTI("그치만 진심인데.")
+	CALL FACE_IMAGE_N("표정_13_일반_11")
+	PRINTFORMW 「⋯응?」
+	CALL FACE_IMAGE_N("표정_13_일반_12")
+	PRINTFORMW 「아,아니.여기서 그렇게 진지한 표정으로⋯⋯.」
+	PRINTFORMW 「딱히 %LOCALS:0%의 말이 거짓말이라는 뜻은 아니고⋯⋯.」
+	PRINTFORMW 「내가 귀엽지 않은 건 누구보다 내가 잘 알고 있으니까⋯⋯.」
+	PRINTFORMW 「⋯아니. 이런 쓸데없는 말을 나누려고 %조사처리(LOCALS:0,"을")% 부른 게 아냐!」
+	CALL FACE_IMAGE_N("표정_13_일반_1")
+	PRINTFORMW 「본론,본론으로 들어가자!」
+	PRINTFORMW 「⋯그래.내가 굳이 %조사처리(LOCALS:0,"을")% 불러낸건」
+	PRINTFORMW 「이번 분기 게헨나 치안 현황을 공유하고 다음 분기에 공조수사 플랜을 수립하기 위한 조언을 구하기 위해서야」
+	PRINTFORML 
+	CALL ASK_MULTI("난 데이트인 줄 알았는데.")
+	CALL FACE_IMAGE_N("표정_13_일반_15")
+	IF TALENT:MASTER:선생 == 1
+		PRINTFORMW 「선생⋯⋯.」
+	ELSE
+		PRINTFORMW 「%LOCALS:0%⋯⋯.」
+	ENDIF
+	PRINTFORML 
+	CALL ASK_MULTI("자,일하자! 일!")
+	PRINTFORMW (히나가 준비해 온 서류를 읽고 의견을 나누었다.)
+
+		;호감도, 경험치 둘다 일단 랜덤으로 처리
+		호감도증감 = MAX(RAND:100, 50)
+		경험치종류 = GETNUM(EXP, "지략경험치")
+		;경험치 10~20 상승 
+		;밸런스 고려하지않음 추후 수정 필요
+		경험치량 = LIMIT(RAND:20, 10, 20)
+		CFLAG:대상:호감도 += 호감도증감
+		;출력하는법을 몰라서 일단은 PRINTFORML로 적음
+		PRINTFORML 히나의 호감도 +{호감도증감}
+		CALL PRINT_ADD_EXP(MASTER, EXPNAME:경험치종류, 경험치량, 1)
+		CALL PRINT_ADD_EXP(대상, EXPNAME:경험치종류, 경험치량, 1)
+		CALL TRAIN_AUTO_ABLUP(MASTER)
+		CALL TRAIN_AUTO_ABLUP(대상)
+		PRINTFORMW
+
+	;인연스토리1 끝
+	KDVAR:대상:히나_인연스토리_진행도 = 1
+;인연스토리2
+ELSEIF KDVAR:대상:히나_인연스토리_진행도 == 1
+	PRINTFORMW 한밤중 게헨나 외곽의 슬럼가
+	PRINTFORML
+	CALL FACE_IMAGE_N("표정_13_일반_1")
+	PRINTFORMW 「안녕,%LOCALS:0%.」
+	PRINTFORMW 「이쪽은 얼마 전 선도 작전으로 학생들의 출입이 봉쇄된 곳이야.」
+	PRINTFORMW 「원래는 위험한 곳이지만 한번 휘저어놨으니 며칠 간은 안전하겠지.」
+	CALL FACE_IMAGE_N("표정_13_일반_16")
+	PRINTFORMW 「나를 알아보는 녀석들도 없을꺼고」
+	PRINTFORMW 「그러니 안심하고 %조사처리(LOCALS:0,"을")% 만나도 돼.」
+	PRINTFORML
+	CALL ASK_MULTI("그런데 어째서 밤에만 만나는거야?")
+	CALL FACE_IMAGE_N("표정_13_일반_99")
+	PRINTFORMW 「어쩔수 없어. 이건 %조사처리(LOCALS:0,"을")% 위한 거니까.」
+	CALL FACE_IMAGE_N("표정_13_일반_5")
+	PRINTFORMW 「알겠지만, 난 적이 많아.언제 어디서나 노려지고 있다고 봐도 돼.」
+	PRINTFORMW 「그런 내가 특별히 만나는 사람이 있다는게 알려지면」
+	PRINTFORMW 「⋯그 사람이 위험에 처할 수도 있으니까.」
+	PRINTFORML
+	CALL ASK_MULTI("심야에 단둘이 있는 걸 들키면 곤란해지지 않을까.")
+	CALL FACE_IMAGE_N("표정_13_일반_4")
+	PRINTFORMW 「⋯? 그런가? 잘 이해가 안 되는데⋯⋯.」
+	CALL FACE_IMAGE_N("표정_13_일반_99")
+	PRINTFORMW 「⋯심야에.」
+	CALL FACE_IMAGE_N("표정_13_일반_18")
+	PRINTFORMW 「단⋯둘이⋯⋯.」
+	CALL FACE_IMAGE_N("표정_13_일반_10")
+	PRINTFORMW 「⋯⋯?!」
+	IF TALENT:대상:합의
+		CALL FACE_IMAGE_N("표정_13_일반_21")
+		PRINTFORMW 「오늘은 별로 그런 일을 하려고 온건 아니지만⋯.」
+		PRINTFORMW 「확실히 소문이 퍼져서 좋을건 없겠지.」
+	ELSE
+		PRINTFORMW 「무,무,무슨 소릴 하는거야?! 내,내가 %조사처리(LOCALS:0,"이")%랑⋯⋯?!」
+		CALL FACE_IMAGE_N("표정_13_일반_9")
+		PRINTFORMW 「내,내가 그런 파렴치한 짓을 할 리가 없잖아!」
+		PRINTFORMW 「⋯⋯.」
+		PRINTFORMW 「그런 가십을 좋아하는 녀석들은 어디에도 있으니. 맞는 말이야.」
+	ENDIF
+		PRINTFORMW 「다음엔 시간을 내서 좀 더 밝은 날에 볼 수 있도록 할게.」
+		PRINTFORMW (그렇지만 낮에는⋯ 일이 너무 많은데⋯⋯.)
+		PRINTFORMW (히나는 고민이 생긴 듯 골똘히 생각에 잠겼다.)
+		;호감도, 경험치 둘다 일단 랜덤으로 처리
+		호감도증감 = MAX(RAND:100, 50)
+		경험치종류 = GETNUM(EXP, "방위경험치")
+		;경험치 10~20 상승 
+		;밸런스 고려하지않음 추후 수정 필요
+		경험치량 = LIMIT(RAND:20, 10, 20)
+		CFLAG:대상:호감도 += 호감도증감
+		;출력하는법을 몰라서 일단은 PRINTFORML로 적음
+		PRINTFORML 히나의 호감도 +{호감도증감}
+		CALL PRINT_ADD_EXP(MASTER, EXPNAME:경험치종류, 경험치량, 1)
+		CALL PRINT_ADD_EXP(대상, EXPNAME:경험치종류, 경험치량, 1)
+		CALL TRAIN_AUTO_ABLUP(MASTER)
+		CALL TRAIN_AUTO_ABLUP(대상)
+	PRINTFORMW
+
+	;인연스토리2 끝
+	KDVAR:대상:히나_인연스토리_진행도 = 2
+;인연스토리3
+ELSEIF KDVAR:대상:히나_인연스토리_진행도 == 2
+	PRINTFORMW 게헨나 변두리의 작은 쇼핑몰
+	PRINTFORML
+	CALL FACE_IMAGE_N("표정_13_일반_18")
+	PRINTFORMW 「⋯⋯.」
+	IF TALENT:MASTER:선생 == 1
+		PRINTFORMW 「아,안녕⋯ 선생.」
+	ELSE 
+		PRINTFORMW 「아,안녕⋯ %LOCALS:0%.」
+	ENDIF
+	PRINTFORML
+	CALL ASK_MULTI("파란 하늘 아래의 히나 쨩!")
+	CALL FACE_IMAGE_N("표정_13_일반_4")
+	PRINTFORMW 「그렇게까지 대단한 일은 아니거든?」
+	CALL FACE_IMAGE_N("표정_13_일반_18")
+	PRINTFORMW 「저번에 낮에 보자고 약속 했었으니까⋯⋯.」
+	PRINTFORML
+	PRINTFORMW 히나와 함께 쇼핑폴로 들어갔다.
+	PRINTFORML
+	CALL FACE_IMAGE_N("표정_13_일반_2")
+	PRINTFORMW (사람이 별로 없네⋯⋯.)
+	CALL FACE_IMAGE_N("표정_13_일반_19")
+	PRINTFORMW (이사람은 아마도 일부러 이런곳을⋯⋯.)
+	PRINTFORMW (정말이지⋯⋯.)
+	PRINTFORMW 「⋯그래서 불러낸 이유가 뭐야?」
+	PRINTFORML
+	CALL ASK_MULTI("당연히 데이트지.")
+	CALL FACE_IMAGE_N("표정_13_일반_18")
+	PRINTFORMW 「⋯역시 그런 걸 줄 알았어.」
+	CALL FACE_IMAGE_N("표정_13_일반_2")
+	PRINTFORMW 「여긴 악세서리를 파는 곳이네⋯.」
+	PRINTFORMW 「응?마음에 드는 게 있냐고?」
+	PRINTFORMW 「아니.난 이런 건 별로 안좋아해서.」
+	PRINTFORMW 「그럼 다른 데로 갈까?」
+	CALL FACE_IMAGE_N("표정_13_일반_1")
+	PRINTFORMW 「스트리트 패션복을 파는 가게⋯.」
+	PRINTFORMW 「⋯마음에 드는 게 있냐고?」
+	PRINTFORMW 「아니 딱히. 교복이 있는데 굳이 사복을 입어야 할 이유도 없고.」
+	PRINTFORML
+	CALL ASK_YN("그래도 하나 골라볼래?", "이 중에 마음에 드는 건?")
+	CALL FACE_IMAGE_N("표정_13_일반_11")
+	PRINTFORMW 「⋯⋯으음.」
+	PRINTFORMW 「흐으음⋯⋯.」
+	PRINTFORMW 「⋯⋯자,잘 모르겠어. 미,미안.」
+	PRINTFORML
+	PRINTFORMW 잠시 쉴 겸 해서 근처의 패밀리 레스토랑으로 왔다.
+	PRINTFORML
+	CALL FACE_IMAGE_N("표정_13_일반_18")
+	PRINTFORMW 「⋯⋯.」
+	PRINTFORML
+	CALL ASK_MULTI("왜 그래,히나 쨩?")
+	CALL FACE_IMAGE_N("표정_13_일반_11")
+	PRINTFORMW 「⋯응?」
+	CALL FACE_IMAGE_N("표정_13_일반_18")
+	PRINTFORMW 「아,아니⋯오늘 기대했던 건 이런 게 아니었던 거 같아서.」
+	PRINTFORMW 「내가⋯ 다⋯⋯ 망쳐버린 느낌이야⋯⋯.」
+	PRINTFORMW 「난⋯ 재미없는 인간이거든⋯⋯. 하아, 나도 알아.」
+	PRINTFORML
+	CALL ASK_YN("오히려 히나다워서 좋은데?", "그런 부분이 히나답다고 할까.")
+	CALL FACE_IMAGE_N("표정_13_일반_19")
+	PRINTFORMW 「⋯⋯.」
+	PRINTFORMW (또 그렇게 나를 배려해줘서⋯⋯.)
+	PRINTFORMW (정말이지⋯⋯.)
+	PRINTFORML
+	PRINTFORMW 히나와 쇼핑을 즐기다 보니 어느새 날이 어두워져 왔다.
+	PRINTFORML
+	CALL FACE_IMAGE_N("표정_13_일반_17")
+	PRINTFORMW 「벌써 시간이 이렇게 됐구나⋯.」
+	IF TALENT:대상:합의
+		CALL FACE_IMAGE_N("표정_13_일반_21")
+		PRINTFORMW 「⋯⋯.」
+		PRINTFORMW 「이 이후에 역시, ⋯하는 거지⋯⋯?」
+		CALL ASK_YN("히나의 손을 잡아 이끈다.", "관둔다")
+		IF RESULT == 0
+			CVARSET CFLAG, 6, 0
+			CFLAG:대상:조교참가플래그 = 1
+			CFLAG:대상:조교중돌아가지않는다 = 1
+			CFLAG:대상:강제우호화 = 1
+			BASE:대상:체력 = MAXBASE:대상:체력
+			BASE:대상:기력 = MAXBASE:대상:기력
+			FLAG:턴엔드조교 = 1
+			;이후의 데일리 이벤트 발생을 막음
+			DAILY_CANCEL = 1
+			;인연스토리3 끝
+			KDVAR:대상:히나_인연스토리_진행도 = 3
+		ELSEIF RESULT == 1
+			CALL FACE_IMAGE_N("표정_13_일반_18")
+			PRINTFORMW 「아⋯ 으응 안하는구나 알겠어.」
+			CALL FACE_IMAGE_N("표정_13_일반_17")
+			PRINTFORMW 「오늘 즐거웠어 %LOCALS:0%.」
+			호감도증감 = MAX(RAND:100, 50)
+			CFLAG:대상:호감도 += 호감도증감
+			PRINTFORML 히나의 호감도 +{호감도증감}
+			PRINTFORMW
+			;인연스토리3 끝
+			KDVAR:대상:히나_인연스토리_진행도 = 3
+		ENDIF
+	ELSEIF CFLAG:대상:2 >= 1000
+		CALL FACE_IMAGE_N("표정_13_일반_21")
+		PRINTFORMW 「⋯⋯.」
+		PRINTFORMW 「저기⋯ %LOCALS:0%」
+		PRINTFORMW 「데이트라면 이 이후에 역시, ⋯하는 거지⋯⋯?」
+		PRINTFORMW 「나도 이런거 어느정도는 알고 있어⋯⋯.」
+		PRINTFORMW 「그리고 나 %조사처리(LOCALS:0,"이")%라면 싫지않으니까⋯⋯.」
+		PRINTFORMW 「%조사처리(LOCALS:0,"은")% 어때?」
+		CALL ASK_YN("히나의 손을 잡아 이끈다.", "관둔다")
+		IF RESULT == 0
+			CALL FACE_IMAGE_N("표정_13_일반_23")
+			PRINTFORMW 「응 좋아 %LOCALS:0%」
+			TALENT:대상:합의 == 1
+			PRINTFORML 히나의<합의>를 얻었다
+			PRINTFORMW
+			CVARSET CFLAG, 6, 0
+			CFLAG:대상:조교참가플래그 = 1
+			CFLAG:대상:조교중돌아가지않는다 = 1
+			CFLAG:대상:강제우호화 = 1
+			BASE:대상:체력 = MAXBASE:대상:체력
+			BASE:대상:기력 = MAXBASE:대상:기력
+			FLAG:턴엔드조교 = 1
+			;이후의 데일리 이벤트 발생을 막음
+			DAILY_CANCEL = 1
+			;인연스토리3 끝
+			KDVAR:대상:히나_인연스토리_진행도 = 3
+		ELSEIF RESULT == 1
+			CALL FACE_IMAGE_N("표정_13_일반_18")
+			PRINTFORMW 「아⋯ 으응 내가 괜한 소리를⋯. 알겠어.」
+			CALL FACE_IMAGE_N("표정_13_일반_17")
+			PRINTFORMW 「오늘 즐거웠어 %LOCALS:0%.」
+			호감도증감 = MAX(RAND:100, 50)
+			CFLAG:대상:호감도 += 호감도증감
+			PRINTFORML 히나의 호감도 +{호감도증감}
+			PRINTFORMW
+			;인연스토리3 끝
+			KDVAR:대상:히나_인연스토리_진행도 = 3
+		ENDIF
+	;호감도 1000조건 달려있어서 일단 이 밑은 작동 안해야 정상
+	ELSE
+		PRINTFORMW 「오늘 즐거웠어 %LOCALS:0%.」
+		호감도증감 = MAX(RAND:100, 50)
+		CFLAG:대상:호감도 += 호감도증감
+		PRINTFORML 히나의 호감도 +{호감도증감}
+		PRINTFORMW 
+		;인연스토리3 끝
+		KDVAR:대상:히나_인연스토리_진행도 = 3
+	ENDIF
+	
+	
+;인연스토리4
+ELSEIF KDVAR:대상:히나_인연스토리_진행도 == 3
+	PRINTFORMW 늦은 밤 히나의 방
+	PRINTFORML
+	CALL ASK_MULTI("오늘은 또 늦은 시간에 불렀네?")
+	PRINTFORML
+	CALL FACE_IMAGE_N("표정_13_일반_21")
+	PRINTFORMW 「%LOCALS:0%⋯ 잠깐 얘기할 수 있을까⋯?」
+	PRINTFORMW 「요즘 몸이 이상해진 것 같아⋯」
+	PRINTFORMW 「선생만 생각하면 가슴이 뜨겁고 어쩐지 아래쪽이 안타까워져서⋯⋯.」
+	PRINTFORMW 히나는 의복을 한꺼풀씩 벗어가며 이쪽으로 다가왔다.
+	PRINTFORML
+	CALL FACE_IMAGE_N("표정_13_일반_24")
+	PRINTFORMW 「혼자서 위로해봐도 계속, 계속 부족해서⋯⋯.」
+	PRINTFORML
+	CALL ASK_MULTI("히나⋯?")
+	PRINTFORMW 「이런 야한 아이는 싫어⋯?」
+	PRINTFORML
+	CALL ASK_YN("껴안는다", "등을돌려 떠난다")
+	IF RESULT == 1
+	PRINTFORMW 「%LOCALS:0%⋯?」
+	PRINTFORMW 히나는 당장 울것같은 표정을 지었다.
+	PRINTFORML
+	PRINTFORMW 「응⋯, 역시 이런 억지부리는거 싫겠지⋯⋯.」
+	PRINTFORMW 「미안해 %LOCALS:0%⋯.」
+		;인연스토리끝
+		KDVAR:대상:히나_인연스토리_진행도 = -1
+	ELSE
+		PRINTFORMW %조사처리(ANAME(MASTER),"은")% 아무말없이 그녀를 껴안았다.
+		PRINTFORML 살며시 그녀를 껴안으면 그녀는 가슴에 안겨 작게 소리를 흘린다.
+		PRINTFORML 잠깐동안 작은 몸을 껴안고 있으면 터질것같은 그녀의 심장의 고동이 느껴졌다.
+		PRINTFORMW 그대로 그녀를 상냥히 안아 침실로 향했다.
+		PRINTFORML
+		PRINTFORML 욕정을 참을 수 없게 된 %조사처리(ANAME(MASTER),"은")% 침실에 도착하자마자 벽을 짚게한채로 
+		SIF TALENT:대상:처녀
+		PRINTFORM 아직 남성을 맞이한적 없는 
+		PRINTFORML 히나의 꽉 닫힌 균열에 조금씩 페니스를 삽입하면
+		PRINTFORML 만나기 전 혼자서 하고 있었는지 질내는 이미 윤활액이 넘쳐 흐르고 있었다.
+		PRINTFORMW 억지로 질육을 펴넓히며 허리의 움직임을 재촉하면 히나는 눈물이 맺힌채 달콤한 교성을 흘리고 있다.
+		PRINTFORML
+		PRINTFORML 평상시의 히나에게는 상상 할 수 없는 그 요염한 소리에 고양감과 함께 사정감이 차오른다.
+		PRINTFORML 한계가 가까워지자, 히나는 이쪽의 사정을 알아 차린건지 헐떡이며 질내사정을 조른다.
+		PRINTFORML 이윽고 긴 사정을 끝내고, 크게 한숨을 내쉬며 페니스를 뽑아내면
+		SIF TALENT:대상:처녀
+		PRINTFORM 선혈과 함께
+		PRINTFORMW 대량의 정액이 그녀의 균열에서 흘러 나왔다.
+		PRINTFORML
+		PRINTFORML 힘이풀려 주저앉아버린 히나의 면전에 채액으로 엉망이 된 페니스를 들이대면
+		PRINTFORML 시키지 않아도 뿌리까지 물어 깨끗하게 해준다.
+		PRINTFORML 페니스에 묻은 체액을 모두 삼키고 난 뒤에도 히나는 이쪽을 올려보며 손가락과 혀를 사용하며 봉사를 계속한다.
+		PRINTFORML 결국 한번 더 한계에 달해 입안에 사정하면 눈을 감은채 한 방울도 빠짐없이 삼켜간다.
+		PRINTFORMW 페니스를 입에서 뽑아내면 히나는 자랑이라도 하듯 입을 벌려 입안을 보여준다.
+		PRINTFORML
+		PRINTFORML 연속적인 사정으로 인해 채력을 보충하려 침대에 누우면 히나가 허리에 올라탄다.
+		PRINTFORML 히나는 허리에 올라탄 채로 소악마같은 표정을 지으며 이쪽에 고해왔다.
+		PRINTFORML
+		PRINTFORMW 「아직 더 할 수 있지 %LOCALS:0%?」
+		PRINTFORML
+		PRINTFORMW 결국 그 날은 히나가 원하는대로 밤새 계속 몸을 겹쳤다.
+		PRINTFORML
+		CALL FUCK(대상, "Ｃ, Ｂ, Ｖ, Ｍ, 욕망, 성교, 봉사, 정애, 펠라티오, 키스, Ｖ성교", "처녀상실, 키스상실, 질내사정", GET_ID(MASTER), @"%ANAME(MASTER)%의 \@RAND:2 ? 페니스 # 입술\@", ANAME(MASTER), "", "화간")
+		CALL FUCK(MASTER, "Ｃ,욕망, 성교, 봉사, 키스, 사정, Ｖ삽입", "동정상실, 키스상실", 0,@"%ANAME(대상)%의 입술" , "", @"%ANAME(대상)%의 질", "화간")
+		PRINTFORMW
+		KDVAR:대상:히나_인연스토리_진행도 = 4
+	ENDIF
+ENDIF
+RETURN 1

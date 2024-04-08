@@ -1,0 +1,146 @@
+﻿
+;--------------------------------------------------
+;◆マップチップ壁
+;--------------------------------------------------
+;┌└┐┘─│┼├┬┤┴κε
+chip_kabe_ita01,kabe1.webp,0, 0, 16, 16
+chip_kabe_ita02,kabe1.webp,16, 0, 16, 16
+chip_kabe_ita03,kabe1.webp,32, 0, 16, 16
+chip_kabe_ita04,kabe1.webp,48, 0, 16, 16
+chip_kabe_ita05,kabe1.webp,64, 0, 16, 16
+chip_kabe_ita06,kabe1.webp,80, 0, 16, 16
+chip_kabe_ita07,kabe1.webp,96, 0, 16, 16
+chip_kabe_ita08,kabe1.webp,112, 0, 16, 16
+chip_kabe_ita09,kabe1.webp,128, 0, 16, 16
+chip_kabe_ita10,kabe1.webp,144, 0, 16, 16
+chip_kabe_ita11,kabe1.webp,160, 0, 16, 16
+chip_kabe_ita12,kabe1.webp,176, 0, 16, 16
+chip_kabe_ita13,kabe1.webp,192, 0, 16, 16
+
+;┏┗┓┛━┃╋┣┳┫┻τλ
+chip_kabe_ishi01,kabe2.webp,0, 0, 16, 16
+chip_kabe_ishi02,kabe2.webp,16, 0, 16, 16
+chip_kabe_ishi03,kabe2.webp,32, 0, 16, 16
+chip_kabe_ishi04,kabe2.webp,48, 0, 16, 16
+chip_kabe_ishi05,kabe2.webp,64, 0, 16, 16
+chip_kabe_ishi06,kabe2.webp,80, 0, 16, 16
+chip_kabe_ishi07,kabe2.webp,96, 0, 16, 16
+chip_kabe_ishi08,kabe2.webp,112, 0, 16, 16
+chip_kabe_ishi09,kabe2.webp,128, 0, 16, 16
+chip_kabe_ishi10,kabe2.webp,144, 0, 16, 16
+chip_kabe_ishi11,kabe2.webp,160, 0, 16, 16
+chip_kabe_ishi12,kabe2.webp,176, 0, 16, 16
+chip_kabe_ishi13,kabe2.webp,192, 0, 16, 16
+
+;--------------------------------------------------
+;◆マップチップ床　板・石・畳
+;--------------------------------------------------
+chip_yuka01,yuka.webp,0, 0, 16, 16
+chip_yuka02,yuka.webp,16, 0, 16, 16
+chip_yuka03,yuka.webp,32, 0, 16, 16
+chip_yuka04,yuka.webp,48, 0, 16, 16
+
+chip_yuka01_aka,ousetu.webp,0, 0, 16, 16
+chip_yuka02_aka,ousetu.webp,16, 0, 16, 16
+chip_yuka03_aka,ousetu.webp,32, 0, 16, 16
+chip_yuka04_aka,ousetu.webp,0, 16, 16, 16
+chip_yuka05_aka,ousetu.webp,16, 16, 16, 16
+chip_yuka06_aka,ousetu.webp,32, 16, 16, 16
+chip_yuka07_aka,ousetu.webp,0, 32, 16, 16
+chip_yuka08_aka,ousetu.webp,16, 32, 16, 16
+chip_yuka09_aka,ousetu.webp,32, 32, 16, 16
+
+chip_yuka01_ao,goraku.webp,0, 0, 16, 16
+chip_yuka02_ao,goraku.webp,16, 0, 16, 16
+chip_yuka03_ao,goraku.webp,32, 0, 16, 16
+chip_yuka04_ao,goraku.webp,0, 16, 16, 16
+chip_yuka05_ao,goraku.webp,16, 16, 16, 16
+chip_yuka06_ao,goraku.webp,32, 16, 16, 16
+chip_yuka07_ao,goraku.webp,0, 32, 16, 16
+chip_yuka08_ao,goraku.webp,16, 32, 16, 16
+chip_yuka09_ao,goraku.webp,32, 32, 16, 16
+
+;--------------------------------------------------
+;◆マップチップ水　水・湯・井戸
+;--------------------------------------------------
+chip_mizu01,ike.webp,0, 0, 16, 16
+chip_mizu02,ike.webp,16, 0, 16, 16
+
+chip_mizu03,ohuro.webp,0, 0, 16, 16
+chip_mizu04,ohuro.webp,0, 16, 16, 16
+
+;--------------------------------------------------
+;◆マップチップ　茂み・樹
+;--------------------------------------------------
+chip_ki01,ki.webp,0, 0, 16, 16
+chip_ki02,ki.webp,16, 0, 16, 16
+chip_ki03,ki.webp,32, 0, 16, 16
+chip_ki04,ki.webp,48, 0, 16, 16
+chip_ki05,ki.webp,0, 16, 16, 16
+chip_ki06,ki.webp,16, 16, 16, 16
+chip_ki07,ki.webp,32, 16, 16, 16
+chip_ki08,ki.webp,48, 16, 16, 16
+
+chip_kusa01,sigemi.webp,0, 0, 16, 16
+chip_kusa02,sigemi.webp,16, 0, 16, 16
+chip_kusa03,sigemi.webp,32, 0, 16, 16
+chip_kusa04,sigemi.webp,48, 0, 16, 16
+
+;--------------------------------------------------
+;◆マップチップ　芝
+;--------------------------------------------------
+chip_shiba01,tuti.webp,0, 0, 16, 16
+chip_shiba02,tuti.webp,16, 0, 16, 16
+chip_shiba03,tuti.webp,32, 0, 16, 16
+chip_shiba04,tuti.webp,48, 0, 16, 16
+
+chip_yuka01_haru,harututi.webp,0, 0, 16, 16
+chip_yuka02_haru,harututi.webp,16, 0, 16, 16
+chip_yuka03_haru,harututi.webp,32, 0, 16, 16
+chip_yuka04_haru,harututi.webp,0, 16, 16, 16
+chip_yuka05_haru,harututi.webp,16, 16, 16, 16
+chip_yuka06_haru,harututi.webp,32, 16, 16, 16
+chip_yuka07_haru,harututi.webp,0, 32, 16, 16
+chip_yuka08_haru,harututi.webp,16, 32, 16, 16
+chip_yuka09_haru,harututi.webp,32, 32, 16, 16
+
+chip_yuka01_natu,natututi.webp,0, 0, 16, 16
+chip_yuka02_natu,natututi.webp,16, 0, 16, 16
+chip_yuka03_natu,natututi.webp,32, 0, 16, 16
+chip_yuka04_natu,natututi.webp,0, 16, 16, 16
+chip_yuka05_natu,natututi.webp,16, 16, 16, 16
+chip_yuka06_natu,natututi.webp,32, 16, 16, 16
+chip_yuka07_natu,natututi.webp,0, 32, 16, 16
+chip_yuka08_natu,natututi.webp,16, 32, 16, 16
+chip_yuka09_natu,natututi.webp,32, 32, 16, 16
+
+chip_yuka01_aki,akituti.webp,0, 0, 16, 16
+chip_yuka02_aki,akituti.webp,16, 0, 16, 16
+chip_yuka03_aki,akituti.webp,32, 0, 16, 16
+chip_yuka04_aki,akituti.webp,0, 16, 16, 16
+chip_yuka05_aki,akituti.webp,16, 16, 16, 16
+chip_yuka06_aki,akituti.webp,32, 16, 16, 16
+chip_yuka07_aki,akituti.webp,0, 32, 16, 16
+chip_yuka08_aki,akituti.webp,16, 32, 16, 16
+chip_yuka09_aki,akituti.webp,32, 32, 16, 16
+
+chip_yuka01_huyu,huyututi.webp,0, 0, 16, 16
+chip_yuka02_huyu,huyututi.webp,16, 0, 16, 16
+chip_yuka03_huyu,huyututi.webp,32, 0, 16, 16
+chip_yuka04_huyu,huyututi.webp,0, 16, 16, 16
+chip_yuka05_huyu,huyututi.webp,16, 16, 16, 16
+chip_yuka06_huyu,huyututi.webp,32, 16, 16, 16
+chip_yuka07_huyu,huyututi.webp,0, 32, 16, 16
+chip_yuka08_huyu,huyututi.webp,16, 32, 16, 16
+chip_yuka09_huyu,huyututi.webp,32, 32, 16, 16
+
+chip_hon,hondana.webp,0, 0, 16, 16
+
+
+Frame_1,Frame.webp, 0, 0, 100, 118
+Frame_2,Frame.webp, 100, 0, 100, 118
+Frame_3,Frame.webp, 200, 0, 100, 118
+Frame_4,Frame.webp, 300, 0, 100, 118
+Frame_5,Frame.webp, 400, 0, 100, 118
+Frame_6,Frame.webp, 500, 0, 100, 118
+Frame_7,Frame.webp, 600, 0, 100, 118

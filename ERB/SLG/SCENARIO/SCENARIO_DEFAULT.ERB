@@ -1,0 +1,35 @@
+﻿;-------------------------------------------------
+;시나리오측에서 배치 함수를 기술하고 있지 않는 경우의 Default 배치
+;-------------------------------------------------
+@SCENARIO_PLACEMENT_DEFAULT
+
+;세력 설정
+COUNTRY_BOSS:0 = 0
+COUNTRY_COLOR:0 = GETDEFCOLOR()
+
+
+
+;지정되지 않았던 캐릭터는 방랑 「당신」는 제외（MASTER 바꿔 넣었을 때에 방랑하는 것을 막는다）.
+FOR LOCAL:0, 1, CHARANUM
+	SIF CFLAG:(LOCAL:0):1 == 0  && CSTR:(LOCAL:0):99 != "당신"
+		CFLAG:(LOCAL:0):특수상태 = 특수상태_방랑
+NEXT
+
+;병력의 초기 배치
+CALL INIT_ARMY
+
+
+;무소속 도시의 병수는 경제의 7.5%
+FOR LOCAL:0, 0, MAX_CITY
+	SIF CITY_OWNER:(LOCAL:0) == 0
+		CITY_SOLDIER:(LOCAL:0) = CITY_ECONOMY:(LOCAL:0) * 75 / 1000
+NEXT
+
+;■관계 설정
+CALL SHARED_SETTING_RELATION
+
+
+
+;CALL INIT_RELATION("호시노"     , "앨리스"   , 600  , 0)
+
+;CALL INIT_ALLIANCE_BY_NAME("호시노"     , "앨리스" , 15)

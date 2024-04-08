@@ -1,0 +1,223 @@
+﻿;-----------------------------
+; 얼굴 화상 표시 함수
+; String에 해당 이미지를 넣으면 얼굴 화상이 표시된다.
+;-----------------------------
+@FACE_IMAGE_N(String)
+#DIM iSize
+#DIMS sHtml
+#DIM iFont_Hei_mag
+#DIM iEnter_Con
+#DIM iSpace
+#DIMS String
+#DIM Integer
+#DIM iID
+SIF ! FLAG:화상설정
+    RETURN 0
+PRINTFORML
+iEnter_Con = 0
+sHtml =  <p align='left'><nobr>
+sHtml += @"<shape type='space' param='{iSpace}'><img src='%String%' height='850' ypos='0'>"
+HTML_PRINT sHtml
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+RETURN 0
+
+@FACE_IMAGE_BIG(String, iSize)
+#DIM iSize
+#DIMS sHtml
+#DIM iFont_Hei_mag
+#DIM iEnter_Con
+#DIM iSpace
+#DIMS String
+#DIM Integer
+#DIM iID
+SIF ! FLAG:화상설정
+    RETURN 0
+PRINTFORML
+iEnter_Con = 0
+sHtml =  <p align='left'><nobr>
+sHtml += @"<shape type='space' param='{iSpace}'><img src='%String%' height='{iSize}' ypos='0'>"
+HTML_PRINT sHtml
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+RETURN 0
+
+
+
+@FACE_IMAGE_TEXT(String)
+#DIM iSize
+#DIMS sHtml
+#DIM iFont_Hei_mag
+#DIM iEnter_Con
+#DIM iSpace
+#DIMS String
+#DIM Integer
+#DIM iID
+SIF ! FLAG:화상설정
+    RETURN 0
+PRINTFORML
+iEnter_Con = 0
+sHtml =  <p align='left'><nobr>
+sHtml += @"<shape type='space' param='{iSpace}'><img src='%String%' height='850' ypos='0'>"
+HTML_PRINT sHtml
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML 
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML      
+RETURN 0
+
+@ILLUST_IMAGE(String)
+#DIM iSize
+#DIMS sHtml
+#DIM iEnter_Con
+#DIM iSpace
+#DIM YPOS
+#DIMS String
+#DIM Integer
+#DIM iID
+SIF ! FLAG:화상설정
+    RETURN 0
+PRINTFORML
+iEnter_Con = 0
+sHtml =  <p align='left'><nobr>
+sHtml += @"<shape type='space' param='{iSpace}'><img src='%String%' height='3500' ypos='0'>"
+HTML_PRINT sHtml
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+PRINTFORML
+RETURN 0
+
+@ILLUST_IMAGE_BLACK_FADEOUT(String)
+#DIM iSize
+#DIMS sHtml
+#DIM iEnter_Con
+#DIM iSpace
+#DIM YPOS
+#DIMS String
+#DIM Integer
+#DIM iID
+SIF ! FLAG:화상설정
+    RETURN 0
+PRINTFORML
+iEnter_Con = 0
+sHtml =  <p align='left'><nobr>
+sHtml += @"<shape type='space' param='{iSpace}'><img src='%String%' height='3500' ypos='{YPOS}'>"
+HTML_PRINT sHtml
+
+@ILLUST_IMAGE_BLACK_FADEIN(String)
+#DIM FIRST_LINE
+#DIM iSize
+#DIMS sHtml
+#DIMS sHtmlBLACK
+#DIM iEnter_Con
+#DIM iSpace
+#DIMS String
+#DIM Integer
+#DIM iID
+
+SIF ! FLAG:화상설정
+    RETURN 0
+PRINTFORML
+
+
+
+LOCAL:1 == 100
+FOR LOCAL:0, 0, 10
+    IF LOCAL:0 == 1
+        iEnter_Con = 0
+        sHtml = <p align='left'><nobr>
+        sHtml += @"<shape type='space' param='{iSpace}'><img src='%String%' height='3500' ypos='0'>"
+        HTML_PRINT sHtml
+        PRINTFORML 1
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+        PRINTFORML
+    ENDIF
+    CLEARLINE 1
+    iEnter_Con = 0
+    sHtmlBLACK =  <p align='left'><nobr>
+    sHtmlBLACK += @"<shape type='space' param='{iSpace}'><img src='BLACK{LOCAL:1}' height='3500' ypos='-3400'>"
+    HTML_PRINT sHtmlBLACK
+    PRINTFORML E
+    TWAIT 150,1
+NEXT
+
+
+
+
+RETURN 0

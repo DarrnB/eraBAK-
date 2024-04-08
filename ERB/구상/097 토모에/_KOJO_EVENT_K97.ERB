@@ -1,0 +1,1095 @@
+﻿;-------------------------------------------------
+;이벤트 구상
+;-------------------------------------------------
+
+;=================================================
+;●각종 이벤트
+;※ARG에 이벤트번호가 들어간다. 자세하게는 자료 폴더의 「era 연희 이벤트표」를 참조
+;※RETURN의 값을 0→1으로 바꾸면, Default의 메세지가 표시되지 않게 된다
+;=================================================
+
+; CFLAG 관리
+; 302 = 쓰러트리기(취기) 관련 동작
+; 303 = 쓰러트리기(취기x) 관련 동작
+
+@KOJO_EVENT_K97(ARG)
+
+;-------------------------------------------------
+;퍼스트 키스 실행
+;-------------------------------------------------
+IF ARG == 1
+	;연모 or 복종
+	IF TALENT:연모 || TALENT:복종
+		PRINTFORMW 입술이 떨어지자 토모에가 붉게 물든 얼굴로 이 쪽을 바라봤다
+		PRINTFORMW 토모에는 손가락으로 자신의 입술을 만졌다
+		PRINTFORML  
+		PRINTFORMW 「정말로 혁명적인 느낌이에요」
+		PRINTFORMW 「이 기쁘고, 녹아내릴 듯한 달콤함은」
+		PRINTFORMW 「체리노 회장에겐 미안한 말이지만, 체룐카 초콜릿과는 비교도 되지 않네요」
+		PRINTFORMW 「이 기분이 어떻게 해야 제대로 전해질 수 있을까요?」
+		PRINTFORML 
+		PRINTFORMW 토모에는 이 쪽으로 다가왔다
+		PRINTFORMW 그리고 두 팔을 뻗어 뒷목에 두르고 정면으로 품에 안겨왔다
+		PRINTFORML 
+		PRINTFORMW 「이 기분을 제대로 연설할 수 있을 때까지 반복할 수 밖에 없겠죠?」
+		PRINTFORML 
+		PRINTFORMW 그렇게 다시 입술을 겹쳐오는 토모에였다...
+	;연인
+	ELSEIF TALENT:연인
+		PRINTFORMW 「늦었어요」
+		PRINTFORML 
+		PRINTFORMW 입술이 떨어지자마자 토모에가 검지를 치켜세웠다
+		PRINTFORML 
+		PRINTFORMW 「이런 일은 정식으로 연인이 되기 전에 하는 게 상식이잖아요?」
+		PRINTFORMW 「요즘 같은 시대에 사귀고 나서 퍼스트 키스를 하는 연인이 어디 있나요?」
+		PRINTFORML 
+		PRINTFORMW 토모에가 너무 바빠보여서 나름 배려해 준 것이라고 설명해 주었다
+		PRINTFORMW 하지만 토모에의 잔소리는 끊이지 않았다...
+		PRINTFORML 
+		PRINTFORMW 「요즘에는 저보다 어린 학생들도 혁명적인 속도로...읍?!」
+		PRINTFORML 
+		PRINTFORMW 혁명적인 속도로 토모에의 입술을 다시 틀어막았다
+		PRINTFORMW 토모에는 달아오른 얼굴로 키스를 다시 받아주었다
+	;그 이외
+	ELSE
+		PRINTFORMW 「키스라는 건 생각 이상으로 부끄러운 일이었군요...」
+		PRINTFORMW 「가슴이 아리기도 하면서, 행복한 것 같기도 하면서, 따뜻하고, 음...중독 될 것 같은 느낌이랄까요」
+		PRINTFORMW 「그러고 보니 인민의 아편은 마약이라는 구절을 본 적이 있는데」
+		PRINTFORMW 「혹시 키스를 마약으로 돌려서 표현한 게 아닐까요? 후후」
+		PRINTFORML 
+		PRINTFORMW 그렇게 말하고 온화한 미소를 짓는 토모에였다
+		
+	ENDIF
+	RETURN 1
+ENDIF
+
+;-------------------------------------------------
+;고백 성공
+;-------------------------------------------------
+IF ARG == 2
+	;연모 or 복종
+	IF TALENT:연모 || TALENT:복종
+		PRINTFORML 
+		PRINTFORMW 「실례지만, 혹시 오늘이 몇 월 며칠인가요?」
+		PRINTFORML 
+		PRINTFORMW 갑자기 날짜를 묻는 토모에에게 의아해 하면서 오늘 날짜를 알려주었다
+		PRINTFORML 
+		PRINTFORMW 「이상하다...이반 쿠팔라 축제 기간은 아닌데...」
+		PRINTFORMW 「생일도 아니고 크리스마스도 아닌데」
+		PRINTFORML 
+		PRINTFORMW 토모에는 잠시 뜸을 들이고 말을 이어나갔다
+		PRINTFORML 
+		PRINTFORMW 「『미묘한 거짓말은 실수에 가깝다』...제가 좋아하는 영화에 나오는 구절이에요」
+		PRINTFORMW 「하지만 지금 그런 미묘한 거짓말을 할 만한 여유는 없겠네요」
+		PRINTFORMW 「앞으로도 잘 부탁드립니다. 저의 연인님」
+	;그 이외
+	ELSE
+		PRINTFORML
+		PRINTFORMW 「네?」
+		PRINTFORML 
+		PRINTFORMW 토모에가 깜짝 놀란 표정으로 이 쪽을 보고 있다
+		PRINTFORMW 역시 너무 성급했나...아직은 고백할 타이밍이 아니었던 건가
+		PRINTFORMW 그런 생각을 하며 토모에에게 조금 전의 말은 잊어버리라고 말했다
+		PRINTFORML 
+		PRINTFORMW 「잠깐만요」
+		PRINTFORML 
+		PRINTFORMW 뜻밖에도 토모에는 거절의 의사를 표시하지 않고, 되려 이 쪽으로 다가왔다
+		PRINTFORMW 그리고 두 손으로 이 쪽의 한 손을 꼭 붙잡았다
+		PRINTFORML 
+		IF TALENT:MASTER:선생 == 1
+			PRINTFORMW 「선생님의 전략안은 익히 알고 있습니다」
+			PRINTFORMW 「저와 연인이 되면, 선생님께서는 저희 붉은겨울 연방학원을 위한 혁명전사가 되어 주실 수 있나요?」
+			PRINTFORML 
+			PRINTFORMW 언제나 학생들의 편이다, 라고 말해주었다
+			PRINTFORML 
+			PRINTFORMW 「미묘한 대답이네요. 제가 원하는 대답은 아니었는데...」
+			PRINTFORMW 「좋습니다. 여기서는 전략적 후퇴를 하기로 하죠」
+			PRINTFORMW 「선생님의 고백을 받아들일게요. 대신,」
+		ELSE
+			PRINTFORMW 「%ANAME(MASTER)%의 전략안은 익히 알고 있습니다」
+			PRINTFORMW 「저와 연인이 되면, 저희 붉은겨울 연방학원을 위한 혁명전사가 되어 주실 수 있나요?」
+			PRINTFORML 
+			PRINTFORMW 언제나 학생들의 편이다, 라고 말해주었다
+			PRINTFORML 
+			PRINTFORMW 「미묘한 대답이네요. 제가 원하는 대답은 아니었는데...」
+			PRINTFORMW 「좋습니다. 여기서는 전략적 후퇴를 하기로 하죠」
+			PRINTFORMW 「그 고백을 받아들일게요. 대신,」
+		ENDIF
+			PRINTFORMW 「키보토스 전역에 혁명의 붉은 깃발을 함께 휘날리도록 하죠!」
+	ENDIF
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;고백 실패
+;-------------------------------------------------
+IF ARG == 3
+	PRINTFORML 
+	PRINTFORMW 「아이 참, 제게 그런 장난을 치셔도 아무 것도 드릴 수 없어요」
+	PRINTFORMW 「어차피 고백해서 혼내주기, 뭐 그런 장난이죠?」
+	PRINTFORMW 「체리노 회장님과 벌칙 게임에서 지신 건가요? 아니면 마리나 보안위원장?」
+	IF TALENT:MASTER:선생 == 1
+		PRINTFORMW 「후후. 괜찮아요, 선생님」
+		PRINTFORMW 「아무리 선생님이라도 위대한 체리노 회장님께 이기실 수는 없으니까요」
+	ELSE
+		PRINTFORMW 「후후. 괜찮아요, %ANAME(MASTER)% 」	
+		PRINTFORMW 「아무리 %ANAME(MASTER)%이라도 위대한 체리노 회장님께 이길 수는 없으니까요」
+	ENDIF
+	PRINTFORMW 「체리노 회장께 패배한 걸 부끄러워 할 필요는 없답니다」
+	PRINTFORML 
+	PRINTFORMW 다른 의미로 패배감을 느낀 순간이었다...
+	PRINTFORML 
+	
+	RETURN 1
+ENDIF
+
+;-------------------------------------------------
+;쓰러트리기 성공(술에 취함의 영향·합의는 얻을 수 없다)
+;-------------------------------------------------
+IF ARG == 4
+	CFLAG:302 = 1
+	PRINTFORML 
+	PRINTFORMW 「...도아 가꺼에요?」
+	PRINTFORML 
+	PRINTFORMW 술에 취한 토모에가 소매를 붙잡았다
+	PRINTFORMW 토모에는 반쯤 풀린 눈으로 이 쪽을 올려다보고 있다
+	PRINTFORMW 평소의 단정하고 여유 넘치는 모습은 사라지고, 취기에 얼굴이 새빨개져서 횡설수설하는 토모에였다
+	PRINTFORMW 토모에는 혼자서 일어나려고 몇 번 애를 썼지만, 번번이 중심을 잃고 쓰러지기를 반복했다
+	PRINTFORMW 그러는 동안 교복 단추는 완전히 풀어헤쳐져서 토모에의 커다란 가슴이 그 모습을 드러냈고
+	PRINTFORMW 치마는 말려 올라가 토모에의 육덕진 하체가 적나라하게 노출되고 있었다
+	PRINTFORML 
+	SETCOLOR 칼라_핑크
+	PRINTFORMW 핑크색이다
+	RESETCOLOR
+	PRINTFORML 
+	PRINTFORMW 「저 몸이 잘 안 움지겨져서. 도와주세여」
+	PRINTFORML 
+	PRINTFORMW 토모에가 네 발로 기어서 당신에게 다가왔다
+	PRINTFORMW 토모에가 움직일 때마다 큰 젖가슴이 출렁거리며 깊은 협곡을 만들고 조였다 풀기를 반복했다
+	PRINTFORMW 토모에는 두 손으로 당신의 허리를 손잡이 삼아 잡고 일어서려고 했고
+	PRINTFORMW 토모에의 손이 스쳐지나간 당신의 아랫도리도 손잡이처럼 일어서려고 했다
+	PRINTFORML 
+
+	CALL ASK_YN("토모에의 협곡을 탐구한다", "나의 손잡이를 사용한다")
+
+	RETURN 1
+ENDIF
+
+;-------------------------------------------------
+;쓰러트리기 성공(합의를 취득)
+;-------------------------------------------------
+IF ARG == 5
+	;연모 or 연인
+	IF TALENT:연모 || TALENT:연인
+		PRINTFORML 
+		PRINTFORMW 토모에는 밀려 쓰러졌는데도 전혀 당황하는 기색이 아니었다
+		PRINTFORMW 오히려 이 쪽을 유혹하는 듯한...?
+		PRINTFORML 
+		IF TALENT:MASTER:선생 == 1
+			PRINTFORMW 「역시, 키보토스에 떠도는 선생님에 대한 변태적인 소문은 거짓 선동이 아니었군요」
+			PRINTFORMW 「학생의 발을 핥거나, 학생이 목욕하는 모습을 대놓고 구경한다거나, 학생의 팬티를 뒤집어 쓰고 그 냄새를 맡거나...」
+			PRINTFORMW 「그리고 저에게까지 손을 대시다니...」
+			PRINTFORMW 「네? 마지막은 오해...?」
+			PRINTFORMW 「그건 중요하지 않아요, 선생님」
+		ELSE
+			PRINTFORMW 「제 몸에 흥미가 생기신 건가요, %AMANE(MASTER)% ?」
+			PRINTFORMW 「그렇군요. 남녀간의 사이도 하나의 혁명...」
+			PRINTFORMW 「붉은겨울도, 키보토스도 관계없는 오직 두 사람만의 혁명...」
+		ENDIF
+		PRINTFORMW 토모에는 드러누워서 이 쪽을 향해 두 팔을 뻗었다
+		PRINTFORML 
+		PRINTFORMW 「저에게 혁명적인 순간을 보여주실 수 있나요?」
+		PRINTFORML 
+	;그 이외
+	ELSE
+		PRINTFORML 
+		PRINTFORMW 「저기, 이런 일이 저희들의 업무에 꼭 필요한 일인가요?」
+		PRINTFORMW 「키보토스의 혁명과 이 일은 크게 상관이 없는 건 아닌지...?」
+		PRINTFORML 
+		CALL ASK_YN ("미인계는 유구한 전통이 있는 혁명의 수단 중에 하나야", "내가 할 수 있는 효율적인 혁명을 위해서 미인계 능력을 갈고 닦을 필요가 있어")
+		PRINTFORML 
+		PRINTFORMW 「그래서 저를 상대로 미인계의 연습을 하고 싶다...?」
+		PRINTFORMW 「그, 그런거라면 어쩔 수 없긴 한데...」
+		PRINTFORML 
+		PRINTFORMW 「음...그러면 잘...부탁드립니다...」
+		PRINTFORML 
+	ENDIF
+	RETURN 1
+ENDIF
+
+;-------------------------------------------------
+;쓰러트리기 실패
+;-------------------------------------------------
+IF ARG == 6
+	;취기로 쓰러트린 적이 있는 경우
+	IF CFLAG:302 == 1
+		PRINTFORML 
+		PRINTFORMW 토모에에게 손을 뻗어 그 탐스러운 가슴을 만지려고 했지만
+		; 연모 이상의 관계일 경우(연모, 합의, 연인)
+		IF TALENT:연인 || TALENT:합의 || TALENT:연모
+			PRINTFORMW 토모에는 당신의 손에 손깍지를 끼고 그 행동을 막았다
+			PRINTFORMW 토모에가 깍지 낀 손가락에 힘을 주자, 손가락 사이사이의 뼈마디들이 묵직하게 울리는 것 같은 고통이 느껴졌다
+			PRINTFORMW 그 고통에 당신이 온몸을 비틀자 토모에는 손깍지를 풀어주었다
+			PRINTFORML 
+			PRINTFORMW 「저에게 그러한 육체적인 호기심을 가지신 것은 기쁩니다만」
+			PRINTFORMW 「그 정욕을 키보토스를 위한 혁명의 불씨로 바꿔보시는 건 어떠세요?」
+			PRINTFORML 
+			PRINTFORMW 토모에는 자신의 블라우스와 치마를 정돈했다
+			PRINTFORMW 그리고 살짝 붉어진 얼굴로 말했다
+			PRINTFORML 
+			PRINTFORMW 「이런 일은...나중에라도 할 수 있으니까요」
+			PRINTFORML 
+		ELSE
+			PRINTFORMW 토모에는 당신의 손목을 붙잡고 가볍게 비틀어버렸다
+			PRINTFORMW 우드득, 하고 당신의 팔에서 끔찍한 소리가 들렸다
+			PRINTFORML 
+			PRINTFORMW 「안심하세요. 부러지지는 않았으니까요」
+			PRINTFORMW 「그 때처럼 저를 취하게라도 만드시지 그러셨어요」
+			PRINTFORMW 「사소한 것부터 차근차근...선동에만 해당되는 말은 아니랍니다」
+			PRINTFORML 
+			PRINTFORMW 토모에가 꺾인 손목을 자유롭게 풀어줬다
+			PRINTFORMW 뻐근한 통증이 느껴지는 손목을 부여잡고 토모에에게서 뒷걸음질 쳤다
+			PRINTFORML 
+			PRINTFORMW 「이번 일은 없었던 것으로 하겠습니다」
+			PRINTFORMW 「이제 그만 가주시겠어요? 체리노 회장이 기다리고 계셔서」
+			PRINTFORML 
+		ENDIF
+	ELSE
+		PRINTFORML 
+		PRINTFORMW 토모에의 모습에 이끌린 당신은 그녀에게 다가갔지만
+		PRINTFORMW 토모에는 그것을 손으로 가볍게 저지했다
+		PRINTFORML  
+		; 연모 이상의 관계일 경우(연모, 합의, 연인)
+		IF TALENT:연인 || TALENT:합의 || TALENT:연모
+			PRINTFORMW 「오늘은 아니에요」
+			PRINTFORMW 「저에게 그러한 육체적인 호기심을 가지신 것은 기쁩니다만」
+			PRINTFORMW 「그 정욕을 키보토스를 위한 혁명의 불씨로 바꿔보시는 건 어떠세요?」
+			PRINTFORML 
+			PRINTFORMW 토모에는 자신의 블라우스와 치마를 정돈했다
+			PRINTFORMW 그리고 살짝 붉어진 얼굴로 말했다
+			PRINTFORML 
+			PRINTFORMW 「이런 일은...나중에라도 할 수 있으니까요」
+			PRINTFORML 
+		ELSE
+			PRINTFORMW 「이 모습을 체리노 회장이 보셨다면 틀림없이 비웃으셨을 거에요」
+			PRINTFORMW 「체리노 회장의 비웃음을 사고 싶으신가요?」
+			PRINTFORML 
+			PRINTFORMW 그 말에 얌전히 납득하고 물러났다
+			PRINTFORML 
+		ENDIF
+	ENDIF
+	RETURN 1
+ENDIF
+;-------------------------------------------------
+;쓰러트리기 성공(이미 합의 있어)
+;-------------------------------------------------
+IF ARG == 7
+	IF ITEM:162 == 0
+	PRINTFORMW 토모에를 쓰러트리자, 그녀의 가슴골 사이에 얇은 봉지 하나가 끼워진 것이 보였다
+	PRINTFORMW 이건...
+	PRINTFORML 
+	SETCOLOR 칼라_노랑
+	PRINTFORMW 토모에의 가슴 사이에 끼워져 있던『콘돔』을 획득했다
+	RESETCOLOR
+	PRINTFORML
+	ITEM:162 = 1
+	ELSE
+		RETURN
+	ENDIF
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;본명을 허락하는 이벤트
+;-------------------------------------------------
+IF ARG == 10
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;데이트중에 저쪽에서 키스
+;-------------------------------------------------
+IF ARG == 20
+	;PRINTFORMW 
+	RETURN 1
+ENDIF
+
+;-------------------------------------------------
+;데이트중에 저쪽에서 고백
+;-------------------------------------------------
+IF ARG == 21
+	PRINTFORMW 「잠시 괜찮을까요?」
+	PRINTFORML 
+	PRINTFORMW 내일의 일정을 위해 돌아가려는 길에, 토모에가 불러세웠다
+	PRINTFORMW 무슨 할 말이 있는지 토모에에게 물었지만 토모에는 눈을 이리저리 굴리며 입을 열지 못하고 있었다.
+	PRINTFORMW 그렇게 짧은 시간이 흐른 뒤에, 토모에는 말을 꺼냈다
+	PRINTFORML 
+	IF TALENT:MASTER:선생 == 1
+		PRINTFORMW 「선생님. 선생님은 저희 붉은겨울의 혁명동지죠?」
+	ELSE
+		PRINTFORMW 「%ANAME(MASTER)%께선 우리 붉은겨울의 혁명동지가 맞죠?」
+	ENDIF
+	PRINTFORML 
+	PRINTFORMW 혁명동지라는 단어는 오묘하지만
+	PRINTFORMW 동료라고 뇌내 필터링을 돌리면 딱히 틀린 말은 아니어서 고개를 끄덕였다
+	PRINTFORML 
+	PRINTFORMW 「다행이다」
+	PRINTFORMW 「알고 계신가요? 혁명동지들은 무엇보다 단단한 결속이 중요합니다」
+	PRINTFORMW 「그래야 반동분자들의 공격에도 끈끈히 버틸 수 있으니까요」
+	PRINTFORMW 「특히, 비서실장인 저는 누구보다도 끈끈한 결속을 가진 동지가 필요합니다」
+	PRINTFORMW 「체리노 회장과는 물론 끈끈한 관계입니다만,」
+	PRINTFORMW 「제가 신뢰하는 사람과 끈끈한 관계를 맺을 수 있다면 더할나위 없지요」
+	PRINTFORML 
+	PRINTFORMW 거기까지 말한 토모에는 이 쪽을 바라보았다
+	PRINTFORMW 무언가 큰 결심을 한 듯 아랫입술을 단단히 깨물고 있다
+	PRINTFORML 
+	PRINTFORMW 「혁명동지가 되어주세요」
+	PRINTFORMW 「붉은겨울이 아닌 저, 사시로 토모에의 혁명동지가 되어주세요」
+	PRINTFORMW 「당신을...신뢰하고 있어요」
+	PRINTFORML 
+
+	CALL ASK_YN("받아들인다", "거절한다")
+
+	;고백을 받아들인다
+	IF RESULT == 0
+		PRINTFORML 
+		PRINTFORMW 말 없이 토모에의 두 손을 꼭 붙잡았다
+		PRINTFORMW 아무 말도 하지 않았지만, 토모에는 그 행동 만으로도 대답을 이해한 것 같다
+		PRINTFORML 
+		PRINTFORMW 「정말...혁명적이라고 해도 과언이 아닌 날이에요」
+		PRINTFORMW 「이반 쿠팔라 축제를 열었을 때도 이렇게 들뜨지는 않았을 거에요」
+		PRINTFORMW 「체리노 회장...아니, 체리노 쨩에게는 죄송한 말이지만」
+		PRINTFORMW 「저를 위한 이반 쿠팔라는 바로 지금이에요」
+		PRINTFORMW 「보이니치 사본이나 토템폴...BD와 기술노트...장갑이나 시계...」
+		PRINTFORMW 「그 동안 받지 못했던 장비들 대신 다른 선물을 받았으니까요」
+		PRINTFORMW 「키보토스의 혁명을 위해 해야할 일이 많은 것은 알지만」
+		PRINTFORMW 「이 순간 만큼은 가벼운 일탈을 느껴도...괜찮겠죠?」
+		PRINTFORML 
+	
+	;	;고백 성공시는 TFLAG:4에 1을 대입
+		TFLAG:4 = 1
+
+	;고백을 거절한다
+	ELSE
+		PRINTFORML 
+		PRINTFORMW 「그렇...군요」
+		PRINTFORML 
+		PRINTFORMW 토모에는 실망이 역력한 표정으로 고개를 떨구었다
+		PRINTFORMW 하지만 이내 고개를 들고 결연한 표정을 지어 보였다
+		PRINTFORML 
+		PRINTFORMW 「그렇죠. 사적인 감정으로 중대사를 망치면 안되겠죠」
+		PRINTFORMW 「지금 제가 신경써야할 것은 키보토스의 혁명」
+		PRINTFORMW 「감정에 휘둘리는 것 조차 사치에요」
+		PRINTFORMW 「자, 돌아가죠! 돌아가서 체리노 회장의 위대함을 어떻게 전파할지 함께 연구해 봐요!」
+		PRINTFORML 
+		PRINTFORMW 그렇게 말한 토모에는 앞장서서 걸어가기 시작했다
+		PRINTFORML 
+	
+	;	;고백 성공시는 TFLAG:4에 0을 대입
+		TFLAG:4 = 0
+	ENDIF
+	RETURN 1
+ENDIF
+
+;-------------------------------------------------
+;상대로부터 밀어 쓰러트려진다
+;-------------------------------------------------
+;합의 없음
+IF ARG == 22
+	PRINTFORML 
+	PRINTFORMW 「저희 붉은겨울 연방학원에서는 대대적으로 미인계를 첩보전술로 사용해 왔답니다」
+	PRINTFORMW 「육체적인 관계를 맺게 되면 좋든 싫든 정이 생기기 마련이거든요」
+	PRINTFORMW 「아시겠나요? 요즘 같은 시대에 실습은 못 해봤지만, 이론이라면 제 머릿속에 충분히 들어 있답니다」
+	PRINTFORML 
+	CALL ASK_YN ("좋은 정보는 고맙긴 한데...", "내 몸 위에서 내려와 주면 안될까?")
+	PRINTFORML 
+	PRINTFORMW 토모에는 당신의 몸을 깔고 앉아 당신을 내려다보고 있다
+	PRINTFORMW 토모에의 한 손은 당신의 가슴을, 다른 한 손은 당신의 사타구니를 쓰다듬고 있다
+	PRINTFORML 
+	PRINTFORMW 「제가 태어난 이후로는 미인계를 수업으로 듣기만 했지 실습해 볼 기회는 없었는데...」
+	PRINTFORMW 「이렇게 좋은 기회가 제 발로 걸어들어왔네요?」
+	PRINTFORMW 「물론 앞으로도 거부하진 않으시겠죠? 먼저 유혹한 건 그 쪽이니까요?」
+	PRINTFORML 
+	PRINTFORMW 토모에가 입맛을 다셨다...
+	PRINTFORML 
+	RETURN 1
+;합의 이루어＆취한 기세
+ELSEIF ARG == 23
+	;PRINTFORMW 
+	RETURN 0
+;합의 있어
+ELSEIF ARG == 24
+	PRINTFORML 
+	PRINTFORMW 「저희 붉은겨울 연방학원에서는 대대적으로 미인계를 첩보전술로 사용해 왔답니다」
+	PRINTFORMW 「그래서 학교 수업에도 미인계에 대한 강의가 있어요」
+	PRINTFORML 
+	CALL ASK_YN ("좋은 정보는 고맙긴 한데...", "전에 한 번 들었던 내용이잖아...")
+	PRINTFORML 
+	PRINTFORMW 「어머? 바로 본론으로 들어가고 싶으신 거네요?」
+	PRINTFORMW 「그럼 우선 이걸 선물로 드릴게요. 안 써도 상관은 없지만」
+	PRINTFORML 
+	PRINTFORMW 토모에는 자신의 가슴골 사이에서 무언가를 꺼내 당신의 손에 쥐여주었다.
+	SETCOLOR 칼라_노랑
+	PRINTFORMW 미지근한 온도의『콘돔』을 얻었다
+	RESETCOLOR
+	PRINTFORML 
+	RETURN 1
+;합의 있어＆취한 기세
+ELSEIF ARG == 25
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;상대로부터 졸라대진다
+;-------------------------------------------------
+;합의 없음
+IF ARG == 26
+	;PRINTFORMW 
+	RETURN 0
+;합의 이루어＆취한 기세
+ELSEIF ARG == 27
+	;PRINTFORMW 
+	RETURN 0
+;합의 있어
+ELSEIF ARG == 28
+	;PRINTFORMW 
+	RETURN 0
+;합의 있어＆취한 기세
+ELSEIF ARG == 29
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;취기 한계에서 넘어진다
+;-------------------------------------------------
+IF ARG == 32
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;임신 발각
+;-------------------------------------------------
+IF ARG == 40
+	;포로 조교
+	IF CFLAG:9 == CFLAG:MASTER:1
+		;종 친불명
+		IF CFLAG:23 == 0
+			IF ABL:출산 >= 3
+				;PRINTFORMW 
+			ELSE
+				;PRINTFORMW 
+			ENDIF
+		;주인공인 아이를 임신했다
+		ELSEIF CFLAG:23 == GET_ID(MASTER)
+			IF TALENT:연모 || TALENT:복종 || TALENT:친구
+				;PRINTFORMW 
+			ELSEIF TALENT:연인 || TALENT:낙인
+				;PRINTFORMW 
+			ELSE
+				IF ABL:출산 >= 3
+					;PRINTFORMW 
+				ELSE
+					;PRINTFORMW 
+				ENDIF
+			ENDIF
+		;촉수의 아이를 임신했다
+		ELSEIF LOCAL:6 == -10
+			;PRINTFORMW 
+		;다른 사관인 아이를 임신했다
+		ELSE
+			;PRINTFORMW 
+		ENDIF
+	;포로 조교 이외
+	ELSE
+		;종 친불명
+		IF CFLAG:23 == 0
+			IF ABL:출산 >= 3
+				;PRINTFORMW 
+			ELSE
+				;PRINTFORMW 
+			ENDIF
+		;주인공인 아이를 임신했다
+		ELSEIF CFLAG:23 == GET_ID(MASTER)
+			IF TALENT:연모 || TALENT:복종 || TALENT:친구
+				;PRINTFORMW 
+			ELSEIF TALENT:연인 || TALENT:낙인
+				;PRINTFORMW 
+			ELSE
+				;PRINTFORMW 
+			ENDIF
+		;촉수의 아이를 임신했다
+		ELSEIF CFLAG:23 == -10
+			;PRINTFORMW 
+		;다른 사관인 아이를 임신했다
+		ELSE
+			;PRINTFORMW 
+		ENDIF
+	ENDIF
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;임월에 접어들었다
+;-------------------------------------------------
+IF ARG == 41
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;아이를 출산했다
+;-------------------------------------------------
+IF ARG == 42
+	;부친의 캐릭터 번호를 LOCAL:0에 취득
+	LOCAL:0 = ID_TO_CHARA(CFLAG:23)
+
+	;주인공의 아이의 경우
+	IF LOCAL:0 == MASTER
+		IF TALENT:연모 || TALENT:복종 || TALENT:친구
+			;PRINTFORMW 
+		ELSEIF TALENT:연인 || TALENT:낙인
+			;PRINTFORMW 
+		ELSE
+			;PRINTFORMW 
+		ENDIF
+	;종 친불명의 경우
+	ELSEIF CFLAG:23 == 0
+		;PRINTFORMW 
+	;다른 관직에 오름의 아이의 경우
+	ELSE
+		;PRINTFORMW 
+	ENDIF
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;주인공에게 자신의 자식을 낳게 했다
+;-------------------------------------------------
+IF ARG == 43
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;촉수의 아이를 출산했다
+;-------------------------------------------------
+IF ARG == 44
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;충성을 맹세하게 한다/성공
+;-------------------------------------------------
+IF ARG == 50
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;충성을 맹세하게 한다/실패
+;-------------------------------------------------
+IF ARG == 51
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;자국으로 이끈다/성공
+;-------------------------------------------------
+IF ARG == 52
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;자국으로 이끈다/실패
+;-------------------------------------------------
+IF ARG == 53
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;연모를 취득
+;-------------------------------------------------
+IF ARG == 60
+	IF TALENT:MASTER:선생 == 1
+		PRINTFORMW 「(최근 들어 선생님을 만날 때마다 이상한 기분이 드네요)」
+		PRINTFORMW 「(선생님을 볼 때마다 어딘가 가슴이 애절해지는 이 기분은 혹시...)」
+	ELSE
+		PRINTFORMW 「최근 들어 %ANAME(MASTER)% 를 생각할 때마다 이상한 기분이 드네요」
+		PRINTFORMW 「(%ANAME(MASTER)% 를 볼 때마다 어딘가 가슴이 애절해지는 이 기분은 혹시...)」
+	ENDIF
+		PRINTFORMW 「(혁명의 전조, 일까요?)」
+		PRINTFORMW 「(어쩌면...그것 뿐만은 아닐지도...)」
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;친구를 취득
+;-------------------------------------------------
+IF ARG == 61
+	PRINTFORMW 「저희 붉은겨울 연방학원의 위대한 업적을 위해 항상 힘써주시는 것에 진심으로 감사드립니다」
+	PRINTFORMW 「체리노 회장께서 그 간의 공로를 인정하여 『하이퍼 울트라 메가 특별 학생 우정 훈장』을 수여해 주시로 하셨어요」
+	PRINTFORML 
+	PRINTFORMW ......
+	CALL ASK_YN ("그 뭔 씹", "위대한 체리노 대장 동지의 포상, 달게 받겠습니다")
+	IF RESULT == 0
+		PRINTFORMW 「후후, 기뻐하셔도 좋아요. 무려 체리노 회장님의 동지로 인정받았다는 뜻이니까요」
+		PRINTFORMW 「체리노 회장님의 동지는 곧 저의 동지」
+		PRINTFORMW 「앞으로도 저희 붉은겨울 연방 학원을 위해 힘써주시기 바랍니다, 동지」
+	ELSE
+		PRINTFORMW 「어머, 생각보다 더 기뻐하시는 걸 보니 저도 좋네요」
+		PRINTFORMW 「조금 더 노력하신다면 이것보다 더 높은 등급인 『초 하이퍼 울트라 메가 특별 학생 우정 훈장』도 받으실 수 있을거에요」
+		PRINTFORMW 「그 때까지 열심히 힘써주세요, 동지」
+	ENDIF
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;친애를 취득
+;-------------------------------------------------
+IF ARG == 62
+	IF TALENT:MASTER:선생 == 1
+		PRINTFORMW 「한 때는 선생님에게서 혁명의 전조를 느꼈어요」
+		PRINTFORMW 「선생님은 체리노 회장을 보좌할 좋은 전위대장이 될 거라고 생각했었는데」
+		PRINTFORMW 「제 생각이 약간 틀렸었어요」
+		PRINTFORMW 「선생님의 혁명은 제 마음 속에서 일어났던 거네요」
+		PRINTFORMW 「선생님께서 제 마음속에 피우신 혁명적인 붉은 불꽃이, 지금 제 얼굴을 달아오르게 만들고 있어요」
+		PRINTFORMW 「마음대로 제게 불장난을 치셨으니, 책임도 져 주세요?」
+	ELSE
+		PRINTFORMW 「한 때는 %ANAME(MASTER)% 에게서 혁명의 전조를 느꼈어요」
+		PRINTFORMW 「%조사처리(ANAME(MASTER), "은")% 체리노 회장을 보좌할 좋은 전위대장이 될 거라고 생각했었는데」
+		PRINTFORMW 「제 생각이 약간 틀렸었어요」
+		PRINTFORMW 「그 혁명은 제 마음 속에서 일어났던 거네요」
+		PRINTFORMW 「제 마음속에 피우신 혁명적인 붉은 불꽃이, 지금 제 얼굴을 달아오르게 만들고 있어요」
+		PRINTFORMW 「마음대로 제게 불장난을 치셨으니, 책임도 져 주세요?」
+	ENDIF
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;복종을 취득
+;-------------------------------------------------
+IF ARG == 63
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;예속을 취득
+;-------------------------------------------------
+IF ARG == 64
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;음란을 취득
+;-------------------------------------------------
+IF ARG == 65
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;혼인의식(선택시)
+;-------------------------------------------------
+IF ARG == 90
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;혼인의식(이벤트시)
+;-------------------------------------------------
+IF ARG == 91
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;조교 후 자위(Ｃ)
+;-------------------------------------------------
+IF ARG == 100
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;조교 후 자위(Ａ)
+;-------------------------------------------------
+IF ARG == 101
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;조교 후 성교
+;-------------------------------------------------
+IF ARG == 102
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;조르기에게 「보류」를 선택
+;-------------------------------------------------
+IF ARG == 103
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;유혹 성공(취한 기세·합의는 얻을 수 없다)
+;-------------------------------------------------
+IF ARG == 104
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;유혹 성공(합의를 취득)
+;-------------------------------------------------
+IF ARG == 105
+	;연모 or 복종
+	IF TALENT:연모 || TALENT:복종
+		;PRINTFORMW 
+	;그 이외
+	ELSE
+		;PRINTFORMW 
+	ENDIF
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;유혹 실패
+;-------------------------------------------------
+IF ARG == 106
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;유혹 성공(이미 합의 있어)
+;-------------------------------------------------
+IF ARG == 107
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;취해 무너진 곳에서 장난
+;-------------------------------------------------
+IF ARG == 110
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;주인공이 실신해도 조교 계속
+;-------------------------------------------------
+IF ARG == 111
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;주인공이 피로해도 조교 계속
+;-------------------------------------------------
+IF ARG == 112
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;커맨드 실행 실패
+;-------------------------------------------------
+IF ARG == 150
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;관장＆플러그를 실행 후, 플러그를 뽑아 낸다
+;-------------------------------------------------
+IF ARG == 151
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;밤이벤트/일반
+;-------------------------------------------------
+;곁잠
+IF ARG == 200
+	;PRINTFORMW 
+	RETURN 0
+;저녁 반주
+ELSEIF ARG == 201
+	;PRINTFORMW 
+	RETURN 0
+;담소
+ELSEIF ARG == 202
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;밤이벤트/애무
+;-------------------------------------------------
+;꾸짖고(통상)
+IF ARG == 210
+	;PRINTFORMW 
+	RETURN 0
+;꾸짖고(가학)
+ELSEIF ARG == 211
+	;PRINTFORMW 
+	RETURN 0
+;받고(통상)
+ELSEIF ARG == 212
+	;PRINTFORMW 
+	RETURN 0
+;받고(피학)
+ELSEIF ARG == 213
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;밤이벤트/성교
+;-------------------------------------------------
+;주인공이 이 캐릭터의Ｖ에 삽입
+IF ARG == 220
+	;PRINTFORMW 
+	RETURN 0
+;주인공이 이 캐릭터의Ａ에 삽입
+ELSEIF ARG == 221
+	;PRINTFORMW 
+	RETURN 0
+;이 캐릭터가 주인공의Ｖ에 삽입
+ELSEIF ARG == 222
+	;PRINTFORMW 
+	RETURN 0
+;이 캐릭터가 주인공의Ａ에 삽입
+ELSEIF ARG == 223
+	;PRINTFORMW 
+	RETURN 0
+;레즈 관련
+ELSEIF ARG == 224
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;아침 이벤트/스스로 성지식을 배운다
+;-------------------------------------------------
+IF ARG == 240
+	;PRINTFORMW 
+	RETURN 0
+
+;-------------------------------------------------
+;아침 이벤트/스스로 성지식을 배운다(역조교)
+;-------------------------------------------------
+ELSEIF ARG == 241
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;전투 개시
+;-------------------------------------------------
+;야전
+IF ARG == 300
+	;PRINTFORMW 
+	RETURN 0
+;방위전(침공측)
+ELSEIF ARG == 301
+	;PRINTFORMW 
+	RETURN 0
+;방위전(방위측)
+ELSEIF ARG == 302
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;특수 전술
+;-------------------------------------------------
+;계략 발동
+IF ARG == 310
+	;PRINTFORMW 
+	RETURN 0
+;반계
+ELSEIF ARG == 311
+	;PRINTFORMW 
+	RETURN 0
+;관계(무력)
+ELSEIF ARG == 312
+	;PRINTFORMW 
+	RETURN 0
+;관계(호감도)
+ELSEIF ARG == 313
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;주인공 세력에 포박 된다(부대 괴멸시)
+;-------------------------------------------------
+IF ARG == 330
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;주인공 세력에 포박 된다(멸망시)
+;-------------------------------------------------
+IF ARG == 331
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;주인공 세력에 포박 되었을 때의 리액션
+;-------------------------------------------------
+;등용에 응한다
+IF ARG == 332
+	;PRINTFORMW 
+	RETURN 0
+;등용을거부한다
+ELSEIF ARG == 333
+	;PRINTFORMW 
+	RETURN 0
+;해방된다
+ELSEIF ARG == 334
+	;PRINTFORMW 
+	RETURN 0
+;투옥된다
+ELSEIF ARG == 335
+	;PRINTFORMW 
+	RETURN 0
+;처형된다
+ELSEIF ARG == 336
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;전사시
+;-------------------------------------------------
+IF ARG == 337
+	;주인공과 동일 세력에 소속
+	IF CFLAG:1 >= 1 && CFLAG:1 == CFLAG:MASTER:1
+		IF TALENT:연모 || TALENT:복종 || TALENT:친구
+			;PRINTFORMW 
+		ELSE
+			;PRINTFORMW 
+		ENDIF
+	;주인공과 다른 세력에 소속
+	ELSE
+		;PRINTFORMW 
+	ENDIF
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;포로 조교의 메뉴
+;-------------------------------------------------
+;해방된다
+IF ARG == 340
+	;PRINTFORMW 
+	RETURN 0
+;처형된다
+ELSEIF ARG == 341
+	;PRINTFORMW 
+	RETURN 0
+;성 노예화 된다
+ELSEIF ARG == 342
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;방랑 이벤트
+;-------------------------------------------------
+;등용에 응한다
+IF ARG == 350
+	;PRINTFORMW 
+	RETURN 0
+;등용을거부한다
+ELSEIF ARG == 351
+	;PRINTFORMW 
+	RETURN 0
+;투옥된다
+ELSEIF ARG == 352
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;단칼·카린 관계
+;-------------------------------------------------
+;[단칼에 연모]를 취득
+IF ARG == 400
+	;PRINTFORMW 
+	RETURN 0
+;[단칼의 연인]를 취득
+ELSEIF ARG == 401
+	;PRINTFORMW 
+	RETURN 0
+;[단칼에 연모]를 상실
+ELSEIF ARG == 402
+	;PRINTFORMW 
+	RETURN 0
+;단칼과 헤어지게 하는 것을 성공
+ELSEIF ARG == 403
+	;PRINTFORMW 
+	RETURN 0
+;단칼과 헤어지게 하는 것을 실패
+ELSEIF ARG == 404
+	;PRINTFORMW 
+	RETURN 0
+;[조조에게 연모]를 취득
+ELSEIF ARG == 410
+	;PRINTFORMW 
+	RETURN 0
+;[조조의 연인]를 취득
+ELSEIF ARG == 411
+	;PRINTFORMW 
+	RETURN 0
+;[조조에게 연모]를 상실
+ELSEIF ARG == 412
+	;PRINTFORMW 
+	RETURN 0
+;조조와 헤어지게 하는 것을 성공
+ELSEIF ARG == 413
+	;PRINTFORMW 
+	RETURN 0
+;조조와 헤어지게 하는 것을 실패
+ELSEIF ARG == 414
+	;PRINTFORMW 
+	RETURN 0
+ENDIF
+
+;-------------------------------------------------
+;역조교시
+;-------------------------------------------------
+;주인공에게 충성을 맹세하게 한다
+IF ARG == 450
+	;PRINTFORMW 
+	RETURN 0
+;주인공에게 충성을 맹세하게 한다/성공
+ELSEIF ARG == 451
+	;PRINTFORMW 
+	RETURN 0
+;주인공에게 충성을 맹세하게 한다/실패
+ELSEIF ARG == 452
+	;PRINTFORMW 
+	RETURN 0
+ENDIF

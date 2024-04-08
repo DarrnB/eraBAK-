@@ -1,0 +1,481 @@
+﻿;---------------------
+;기본적인 발생 확률(1000분 율 100으로 10%)
+;이것에 콘피그 항목의 발생 빈도를 걸칠 수 있으므로, 반드시 이 대로는 되지 않는다
+;---------------------
+@EVENT_DAILY_REQUEST_CHARA_RATE()
+RETURN 30
+
+;---------------------
+;확률 이외의 발생 판정
+;0기 이후가 되면 발생한다든가, 데일리측에서 이용하고 있는 변수가-1이라면 일으키지 않는다  같은 튕기는 방법을 할 경우에 사용한다
+;---------------------
+@EVENT_DAILY_REQUEST_CHARA_DECISION()
+;미검수 OFF면 스킵
+SIF FLAG:데일리이벤트_미검수 == 0
+	RETURN 0
+SIF DVAR:사관요구_발생금지카운터 > 0
+	RETURN 0
+SIF FLAG:클리어플래그
+	RETURN 0
+
+RETURN DAY >= SLG_PP:0
+
+;---------------------
+;장르
+;콘피그 설정으로 사용
+;---------------------
+@EVENT_DAILY_REQUEST_CHARA_GENRE()
+RETURN 데일리_장르_외교
+
+;---------------------
+;본체
+;이벤트가 발생했을 경우는 1, 발생하지 않았던 경우는 0을 돌려준다
+;발생하지 않았다는 것은 예를 들면, 특정 조건을 채우는 캐릭터로부터 랜덤에 한사람 선택하는 데일리로, 원래 그 조건을 채우는 캐릭터가 한사람도 없는 것 같은 때
+;구사양으로 만든 적 있는 사람용으로 말하면 「구사양의 데일리 본체 첫머리에서-1을 돌려주는 것 같은 상황」
+;---------------------
+@EVENT_DAILY_REQUEST_CHARA()
+#DIM 자국경제치
+#DIM 각국경제치, MAX_COUNTRY
+#DIM 후보국, MAX_COUNTRY
+#DIM 후보수
+#DIM 결과국
+#DIM 결과군주
+;LOCALSIZE에 맞춘다. VARSIZE 사용하고 싶지만 DIM에는 짜넣을 수 없다
+#DIM 후보캐릭터, 3000
+#DIM 결과캐릭터
+#DIM 도둑
+VARSET 자국경제치
+VARSET 각국경제치
+VARSET 후보국
+VARSET 후보캐릭터
+VARSET 후보수
+VARSET 도둑
+
+;미리, 도둑의 세력 번호를 보존
+도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_도둑))
+
+
+;------------여기에서 나라의 선출-----------------
+
+;우선 각국의 경제치를 보존
+FOR LOCAL, 0, MAX_COUNTRY
+	IF CFLAG:MASTER:소속 == LOCAL
+		자국경제치 = GET_SUM_ECONOMY(LOCAL)
+	ELSEIF IS_COUNTRY(LOCAL)
+		각국경제치:LOCAL = GET_SUM_ECONOMY(LOCAL)
+	ENDIF
+NEXT
+
+;도둑 세력에 소속하지 않은 경우, 도둑 세력의 경제치는 자국 경제치의 배라는 일로 해 둔다
+SIF 도둑 > 0 && CFLAG:MASTER:소속 != 도둑
+	각국경제치:도둑 = 자국경제치 * 2
+
+
+;자국보다 경제치가 큰 국가를 후보로서 기록
+FOR LOCAL, 0, MAX_COUNTRY
+	IF 자국경제치 < 각국경제치:LOCAL
+		후보국:후보수 = LOCAL
+		후보수 ++
+	ENDIF
+NEXT
+
+;후보가 없으면 끝난다
+IF 후보수 == 0
+	RETURN 0
+ENDIF
+
+;후보가 존재한다면, 랜덤에서 선출한 것을 결과국으로 한다
+CALL FISHER_YATES_SHAFFLE(후보수)
+결과국 = 후보국:(SHAFFLE_ARRAY:0)
+결과군주 = GET_COUNTRY_BOSS(결과국)
+
+;3비율의 확률로 강제적으로 도둑이 된다
+IF 도둑 > 0 && CFLAG:MASTER:소속 != 도둑 && RAND:100 < 30
+	결과국 = 도둑
+	결과군주 = GET_COUNTRY_BOSS(도둑)
+ENDIF
+
+;------------여기로부터 캐릭터의 선출-----------------
+
+;후보수를 제로 클리어
+VARSET 후보수
+
+;캐릭터의 선출
+FOR LOCAL, 0, CHARANUM
+	;MASTER는 아니고, MASTER 소속 세력의 군주도 아니고, 같은 나라에 소속. 만약 결과국이 도둑이라면 여자인 것. 동물은 안 돼.
+	IF LOCAL != MASTER && LOCAL != GET_COUNTRY_BOSS(CFLAG:MASTER:소속) && CFLAG:(LOCAL):소속 == CFLAG:MASTER:소속 && !CFLAG:(LOCAL):포로처 && (결과국 != 도둑 || IS_FEMALE(LOCAL)) && !IS_ANIMAL(LOCAL)
+		;0 ~ 「능력4종의 10배로 호감도·종속도·의존도의 것 1/10의 총화」  의 난수를 보존
+		후보캐릭터:LOCAL = RAND(0, MAX((ABL:LOCAL:무투 + ABL:LOCAL:방위 + ABL:LOCAL:지략 + ABL:LOCAL:정치) * 10 + (CFLAG:LOCAL:호감도 + CFLAG:LOCAL:종속도 + CFLAG:LOCAL:의존도 + CFLAG:(LOCAL):지배도) / 10, 1))
+		후보수 ++
+	ENDIF
+NEXT
+
+;후보가 없으면 끝난다
+IF 후보수 == 0
+	PRINTFORMW 인재의 제공을 요구하려고 한 세력이 있던 것 같지만, 이쪽의 인재가 고갈하고 있다고 알아 포기한 것 같다……
+	RETURN 0
+ENDIF
+
+;방금전 얻은 난수가 최대였던 캐릭터를 취득
+결과캐릭터 = FINDELEMENT(후보캐릭터, MAXARRAY(후보캐릭터))
+
+;없을 것이지만, 결과 캐릭터가 발견되지 않으면 끝난다
+SIF 결과캐릭터 <= 0
+	RETURN 0
+
+;여기로부터 메세지와 각종 처리
+;도둑의 경우는 특수 패턴
+IF 결과국 != 도둑
+	PRINTFORML %조사처리(ANAME(MASTER),"가")% 업무를 보고 있을 때, 비서가 손님이 왔다고 알렸다.
+	CALL COLOR_PRINT(@"%ANAME(결과군주)%", 칼라_주의)
+	PRINTFORMW 가 보낸 것이라고 한다
+	PRINTFORML %ANAME(결과군주)%라고 하면, 이쪽보다 강력한 세력을 인솔하고 있는 군주다
+	PRINTFORMW 기다리게 하는 것도 결례이니 %조사처리(ANAME(MASTER),"는")% 당장 만나기로 했다……
+	PRINTFORML
+	PRINTFORML
+	PRINTFORML
+	PRINTFORMW %ANAME(결과군주)%의 학생의 이야기는, 이런 일이었다
+	PRINTFORML
+	PRINTFORML 요즈음은 싸움이 격렬해져, 우리 학교에서는 유능한 학생이 필요하다
+	PRINTFORM 즉, %ANAME(MASTER)%의 학교에 있는
+	CALL COLOR_PRINT(@"%ANAME(결과캐릭터)%", 칼라_주의)
+	PRINTFORMW 를 이 쪽에 양보해 주지 않겠냐는 것이다.
+	PRINTFORMW 두 학교간의 우호적인 관계와 미래를 위해서 부디 잘 생각해보라는 권유였다.
+	PRINTFORML
+	PRINTFORML 물론, 이쪽의 세력이 약한 것을 이용한, 악랄한 요구다
+	PRINTFORML 분노하는 %조사처리(ANAME(MASTER),"이지만")%, 저 편이 입장이 강한 것은 사실이다.
+	PRINTFORML 거절하면 상대는 기분이 나쁠 것이고, 그것은 %ANAME(MASTER)%의 세력의 장래가 위험할 수도 있다
+	PRINTFORMW 그렇다고 해서 그런 인질과 같은 역할을 %ANAME(결과캐릭터)%에 맡겨도 될 것인가.
+	CALL SINGLE_DRAWLINE
+	CALL ASK_YN(@"%ANAME(결과캐릭터)%를 배웅한다", "거절한다")
+	LOCAL = RESULT
+	IF RESULT == 0
+		PRINTFORMW 여기는 따를 수밖에 없다. 그렇게 생각한 %조사처리(ANAME(MASTER),"는")% %ANAME(결과캐릭터)%를 배웅하기로 했다……
+		PRINTFORMW 요구에 따른 것으로, %ANAME(결과군주)%는 기분이 매우 좋아진 것 같다.
+		CALL CHANGE_RELATION_C_TO_C(결과국, CFLAG:MASTER:소속, 500, -300)
+		CALL CHANGE_COUNTRY(결과캐릭터, 결과국, 1)
+		CFLAG:결과캐릭터:호감도 /= 2
+		CFLAG:결과캐릭터:의존도 /= 2
+		CFLAG:결과캐릭터:종속도 /= 2
+		CFLAG:결과캐릭터:지배도 /= 2
+	ELSEIF RESULT == 1
+		PRINTFORMW 역시 그런 일은 할 수 없다. 그렇게 전해, %ANAME(결과군주)%의 학생을 돌려 보냈다
+		PRINTFORMW %ANAME(결과군주)%의 기분이 안 좋아진 것 같다……
+		CALL CHANGE_RELATION_C_TO_C(결과국, CFLAG:MASTER:소속, -300, 300)
+	ENDIF
+	DVAR:사관요구_발생금지카운터 = 10
+ELSE
+	PRINTFORML %조사처리(ANAME(MASTER),"가")% 업무를 보고 있을 때, 비서가 손님이 왔다고 알렸다.
+	CALL COLOR_PRINT(@"%ANAME(결과군주)%", 칼라_주의)
+	PRINTFORMW 가 사람을 보낸 것이라고 한다
+	PRINTFORML %ANAME(결과군주)%라고 하면, 각국이 골머리를 썩히고 있는 상대다
+	PRINTFORMW 도대체 무엇을 전하러 온 것일까, %조사처리(ANAME(MASTER),"는")% 당장 만나기로 했다……
+	PRINTFORML
+	PRINTFORML
+	PRINTFORML
+	PRINTFORMW %ANAME(결과군주)%의 사람이 가져온 이야기는, 이런 일이었다
+	PRINTFORML
+	PRINTFORML 최근, 세력권 내의 학교를 다 점령해버려 괜찮은 여학생이 없어져 버렸다
+	PRINTFORML 좋은 여자가 옆에 없는 영향으로, 남자들은 여자에 굶주리고 있어 학교의 사기가 좋지 않다
+	PRINTFORM 그래서, %ANAME(MASTER)%에 있는
+	CALL COLOR_PRINT(@"%ANAME(결과캐릭터)%", 칼라_주의)
+	PRINTFORMW 가 아주 훌륭한 여학생이라고 들었다
+	PRINTFORML 그래서 부탁이란, %ANAME(결과캐릭터)%를 「유학이라는 명목으로」 「빌려」주지 않겠는가
+	PRINTFORMW 그렇지 않으면, 어떠한 「불이익」이 %ANAME(MASTER)%에 발생하게 될 것이다
+	PRINTFORML 요즈음 우리들은 강한 힘을 가지고 있어, 지금은 다른 모든 학교들과도 대등하게 싸울 수 있는 관계에 있다
+	PRINTFORMW 그런 우리의 부탁을 들어주지 않으면, 책임은 그 쪽에 있는 것이다.
+	PRINTFORMW %ANAME(결과캐릭터)%은 정중하게 취급해 주기 때문에, 안심해도 괜찮을 것이다.
+	PRINTFORML
+	PRINTFORML 정중하게 취급한다고 말해고 있지만, 녀석들이 %ANAME(결과캐릭터)%를 성노예와 같은 취급을 하는 것은 틀림없다
+	PRINTFORMW 도적 새끼들이, 이 무슨 무례한 요구인가!
+	PRINTFORML 마음 속으로 격노하는 %조사처리(ANAME(MASTER),"이지만")%, 이 녀석들의 세력이 지금 강한 것은 사실.
+	PRINTFORML 거절하면, 상대가 어떠한 괴롭힘―-그것도 피도, 눈물도, 자비도, 없을 것 같은―-에 나오는 것은 확실하다
+	PRINTFORMW 그렇다고 해서 이런 사람을 사람으로도 생각하지 않는 무리에게 %ANAME(결과캐릭터)%를 건네주어도 좋을까……
+	CALL SINGLE_DRAWLINE
+	CALL ASK_MULTI(@"%ANAME(결과캐릭터)%를 배웅한다", "자극하지 않게, 정중하게 거절한다", "사용의 사람을 베어 버린다")
+	LOCAL = RESULT
+	IF RESULT == 0
+		PRINTFORMW 여기는 따를 수밖에 없다. 그렇게 생각한 %조사처리(ANAME(MASTER),"는")% %ANAME(결과캐릭터)%를 배웅하기로 했다……
+		CALL COLOR_PRINT(@"%ANAME(결과군주)%", 칼라_주의)
+		PRINTFORMW 의 사람은 음흉한 미소를 지으며, %ANAME(결과캐릭터)%과 함께 자국으로 돌아갔다.
+		IF !CONFIG:200
+			PRINTFORMW 도둑들의 아지트에 데리고 돌아가진 %ANAME(결과캐릭터)%는, 도둑 전원의 앞에서 새로운 노예로서 소개되었다
+			PRINTFORMW 그리고 그대로, 노예로서 처음의 「일」에 종사 당한 것 같다……
+			CALL FORCE_FREE(결과캐릭터)
+			CALL FUCK_GANGBANG(결과캐릭터, GET_SPERM_ID("도둑"), @"도둑의 \@ RAND:2 ? 페니스 # 입술\@", "도둑")
+		ENDIF
+			CALL CHANGE_RELATION_C_TO_C(결과국, CFLAG:MASTER:소속, 500, -300)
+			CFLAG:결과캐릭터:호감도 /= 2
+			CFLAG:결과캐릭터:의존도 /= 2
+			CFLAG:결과캐릭터:종속도 /= 2
+			CFLAG:결과캐릭터:지배도 /= 2
+			CALL CAPTURE(결과캐릭터, 결과국)
+	ELSEIF RESULT == 1
+		PRINTFORMW 역시 그런 일은 할 수 없다고 생각해, %ANAME(결과군주)%의 사람을 돌려 보냈다
+		PRINTFORMW %조사처리(ANAME(MASTER),"이지만")% 정중하게 거절했던 것이 좋았던 것일까, 어떤 보복도 일어나지 않았다……
+	ELSEIF RESULT == 2
+		PRINTFORMW 분노에 맡겨%조사처리(ANAME(MASTER),"는")% 욕을 하며 그를 내쫒았다
+		PRINTFORMW %ANAME(결과군주)%의 사람은 두고 보자는 말과 함께 학교를 나갔다.
+		PRINTFORMW 조금 가슴이 후련한 기분이다……
+		PRINTFORML 
+		SETCOLOR 칼라_경고
+		PRINTFORMW ……그러나, 이 처사가 어떠한 결과를 부르는지, %조사처리(ANAME(MASTER),"는")% 깨닫게 된다……
+		RESETCOLOR
+		DVAR:사관요구_도둑베어버리기플래그 = GET_ID(결과캐릭터)
+	ENDIF
+	DVAR:사관요구_발생금지카운터 = 10
+ENDIF
+RETURN 1
+
+;---------------------
+;기본적인 발생 확률(1000분 율 100으로 10%)
+;이것에 콘피그 항목의 발생 빈도를 걸칠 수 있으므로, 반드시 이 대로는 되지 않는다
+;---------------------
+@EVENT_DAILY_REQUEST_MONEY_RATE()
+RETURN 30
+
+;---------------------
+;확률 이외의 발생 판정
+;0기 이후가 되면 발생한다든가, 데일리측에서 이용하고 있는 변수가-1이라면 일으키지 않는다  같은 튕기는 방법을 할 경우에 사용한다
+;---------------------
+@EVENT_DAILY_REQUEST_MONEY_DECISION()
+SIF DVAR:자금원조요구_발생금지카운터 > 0
+	RETURN 0
+SIF FLAG:클리어플래그
+	RETURN 0
+RETURN DAY >= SLG_PP:0
+;---------------------
+;장르
+;콘피그 설정으로 사용
+;---------------------
+@EVENT_DAILY_REQUEST_MONEY_GENRE()
+RETURN 데일리_장르_외교
+
+;---------------------
+;본체
+;이벤트가 발생했을 경우는 1, 발생하지 않았던 경우는 0을 돌려준다
+;발생하지 않았다는 것은 예를 들면, 특정 조건을 채우는 캐릭터로부터 랜덤에 한사람 선택하는 데일리로, 원래 그 조건을 채우는 캐릭터가 한사람도 없는 것 같은 때
+;구사양으로 만든 적 있는 사람용으로 말하면 「구사양의 데일리 본체 첫머리에서-1을 돌려주는 것 같은 상황」
+;---------------------
+@EVENT_DAILY_REQUEST_MONEY()
+#DIM 자국경제치
+#DIM 각국경제치, MAX_COUNTRY
+#DIM 후보국, MAX_COUNTRY
+#DIM 후보수
+#DIM 결과국
+#DIM 결과군주
+;LOCALSIZE에 맞춘다. VARSIZE 사용하고 싶지만 DIM에는 짜넣을 수 없다
+#DIM 후보캐릭터, 3000
+#DIM 결과캐릭터
+#DIM 도둑
+#DIM 후보액
+VARSET 자국경제치
+VARSET 각국경제치
+VARSET 후보국
+VARSET 후보캐릭터
+VARSET 후보수
+VARSET 도둑
+
+
+도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_도둑))
+;------------여기에서 나라의 선출-----------------
+
+;우선 각국의 경제치를 보존
+;다만, 도둑 이외의 특수 세력은 대상이 되지 않는다
+FOR LOCAL, 0, MAX_COUNTRY
+	IF CFLAG:MASTER:소속 == LOCAL
+		자국경제치 = GET_SUM_ECONOMY(LOCAL)
+	ELSEIF IS_COUNTRY(LOCAL) && (!IS_SP_COUNTRY(LOCAL) || LOCAL == 도둑)
+		각국경제치:LOCAL = GET_SUM_ECONOMY(LOCAL)
+	ELSEIF IS_COUNTRY(LOCAL) && IS_SP_COUNTRY(LOCAL)
+		각국경제치:LOCAL = __INT_MAX__
+	ENDIF
+NEXT
+
+;도둑 세력에 소속하지 않은 경우, 도둑 세력의 경제치는 1이라는 일로 해 둔다
+SIF 도둑 > 0 && CFLAG:MASTER:소속 != 도둑
+	각국경제치:도둑 = 1
+
+
+;자국보다 경제치가 작은 국가를 후보로서 기록
+FOR LOCAL, 0, MAX_COUNTRY
+	IF IS_COUNTRY(LOCAL) && LOCAL != CFLAG:MASTER:소속 && 자국경제치 > 각국경제치:LOCAL
+		후보국:후보수 = LOCAL
+		후보수 ++
+	ENDIF
+NEXT
+
+
+;후보가 없으면 끝난다
+IF 후보수 == 0
+	PRINTFORMW 인재 교환과 자금의 제공을 요구하려고 한 학교가 있던 것 같지만, 유용한 인재가 없었기 때문에 포기한 것 같다……
+	RETURN 0
+ENDIF
+
+
+;후보가 존재한다면, 랜덤에서 선출한 것을 결과국으로 한다
+CALL FISHER_YATES_SHAFFLE(후보수)
+결과국 = 후보국:(SHAFFLE_ARRAY:0)
+결과군주 = GET_COUNTRY_BOSS(결과국)
+
+;3비율의 확률로 강제적으로 도둑이 된다
+IF 도둑 > 0 && CFLAG:MASTER:소속 != 도둑 && RAND:100 < 30
+	결과국 = 도둑
+	결과군주 = GET_COUNTRY_BOSS(도둑)
+ENDIF
+
+;급료 5 턴 만큼, 최저 10000
+후보액 = MAX(CALC_SALARY() * 5, 10000)
+
+
+;메세지와 각종 처리
+;도둑의 경우는 특수 패턴
+IF 결과국 != 도둑
+	;인질로서 보내는 캐릭터 선출을 실시한다
+	;후보수를 제로 클리어
+	VARSET 후보수
+	;캐릭터의 선출
+	FOR LOCAL, 0, CHARANUM
+		;결과 태어난 고향속에서, 포로는 아니고, 수령은 아니다. 한편 여자이다. 동물은 안 돼.
+		IF CFLAG:LOCAL:소속 == 결과국 && !CFLAG:(LOCAL):포로처 && LOCAL != GET_COUNTRY_BOSS(결과국) && IS_FEMALE(LOCAL) && !IS_ANIMAL(LOCAL)
+			;0 ~ 「3 능력의 10배로 호감도·종속도·의존도의 것 1/10의 총화」  의 난수를 보존
+			후보캐릭터:LOCAL = RAND(0, MAX((ABL:LOCAL:무투 + ABL:LOCAL:방위 + ABL:LOCAL:지략 + ABL:LOCAL:정치) * 10 + (CFLAG:LOCAL:호감도 + CFLAG:LOCAL:종속도 + CFLAG:LOCAL:의존도 + CFLAG:(LOCAL):지배도) / 10, 1))
+			후보수 ++
+		ENDIF
+	NEXT
+	;후보가 없으면 끝난다
+	IF 후보수 == 0
+		PRINTFORMW 인재 교환과 자금의 제공을 요구하려고 한 세력이 있던 것 같지만, 유용한 인재가 없었기 때문에 포기한 것 같다……
+		RETURN 0
+	ENDIF
+
+	;방금전 얻은 난수가 최대였던 캐릭터를 취득
+	결과캐릭터 = FINDELEMENT(후보캐릭터, MAXARRAY(후보캐릭터))
+	;결과 캐릭터가 발견되지 않으면 끝난다
+	SIF 결과캐릭터 <= 0
+		RETURN 0
+	PRINTFORML %조사처리(ANAME(MASTER),"가")% 일을 하고 있을 때, 비서가 다가왔다
+	CALL COLOR_PRINT(@"%ANAME(결과군주)%", 칼라_주의)
+	PRINTFORMW 가 사람을 보낸 것이라고 한다
+	PRINTFORML %ANAME(결과군주)%라고 하면, 이쪽보다 약한 세력이지만……
+	PRINTFORMW 약하다고 해서 가볍게 대할 수는 없기에, %조사처리(ANAME(MASTER),"는")% 조속히 만나기로 했다……
+	PRINTFORML
+	PRINTFORML
+	PRINTFORML
+	PRINTFORMW %ANAME(결과군주)%의 사람이 가져온 이야기는, 이런 일이었다
+	PRINTFORML
+	PRINTFORML 요즈음은 싸움이 격렬해져, 우리 나라는 자금이 매우 부족한 상황이다
+	CALL ICPRINT(@"그래서, %조사처리(ANAME(MASTER),"로")%부터 돈<{후보액}>정도 원조해 주지 않는가", "W", 칼라_주의)
+	CALL ICPRINT(@"그 대신에, %ANAME(결과캐릭터)%를 주겠다……", "W", 칼라_주의)
+	PRINTFORML
+	PRINTFORML 타국에 울며 매달리지 않으면 안 될 정도로 어려울 것이다
+	PRINTFORML 그들의 상황에 동정하는 %조사처리(ANAME(MASTER),"이지만")%, 도와줄 것인가는 또 다른 이야기다.
+	PRINTFORML 원조하면 %ANAME(결과군주)%는 기분이 좋아질 것이고, 우수한 인재도 얻을 수 있다……
+	PRINTFORML 그것은 돌고 돌아, %ANAME(MASTER)%의 세력의 장래를 안정시키는 포석이 될 것이다
+	PRINTFORMW 그렇다고는 해도, 돈 또한 중요한 자원이다. 무한하게 있는 것은 아니고, 아껴쓰지 않으면……
+	CALL SINGLE_DRAWLINE
+	PRINTFORML 현재의 자금:{MONEY}
+	CALL ASK_MULTI_JUDGE(@"금{후보액}를 원조한다", MONEY >= 후보액, "거절한다", 1, "너의 신체를 넘겨라", MONEY >= 후보액)
+	LOCAL = RESULT
+	IF RESULT == 0
+		PRINTFORMW 뭐, 원조해 준다고 하자. %조사처리(ANAME(MASTER),"는")% 돈{후보액}를 주기로 했다
+		PRINTFORMW 자금원조에 의해, %ANAME(결과군주)%과의 사이가 매우 좋아졌다.
+		CALL COLOR_PRINTW(@"%ANAME(결과캐릭터)%를 양도했습니다", 칼라_주의)
+		CALL CHANGE_RELATION_C_TO_C(결과국, CFLAG:MASTER:소속, 300, -200)
+		CALL FORCE_FREE(결과캐릭터)
+		CALL CHANGE_COUNTRY(결과캐릭터, CFLAG:MASTER:소속, 1)
+		MONEY -= 후보액
+	ELSEIF RESULT == 1
+		PRINTFORMW 이 쪽도 그런 여유는 없다. 그렇게 전해, %ANAME(결과군주)%의 사람을 돌려 보냈다
+	ELSEIF RESULT == 2
+		PRINTFORMW 대신에 너의 신체를 넘겨라……%ANAME(결과군주)%에 그렇게 전했다
+		PRINTFORMW 농담으로 끝나지 않는 이 발언은, %ANAME(결과군주)% 뿐만 아니라 다른 세력을 동요시켰다
+		PRINTFORMW 하지만 그런데도, %ANAME(결과군주)%는 이것을 받아들이지 않을 수 없었다……
+		CALL COLOR_PRINTW(@"자금을 원조하는 대신, %ANAME(결과군주)%를 안을 수 있게 되었습니다", 칼라_주의)
+		CALL COLOR_PRINTW(@"다른 학교와의 관계가 악화되었습니다", 칼라_경고)
+		MONEY -= 후보액
+		CFLAG:(결과군주):외교조교중 = 1
+		;관계 악화
+		FOR LOCAL:0, 0, MAX_COUNTRY
+			IF IS_COUNTRY(LOCAL) && LOCAL != CFLAG:MASTER:소속
+				IF LOCAL == 결과국
+					CALL CHANGE_RELATION_C_TO_C(결과국, CFLAG:MASTER:소속, -1000, 1000)
+				ELSE
+					CALL CHANGE_RELATION_C_TO_C(LOCAL, CFLAG:MASTER:소속, -400, 300)
+				ENDIF
+			ENDIF
+		NEXT
+	ENDIF
+	DVAR:자금원조요구_발생금지카운터 = 10
+ELSE
+	PRINTFORML %조사처리(ANAME(MASTER),"가")% 스케쥴로 바삐 일하고 있을 때, 비서가 찾아왔다.
+	CALL COLOR_PRINT(@"%ANAME(결과군주)%", 칼라_주의)
+	PRINTFORMW 가 사람을 보낸 것이라고 한다
+	PRINTFORML %ANAME(결과군주)%라고 하면, 다른 학교도 골머리를 썩히고 있는 상대다
+	PRINTFORMW 도대체 무엇을 전하러 온 것일까, %조사처리(ANAME(MASTER),"는")% 바로 만나기로 했다……
+	PRINTFORML
+	PRINTFORML
+	PRINTFORML
+	PRINTFORMW %ANAME(결과군주)%의 사람이 가져온 이야기는, 이런 일이었다
+	PRINTFORML
+	PRINTFORML 최근, 세력권내의 학교들을 모두 약탈해버려, 세금이 나올 구석이 없다.
+	PRINTFORML 돈 뿐만 아니라, 남자 무리는 오락에 굶주리고 있어 사기에도 영향이 나오고 있다
+	PRINTFORM 거기서 부탁할 일인 것이지만, 돈
+	CALL COLOR_PRINT(@"{후보액}", 칼라_주의)
+	PRINTFORMW 정도 「양도해」주지 않는가
+	PRINTFORMW 그렇지 않으면 어떠한 「불이익」이 %ANAME(MASTER)%에 발생하게 될 것이다
+	PRINTFORML 근래에 우리는 강한 힘을 가지고 있어, 지금은 다른 모든 학교와 대등하게 서로 싸울 수 있을 정도다
+	PRINTFORMW 뭘, 그저 몇 푼 안 되는 돈만 주면 아무 일도 없을 것이다……
+	PRINTFORML
+	PRINTFORMW 도적 새끼들이, 무슨 파렴치한 요구인가!
+	PRINTFORML 분노를 느끼는 %조사처리(ANAME(MASTER),"이지만")%, 녀석들이 어떤 해코지를 할지 모르는 상황이다
+	PRINTFORML 거절하면, 상대가 우리에게 해를 끼치는 것은 확실할 것이다
+	PRINTFORMW 그렇다고 해서 저런 무리에게 돈을 건네주어도 좋은 것일까……
+	CALL SINGLE_DRAWLINE
+	CALL ASK_MULTI_JUDGE(@"금{후보액}를 원조한다", MONEY >= 후보액, "자극하지 않게, 정중하게 거절한다", 1, "쫒아낸다", 1)
+	IF RESULT == 0
+		PRINTFORMW 뭐, 원조해 준다고 하자. %조사처리(ANAME(MASTER),"는")% 돈{후보액}를 주기로 했다
+		PRINTFORMW 자금원조에 의해, %ANAME(결과군주)%과 관계가 좋아졌다.
+
+		CALL CHANGE_RELATION_C_TO_C(결과국, CFLAG:MASTER:소속, 300, -200)
+		MONEY -= 후보액
+	ELSEIF RESULT == 1
+		PRINTFORMW 범죄자들에게 주는 돈은 없다. %ANAME(결과군주)%의 사람을 돌려 보냈다
+		PRINTFORMW 보복을 경계하고 있었던 %조사처리(ANAME(MASTER),"이지만")%, 정중하게 거절했던 것이 좋았던 것일까, 어떠한 해코지도 일어나지 않았다……
+	ELSEIF RESULT == 2
+		PRINTFORMW 분노에 맡겨%조사처리(ANAME(MASTER),"는")% 욕하며 그를 쫒아냈다
+		PRINTFORMW 두고 보자는 말과 함께 학교 밖으로 강제로 떠나갔다
+		PRINTFORMW 조금 가슴이 후련한 기분이다……
+		PRINTFORML 
+		;-------자금원조 요구는 여기서 캐릭터 선출을 실시한다-------
+		;후보수를 제로 클리어
+		VARSET 후보수
+		;캐릭터의 선출
+		FOR LOCAL, 0, CHARANUM
+			;MASTER는 아니고, MASTER 소속 세력의 군주도 아니고, 같은 나라에 소속. 만약 결과국이 도둑이라면 여자인 것.
+			IF LOCAL != MASTER && LOCAL != GET_COUNTRY_BOSS(CFLAG:MASTER:소속) && CFLAG:(LOCAL):소속 == CFLAG:MASTER:소속 && !CFLAG:(LOCAL):포로처 && (결과국 != 도둑 || IS_FEMALE(LOCAL)) && !IS_ANIMAL(LOCAL)
+				;0 ~ 「3 능력의 10배로 호감도·종속도·의존도의 것 1/10의 총화」  의 난수를 보존
+				후보캐릭터:LOCAL = RAND(0, MAX((ABL:LOCAL:무투 + ABL:LOCAL:방위 + ABL:LOCAL:지략 + ABL:LOCAL:정치) * 10 + (CFLAG:LOCAL:호감도 + CFLAG:LOCAL:종속도 + CFLAG:LOCAL:의존도 + CFLAG:(LOCAL):지배도) / 10, 1))
+				후보수 ++
+			ENDIF
+		NEXT
+		;후보가 없으면 끝난다
+		SIF 후보수 == 0
+			RETURN 0
+		;방금전 얻은 난수가 최대였던 캐릭터를 취득
+		결과캐릭터 = FINDELEMENT(후보캐릭터, MAXARRAY(후보캐릭터))
+		;없을 것이지만, 결과 캐릭터가 발견되지 않으면 끝난다
+		SIF 결과캐릭터 <= 0
+			RETURN 0
+
+		SETCOLOR 칼라_경고
+		PRINTFORMW ……그렇지만 이것이 어떠한 결과를 부르는지, %조사처리(ANAME(MASTER),"는")% 깨닫게 된다……
+
+		RESETCOLOR
+		DVAR:사관요구_도둑베어버리기플래그 = GET_ID(결과캐릭터)
+	ENDIF
+	DVAR:자금원조요구_발생금지카운터 = 10
+ENDIF
+RETURN 1
+
+
