@@ -66,6 +66,7 @@ RETURN 1
 #DIM 대상세력
 #DIM 대상부대
 대상측 = !발동측
+CALL FACE_IMAGE_N("얼굴_의복_통상_108")
 PRINTFORML "화력 지원을 시작한다!"
 BATTLE_SKILL_SEALED:대상측:COMBAT_SKILL_TARGET = 1
 CALL DECREASE_SOLDIER(대상세력, 대상부대, RAND(800, 2000), 1)

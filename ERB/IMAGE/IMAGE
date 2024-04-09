@@ -1,0 +1,24 @@
+
+;-------------------------------------------------------------
+; 이미지 출력
+; - sImageName: 이미지 이름
+; - iHeight: 이미지 세로크기
+;   (단위는 텍스트 한 줄의 높이, 예를 들어 4를 넣으면 텍스트 4줄 만큼의 크기가 됨)
+; - iPos: 이미지 세로위치, 단위는 iHeight와 동일
+; - iSpace: 이미지 왼쪽 여백, 여러 이미지를 나란히 표시할 때 사용, 기본 0
+;-------------------------------------------------------------
+@PRINT_IMAGE(sImageName, iHeight, iPos, iSpace)
+#DIMS sImageName
+#DIM iHeight
+#DIM iPos
+#DIM iSpace
+#DIM iSizeFactor
+#DIMS sHtml
+
+iSizeFactor = 100 * GETCONFIG("一行の高さ") / GETCONFIG("フォントサイズ")
+iHeight *= iSizeFactor
+iPos *= iSizeFactor
+iSpace *= iSizeFactor
+HTML_PRINT @"<shape type='space' param='{iSpace}'><img src='%sImageName%' height='{iHeight}' ypos='-{iPos}'>"
+
+RETURN

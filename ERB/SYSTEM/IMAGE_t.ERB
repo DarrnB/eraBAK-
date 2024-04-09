@@ -668,6 +668,7 @@ RETURN
 #FUNCTIONS
 #DIM iID
 #DIMS sName
+
 IF TALENT:(iID):커스텀페이스 > 0
 	sName = 커스텀
 	;성별전환 커스텀페이스
@@ -677,16 +678,71 @@ IF TALENT:(iID):커스텀페이스 > 0
 		sName = %sName%_F
 	ENDIF
 	sName = %sName%_얼굴_의복_통상_{TALENT:(iID):커스텀페이스}
+ELSEIF EXIST_PICTURE(NO:iID)
+	sNAME = 얼굴_의복_통상_{NO:iID}
 ELSEIF IS_MALE(iID)
 	sName = F_남
 ELSEIF IS_FEMALE(iID)
 	sName = F_여
+
 ELSE
 	sName = F_DUMMY
 ENDIF
 
 RETURNF sName
 
+;-------------------------------------------------------------
+;화상이 있는 캐릭터
+;-------------------------------------------------------------
+@EXIST_PICTURE(ID)
+#FUNCTION
+#DIM ID
+
+SELECTCASE ID
+CASE 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135 
+		RETURNF 1
+	CASEELSE
+		RETURNF 0
+ENDSELECT
+
+;-------------------------------------------------------------
+;PRINT COMMANDER
+;전투시 지휘관 얼굴을 출력하는 함수
+;-------------------------------------------------------------
+@PRINT_COMMANDER(COMMANDER:0, COMMANDER:1, COMMANDER:2)
+#DIM COMMANDER, MAX_UNIT_COMMANDER
+#DIMS IMAGE, MAX_UNIT_COMMANDER
+#DIM iSize
+#DIM iSpace
+#DIM iPadding
+#DIM iVar
+
+iSize = 6
+CALL PRINT_ENTER(iSize - MAX_UNIT_COMMANDER)
+
+FOR iVar, 0, MAX_UNIT_COMMANDER
+	IF COMMANDER:iVar < 0
+		PRINTL
+		CONTINUE
+	ENDIF
+	IMAGE:iVar = %GET_IMAGE_NAME(COMMANDER:iVar)%
+
+	iSpace = iSize * iVar
+	iPadding = iSize - MAX_UNIT_COMMANDER + iVar
+	CALL F_PRINT_IMAGE(IMAGE:iVar, iSize, iPadding, iSpace)
+NEXT
+
+RETURN
+;-------------------------------------------------------------
+; count만큼 빈 줄을 추가
+;-------------------------------------------------------------
+@PRINT_ENTER(iCount)
+#DIM iCount
+#DIM iVar
+
+FOR iVar, 0, iCount
+	HTML_PRINT "<br>"
+NEXT
 
 ;=======================================================================
 ; ☆ 아이 이미지 적용 - 레몬녹차
@@ -735,3 +791,27 @@ SELECTCASE LOCAL:0
 				TALENT:TARGET:아이화상번호 = 1
 		ENDSELECT
 ENDSELECT
+
+;-------------------------------------------------------------
+; 이미지 출력
+; - sImageName: 이미지 이름
+; - iHeight: 이미지 세로크기
+;   (단위는 텍스트 한 줄의 높이, 예를 들어 4를 넣으면 텍스트 4줄 만큼의 크기가 됨)
+; - iPos: 이미지 세로위치, 단위는 iHeight와 동일
+; - iSpace: 이미지 왼쪽 여백, 여러 이미지를 나란히 표시할 때 사용, 기본 0
+;-------------------------------------------------------------
+@F_PRINT_IMAGE(sImageName, iHeight, iPos, iSpace)
+#DIMS sImageName
+#DIM iHeight
+#DIM iPos
+#DIM iSpace
+#DIM iSizeFactor
+#DIMS sHtml
+
+iSizeFactor = 100 * GETCONFIG("一行の高さ") / GETCONFIG("フォントサイズ")
+iHeight *= iSizeFactor
+iPos *= iSizeFactor
+iSpace *= iSizeFactor
+HTML_PRINT @"<shape type='space' param='{iSpace}'><img src='%sImageName%' height='{iHeight}' ypos='-{iPos}'>"
+
+RETURN
