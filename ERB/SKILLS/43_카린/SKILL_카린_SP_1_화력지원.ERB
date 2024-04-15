@@ -5,7 +5,7 @@
 RETURN 1
 
 @SKILL_43_SP_0_NAME
-RESULTS = 대상, 삭제
+RESULTS = 화력, 지원
 
 ;레벨은 1-5까지
 @SKILL_43_SP_0_LEVEL
@@ -68,7 +68,7 @@ RETURN 1
 대상측 = !발동측
 PRINTFORML "목표를 포착했다."
 
-CALL DECREASE_SOLDIER(대상세력, 대상부대, 1000, 1)
+CALL DECREASE_SOLDIER(대상세력, 대상부대, 2000, 1)
 
 @SKILL_43_SP_0_EXPLANATION
 RESULTS = 적 부대에 고정 데미지를 준다.

@@ -1,0 +1,58 @@
+﻿;-------------------------------------------------
+;「무기변경」의 명칭
+;-------------------------------------------------
+@SHOP_LIFE_NAME63
+RESULTS:0 '= "무기변경"
+;-------------------------------------------------
+;「무기변경」의 선택 가부
+;-------------------------------------------------
+@SHOP_LIFE_CHECK63
+SIF CFLAG:MASTER:포로처
+	RETURN 0
+RETURN 1
+
+;-------------------------------------------------
+;「무기변경」의 선택 가능 캐릭터 존재 판정
+;-------------------------------------------------
+@SHOP_LIFE_CHECKCHARA63(ARG:0)
+;동일세력, 포로가 아님,동물이 아님
+RETURN CFLAG:(ARG:0):소속 == CFLAG:MASTER:소속 && CFLAG:(ARG:0):포로처 == 0 && !IS_ANIMAL(ARG:0)
+
+;-------------------------------------------------
+;「무기변경」의 오른쪽 컬럼 표시 처리
+;-------------------------------------------------
+@SHOP_LIFE_EVENTBUY_SHOW63
+CALL COLUMN_RIGHT_TITLE("대상자 선택", "1", "1", "0", "0", "0")
+CALL COLUMN_RIGHT_PRINTL
+CALL COLUMN_RIGHT_LINE
+CALL COLUMN_RIGHT_PRINTL
+CALL COLOR_PRINT(" 학생들의 무기를 변경 할 수 있습니다 ", 칼라_주석)
+CALL COLUMN_RIGHT_PRINTL
+CALL COLUMN_RIGHT_LINE
+CALL COLUMN_RIGHT_PRINTL
+CALL COLUMN_RIGHT_CHARALIST
+RETURN 0
+
+;-------------------------------------------------
+;「무기변경」의 왼쪽 컬럼 메뉴의 입력 처리
+;-------------------------------------------------
+@SHOP_LIFE_EVENTBUY63
+FLAG:거점페이즈페이지 = 1
+RETURN 0
+
+;-------------------------------------------------
+;「무기변경」의 입력 처리
+;-------------------------------------------------
+@SHOP_LIFE_USERSHOP63(대상)
+#DIM 대상
+
+CALL SINGLE_DRAWLINE
+CALL ICPRINT(@"현재 <%ANAME(대상)%>의 무기", "L", 칼라_주의)
+CALL SINGLE_DRAWLINE
+CALL WEAPON_IMAGE(TALENT:대상:웨폰, 7, 0)
+PRINTL
+PRINTL
+PRINTFORML [%WEAPON_NAME(TALENT:대상:웨폰), 30, LEFT%]
+TRYCALLFORM 무기_설명_{TALENT:대상:웨폰}
+CALL SINGLE_DRAWLINE
+CALL WEAPON_MENU(대상)

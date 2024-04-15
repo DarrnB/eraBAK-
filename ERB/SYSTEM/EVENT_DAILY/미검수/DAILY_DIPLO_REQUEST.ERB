@@ -52,7 +52,7 @@ VARSET 후보수
 VARSET 도둑
 
 ;미리, 도둑의 세력 번호를 보존
-도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_도둑))
+도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_카이저_코퍼레이션))
 
 
 ;------------여기에서 나라의 선출-----------------
@@ -221,7 +221,7 @@ ELSE
 		SETCOLOR 칼라_경고
 		PRINTFORMW ……그러나, 이 처사가 어떠한 결과를 부르는지, %조사처리(ANAME(MASTER),"는")% 깨닫게 된다……
 		RESETCOLOR
-		DVAR:사관요구_도둑베어버리기플래그 = GET_ID(결과캐릭터)
+		DVAR:사관요구_카이저_코퍼레이션베어버리기플래그 = GET_ID(결과캐릭터)
 	ENDIF
 	DVAR:사관요구_발생금지카운터 = 10
 ENDIF
@@ -277,7 +277,7 @@ VARSET 후보수
 VARSET 도둑
 
 
-도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_도둑))
+도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_카이저_코퍼레이션))
 ;------------여기에서 나라의 선출-----------------
 
 ;우선 각국의 경제치를 보존
@@ -472,7 +472,7 @@ ELSE
 		PRINTFORMW ……그렇지만 이것이 어떠한 결과를 부르는지, %조사처리(ANAME(MASTER),"는")% 깨닫게 된다……
 
 		RESETCOLOR
-		DVAR:사관요구_도둑베어버리기플래그 = GET_ID(결과캐릭터)
+		DVAR:사관요구_카이저_코퍼레이션베어버리기플래그 = GET_ID(결과캐릭터)
 	ENDIF
 	DVAR:자금원조요구_발생금지카운터 = 10
 ENDIF

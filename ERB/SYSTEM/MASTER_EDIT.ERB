@@ -301,8 +301,7 @@ ELSEIF 번호 == 1
 	ELSE
 		TALENT:대상:커스텀페이스 ++
 	ENDIF
-ELSEIF 번호 == 2
-	CALL WEAPON_MENU(대상)
+
 ENDIF
 
 ;-------------------------
@@ -442,7 +441,7 @@ PRINTBUTTON "[◁]", 400
 PRINT [프로필사진]
 PRINTBUTTON "[▷]", 401
 PRINT     
-PRINTBUTTON @"[웨폰:%WEAPON_NAME(TALENT:대상:웨폰)%]", 402
+PRINTFORM [웨폰:%WEAPON_NAME(TALENT:대상:웨폰)%]
 PRINTL
 
 ;-------------------------
@@ -468,7 +467,7 @@ PRINTFORM 성장형:%TOSTR_GROWTYPE(TALENT:대상:성장형)%(%TOSTR_GROWTYPE_B(
 PRINTL
 PRINTBUTTON "[수동 설정]", 100001
 PRINT   
-PRINTBUTTON "[리로르]", 300
+PRINTBUTTON "[리로드]", 300
 PRINT   
 FOR LOCAL, 0, VARSIZE("표시능력")
 	PRINTFORM %ABLNAME:(표시능력:LOCAL)%:

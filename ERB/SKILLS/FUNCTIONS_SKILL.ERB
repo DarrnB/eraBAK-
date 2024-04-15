@@ -342,6 +342,8 @@ CALLFORM %악세사%NAME
 스킬명 = %(STRLENS(RESULTS:0) > 20 ? TOHALF(RESULTS:0) # RESULTS:0)%
 IF 스킬NO == 0
 	캐릭터명 = 범용
+ELSEIF 스킬NO > 1000
+	캐릭터명 = %(WEAPON_NAME(스킬NO - 1000))%
 ELSEIF 스킬NO > 10000
 	캐릭터명 = 특수
 ELSE

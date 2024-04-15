@@ -1,7 +1,12 @@
-﻿;-------------------------------------------------
-;공통 부분
+﻿;===============================================
+; EraBlueArchiveK 아이리 구상 공통부분
+; 제작자 : 레몬녹차
+; 구상 최종 수정 : 2024-04-14
+; 
+; 자칭 '평범'호소인이 아닌 진짜 '평범'한 학생 아이리 구상
+; 아이리 귀여워 (★≧▽^))★☆
+; 
 ;-------------------------------------------------
-
 ;=================================================
 ;●구상의 존재 판정
 ;=================================================
@@ -73,7 +78,6 @@ SIF !TALENT:동정
 IF TALENT:공허 || IS_EQUIP_CONTINUE(TARGET, "입장착")
 	RETURN 0
 ENDIF
-
 SETCOLOR 0x7CCEC3
 
 ;------------------------------------------------
@@ -85,9 +89,9 @@ IF IS_SLAVE(TARGET)
 ;아나타가 [선생]이면 '선생님'이라고 부름
 ELSEIF TALENT:MASTER:선생 == 1
 	LOCALS:0 = 선생님
-;친구라면 ~쨩으로 부름
+;친구라면 ~짱으로 부름
 ELSEIF TALENT:친구
-	LOCALS:0 = %ANAME(MASTER)%쨩
+	LOCALS:0 = %ANAME(MASTER)%짱
 ;그 외엔 이름으로 부름
 ELSE
 	LOCALS:0 = %ANAME(MASTER)%
@@ -97,33 +101,41 @@ ENDIF
 ;첫절정은 재사용할 수 있을 것 같은 것으로 여기에 작성
 ;-------------------------------------------------
 ;-------------------------------------------------
-;처음Ｃ절정
+;Ｃ절정 구상
 ;-------------------------------------------------
 IF NOWEX:Ｃ절정 > 0
 	;첫 C절정
 	IF CFLAG:220 == 0
 		CFLAG:220 = 1
-		PRINTFORMW C 첫절정 
+		PRINTFORML 「하읏... 흐.. 이거 이상해요....」
+		PRINTFORMW 아이리는 녹아버릴 것 같은 얼굴로 엄청난 쾌감을 견디고 있다.
+		PRINTFORML 「으읏... 햐아.. 뭔가 와요.. 흐읏... 햐아앗!」
+		PRINTFORMW %ANAME(MASTER)%의 손이 살짝 닿자 아이리는 몸을 떨면서 절정에 달했다.
+		PRINTFORMW 「햐으... 흐에... 이런거... 머리가 이상해져요」
 	;그 이후 절정
 	ELSE
-	PRINTFORMW c 절정
+		PRINTFORML 아이리는 달콤한 신음을 내며 절정에 달했다.
+		PRINTFORMW 「흐읏.. 햐앗... 기분 죠아...」
 	ENDIF
 ENDIF
 
 ;-------------------------------------------------
-;Ｖ절정
+;Ｖ절정 대사
 ;-------------------------------------------------
 IF NOWEX:Ｖ절정 > 0
 	;첫 V절정
 	IF CFLAG:221 == 0
 		CFLAG:221 = 1
 		PRINTFORMW 「아앗.. 와요... 이상한게 와요...」
-		PRINTFORMW 아이리는 질로 절정에 달했다.
+		PRINTFORML 「안쪽이 이상해.... 간닷....」
+		PRINTFORMW 아이리는 고개를 젖히고 질로 절정에 달했다.
+	;그 이후 V절정
 	ELSE
 		SELECTCASE RAND:3
 			CASE 0
 				PRINTFORML 아이리는 몸을 떨며 절정했다
-				PRINTFORMW 「흐읏.... 후으...」
+				PRINTFORML 「햐읏.... 후읏...」
+				PRINTFORMW 안쪽이 꾸욱 조이면서 질로 절정했다.
 			CASE 1
 				PRINTFORML 「햐앗.. 가요... 가버려요...」
 				PRINTFORMW 아이리의 질내가 확 조이면서 절정에 달했다.
@@ -132,7 +144,7 @@ IF NOWEX:Ｖ절정 > 0
 					PRINTFORML 「하아 하앗... %LOCALS:0%의 자지로 가버려요...♡」
 					PRINTFORMW 아이리는 %ANAME(MASTER)%의 자지를 조이면서 가버렸다
 				ELSEIF TALENT:복종
-					PRINTFORML 「우으... %LOCALS:0%의 자지로 가버려요..」
+					PRINTFORML 「우읏... %LOCALS:0%의 자지로 가버려요..」
 					PRINTFORMW 아이리는 %ANAME(MASTER)%의 피스톤질에 가버렸다
 				ELSE
 					PRINTFORML 「햐앗... 뭔가 와요...」
@@ -141,26 +153,38 @@ IF NOWEX:Ｖ절정 > 0
 				ENDIF
 		ENDSELECT
 	ENDIF
-
 ENDIF
 
 ;-------------------------------------------------
 ;처음Ａ절정
 ;-------------------------------------------------
 IF NOWEX:Ａ절정 > 0
+	;처음 A절정
 	IF CFLAG:222 == 0
 		CFLAG:222 = 1
-		;PRINTFORMW 
+		PRINTFORMW 「아앗... 엉덩이 이상해요오... 흐읏...」
+		PRINTFORML 아이리의 장내가 꾸욱 조이면서 생전 처음 느껴보는 절정에 달하였다.
+		PRINTFORMW 「흐으... 흐읏... 저 변태가 되어버린거 같아요...」
+	;그 이후 A절정
+	ELSE
+		PRINTFORML 아이리는 고개를 젖히고 엉덩이로 절정에 달하였다.
+		PRINTFORMW 「아앗... 엉덩이로 가욧...♡」
 	ENDIF
+
 ENDIF
 
 ;-------------------------------------------------
 ;처음Ｂ절정
 ;-------------------------------------------------
 IF NOWEX:Ｂ절정 > 0
+	;처음Ｂ절정
 	IF CFLAG:223 == 0
 		CFLAG:223 = 1
-		;PRINTFORMW 
+		PRINTFORMW 「크읏... 가슴이 이상해요옷.. 히야앗」
+	;그 이후Ｂ절정
+	ELSE
+		PRINTFORML 「햐앗... 가슴으로 가버려요...」
+		PRINTFORMW 「크으읏....♡」
 	ENDIF
 ENDIF
 
@@ -230,17 +254,21 @@ RESETCOLOR
 ;
 ;
 @KOJO_SINGLE_ENDING_K62
+SETCOLOR 0x7CCEC3
 ;단체 엔딩
 ;전도시를 통일했을 때, 호감도 5000이상 또한 전캐릭터중 가장 호감도가 높다고 표시된다
 ;PRINTFORMW 
 
 ;RETURN의 값을 0→1으로 바꾸면, Default의 단체 엔딩 메세지가 스킵 된다
+RESETCOLOR
 RETURN 0
 
 @KOJO_DEAD_ENDING_K62
+SETCOLOR 0x7CCEC3
 ;참수 엔딩
 ;자세력이 멸망 했을 때의 선택지로 「……베어라」를 선택해 주인공이 사망했을 경우에, 호감도 5000이상 또한 전캐릭터중 가장 호감도가 높다고 표시된다
 ;PRINTFORMW 
 
 ;RETURN의 값을 0→1으로 바꾸면, Default의 단체 엔딩 메세지가 스킵 된다
+RESETCOLOR
 RETURN 0

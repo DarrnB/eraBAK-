@@ -76,6 +76,7 @@ CFLAG:NAME_TO_CHARA("후우카"):소속              = GET_COUNTRY_FROM_BOSS_NAM
 CFLAG:NAME_TO_CHARA("주리"):소속              = GET_COUNTRY_FROM_BOSS_NAME("마코토")
 CFLAG:NAME_TO_CHARA("에리카"):소속              = GET_COUNTRY_FROM_BOSS_NAME("마코토")
 CFLAG:NAME_TO_CHARA("키라라"):소속              = GET_COUNTRY_FROM_BOSS_NAME("마코토")
+CFLAG:NAME_TO_CHARA("치아키"):소속              = GET_COUNTRY_FROM_BOSS_NAME("마코토")
 CITY_OWNER:GET_CITYNUMBER("만마전")           = GET_COUNTRY_FROM_BOSS_NAME("마코토")
 CITY_OWNER:GET_CITYNUMBER("게헨나 중앙구")       = GET_COUNTRY_FROM_BOSS_NAME("마코토")
 CITY_OWNER:GET_CITYNUMBER("게헨나 급식소")       = GET_COUNTRY_FROM_BOSS_NAME("마코토")
@@ -111,6 +112,7 @@ CFLAG:NAME_TO_CHARA("토키"):소속              = GET_COUNTRY_FROM_BOSS_NAME("
 CFLAG:NAME_TO_CHARA("우타하"):소속              = GET_COUNTRY_FROM_BOSS_NAME("리오")
 CFLAG:NAME_TO_CHARA("히비키"):소속              = GET_COUNTRY_FROM_BOSS_NAME("리오")
 CFLAG:NAME_TO_CHARA("코토리"):소속              = GET_COUNTRY_FROM_BOSS_NAME("리오")
+CFLAG:NAME_TO_CHARA("레이"):소속              = GET_COUNTRY_FROM_BOSS_NAME("리오")
 CITY_OWNER:GET_CITYNUMBER("밀레니엄 타워")           = GET_COUNTRY_FROM_BOSS_NAME("리오")
 CITY_OWNER:GET_CITYNUMBER("밀레니엄 발전소")           = GET_COUNTRY_FROM_BOSS_NAME("리오")
 CITY_OWNER:GET_CITYNUMBER("밀레니엄 스타디움")           = GET_COUNTRY_FROM_BOSS_NAME("리오")
@@ -176,6 +178,9 @@ CFLAG:NAME_TO_CHARA("카에데"):소속              = GET_COUNTRY_FROM_BOSS_NAM
 CFLAG:NAME_TO_CHARA("미치루"):소속              = GET_COUNTRY_FROM_BOSS_NAME("니야")
 CFLAG:NAME_TO_CHARA("이즈나"):소속              = GET_COUNTRY_FROM_BOSS_NAME("니야")
 CFLAG:NAME_TO_CHARA("츠쿠요"):소속              = GET_COUNTRY_FROM_BOSS_NAME("니야")
+CFLAG:NAME_TO_CHARA("키쿄"):소속              = GET_COUNTRY_FROM_BOSS_NAME("니야")
+CFLAG:NAME_TO_CHARA("유카리"):소속              = GET_COUNTRY_FROM_BOSS_NAME("니야")
+CFLAG:NAME_TO_CHARA("렌게"):소속              = GET_COUNTRY_FROM_BOSS_NAME("니야")
 ;CFLAG:NAME_TO_CHARA("쿠즈노하"):소속              = GET_COUNTRY_FROM_BOSS_NAME("니야")
 ;CFLAG:NAME_TO_CHARA("나구사"):소속              = GET_COUNTRY_FROM_BOSS_NAME("니야")
 CITY_OWNER:GET_CITYNUMBER("백귀야행 왕벚신목")           = GET_COUNTRY_FROM_BOSS_NAME("니야")
@@ -299,9 +304,10 @@ CITY_OWNER:GET_CITYNUMBER("시립 도서관")           = GET_COUNTRY_FROM_BOSS_
 ;---------미등장 캐릭터 설정----------
 CFLAG:NAME_TO_CHARA("소라"):특수상태 = 특수상태_미등장
 CFLAG:NAME_TO_CHARA("아로나"):특수상태 = 특수상태_미등장
-CFLAG:NAME_TO_CHARA("쿠즈노하"):특수상태 = 특수상태_미등장
-CFLAG:NAME_TO_CHARA("나구사"):특수상태 = 특수상태_미등장
+;CFLAG:NAME_TO_CHARA("쿠즈노하"):특수상태 = 특수상태_미등장
+;CFLAG:NAME_TO_CHARA("나구사"):특수상태 = 특수상태_미등장
 CFLAG:NAME_TO_CHARA("페이"):특수상태 = 특수상태_미등장
+;CFLAG:NAME_TO_CHARA("슈로"):특수상태 = 특수상태_미등장
 
 ;지정되지 않았던 캐릭터는 방랑 「당신」는 제외（MASTER 바꿔 넣었을 때에 방랑하는 것을 막는다）.
 FOR LOCAL:0, 1, CHARANUM
@@ -358,12 +364,12 @@ CALL INIT_RELATION("린", "아로나", 300, 0)
 CUSTOMDRAWLINE =
 PRINTFORML 시나리오 진행
 CALL COLOR_LINE
-;나구사 등장 테스트
-IF DAY >= 25 && CFLAG:NAME_TO_CHARA("나구사"):특수상태 == 특수상태_미등장
-	CALL FACE_IMAGE_N("표정_131_일반_2")
-	PRINTFORMW 「... 원래라면 이런 일에 개입하지 않아야하지만, 어쩔 수 없네」
-	PRINTFORMW 나구사가 등장했습니다.
-	CFLAG:NAME_TO_CHARA("나구사"):특수상태 = 특수상태_방랑
-ENDIF
-
+;-----------------------나구사 등장 테스트----------------------------
+; IF DAY >= 25 && CFLAG:NAME_TO_CHARA("나구사"):특수상태 == 특수상태_미등장
+; 	CALL FACE_IMAGE_N("표정_131_일반_2")
+; 	PRINTFORMW 「... 원래라면 이런 일에 개입하지 않아야하지만, 어쩔 수 없네」
+; 	PRINTFORMW 나구사가 등장했습니다.
+; 	CFLAG:NAME_TO_CHARA("나구사"):특수상태 = 특수상태_방랑
+; ENDIF
+;--------------------------------------------------------------------
 CALL SINGLE_DRAWLINE

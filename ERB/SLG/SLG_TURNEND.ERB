@@ -11,7 +11,7 @@
 CALL TMP_CREATE_RELATION_MAP
 
 ;도둑은 도시를 가지고 있으면 외교할 수 있다
-LOCAL = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_도둑))
+LOCAL = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_카이저_코퍼레이션))
 IF LOCAL > 0 && GET_OWN_CITY(LOCAL) > 0
 	COUNTRY_IS_CLOSED:LOCAL = 0
 ELSEIF LOCAL > 0 && GET_OWN_CITY(LOCAL) == 0
@@ -60,7 +60,7 @@ FOR LOCAL, 0, MAX_COUNTRY
 	세력 = 세력행동순서:LOCAL
 	SIF !IS_COUNTRY(세력) || (세력 == CFLAG:MASTER:소속 && CONFIG:302 != 1)
 		CONTINUE
-	SIF FLAG:전사엔드플래그 || FLAG:강제엔드플래그 || (COUNTRY_EVENT_ID:세력 == SP_COUNTRY_ID:특수세력_도둑 && TMP_OWN_CITY:세력 <= 0)
+	SIF FLAG:전사엔드플래그 || FLAG:강제엔드플래그 || (COUNTRY_EVENT_ID:세력 == SP_COUNTRY_ID:특수세력_카이저_코퍼레이션 && TMP_OWN_CITY:세력 <= 0)
 		CONTINUE
 	;#; USETIME = GETMILLISECOND();
 	CALL AI_ACTION(세력)
@@ -75,8 +75,8 @@ NEXT
 CLEARLINE 1
 
 FOR LOCAL, 0, MAX_COUNTRY
-	IF COUNTRY_EVENT_ID:LOCAL == SP_COUNTRY_ID:(특수세력_도둑) && TMP_OWN_CITY:LOCAL == 0
-		CALL BANDIT_AI(LOCAL)
+	IF COUNTRY_EVENT_ID:LOCAL == SP_COUNTRY_ID:(특수세력_카이저_코퍼레이션) && TMP_OWN_CITY:LOCAL == 0
+		CALL KAISER_AI(LOCAL)
 	ENDIF
 NEXT
 
@@ -106,7 +106,7 @@ IF DAY >= SLG_PP:1
 		세력 = 세력행동순서:LOCAL
 		SIF !IS_COUNTRY(세력) || 세력 == CFLAG:MASTER:소속
 			CONTINUE
-		SIF FLAG:전사엔드플래그 || FLAG:강제엔드플래그 || (COUNTRY_EVENT_ID:세력 == SP_COUNTRY_ID:특수세력_도둑 && TMP_OWN_CITY:세력 <= 0)
+		SIF FLAG:전사엔드플래그 || FLAG:강제엔드플래그 || (COUNTRY_EVENT_ID:세력 == SP_COUNTRY_ID:특수세력_카이저_코퍼레이션 && TMP_OWN_CITY:세력 <= 0)
 			CONTINUE
 		SIF 표시플래그
 			CALL SINGLE_DRAWLINE("-", 칼라_선택불가)
@@ -121,7 +121,7 @@ IF DAY >= SLG_PP:1
 		세력 = 세력행동순서:LOCAL
 		SIF !IS_COUNTRY(세력)
 			CONTINUE
-		SIF FLAG:전사엔드플래그 || FLAG:강제엔드플래그 || (COUNTRY_EVENT_ID:세력 == SP_COUNTRY_ID:특수세력_도둑 && TMP_OWN_CITY:세력 <= 0)
+		SIF FLAG:전사엔드플래그 || FLAG:강제엔드플래그 || (COUNTRY_EVENT_ID:세력 == SP_COUNTRY_ID:특수세력_카이저_코퍼레이션 && TMP_OWN_CITY:세력 <= 0)
 			CONTINUE
 		CALL TURNEND_CITY_ATTACK(세력)
 	NEXT

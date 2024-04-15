@@ -1,0 +1,54 @@
+﻿;------------------------------------------
+;이름
+;필요는 없는데 후에 필요 할 수도 있어서 일단 적음
+;------------------------------------------
+@무기_이름_1107
+RESULTS = 아이덴티티
+;------------------------------------------
+;착용 효과 (대상, 착용 1,미착용 -1)
+;------------------------------------------
+@무기_착용_1107(대상, 탈착 = 1)
+#DIM 대상
+#DIM 탈착
+LOCAL:1	= 25
+
+
+IF 탈착 == 1
+	ABL:대상:무투 += LOCAL:1
+	TALENT:대상:웨폰 = 1107
+	CALL SKILL_LEARN(대상, 스킬_장르_SP, 2107, 0)
+	무기사용가능:1107 = 0
+ELSEIF 탈착 == -1
+	ABL:대상:무투 -= LOCAL:1
+	TALENT:대상:웨폰 = 100
+	CALL SKILL_FORGET_BY_NAME(대상, 스킬_장르_SP, "지, 지금 지원할게요!")
+	무기사용가능:1107 = 1
+ENDIF
+
+RETURN 탈착
+;------------------------------------------
+;무기설명
+;------------------------------------------
+@무기_설명_1107
+CALL ICPRINT(@"무투: <25>", "L", 칼라_주의)
+CALL SINGLE_DRAWLINE
+PRINTL 전용스킬
+PRINTL 
+CALL SKILL_2107_SP_0_NAME
+SETCOLOR 칼라_선택불가
+PRINT   · 
+RESETCOLOR
+PRINTFORML %RESULTS%
+CALL COLOR_LINE
+SETCOLOR 칼라_선택불가
+PRINT   · 
+RESETCOLOR
+CALL SKILL_2107_SP_0_EXPLANATION
+PRINTFORML %RESULTS% 
+PRINTL
+SETCOLOR 칼라_선택불가
+PRINT   · 
+RESETCOLOR
+CALL ICPRINT(@"영향 받는 능력치 : <없음>", "L", 칼라_주의)
+PRINTL 
+RETURN

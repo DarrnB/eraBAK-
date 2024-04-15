@@ -300,8 +300,8 @@ ELSE
 		ENDIF
 	;해당 캐릭터가 특수세력이라면
 	ELSEIF IS_SP_CHARA(대상)
-		IF CFLAG:대상:소속 == GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:특수세력_도둑)
-			sName = 스탠딩_의복_통상_도둑
+		IF CFLAG:대상:소속 == GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:특수세력_카이저_코퍼레이션)
+			sName = 스탠딩_의복_통상_PMC
 		ELSEIF CFLAG:대상:소속 == GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:특수세력_홉고블린)
 			sName = 스탠딩_의복_통상_홉고블린
 		ELSEIF CFLAG:대상:소속 == GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:특수세력_외래인)
@@ -680,11 +680,12 @@ IF TALENT:(iID):커스텀페이스 > 0
 	sName = %sName%_얼굴_의복_통상_{TALENT:(iID):커스텀페이스}
 ELSEIF EXIST_PICTURE(NO:iID)
 	sNAME = 얼굴_의복_통상_{NO:iID}
+ELSEIF HAS_TAG(iID,태그_PMC)
+	sNAME = 스탠딩_의복_통상_PMC
 ELSEIF IS_MALE(iID)
 	sName = F_남
 ELSEIF IS_FEMALE(iID)
 	sName = F_여
-
 ELSE
 	sName = F_DUMMY
 ENDIF
@@ -699,7 +700,7 @@ RETURNF sName
 #DIM ID
 
 SELECTCASE ID
-CASE 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135 
+CASE 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141
 		RETURNF 1
 	CASEELSE
 		RETURNF 0
@@ -793,7 +794,7 @@ SELECTCASE LOCAL:0
 ENDSELECT
 
 ;-------------------------------------------------------------
-; 이미지 출력
+; 전투용 이미지 출력
 ; - sImageName: 이미지 이름
 ; - iHeight: 이미지 세로크기
 ;   (단위는 텍스트 한 줄의 높이, 예를 들어 4를 넣으면 텍스트 4줄 만큼의 크기가 됨)
@@ -813,5 +814,26 @@ iHeight *= iSizeFactor
 iPos *= iSizeFactor
 iSpace *= iSizeFactor
 HTML_PRINT @"<shape type='space' param='{iSpace}'><img src='%sImageName%' height='{iHeight}' ypos='-{iPos}'>"
+
+RETURN
+
+;-------------------------------------------------------------
+; 무기 이미지 호출이 얼굴과 연동돼있어서 따로 하나 더 작성함
+;-------------------------------------------------------------
+
+@WEAPON_IMAGE(ARG, iSize, iSpace = 0)
+#DIMS sWeapon
+#DIM iSize
+#DIM iPadding
+#DIM iSpace
+#DIM iVar
+
+sWeapon = 웨폰_{ARG}
+iPadding = iSize - 3
+
+FOR iVar, 0, iPadding
+	HTML_PRINT "<br>"
+NEXT
+CALL PRINT_HTML_IMAGE(sWeapon, iSize, iPadding, iSpace)
 
 RETURN

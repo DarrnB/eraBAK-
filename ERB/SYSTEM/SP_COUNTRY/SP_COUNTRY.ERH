@@ -10,7 +10,7 @@
 ;범용적인 정수 할당
 ;함락소질（비트 관리）도 이것으로 관리하기 위해(때문에), 0번을 더미로 해 두지 않으면 조금 곤란함
 #DIM CONST 특수세력_더미 = 0
-#DIM CONST 특수세력_도둑 = 1
+#DIM CONST 특수세력_카이저_코퍼레이션 = 1
 #DIM CONST 특수세력_홉고블린 = 2
 #DIM CONST 특수세력_외래인 = 3
 #DIM CONST 특수세력_촉수 = 4
@@ -44,15 +44,15 @@
 #DIM SAVEDATA SP_COUNTRY_INITIAL_RISE, MAX_SP_COUNTRY
 
 ;도둑의 최초의 봉기로 도시를 빼앗을까
-#DIM SAVEDATA BANDIT_HAS_INITIAL_CITIES
+#DIM SAVEDATA KAISER_HAS_INITIAL_CITIES
 
 #DIM CONST 특수세력스타트_사관 = 1
 #DIM CONST 특수세력스타트_노예 = 2
 #DIM CONST 특수세력스타트_포로 = 3
 #DIM CONST 특수세력스타트_군주 = 4
 
-#DIMS CONST SP_COUNTRY_NAME = "", "도둑", "홉고블린", "외래인", "촉수", "자경단", "서큐버스", "광신도"
-#DIMS CONST SP_COUNTRY_NAME_ENG = "", "BANDIT", "GOBLIN", "GAIRAI", "TENTACLE", "VIGILANTE", "SUCCUBUS", "CULTIST"
+#DIMS CONST SP_COUNTRY_NAME = "", "카이저", "홉고블린", "외래인", "촉수", "자경단", "서큐버스", "광신도"
+#DIMS CONST SP_COUNTRY_NAME_ENG = "", "KAISER", "GOBLIN", "GAIRAI", "TENTACLE", "VIGILANTE", "SUCCUBUS", "CULTIST"
 #DIMS CONST SP_FALLEN_TALENT_NAME = "", "도둑의 성노예", "홉고블린의 육변기", "실험동물", "촉수에 의한 기생", "자경단원", "음마", "광신도"
 
 

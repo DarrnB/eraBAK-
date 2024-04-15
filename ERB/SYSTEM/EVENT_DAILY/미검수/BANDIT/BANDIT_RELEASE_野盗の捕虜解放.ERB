@@ -2,7 +2,7 @@
 ;기본적인 발생 확률(1000분 율 100으로 10%)
 ;이것에 콘피그 항목의 발생 빈도를 걸칠 수 있으므로, 반드시 이 대로는 되지 않는다
 ;---------------------
-@EVENT_DAILY_BANDIT_RELEASE_RATE()
+@EVENT_DAILY_KAISER_RELEASE_RATE()
 ;대상 캐릭터에게 의존하므로 여기에서는 절대로 통해 둔다
 RETURN 1000
 
@@ -11,9 +11,9 @@ RETURN 1000
 ;확률 이외의 발생 판정
 ;0기 이후가 되면 발생한다든가, 데일리측에서 이용하고 있는 변수가-1이라면 일으키지 않는다  같은 튕기는 방법을 할 경우에 사용한다
 ;---------------------
-@EVENT_DAILY_BANDIT_RELEASE_DECISION()
+@EVENT_DAILY_KAISER_RELEASE_DECISION()
 #DIM 도둑
-도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_도둑))
+도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_카이저_코퍼레이션))
 SIF 도둑 == -1
 	RETURN 0
 SIF CFLAG:MASTER:소속 == 도둑
@@ -25,12 +25,12 @@ RETURN 1
 ;다른 함수는 필수이지만, 이것만은 없어도 좋다  라고 할까 퍼포먼스에 영향을 주므로 불필요하면 만들어서는 안 된다
 ;대상이 존재하지 않고 데일리를 개시 할 수 없는 경우는 0을 돌려주는 것으로 데일리의 발생을 캔슬한다
 ;---------------------
-@EVENT_DAILY_BANDIT_RELEASE_SETTARGET()
+@EVENT_DAILY_KAISER_RELEASE_SETTARGET()
 #DIM 도둑
-도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_도둑))
+도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_카이저_코퍼레이션))
 
 FOR LOCAL, 1, CHARANUM
-	IF CFLAG:LOCAL:소속 == CFLAG:MASTER:소속 && CFLAG:LOCAL:포로처 == 도둑 && IS_FEMALE(LOCAL) && SP_TRAIN_COUNT:LOCAL:특수세력_도둑 * 10 > RAND:100
+	IF CFLAG:LOCAL:소속 == CFLAG:MASTER:소속 && CFLAG:LOCAL:포로처 == 도둑 && IS_FEMALE(LOCAL) && SP_TRAIN_COUNT:LOCAL:특수세력_카이저_코퍼레이션 * 10 > RAND:100
 		DAILY_TARGET:DAILY_TARGET_NUM = LOCAL
 		DAILY_TARGET_NUM ++
 	ENDIF
@@ -44,7 +44,7 @@ RETURN 1
 ;장르
 ;콘피그 설정으로 사용
 ;---------------------
-@EVENT_DAILY_BANDIT_RELEASE_GENRE()
+@EVENT_DAILY_KAISER_RELEASE_GENRE()
 RETURN 데일리_장르_특수세력
 
 ;---------------------
@@ -53,20 +53,20 @@ RETURN 데일리_장르_특수세력
 ;발생하지 않았다는 것은 예를 들면, 특정 조건을 채우는 캐릭터로부터 랜덤에 한사람 선택하는 데일리로, 원래 그 조건을 채우는 캐릭터가 한사람도 없는 것 같은 때
 ;구사양으로 만든 적 있는 사람용으로 말하면 「구사양의 데일리 본체 첫머리에서-1을 돌려주는 것 같은 상황」
 ;---------------------
-@EVENT_DAILY_BANDIT_RELEASE()
+@EVENT_DAILY_KAISER_RELEASE()
 #DIM 대상
 #DIM 도둑
 
-도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_도둑))
+도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:(특수세력_카이저_코퍼레이션))
 
 
 대상 = DAILY_TARGET:(RAND:DAILY_TARGET_NUM)
 
-CALL BANDIT_RELEASE_MSG(대상)
+CALL KAISER_RELEASE_MSG(대상)
 
 RETURN 1
 
-@BANDIT_RELEASE_MSG(대상)
+@KAISER_RELEASE_MSG(대상)
 #DIM 대상
 PRINTFORML 도둑에게 잡히고 있었던 %조사처리(ANAME(대상),"가")% 해방된 것 같다!
 PRINTFORML 그것을 (들)물었던 %조사처리(ANAME(MASTER),"는")%, 몹시 당황하며 맞이하러 갔다……

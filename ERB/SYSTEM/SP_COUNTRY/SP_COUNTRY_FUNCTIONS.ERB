@@ -188,7 +188,7 @@ SIF DAY < SLG_PP:1
 기초확률 += (DAY - SLG_PP:1) * 10
 
 FOR LOCAL, 0, MAX_COUNTRY
-	SIF IS_SP_COUNTRY(LOCAL) && COUNTRY_EVENT_ID:LOCAL != SP_COUNTRY_ID:특수세력_도둑
+	SIF IS_SP_COUNTRY(LOCAL) && COUNTRY_EVENT_ID:LOCAL != SP_COUNTRY_ID:특수세력_카이저_코퍼레이션
 		세력수 ++
 NEXT
 
@@ -213,7 +213,7 @@ SIF 세력 == -1
 	RETURN 0
 
 SELECTCASE 세력정수
-	CASE 특수세력_도둑
+	CASE 특수세력_카이저_코퍼레이션
 		COUNTRY_COLOR:세력 = 0x800000
 	CASE 특수세력_홉고블린
 		COUNTRY_COLOR:세력 = 0x2B5C1B
@@ -298,13 +298,13 @@ IF 보스
 	SELECTCASE SP_COUNTRY_BOSSNAME:세력정수
 		CASE 0
 			SELECTCASE 세력정수
-				CASE 특수세력_도둑
-					NAME:대상     = 도둑
-					CALLNAME:대상 = 도둑
-					CSTR:대상:1   = 도둑
-					CSTR:대상:3   = 도둑
-					CSTR:대상:4   = 도둑
-					CSTR:대상:6   = 도둑
+				CASE 특수세력_카이저_코퍼레이션
+					NAME:대상     = PMC 병사
+					CALLNAME:대상 = PMC 병사
+					CSTR:대상:1   = PMC 병사
+					CSTR:대상:3   = PMC 병사
+					CSTR:대상:4   = PMC 병사
+					CSTR:대상:6   = PMC 병사
 				CASE 특수세력_홉고블린
 					NAME:대상     = 홉고블린
 					CALLNAME:대상 = 홉고블린
@@ -350,13 +350,13 @@ IF 보스
 			ENDSELECT
 		CASE 1
 			SELECTCASE 세력정수
-				CASE 특수세력_도둑
-					NAME:대상     = 도둑수령
-					CALLNAME:대상 = 도둑수령
-					CSTR:대상:1   = 도둑수령
-					CSTR:대상:3   = 도둑수령
-					CSTR:대상:4   = 도둑수령
-					CSTR:대상:6   = 도둑수령
+				CASE 특수세력_카이저_코퍼레이션
+					NAME:대상     = 카이저 이사
+					CALLNAME:대상 = 카이저 이사
+					CSTR:대상:1   = 카이저 이사
+					CSTR:대상:3   = 카이저 이사
+					CSTR:대상:4   = 카이저 이사
+					CSTR:대상:6   = 카이저 이사
 				CASE 특수세력_홉고블린
 					NAME:대상     = 고블린킹
 					CALLNAME:대상 = 고블린킹
@@ -417,13 +417,13 @@ IF 보스
 	ENDSELECT
 ELSE
 	SELECTCASE 세력정수
-		CASE 특수세력_도둑
-			NAME:대상     = 도둑
-			CALLNAME:대상 = 도둑
-			CSTR:대상:1   = 도둑
-			CSTR:대상:3   = 도둑
-			CSTR:대상:4   = 도둑
-			CSTR:대상:6   = 도둑
+		CASE 특수세력_카이저_코퍼레이션
+			NAME:대상     = PMC 병사
+			CALLNAME:대상 = PMC 병사
+			CSTR:대상:1   = PMC 병사
+			CSTR:대상:3   = PMC 병사
+			CSTR:대상:4   = PMC 병사
+			CSTR:대상:6   = PMC 병사
 		CASE 특수세력_홉고블린
 			NAME:대상     = 홉고블린
 			CALLNAME:대상 = 홉고블린
@@ -503,7 +503,7 @@ ELSE
 ENDIF
 
 SELECTCASE 세력정수
-	CASE 특수세력_도둑
+	CASE 특수세력_카이저_코퍼레이션
 		ABL:대상:Ｃ감 = 3
 		ABL:대상:욕망 = 5
 		ABL:대상:성기술 = 3
@@ -517,6 +517,7 @@ SELECTCASE 세력정수
 		ABL:대상:주도도Ｎ = 300
 		ABL:대상:도착도 = 300
 		EXP:대상:절정경험 = 500
+		TAG = 태그_PMC
 	CASE 특수세력_홉고블린
 		ABL:대상:Ｃ감 = 4
 		ABL:대상:욕망 = 6
@@ -663,7 +664,7 @@ ABL:대상:주량 = 3
 ;베이스 100, 난도 의존 20(난도 3으로 100), 랜덤 기대치 20 =합계 220
 ;능력4종 평균 조금 위
 SELECTCASE 세력정수
-	CASE 특수세력_도둑
+	CASE 특수세력_카이저_코퍼레이션
 		ABL:대상:무투 = 30 + 6 * SP_COUNTRY_ABL_MODIFIER(세력정수)
 		ABL:대상:방위 = 30 + 6 * SP_COUNTRY_ABL_MODIFIER(세력정수)
 		ABL:대상:지략 = 20 + 4 * SP_COUNTRY_ABL_MODIFIER(세력정수)
@@ -724,7 +725,7 @@ IF 보스
 ENDIF
 [SKIPSTART]
 SELECTCASE 세력정수
-	CASE 특수세력_도둑
+	CASE 특수세력_카이저_코퍼레이션
 		CALL SET_CLOTH_BY_NAME(대상, 의상부위_상의, "옷")
 		CALL SET_CLOTH_BY_NAME(대상, 의상부위_하의, "바지")
 		CALL SET_CLOTH_BY_NAME(대상, 의상부위_속옷하, "트렁크스")
@@ -766,7 +767,7 @@ SELECTCASE 세력정수
 ENDSELECT
 [SKIPEND]
 SELECTCASE 세력정수
-	CASE 특수세력_도둑
+	CASE 특수세력_카이저_코퍼레이션
 		COM_TENDENCY:대상:GETNUM(TRAINNAME, "번갈아삽입") = 1
 		COM_TENDENCY:대상:GETNUM(TRAINNAME, "번갈아Ａ삽입") = 1
 		COM_TENDENCY:대상:GETNUM(TRAINNAME, "마약") = 2

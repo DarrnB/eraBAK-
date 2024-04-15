@@ -318,7 +318,7 @@ IF CITY_SOLDIER:(ARG:2) <= 0
 
 	;세력의 멸망 판정
 	IF IS_COUNTRY(LOCAL:6) && GET_OWN_CITY(LOCAL:6) <= 0
-		IF COUNTRY_EVENT_ID:(LOCAL:6) == SP_COUNTRY_ID:(특수세력_도둑)
+		IF COUNTRY_EVENT_ID:(LOCAL:6) == SP_COUNTRY_ID:(특수세력_카이저_코퍼레이션)
 			IF CFLAG:MASTER:소속 == LOCAL:6
 				SETCOLOR 칼라_경고
 				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 시중들고 있었던 %BATTLE_NAME:1%들은, 도시를 모두 잃었습니다…

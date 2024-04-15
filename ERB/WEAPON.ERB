@@ -131,7 +131,7 @@ SELECTCASE ARG
 	CASE 504
 		LOCALS = 마비노기온
 	CASE 505
-		LOCALS = 미니 No.5
+		LOCALS = 미니 NO.5
 	CASE 506
 		LOCALS = 오토 래커
 	CASE 507
@@ -163,7 +163,7 @@ SELECTCASE ARG
 	CASE 900
 		LOCALS = 양산형 샷건
 	CASE 901
-		LOCALS = Eye of Horus
+		LOCALS = 호루스의 눈
 	CASE 902
 		LOCALS = 구호의 증명
 	CASE 903
@@ -231,7 +231,7 @@ SELECTCASE ARG
 	CASE 1107
 		LOCALS = 아이덴티티
 	CASE 1108
-		LOCALS = 와인레드•어드마이어
+		LOCALS = 와인레드・어드마이어
 	CASE 1109
 		LOCALS = 임페일먼트
 	CASE 1110
@@ -250,6 +250,12 @@ SELECTCASE ARG
 		LOCALS = 플래시 인스피레이션
 	CASE 1117
 		LOCALS = 유아독존
+	CASE 1118
+		LOCALS = 백화요란 제식 소총-검푸른 지혜
+	CASE 1119
+		LOCALS = 백화요란 제식 소총-소녀의 결의
+	CASE 1120
+		LOCALS = 백화요란 제식 소총-청춘의 불꽃
 	CASE 3101
 		LOCALS = FAMAS
 	CASE 3102
@@ -406,7 +412,17 @@ SELECTCASE ARG
 ENDSELECT
 RETURNF LOCALS
 
-@WEAPON_MENU(ARG)
+@WEAPON_MENU(대상)
+#DIM 대상
+#DIM WEAPON_SELECT
+;무기 종류 출력과 버튼화
+;local 변수 정리
+;LOCAL:2 무기 종류 100=돌격소총 200=화염방사기 등등
+;LOCAL:3 무기 옆에 붙는 숫자 LOCAL:2 + LOCAL:3 을 해서 무기 번호를 알아냄
+;LOCAL:4 무기 번호
+;LOCAL:5 줄바꿈을 위한 변수
+;무기 종류를 선택하는 루프
+$INPUT_LOOP1
 FOR LOCAL, 1, 12
 	PRINTBUTTON @"{LOCAL,2,RIGHT}[%WEAPON_TYPE(LOCAL*100)%]",LOCAL
 	PRINTL
@@ -421,10 +437,18 @@ ELSE
 	LOCAL:4 = 0
 	LOCAL:5 = 0
 	FOR LOCAL:3, 0, 100
-		LOCAL:4 = LOCAL:2+LOCAL:3
+	LOCAL:4 = LOCAL:2+LOCAL:3
+		;번호에 해당하는 무기가 없으면 출력 멈춤
 		SIF STRLENS(WEAPON_NAME(LOCAL:4)) == 0
 			BREAK
+		;번호에 해당하는 무기가 미사용중일때만 출력
+		SIF 사용가능한무기(LOCAL:4) == 1
+			RESETCOLOR
+		SIF 사용가능한무기(LOCAL:4) == 0
+			SETCOLOR 칼라_선택불가
 		PRINTBUTTON @"{LOCAL:3,3,RIGHT}[%WEAPON_NAME(LOCAL:4), 30, LEFT%]", LOCAL:4
+			RESETCOLOR
+		;3번마다 줄 변경
 		LOCAL:5 ++
 		IF LOCAL:5 % 3 == 0
 			PRINTL
@@ -432,6 +456,7 @@ ELSE
 			PRINT     
 		ENDIF
 	NEXT
+	;전무가 아닌 무기
 	PRINTL
 	LOCAL:2 = RESULT * 100 + 3001
 	LOCAL:4 = 0
@@ -452,10 +477,59 @@ ELSE
 	PRINTL
 	PRINTFORML [99] 뒤로
 	INPUT
+	WEAPON_SELECT = RESULT
 	IF RESULT == 99
-		RETURN
+		GOTO INPUT_LOOP1
+	ELSEIF 사용가능한무기(RESULT) == 0
+		PRINTW 사용 불가능한 무기 입니다.
+		GOTO INPUT_LOOP1
 	ELSE
-		TALENT:ARG:웨폰 = RESULT
-		RETURN
+		PRINTL
+		CALL WEAPON_IMAGE(WEAPON_SELECT, 7, 0)
+		PRINTL
+		PRINTL
+		PRINTFORML [%WEAPON_NAME(WEAPON_SELECT), 30, LEFT%]
+		PRINTL 
+		TRYCALLFORM 무기_설명_{WEAPON_SELECT}
+		CALL SINGLE_DRAWLINE
+		PRINTL 이 무기를 선택합니까?
+		PRINTFORML [0] 네 [1] 아니요
+		INPUT
+		IF RESULT == 1
+			GOTO INPUT_LOOP1
+		ELSE
+			IF 사용가능한무기(WEAPON_SELECT) == 0
+			PRINTFORMW {사용가능한무기(WEAPON_SELECT)}
+			ELSE
+				TRYCALLFORM 무기_착용_{TALENT:대상:웨폰}(대상,-1)
+				TRYCALLFORM 무기_착용_{WEAPON_SELECT}(대상,1)
+				TALENT:대상:웨폰 = WEAPON_SELECT
+				RETURN
+			ENDIF
+		ENDIF
 	ENDIF
 ENDIF
+;-------------------------------------------------
+;사용가능한무기
+;사용 가능하면 1을 반환
+;-------------------------------------------------
+@사용가능한무기(ID)
+#FUNCTION
+#DIM ID
+
+SELECTCASE ID
+;양산형은 항상 가능
+CASE 100,200,300,400,500,600,700,800,900,1000,1100
+	RETURNF 1
+;사용중인 캐릭터가 있을 시 사용 불가능하게
+CASE 100 TO 1200
+	SIF 무기사용가능:ID == 1
+	RETURNF 1
+	RETURNF 0
+;추가된 총기는 항상 가능
+CASE 3100 TO 4100
+	RETURNF 1
+CASEELSE
+	RETURNF 0
+ENDSELECT
+

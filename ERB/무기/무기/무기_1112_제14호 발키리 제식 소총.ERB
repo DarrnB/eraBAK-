@@ -1,0 +1,60 @@
+﻿;------------------------------------------
+;이름
+;필요는 없는데 후에 필요 할 수도 있어서 일단 적음
+;------------------------------------------
+@무기_이름_1112
+RESULTS = 제14호 발키리 제식 소총
+;------------------------------------------
+;착용 효과 (대상, 착용 1,미착용 -1)
+;------------------------------------------
+@무기_착용_1112(대상, 탈착 = 1)
+#DIM 대상
+#DIM 탈착
+LOCAL:1	= 5
+LOCAL:2 = 15
+LOCAL:3 = -10
+
+
+IF 탈착 == 1
+	ABL:대상:방위 += LOCAL:1
+	ABL:대상:지략 += LOCAL:2
+	ABL:대상:야심 += LOCAL:3
+	TALENT:대상:웨폰 = 1112
+	CALL SKILL_LEARN(대상, 스킬_장르_SP, 2112, 0)
+	무기사용가능:1112 = 0
+ELSEIF 탈착 == -1
+	ABL:대상:방위 -= LOCAL:1
+	ABL:대상:지략 -= LOCAL:2
+	ABL:대상:야심 -= LOCAL:3
+	TALENT:대상:웨폰 = 100
+	CALL SKILL_FORGET_BY_NAME(대상, 스킬_장르_SP, "일단은 달콤한 휴식부터")
+	무기사용가능:1112 = 1
+ENDIF
+
+RETURN 탈착
+;------------------------------------------
+;무기설명
+;------------------------------------------
+@무기_설명_1112
+CALL ICPRINT(@"방위: <5> 지략: <15> 야심: <-10>", "L", 칼라_주의)
+CALL SINGLE_DRAWLINE
+PRINTL 전용스킬
+PRINTL 
+CALL SKILL_2112_SP_0_NAME
+SETCOLOR 칼라_선택불가
+PRINT   · 
+RESETCOLOR
+PRINTFORML %RESULTS%
+CALL COLOR_LINE
+SETCOLOR 칼라_선택불가
+PRINT   · 
+RESETCOLOR
+CALL SKILL_2112_SP_0_EXPLANATION
+PRINTFORML %RESULTS% 
+PRINTL
+SETCOLOR 칼라_선택불가
+PRINT   · 
+RESETCOLOR
+CALL ICPRINT(@"영향 받는 능력치 : <없음>", "L", 칼라_주의)
+PRINTL 
+RETURN

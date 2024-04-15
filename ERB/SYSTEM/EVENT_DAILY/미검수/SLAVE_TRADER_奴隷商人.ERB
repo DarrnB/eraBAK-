@@ -12,7 +12,7 @@ RETURN 100
 ;---------------------
 @EVENT_DAILY_SLAVE_TRADER_DECISION()
 #DIM 도둑
-도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:특수세력_도둑)
+도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:특수세력_카이저_코퍼레이션)
 
 ;미검수 OFF면 스킵
 SIF FLAG:데일리이벤트_미검수 == 0
@@ -54,7 +54,7 @@ RETURN 데일리_장르_에로
 #DIM 포로번호, 3000
 #DIM 도둑
 
-도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:특수세력_도둑)
+도둑 = GET_COUNTRY_FROM_ID(SP_COUNTRY_ID:특수세력_카이저_코퍼레이션)
 
 PRINTFORML 이상한 협상가가 왔다
 PRINTFORML 「이쪽에서 다른 학교의 학생을 잡고 있다고 들었습니다」

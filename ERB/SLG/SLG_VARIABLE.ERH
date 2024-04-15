@@ -238,7 +238,7 @@
 #DIM SAVEDATA SCVAR, 1000
 
 ;도둑 출현 정지 기간
-#DIM SAVEDATA BANDIT_POP_SUSPENDED
+#DIM SAVEDATA KAISER_POP_SUSPENDED
 
 ;-------------------------------------------------
 ;■전투 계산에 관한 변수
