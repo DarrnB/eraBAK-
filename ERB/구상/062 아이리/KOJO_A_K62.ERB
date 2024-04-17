@@ -229,8 +229,8 @@ IF PALAM:취기 > 2000
 ELSEIF TCVAR:52
 	PRINTFORMW 「히윽... 햣... 흣..」
 	PRINTFORMW 아이리는 절정에 못 이겨 침대에 쓰러진채로 신음하고 있다.
-;피로에 의한 행동 불능
-ELSEIF BASE:기력 <= 300
+;피로에 의한 행동 불능 ※ 만나러간다에선 거의 출력되기 힘듬
+ELSEIF BASE:기력 <= 300 || BASE:체력 <= 300
 	PRINTFORMW 「죄송해요. 너무 피곤해요....」
 	PRINTFORMW 아이리는 꾸벅꾸벅 졸더니 그대로 잠들어버렸다.
 ;-------------------------------------------------
@@ -256,8 +256,6 @@ ELSEIF CFLAG:201 < 2 && TALENT:연모 && TALENT:키스미경험 && CFLAG:250 < 1
 ;-------------------------------------------------
 ;종료시(2회째 이후)
 ;-------------------------------------------------
-;행동 불능이라면 비표시
-
 ;연인이면서 섹스(합의)한 상태
 ELSEIF TALENT:연인 && TALENT:합의
 	;PRINTFORMW 
@@ -335,14 +333,17 @@ IF TALENT:공허
 ENDIF
 
 ;술에 취함에 의한 행동 불능
-IF TCVAR:53 == 1
-	;PRINTFORMW 
-;쾌감인 나머지 기절
+IF PALAM:취기 > 2000
+	PRINTFORMW 「우으에... 기분 좋아요오... 헤헤...」 
+	PRINTFORMW 만취하여 술주정을 부리는 아이리를 두고 방을 나왔다.
+;쾌감인 나머지 기절 (작동안됨)
 ELSEIF TCVAR:52
-	;PRINTFORMW 
-;피로에 의한 행동 불능 or 기력 300 이하
-ELSEIF TCVAR:51
-	;PRINTFORMW 
+	PRINTFORMW 「히윽... 햣... 흣..」
+	PRINTFORMW 아이리는 절정에 못 이겨 침대에 쓰러진채로 신음하고 있다.
+;피로에 의한 행동 불능
+ELSEIF BASE:기력 <= 300 || BASE:체력 <= 300
+	PRINTFORMW 「흣... 죄송해요. 너무 피곤해요....」
+	PRINTFORMW 아이리는 꾸벅꾸벅 졸더니 그대로 잠들어버렸다.
 ;연인이면서 섹스(합의)한 상태
 ELSEIF TALENT:연인 && TALENT:합의
 	;PRINTFORMW 
@@ -855,7 +856,7 @@ IF SELECTCOM == 1
 ENDIF
 
 ;-------------------------------------------------
-;커널링구스(타겟) ※ 주도권 상관 없이 출력
+;커닐링구스(타겟) ※ 주도권 상관 없이 출력
 ;-------------------------------------------------
 IF SELECTCOM == 2
 	;처음
@@ -892,7 +893,7 @@ IF SELECTCOM == 2
 				PRINTFORMW 「흐읏...♡ %조사처리(LOCALS:0,"가")%의 혀, 기분 좋아...♡」
 			;Ｃ감 Lv3 미만
 			ELSE
-				PRINTFORMW 
+				PRINTFORMW 「」
 			ENDIF
 		ENDIF
 	;2회째 이후
