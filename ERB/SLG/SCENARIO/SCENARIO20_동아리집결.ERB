@@ -14,6 +14,7 @@ MAPID '= "KIVOTOS"
 @SCENARIO_INTRO_20
 CALL SCENARIO_START_CONFIG
 
+
 [SKIPSTART]
 PRINTFORML 2. 프롤로그를 보시겠습니까?(미완성, 임시)
 CALL ASK_YN
@@ -103,6 +104,7 @@ CFLAG:NAME_TO_CHARA("마코토"):소속          = GET_COUNTRY_FROM_BOSS_NAME("�
 CFLAG:NAME_TO_CHARA("이로하"):소속      = GET_COUNTRY_FROM_BOSS_NAME("마코토")
 CFLAG:NAME_TO_CHARA("이부키"):소속      = GET_COUNTRY_FROM_BOSS_NAME("마코토")
 CFLAG:NAME_TO_CHARA("사츠키"):소속      = GET_COUNTRY_FROM_BOSS_NAME("마코토")
+CFLAG:NAME_TO_CHARA("치아키"):소속              = GET_COUNTRY_FROM_BOSS_NAME("마코토")
 CITY_OWNER:GET_CITYNUMBER("만마전")           = GET_COUNTRY_FROM_BOSS_NAME("마코토")
 CITY_OWNER:GET_CITYNUMBER("게헨나 중앙구")       = GET_COUNTRY_FROM_BOSS_NAME("마코토")
 
@@ -145,7 +147,6 @@ CFLAG:NAME_TO_CHARA("리오"):소속              = GET_COUNTRY_FROM_BOSS_NAME("
 CFLAG:NAME_TO_CHARA("노아"):소속              = GET_COUNTRY_FROM_BOSS_NAME("리오")
 CFLAG:NAME_TO_CHARA("유우카"):소속              = GET_COUNTRY_FROM_BOSS_NAME("리오")
 CFLAG:NAME_TO_CHARA("코유키"):소속              = GET_COUNTRY_FROM_BOSS_NAME("리오")
-CFLAG:NAME_TO_CHARA("스미레"):소속              = GET_COUNTRY_FROM_BOSS_NAME("리오")
 CITY_OWNER:GET_CITYNUMBER("밀레니엄 타워")           = GET_COUNTRY_FROM_BOSS_NAME("리오")
 CITY_OWNER:GET_CITYNUMBER("밀레니엄 발전소")           = GET_COUNTRY_FROM_BOSS_NAME("리오")
 
@@ -187,6 +188,8 @@ CFLAG:NAME_TO_CHARA("린"):소속              = GET_COUNTRY_FROM_BOSS_NAME("린
 CFLAG:NAME_TO_CHARA("모모카"):소속              = GET_COUNTRY_FROM_BOSS_NAME("린")
 CFLAG:NAME_TO_CHARA("아유무"):소속              = GET_COUNTRY_FROM_BOSS_NAME("린")
 CFLAG:NAME_TO_CHARA("아오이"):소속              = GET_COUNTRY_FROM_BOSS_NAME("린")
+CFLAG:NAME_TO_CHARA("스모모"):소속              = GET_COUNTRY_FROM_BOSS_NAME("린")
+CFLAG:NAME_TO_CHARA("하이네"):소속              = GET_COUNTRY_FROM_BOSS_NAME("린")
 CITY_OWNER:GET_CITYNUMBER("생텀타워")           = GET_COUNTRY_FROM_BOSS_NAME("린")
 CITY_OWNER:GET_CITYNUMBER("총학생회 사무국")           = GET_COUNTRY_FROM_BOSS_NAME("린")
 CITY_OWNER:GET_CITYNUMBER("총학생회 운영국")           = GET_COUNTRY_FROM_BOSS_NAME("린")
@@ -409,12 +412,33 @@ CITY_OWNER:GET_CITYNUMBER("코우사기 공원")           = GET_COUNTRY_FROM_BO
 ;--------카야(FOX 소대)--------
 COUNTRY_BOSS:34                                = GET_ID(NAME_TO_CHARA("카야"))
 COUNTRY_COLOR:34                               = 0xFFE1F8
-CFLAG:NAME_TO_CHARA("카야"):소속              = GET_COUNTRY_FROM_BOSS_NAME("카야")
+CFLAG:NAME_TO_CHARA("카야"):소속                = GET_COUNTRY_FROM_BOSS_NAME("카야")
 CFLAG:NAME_TO_CHARA("유키노"):소속              = GET_COUNTRY_FROM_BOSS_NAME("카야")
-CFLAG:NAME_TO_CHARA("니코"):소속              = GET_COUNTRY_FROM_BOSS_NAME("카야")
+CFLAG:NAME_TO_CHARA("니코"):소속                = GET_COUNTRY_FROM_BOSS_NAME("카야")
 CFLAG:NAME_TO_CHARA("쿠루미"):소속              = GET_COUNTRY_FROM_BOSS_NAME("카야")
 CFLAG:NAME_TO_CHARA("오토기"):소속              = GET_COUNTRY_FROM_BOSS_NAME("카야")
-CITY_OWNER:GET_CITYNUMBER("총학생회 방위국")           = GET_COUNTRY_FROM_BOSS_NAME("카야")
+CITY_OWNER:GET_CITYNUMBER("총학생회 방위국")	 = GET_COUNTRY_FROM_BOSS_NAME("카야")
+
+;--------키쿄(분쟁조정위원회)--------
+COUNTRY_BOSS:35                                = GET_ID(NAME_TO_CHARA("키쿄"))
+COUNTRY_COLOR:35							   = 0x9966cc
+CFLAG:NAME_TO_CHARA("키쿄"):소속                = GET_COUNTRY_FROM_BOSS_NAME("키쿄")
+CFLAG:NAME_TO_CHARA("유카리"):소속                = GET_COUNTRY_FROM_BOSS_NAME("키쿄")
+CFLAG:NAME_TO_CHARA("렌게"):소속                = GET_COUNTRY_FROM_BOSS_NAME("키쿄")
+CITY_OWNER:GET_CITYNUMBER("백화요란 분쟁조정 위원회")	 = GET_COUNTRY_FROM_BOSS_NAME("키쿄")
+
+;--------스미레(트레이닝부)--------
+COUNTRY_BOSS:36                                = GET_ID(NAME_TO_CHARA("스미레"))
+COUNTRY_COLOR:36							   = 0x660099
+CFLAG:NAME_TO_CHARA("스미레"):소속              = GET_COUNTRY_FROM_BOSS_NAME("스미레")
+CFLAG:NAME_TO_CHARA("레이"):소속              = GET_COUNTRY_FROM_BOSS_NAME("스미레")
+CITY_OWNER:GET_CITYNUMBER("카와니시역")	 = GET_COUNTRY_FROM_BOSS_NAME("스미레")
+
+;---------미등장 캐릭터 설정----------
+CFLAG:NAME_TO_CHARA("소라"):특수상태 = 특수상태_미등장
+CFLAG:NAME_TO_CHARA("아로나"):특수상태 = 특수상태_미등장
+CFLAG:NAME_TO_CHARA("페이"):특수상태 = 특수상태_미등장
+
 
 
 
