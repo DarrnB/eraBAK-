@@ -1,0 +1,249 @@
+﻿; ============================================
+; ☆ 몰루K 데일리이벤트 - 붉은겨울의 일상
+;  - 제작자 : DanB
+;  - 설명 : 여러 변수에 의해 확률이 변동 발생시 세력 수장이 바뀐다.
+;    혁명의 이반 쿠팔라 스토리에서 일부 차용함
+;  - 장르 : 일상, 그외
+;
+; ☆ 라이선스 (수정해서 사용, 필요 없을시 삭제)
+; 1. 해당 이벤트를 가필, 수정, 개조하는 것을 허용합니다. 단, 상단 가필, 수정 내역에 수정자 및 수정내용을 작성하길 권장합니다.
+; 2. 해당 이벤트를 타 era에 이식하는 것을 허용합니다. 이식할 때 이벤트 제작자, 수정자의 이름을 적어야합니다.
+; 3. 해당 이벤트를 타 게임, 타 매체에 이용할 때엔 이벤트 제작자에게 허락을 받으시기 바랍니다.
+; 4. 해당 이벤트를 타 언어로 번역하는 것을 허용합니다.
+; 5. 위 4가지 사항에 대해 이벤트의 출처나 제작/개조자를 표기하여야 합니다.
+; ============================================
+;---------------------
+; ☆ 이벤트 발생 확률(천분율, 100이라면 10%)
+;  - 확률 : 초기 0% 변수에 따라 최대 30%
+;---------------------
+@EVENT_DAILY_CHERINOFALL_RATE()
+LOCAL:1 = DVAR:체리노실각_마리나공포
+LOCAL:2 = DVAR:체리노실각_용역부분노
+LOCAL:3 = DVAR:체리노실각_노도카분노
+
+LOCAL:4 = LOCAL:1*50 + LOCAL:2*25 + LOCAL:3*25
+
+RETURN LOCAL:4
+
+
+;---------------------
+; ☆ 확률 외의 발생 조건
+;  - 이벤트 자체가 걸러지는 필터 조건을 기입
+;  - RETURN이 0이면 발동 x, RETURN이 1이면 발동
+;  - ex) 에로계열 필터 OFF시 이벤트 작동 X
+;
+; ☆ 본체 내 필터 조건
+;  - 이벤트 자체 조건 외에 이벤트 내용 중 조건등을 기입
+;  - ex) NTR이벤트 OFF시, NTR 전개로 흘러가지 않음
+;---------------------
+@EVENT_DAILY_CHERINOFALL_DECISION()
+#DIM 세력군주
+세력군주 = GET_COUNTRY_BOSS(CFLAG:98:소속)
+;체리노와 마리나가 같은 소속
+SIF CFLAG:98:소속 != CFLAG:96:소속
+    RETURN 0
+;세력 수장이 체리노
+SIF 세력군주 != 96
+    RETURN 0
+SIF DVAR:체리노실각_발생플래그 == 0
+    RETURN 0
+;체리노와 마리나가 포로가 아님
+SIF CFLAG:98:포로처 || CFLAG:96:포로처
+    RETURN 0
+RETURN 1
+
+;---------------------
+; ☆ 장르
+;---------------------
+@EVENT_DAILY_CHERINOFALL_GENRE()
+RETURN 데일리_장르_그외
+
+;---------------------
+; ☆ 이벤트 랜덤대상 조건
+;  - 특정의 조건을 채우는 캐릭터를 랜덤에 선택하는 경우에 이용
+;    다른 함수는 필수이지만, 이것은 없어도 괜찮음(오히려 성능상 필요 없다면 지우는걸 추천)
+;    해당조건의 대상이 존재하지 않다면 RETURN을 0으로 되돌려 데일리이벤트 발생을 취소시킬 수 있다
+;
+;  - ex) 같은 동아리 소속이자(포로 X), 비 임신캐릭터
+;  - ex) 농땡이마왕이 아닐 것(귀찮아서 조깅도 안하니까)
+;---------------------
+@EVENT_DAILY_CHERINOFALL_SETTARGET()
+
+; 예시(지우고 사용하세요)
+;FOR LOCAL, 0, CHARANUM
+;	IF CFLAG:(LOCAL):소속 == CFLAG:MASTER:소속 && !(CFLAG:(LOCAL):행동불능상태 == 행동불능_임월) && !CFLAG:(LOCAL):포로처 && IS_FEMALE(LOCAL) && !IS_ANIMAL(LOCAL) && !TALENT:(LOCAL):농땡이마왕
+;		DAILY_TARGET:DAILY_TARGET_NUM = LOCAL 
+;		DAILY_TARGET_NUM ++
+;	ENDIF
+;NEXT
+;
+;SIF DAILY_TARGET_NUM == 0
+;	RETURN 0
+;
+;RETURN 1
+
+
+; FOR LOCAL, 0, CHARANUM
+
+; NEXT
+RETURN 1
+
+;---------------------
+;이벤트의 진행 정도에 응해 이벤트명을 변경하고 싶은 경우에 이용
+;변경할 필요가 없는 경우, 이 함수는 불요
+;---------------------
+; @EVENT_DAILY_CHERINOFALL_NAME()
+; RESULTS = ""
+
+
+;---------------------
+; ☆ 본체
+;  - 이벤트가 발생했을 경우는 1, 발생하지 않았던 경우는 0을 돌려준다
+;---------------------
+@EVENT_DAILY_CHERINOFALL()
+IF DVAR:체리노실각_발생이후 == 0
+    CALL FACE_IMAGE_N("표정_96_일반_3")
+    PRINTW 「으헤헤… 푸딩이 하나, 푸딩이 두개……」
+    PRINTL
+    PRINTW 「회장님? ……회장님!!」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_96_일반_4")
+    PRINTW 「으와아앗!」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_96_일반_5")
+    PRINTW 「누구냐! 감히 이 몸의 낮잠 시간을 방해하는 녀석이!」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_97_일반_5")
+    PRINTW 「체,체리노 쨩! 긴급 상황이에요!」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_96_일반_5")
+    PRINTL 「아무리 급한 일이라고 해도 낮잠 시간엔 깨우지 말라고 했잖아!」
+    PRINTW 「비서실장이라고 해도 이건 용서할 수 없어!」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_97_일반_6")
+    PRINTW 「흠,흠! 체리노 회장님, 무장한 학생들이 사무국으로 몰려오고 있습니다.」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_96_일반_5")
+    PRINTL 「뭐야, 이번엔 어느 동아리에서 쿠데타를 일으킨 건데?」
+    PRINTL 「그보다 쿠데타라면 마리나 보안위원장에게 맡기면 문제 없을텐데」
+    PRINTW 「이런 사소한 일로 낮잠을 방해하지 말라고!」
+    PRINTL
+ELSEIF DVAR:체리노실각_발생이후 == 1
+    CALL FACE_IMAGE_N("표정_96_일반_5")
+    PRINTL 「이 녀석들은 포기를 모르는구나!」
+    PRINTW 「감히 이 몸의 권위에 도전하다니 숙청이야 숙청!」
+    PRINTW 「비서실장! 보안위원장을 불러 불순분자들을 모두 숙청하도록!」
+    PRINTL
+ENDIF
+IF DVAR:체리노실각_마리나공포 >= 2
+    CALL FACE_IMAGE_N("표정_97_일반_7")
+    PRINTW 「저기 그게…」
+    PRINTL
+    IF DVAR:체리노실각_마리나공포 == 3
+        CALL FACE_IMAGE_N("표정_97_일반_5")
+        PRINTW 「쿠데타를 일으킨 사람이 바로 보안위원장입니다.」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_96_일반_4")
+        PRINTL 「뭐,뭐라고!?」
+        PRINTW 「친위대는, 친위대는 어떻게 됐나」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_97_일반_5")
+        PRINTW 「친위대도 모두 보안위원장편에 서서 이쪽으로 오고 있다고 합니다.」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_96_일반_4")
+        PRINTL 「어째서 보안위원장이 쿠데타를 일으킨거지? 난 아무 짓도 안했는데!」
+        PRINTW 「그보다 어떡해야 하지?」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_97_일반_6")
+        PRINTL 「이곳은 위험합니다. 곧 위원장이 이끄는 친위대가 도착할 겁니다.」
+        PRINTW 「우선 구교사로 몸을 피하시죠.」
+        CALL FACE_IMAGE_N("표정_96_일반_1")
+        PRINTW 「우우…어쩔 수 없지 이건 전략적 후퇴니까! 절대로 도망가는 게 아니니까!」
+        PRINTL
+        CALL SET_COOLTIME(96,1)
+        COUNTRY_BOSS:GET_COUNTRY_FROM_BOSS_NAME("체리노") = GET_ID(98)
+        CALL ICPRINT(@"<체리노> 세력의 지도자가 <마리나>가 되었다.", "L", 칼라_주의)
+        DVAR:체리노복귀_발생플래그 = 1
+    ELSEIF DVAR:체리노실각_용역부분노 == 3 && CFLAG:103:소속 == CFLAG:96:소속 && !CFLAG:103:포로처
+        CALL FACE_IMAGE_N("표정_97_일반_5")
+        PRINTW 「용역부가 쿠데타를 일으켰지만 보안위원장도 함께라고 합니다.」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_96_일반_4")
+        PRINTL 「뭐,뭐라고!?」
+        PRINTW 「친위대는, 친위대는 어떻게 됐나」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_97_일반_5")
+        PRINTW 「친위대도 모두 용역부편에 서서 이쪽으로 오고 있다고 합니다.」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_96_일반_4")
+        PRINTL 「어째서 보안위원장이 쿠데타에 가담한거지? 난 아무 짓도 안했는데!」
+        PRINTW 「그보다 어떡해야 하지?」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_97_일반_6")
+        PRINTL 「이곳은 위험합니다. 곧 용역부가 도착할 겁니다.」
+        PRINTW 「우선 구교사로 몸을 피하시죠.」
+        CALL FACE_IMAGE_N("표정_96_일반_1")
+        PRINTW 「우우…어쩔 수 없지 이건 전략적 후퇴니까! 절대로 도망가는 게 아니니까!」
+        PRINTL
+        COUNTRY_BOSS:GET_COUNTRY_FROM_BOSS_NAME("체리노") = GET_ID(98)
+        CALL SET_COOLTIME(96,1)
+        CALL ICPRINT(@"<체리노> 세력의 지도자가 <마리나>가 되었다.", "L", 칼라_주의)
+        DVAR:체리노복귀_발생플래그 = 1
+    ELSEIF DVAR:체리노실각_노도카분노 == 3 && CFLAG:103:소속 == CFLAG:96:소속 && !CFLAG:103:포로처
+        CALL FACE_IMAGE_N("표정_97_일반_5")
+        PRINTW 「구교사 학생들이 쿠데타를 일으켰지만 보안위원장도 함께라고 합니다.」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_96_일반_4")
+        PRINTL 「뭐,뭐라고!?」
+        PRINTW 「친위대는, 친위대는 어떻게 됐나」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_97_일반_5")
+        PRINTW 「친위대도 모두 위원장편에 서서 이쪽으로 오고 있다고 합니다.」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_96_일반_4")
+        PRINTL 「어째서 보안위원장이 쿠데타에 가담한거지? 난 아무 짓도 안했는데!」
+        PRINTW 「그보다 어떡해야 하지?」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_97_일반_6")
+        PRINTL 「이곳은 위험합니다. 곧 구교사 학생들이 도착할 겁니다.」
+        PRINTW 「우선 안전한 곳으로 몸을 피하시죠.」
+        CALL FACE_IMAGE_N("표정_96_일반_1")
+        PRINTW 「우우…어쩔 수 없지 이건 전략적 후퇴니까! 절대로 도망가는 게 아니니까!」
+        PRINTL
+        COUNTRY_BOSS:GET_COUNTRY_FROM_BOSS_NAME("체리노") = GET_ID(98)
+        CALL SET_COOLTIME(96,1)
+        CALL ICPRINT(@"<체리노> 세력의 지도자가 <마리나>가 되었다.", "L", 칼라_주의)
+        DVAR:체리노복귀_발생플래그 = 1
+    ELSE
+        PRINTW 「마리나 보안위원장이 어제부터 보이지 않아서……」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_96_일반_5")
+        PRINTW 「뭐야? 보안위원장이 태업이라니! 숙청이야 숙청!」
+        PRINTW 「토모에라도 나가서 녀석들을 막으란 말이야!」
+        PRINTL
+        CALL FACE_IMAGE_N("표정_97_일반_6")
+        PRINTW 「네 그럼 불순분자들을 모두 숙청하고 오겠습니다!」
+        PRINTL ·
+        PRINTL ·
+        PRINTL ·
+        CALL FACE_IMAGE_N("표정_97_일반_6")
+        PRINTW 「회장님의 위대함을 모르는 당신들은 모두 숙청입니다!」
+        PRINTL ·
+        PRINTL ·
+        PRINTL ·
+        PRINTW 쿠데타는 마리나가 이끄는 친위대에 의해 저지당했다!
+        DVAR:체리노실각_발생이후 = 1
+    ENDIF
+ELSE
+    CALL FACE_IMAGE_N("표정_97_일반_6")
+    PRINTW 「그럼 보안위원장에게 모두 숙청하라고 일러두겠습니다.」
+    PRINTL ·
+    PRINTL ·
+    PRINTL ·
+    CALL FACE_IMAGE_N("표정_98_일반_6")
+    PRINTW 「불순분자들은 모두 숙청이다!」
+    PRINTL
+    PRINTW 쿠데타는 마리나가 이끄는 친위대에 의해 저지당했다!
+    DVAR:체리노실각_발생이후 = 1
+ENDIF
+RETURN 1

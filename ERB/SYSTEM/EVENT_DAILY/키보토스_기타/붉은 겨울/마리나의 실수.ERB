@@ -1,0 +1,175 @@
+﻿; ============================================
+; ☆ 몰루K 데일리이벤트 - 마리나의 실수
+;  - 제작자 : DanB
+;  - 설명 : 매 턴 10% 확률로 발생. 
+;    체리노 실각 이벤트와 연계해서 체리노실각_마리나공포 에 따라 붉은겨울의 일상 데일리 내용이 달라진다.
+;    혁명의 이반 쿠팔라와 마리나 인연스토리에서 일부 차용함
+;  - 장르 : 일상, 그외
+;
+; ☆ 라이선스 (수정해서 사용, 필요 없을시 삭제)
+; 1. 해당 이벤트를 가필, 수정, 개조하는 것을 허용합니다. 단, 상단 가필, 수정 내역에 수정자 및 수정내용을 작성하길 권장합니다.
+; 2. 해당 이벤트를 타 era에 이식하는 것을 허용합니다. 이식할 때 이벤트 제작자, 수정자의 이름을 적어야합니다.
+; 3. 해당 이벤트를 타 게임, 타 매체에 이용할 때엔 이벤트 제작자에게 허락을 받으시기 바랍니다.
+; 4. 해당 이벤트를 타 언어로 번역하는 것을 허용합니다.
+; 5. 위 4가지 사항에 대해 이벤트의 출처나 제작/개조자를 표기하여야 합니다.
+; ============================================
+;---------------------
+; ☆ 이벤트 발생 확률(천분율, 100이라면 10%)
+;  - 확률 : 10%
+;---------------------
+@EVENT_DAILY_MARINAFEAR_RATE()
+RETURN 100
+
+;---------------------
+; ☆ 확률 외의 발생 조건
+;  - 이벤트 자체가 걸러지는 필터 조건을 기입
+;  - RETURN이 0이면 발동 x, RETURN이 1이면 발동
+;  - ex) 에로계열 필터 OFF시 이벤트 작동 X
+;
+; ☆ 본체 내 필터 조건
+;  - 이벤트 자체 조건 외에 이벤트 내용 중 조건등을 기입
+;  - ex) NTR이벤트 OFF시, NTR 전개로 흘러가지 않음
+;---------------------
+@EVENT_DAILY_MARINAFEAR_DECISION()
+#DIM 세력군주
+세력군주 = GET_COUNTRY_BOSS(CFLAG:98:소속)
+;체리노와 마리나가 같은 소속
+SIF CFLAG:98:소속 != CFLAG:96:소속
+    RETURN 0
+;세력 수장이 체리노
+SIF 세력군주 != 96
+    RETURN 0
+SIF DVAR:체리노실각_마리나공포 >= 3
+    RETURN 0
+;체리노와 마리나가 포로가 아님
+SIF CFLAG:98:포로처 || CFLAG:96:포로처
+    RETURN 0
+RETURN 1
+
+;---------------------
+; ☆ 장르
+;---------------------
+@EVENT_DAILY_MARINAFEAR_GENRE()
+RETURN 데일리_장르_그외
+
+;---------------------
+; ☆ 이벤트 랜덤대상 조건
+;  - 특정의 조건을 채우는 캐릭터를 랜덤에 선택하는 경우에 이용
+;    다른 함수는 필수이지만, 이것은 없어도 괜찮음(오히려 성능상 필요 없다면 지우는걸 추천)
+;    해당조건의 대상이 존재하지 않다면 RETURN을 0으로 되돌려 데일리이벤트 발생을 취소시킬 수 있다
+;
+;  - ex) 같은 동아리 소속이자(포로 X), 비 임신캐릭터
+;  - ex) 농땡이마왕이 아닐 것(귀찮아서 조깅도 안하니까)
+;---------------------
+@EVENT_DAILY_MARINAFEAR_SETTARGET()
+
+; 예시(지우고 사용하세요)
+;FOR LOCAL, 0, CHARANUM
+;	IF CFLAG:(LOCAL):소속 == CFLAG:MASTER:소속 && !(CFLAG:(LOCAL):행동불능상태 == 행동불능_임월) && !CFLAG:(LOCAL):포로처 && IS_FEMALE(LOCAL) && !IS_ANIMAL(LOCAL) && !TALENT:(LOCAL):농땡이마왕
+;		DAILY_TARGET:DAILY_TARGET_NUM = LOCAL 
+;		DAILY_TARGET_NUM ++
+;	ENDIF
+;NEXT
+;
+;SIF DAILY_TARGET_NUM == 0
+;	RETURN 0
+;
+;RETURN 1
+
+
+; FOR LOCAL, 0, CHARANUM
+
+; NEXT
+RETURN 1
+
+;---------------------
+;이벤트의 진행 정도에 응해 이벤트명을 변경하고 싶은 경우에 이용
+;변경할 필요가 없는 경우, 이 함수는 불요
+;---------------------
+; @EVENT_DAILY_MARINAFEAR_NAME()
+; RESULTS = ""
+
+
+;---------------------
+; ☆ 본체
+;  - 이벤트가 발생했을 경우는 1, 발생하지 않았던 경우는 0을 돌려준다
+;---------------------
+@EVENT_DAILY_MARINAFEAR()
+IF DVAR:체리노실각_마리나공포 == 0
+    PRINTW 마리나는 체리노 회장의 지시에 따라 불순분자들을 숙청하고 있다.
+    PRINTL
+    PRINTL
+    CALL FACE_IMAGE_N("표정_98_일반_6")
+    PRINTW 「가증스러운 불순분자들은 아무리 숙청해도 끝이 없군」
+    PRINTW 「그러고보니 아까 뭔가 쓰러진 것 같았는데⋯⋯.」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_98_일반_9")
+    PRINTW 「이…이건……!?」
+    PRINTL
+    CALL IMAGE_ILLUST("체리노이벤트_1")
+    PRINTW
+    CALL FACE_IMAGE_N("표정_98_일반_13")
+    PRINTW 「체리노 회장님의 석상이!!」
+    PRINTW 「회장님의 수염이… 회장님의 권위가 이렇게 처참하게⋯⋯.」
+    PRINTW 「어떻게…… 어떻게 해야하지?」
+    PRINTW 「이 사실이 알려졌다간 숙청을 피할 수 없을텐데……」
+    DVAR:체리노실각_마리나공포 = 1
+ELSEIF DVAR:체리노실각_마리나공포 == 1
+    PRINTW 마리나는 체리노 회장의 푸딩을 훔쳐먹은 범인을 찾고 있다.
+    PRINTL
+    PRINTL
+    PRINTW 낡은 창고 앞 버려진 푸딩 용기들이 널부러져 있다.
+    PRINTL
+    CALL FACE_IMAGE_N("표정_98_일반_6")
+    PRINTW 「스파이는 이곳에 은신하고 있는 게 틀림없다!」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_98_일반_12")
+    PRINTW 「순순히 모습을 드러내라 괘씸한 스파이 녀석!」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_98_일반_9")
+    PRINTW 「어라? 이건……」
+    PRINTL
+    PRINTW 모습을 드러낸건 작은 고양이였다.
+    PRINTL
+    CALL FACE_IMAGE_N("표정_98_일반_13")
+    PRINTW 「매, 맹수가 나타났다!」
+    PRINTW 「우와아아악! 가,가까이 오지마!!!」
+    PRINTL
+    PRINTW 마리나가 정신없이 총탄을 흩뿌리자 고양이는 총성에 깜짝 놀라 밖으로 도망갔다.
+    PRINTL
+    CALL FACE_IMAGE_N("표정_98_일반_9")
+    PRINTW 「……해,해치웠나?」
+    PRINTW 「그나저나 방금 선반위에서 무언가 떨어진 것 같은데…」
+    PRINTL
+    CALL IMAGE_ILLUST("체리노이벤트_1")
+    PRINTW
+    CALL FACE_IMAGE_N("표정_98_일반_13")
+    PRINTW 「체리노 회장님의 석상이!!」
+    PRINTW 「어째서 이런곳에 회장님의 석상이이!!」
+    DVAR:체리노실각_마리나공포 = 2
+ELSEIF DVAR:체리노실각_마리나공포 == 2
+    CALL FACE_IMAGE_N("표정_97_일반_3")
+    PRINTW 「어머, 마리나씨 여기 테이블 위에 올려져 있던 푸딩 못 보셨나요?」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_98_일반_1")
+    PRINTW 「네? 그 푸딩이라면 제가 방금 먹었…」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_97_일반_3")
+    PRINTW 「체리노 회장님께 드려야 할 푸딩이였는데 말이에요.」
+    PRINTW 「설마 테이블 위에 놓인 푸딩을 아무 의심없이 덥석 집어 먹는 사람이 있겠어요?」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_98_일반_8")
+    PRINTW 「푸,푸딩은 본적 없는 것 같습니다.」
+    PRINTW 「회장님의 푸딩이 사라졌다니 그것 참 큰일이군요.」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_97_일반_8")
+    PRINTW 「마리나씨는 본 적 없으신거군요. 네 잘 알아들었습니다. 그럼 이만」
+    PRINTL
+    CALL FACE_IMAGE_N("표정_98_일반_13")
+    PRINTW 「그,그게 회장님 푸딩이였다니…」
+    PRINTW 「어떻게 해야하지… 비서실장이 눈치챈 것 같았는데…」
+    PRINTW 「회장님 귀에 들어갔다간 분명……」
+    DVAR:체리노실각_마리나공포 = 3
+    DVAR:체리노실각_발생플래그 = 1
+ENDIF    
+RETURN 1

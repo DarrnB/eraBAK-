@@ -389,6 +389,7 @@ PRINTFORML 1. 이미지를 표시하겠습니까?
 CALL ASK_YN
 IF RESULT == 0
 	FLAG:화상설정 = 1
+	FLAG:이벤트화상 = 1
 	PRINTFORMW 이미지를 표시합니다.
 ELSE
 	PRINTFORMW 이미지를 표시하지 않습니다.
