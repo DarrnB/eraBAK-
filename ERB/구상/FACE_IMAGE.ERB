@@ -28,6 +28,33 @@ PRINTFORML
 PRINTFORML
 RETURN 0
 
+@IMAGE_ILLUST(String,SIZE)
+#DIM iSize
+#DIMS sHtml
+#DIM iFont_Hei_mag
+#DIM iEnter_Con
+#DIM iSpace
+#DIMS String
+#DIM SIZE
+#DIM SPACE_LIST
+#DIM Integer
+#DIM iID
+
+SIF ! FLAG:이벤트화상
+    RETURN 0
+SIF SIZE == 0
+    SIZE = 850
+PRINTFORML
+iEnter_Con = 0
+sHtml =  <p align='left'><nobr>
+sHtml += @"<shape type='space' param='{iSpace}'><img src='%String%' height='{SIZE}' ypos='0'>"
+HTML_PRINT sHtml
+
+FOR SPACE_LIST, 0, SIZE, 100
+    PRINTFORML 
+NEXT
+RETURN 0
+
 @FACE_IMAGE_BIG(String, iSize)
 #DIM iSize
 #DIMS sHtml

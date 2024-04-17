@@ -16,6 +16,8 @@
 ;-------------------------------------------------
 ;=================================================
 ;●「만나러간다」의 개시시의 대사
+; - 
+; - 
 ;=================================================
 @KOJO_TRAIN_START_A1_K62
 SETCOLOR 0x7CCEC3
@@ -37,7 +39,8 @@ ELSE
 ENDIF
 
 ;-------------------------------------------------
-;[공허]상태라면 구상을 표시하지 않는다
+;[공허]상태라면 구상을 표시하지 않음.
+; - 공허상태라는 대사를 넣을 수 있음.
 IF TALENT:공허
 	PRINTFORML 아이리의 방에 들어갔지만 아무런 기척도 느껴지지 않는다.
 	PRINTFORMW ...?
@@ -218,16 +221,17 @@ ENDIF
 ;-------------------------------------------------
 ;행동 불능의 경우
 ;-------------------------------------------------
-;술에 취함에 의한 행동 불능
-IF TCVAR:53 == 1
+;술에 취함에 의한 행동 불능(파라미터 취기 2천 초과)
+IF PALAM:취기 > 2000
 	PRINTFORMW 「우으에... 민트쵸코오 먹고시퍼요오... 헤헤...」 
-;쾌감인 나머지 기절
+	PRINTFORMW 아이리는 만취하여 술주정을 부리고 있다.
+;쾌감인 나머지 기절 (작동안됨)
 ELSEIF TCVAR:52
 	PRINTFORMW 「히윽... 햣... 흣..」
 	PRINTFORMW 아이리는 절정에 못 이겨 침대에 쓰러진채로 신음하고 있다.
 ;피로에 의한 행동 불능
-ELSEIF TCVAR:51
-	PRINTFORMW 「죄송해요. 너무 피곤해서....」
+ELSEIF BASE:기력 <= 300
+	PRINTFORMW 「죄송해요. 너무 피곤해요....」
 	PRINTFORMW 아이리는 꾸벅꾸벅 졸더니 그대로 잠들어버렸다.
 ;-------------------------------------------------
 ;종료시(1회만)
@@ -286,7 +290,7 @@ ENDIF
 RESETCOLOR
 
 ;=================================================
-;●「침실호출」의 개시시의 대사 ※단독으로 불렸을 경우만 불린다
+;●「침실호출」의 개시시의 대사 ※단독으로 불렸을 경우만 출력된다.
 ;=================================================
 @KOJO_TRAIN_START_A2_K62
 SETCOLOR 0x7CCEC3
@@ -321,7 +325,7 @@ ENDIF
 RESETCOLOR
 
 ;=================================================
-;●「침실호출」의 종료시의 대사 ※단독으로 불렸을 경우만 불린다
+;●「침실호출」의 종료시의 대사 ※단독으로 불렸을 경우만 출력된다.
 ;=================================================
 @KOJO_TRAIN_END_A2_K62
 SETCOLOR 0x7CCEC3
@@ -333,10 +337,10 @@ ENDIF
 ;술에 취함에 의한 행동 불능
 IF TCVAR:53 == 1
 	;PRINTFORMW 
-;쾌감인 나머지 기절 or 기력 300 이하
-ELSEIF TCVAR:52 || BASE:기력 <= 300
+;쾌감인 나머지 기절
+ELSEIF TCVAR:52
 	;PRINTFORMW 
-;피로에 의한 행동 불능
+;피로에 의한 행동 불능 or 기력 300 이하
 ELSEIF TCVAR:51
 	;PRINTFORMW 
 ;연인이면서 섹스(합의)한 상태
@@ -419,62 +423,32 @@ ENDIF
 ;키스
 ;-------------------------------------------------
 IF SELECTCOM == 20
-	;이 캐릭터가 주도권을 가지고 있다
-	IF IS_INITIATIVE(TARGET)
-		;퍼스트 키스
-		IF TALENT:키스미경험
-			;연모
-			IF TALENT:연모
-				;PRINTFORMW 
-			;복종
-			ELSEIF TALENT:복종
-				;PRINTFORMW
-			;그 이외
-			ELSE
-				;PRINTFORMW 
-			ENDIF
-		;키스경험이 끝난 상태
+	;퍼스트 키스
+	IF TALENT:키스미경험
+		;연모
+		IF TALENT:연모
+			;PRINTFORMW 
+		;복종
+		ELSEIF TALENT:복종
+			;PRINTFORMW
+		;그 이외
 		ELSE
-			;연모
-			IF TALENT:연모
-				;PRINTFORMW 
-			;복종
-			ELSEIF TALENT:복종
-				;PRINTFORMW
-			;그 이외
-			ELSE
-				;PRINTFORMW 
-			ENDIF
+			;PRINTFORMW 
 		ENDIF
-	;이 캐릭터가 주도권을 가지고 있지 않다
+	;키스경험이 있음
 	ELSE
-		;퍼스트 키스
-		IF TALENT:키스미경험
-			;연모
-			IF TALENT:연모
-				;PRINTFORMW 
-			;복종
-			ELSEIF TALENT:복종
-				;PRINTFORMW
-			;그 이외
-			ELSE
-				;PRINTFORMW 
-			ENDIF
-		;키스경험이 끝난 상태
+		;연모
+		IF TALENT:연모
+			;PRINTFORMW 
+		;복종
+		ELSEIF TALENT:복종
+			;PRINTFORMW
+		;그 이외
 		ELSE
-			;연모
-			IF TALENT:연모
-				;PRINTFORMW 
-			;복종
-			ELSEIF TALENT:복종
-				;PRINTFORMW
-			;그 이외
-			ELSE
-				;PRINTFORMW 
-			ENDIF
+			;PRINTFORMW 
 		ENDIF
 	ENDIF
-	RETURN 0
+RETURN 0
 ENDIF
 
 ;-------------------------------------------------
@@ -6029,23 +6003,28 @@ IF SELECTCOM == 300
 		IF TALENT:연모
 			SELECTCASE RAND:2
 				CASE 0
-					PRINTFORMW 「」
+					PRINTFORML 「에헤헤, %LOCALS:0%, 어제는 있죠~」
+					PRINTFORMW 아이리는 %ANAME(MASTER)%의 옆에 붙어서 여러 이야기를 나눴다.
 				CASE 1
-					PRINTFORMW 
+					PRINTFORML 「민트초코도 좋지만 %LOCALS:0%랑 데이트 하는게 더 좋아요.」
+					PRINTFORMW 「그러니까 다음엔 에헤헤... 같이 맛있는거 먹으러 가요!」
 			ENDSELECT
 		;복종
 		ELSEIF TALENT:복종
 			SELECTCASE RAND:2
 				CASE 0
-					PRINTFORMW 「네에... 알겠습니다.」
+					PRINTFORML 「네에... 알겠습니다.」
+					PRINTFORMW 아이리는 %ANAME(MASTER)%의 눈치를 보며 이야기를 듣고 있다.
 				CASE 1
-					PRINTFORMW 
+					PRINTFORML 「네... 그렇군요...」
+					PRINTFORMW 아이리는 %ANAME(MASTER)%의 말을 듣고 눈치를 보며 조심스럽게 대답한다.
 			ENDSELECT
 		;친구
 		ELSEIF TALENT:친구
 			SELECTCASE RAND:2
 				CASE 0
-					PRINTFORMW 
+					PRINTFORMW 「%조사처리(LOCALS:0,"은")% 먹고 싶은 간식이 있나요?」
+					PRINTFORMW 아이리는 %ANAME(MASTER)%와 소소한 잡담을 나누었다.
 				CASE 1
 					PRINTFORMW 
 			ENDSELECT
@@ -6062,17 +6041,14 @@ IF SELECTCOM == 300
 			ENDSELECT
 		;그 외
 		ELSE
-			SELECTCASE RAND:4
+			SELECTCASE RAND:3
 				CASE 0
 					PRINTFORML 「네? 정말요?」
 					PRINTFORML 「신기하네요!! 전혀 몰랐어요!」
 					PRINTFORMW 아이리와 사소한 잡담을 했다.
 				CASE 1
-					PRINTFORML 「」
-					PRINTFORMW 아이리는 %LOCALS:0%의 말을 경청하고 있다.
-				CASE 2
 					PRINTFORMW 「정말이지... 나츠짱의 생각은 알 수 없을 때가 많다니까요!」
-				CASE 3
+				CASE 2
 					PRINTFORMW 「에헤헤... 달콤한 디저트 생각만 하면 기분이 좋아져요!」
 			ENDSELECT
 		ENDIF
@@ -6258,6 +6234,7 @@ ENDIF
 ;만나러간다-교류-술을 마신다
 ;-------------------------------------------------
 IF SELECTCOM == 310
+PRINTFORML {PALAM:(TARGET):취기}
 	;처음(주도권을 고려하지 않는다)
 	IF IS_COM_FIRST(1)
 		;PRINTFORMW 
