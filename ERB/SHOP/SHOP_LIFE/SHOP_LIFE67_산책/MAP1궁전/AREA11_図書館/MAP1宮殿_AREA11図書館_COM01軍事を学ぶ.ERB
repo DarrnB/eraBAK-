@@ -113,12 +113,12 @@ ENDIF
 
 PRINTFORM 도서관에 온 %조사처리(ANAME(대상),"가")%
 IF RAND:2 == 0
-	PRINTFORML  전술 BD를 정리하고 있었다
+	PRINTFORML  전술 BD를 정리하고 있었다.
 ELSE
-	PRINTFORML  학생 정보를 정리하고 있었다
+	PRINTFORML  학생 정보를 정리하고 있었다.
 ENDIF
 
-PRINTFORML  %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%의 옆에서 수학을 시작했다
+PRINTFORML  %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%의 옆에서 공부를 시작했다.
 
 ;-------------------------------------------------
 ; 묘사 2
@@ -133,43 +133,43 @@ PRINTFORML  %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%의 옆에서 수
 PRINTL 
 주인공서투름플래그 = 0
 IF ABL:(MASTER):지략 < 30
-	PRINTFORML  문자가 읽지 못하고 고생하고 있는 %조사처리(ANAME(MASTER),"를")% 봐 불안하게 되었는지, %조사처리(ANAME(대상),"는")% 함께 배우려고 말을 걸어 왔다
+	PRINTFORML  이미 봤던 부분을 몇 번이고 돌려보며 고생하고 있는 %조사처리(ANAME(MASTER),"가")% 불쌍해 보였는지, %조사처리(ANAME(대상),"가")% 함께 공부하자며 말을 걸어 왔다.
 	주인공서투름플래그 = 2
 ELSEIF ABL:(MASTER):지략 < 50
-	PRINTFORML  서적에 향해 가끔목을 돌리고 있는 %조사처리(ANAME(MASTER),"를")% 보기 힘들어인가, %조사처리(ANAME(대상),"는")% 함께 배우려고 말을 걸어 왔다
+	PRINTFORML  좀처럼 내용에 집중하지 못하는 %조사처리(ANAME(MASTER),"를")% 내버려 둘 수 없었는지, %조사처리(ANAME(대상),"가")% 함께 공부하자며 말을 걸어 왔다.
 	주인공서투름플래그 = 1
 ELSE
 	주인공서투름플래그 = 0
-	PRINTFORML  술술서적을 읽어 진행하는 %ANAME(MASTER)%에, %조사처리(ANAME(대상),"는")% 감탄 한 모습으로 함께 배우고 싶다고 권해 왔다
+	PRINTFORML  BD를 1.5배속으로 돌리면서도 막힘없이 진행하는 %ANAME(MASTER)%의 모습에, %조사처리(ANAME(대상),"는")% 감탄한 표정으로 함께 배우고 싶다고 말해 왔다.
 ENDIF
 
 PRINTL 
 IF ABL:(대상):지략 < 30
 	대상서투름플래그 = 2
 	IF 주인공서투름플래그 == 2
-		PRINTFORML  하지만 %ANAME(대상)%도 적당하게 읽고 있는지 어떻게도 이상하다…
+		PRINTFORML  하지만 %ANAME(대상)%도 제대로 알고 있는 것은 아니었는지, 설명을 들을수록 점점 더 머리가 복잡해졌다…
 	ELSEIF 주인공서투름플래그 == 1
-		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%보다 한층 모르는 것 같다…
+		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%보다도 더 집중력이 나빴다…
 	ELSE
-		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% 머리를 움켜 쥐어 웅크리고 앉아 버렸다…
+		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% 설명이 이어질수록 머리를 움켜쥐고 책상 아래로 가라앉아 버렸다…
 	ENDIF
 ELSEIF ABL:(대상):지략 < 50
 	대상서투름플래그 = 1
 	IF 주인공서투름플래그 == 2
-		PRINTFORML  하지만 %조사처리(ANAME(대상),"가")% 읽어 들려주고도 군데군데 씹고 있다…
+		PRINTFORML  하지만 %조사처리(ANAME(대상),"가")% 설명한 내용에는 군데군데 구멍이 뚤려 있었다…
 	ELSEIF 주인공서투름플래그 == 1
-		PRINTFORML  하지만 %ANAME(대상)%의 이해도 %조사처리(ANAME(MASTER),"와")% 동일한 정도인 것 같다…
+		PRINTFORML  하지만 %ANAME(대상)%의 집중력도 %조사처리(ANAME(MASTER),"와")% 비슷했다…
 	ELSE
-		PRINTFORML  모르는 곳이 있는 것 같고, %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%에 의미를 물어 왔다…
+		PRINTFORML  모르는 곳이 있었는지, %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%에게 의미를 물어 왔다…
 	ENDIF
 ELSE
 	대상서투름플래그 = 0
 	IF 주인공서투름플래그 == 2
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 술술 서적을 읽어, %ANAME(MASTER)%에 의미를 가르쳐 주었다…
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 막힘없이 포인트를 짚어주며, %ANAME(MASTER)%에게 의미를 가르쳐 주었다…
 	ELSEIF 주인공서투름플래그 == 1
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 술술 서적을 읽어, %ANAME(MASTER)%에 들려주었다…
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 막힘없이 영상을 넘겨가며, %ANAME(MASTER)%에게 내용을 풀어서 설명해주었다…
 	ELSE
-		PRINTFORML  서로의 생각하고 이야기하고 서로 높일 수가 있어, 학습은 매우 진전되었다…
+		PRINTFORML  서로의 생각을 이야기하면서 서로 이해를 높일 수 있어, 학습이 매우 진전되었다…
 	ENDIF
 ENDIF
 ;---------------------------------------------------------------------- 

@@ -9,12 +9,12 @@ CALL TITLE_CATEGORY_GENERAL("상인을 찾는다")
 PRINTL 
 	SETCOLOR COLOR("실버")
 	PRINTL 
-	PRINTFORML    근처를 둘러보고 있으면 노출이 격렬한 의상을 감긴 수수께끼의 미녀가 말을 걸어 왔다…
+	PRINTFORML    근처를 둘러보고 있으면 노출이 과감한 옷을 입은 수수께끼의 미녀가 말을 걸어 왔다…
 	PRINTL 
-	PRINTFORML   「네에에, 뭔가 찾고 있는 것 같네요～」
-	PRINTFORML   「만약 FP를 가지고 있다면, 이쪽에서 좋은 것과 교환을 할 수 있어요」
-	PRINTFORML   「교환할 수 있는 상품에 대한 안내 쓰기도 준비해 있기에, 사전에 미리 확인해 주세요」
-	PRINTFORML   「아, 교환 후의 반품은 받고 있지 않으므로, 조~심하세요」
+	PRINTFORML   「거기 너~, 뭔가 찾고 있는 것 같네～」
+	PRINTFORML   「만약 FP를 가지고 있다면, 이쪽에서 좋은 것과 교환할 수 있단다」
+	PRINTFORML   「교환 가능 상품에 대한 안내문도 준비해 뒀으니, 사전에 미리 확인해 주렴」
+	PRINTFORML   「아, 교환한 뒤엔 반품이 안 되니까, 조~심하렴?」
 	RESETCOLOR
 CALL COLOR_LINE
 CALL ASK_MULTI ("상품을 교환한다","상품 설명을 본다","돌아온다")
@@ -23,79 +23,79 @@ CALL ASK_MULTI ("상품을 교환한다","상품 설명을 본다","돌아온다
 	IF RESULT == 1
 			PRINTFORML   ◇◇FP로 교환할 수 있는 상품에 대해◇◇
 			PRINTL
-			PRINTFORML   %조사처리(ANAME(MASTER),"가")% 스킬을 기억할 수가 있습니다
-			PRINTFORML   다만 스킬범위에 빈곳이 없는 경우, 스킬을 기억할 수 없습니다
-			PRINTFORML   또, 한 번 스킬을 잊은 후, 재차 취득하는 경우도 교환에 필요한 FP를 지불할 필요가 있습니다
+			PRINTFORML   %조사처리(ANAME(MASTER),"가")% 스킬을 익힐 수 있습니다
+			PRINTFORML   다만 스킬 슬롯에 빈 공간이 없는 경우, 스킬을 익힐 수 없습니다
+			PRINTFORML   또, 한 번 스킬을 잊은 후, 재차 익히는 경우에도 교환에 필요한 FP를 지불해야 합니다
 			PRINTL
 			WAIT
 			CALL COLOR_PRINTL("  【특수장비 「군령깃발」】 필요 FP,", GETDEFCOLOR(), "3000", 칼라_오렌지)
-			PRINTFORML   스킬 「전체 강화」를 습득할 수 있다
+			PRINTFORML   스킬 「전체 강화」를 습득한다
 			PRINTFORML   스킬 효과 「아군 전체의 공격력을 업」
 			PRINTFORML   발동율:15.0
 			PRINTL
 			WAIT
 			CALL COLOR_PRINTL("  【특수장비 「응원나팔」】 필요 FP,", GETDEFCOLOR(), "3000", 칼라_오렌지)
-			PRINTFORML   스킬 「기력 양도」를 습득할 수 있다
+			PRINTFORML   스킬 「기력 양도」를 습득한다
 			PRINTFORML   스킬 효과 「아군 단체의 스킬 발동률을 늘린다」
 			PRINTFORML   발동율:20.0
 			PRINTL
 			WAIT
 			CALL COLOR_PRINTL("  【특수장비 「전술기록」】 필요 FP,", GETDEFCOLOR(), "3000", 칼라_오렌지)
-			PRINTFORML   스킬 「철의 전심」을 습득할 수 있다
+			PRINTFORML   스킬 「철의 전심」을 습득한다
 			PRINTFORML   스킬 효과 「아군 단체의 방위·지략 업」
 			PRINTFORML   발동율:18.0
 			PRINTL
 			WAIT
 			CALL COLOR_PRINTL("  【특수장비 「꿈의조각」】 필요 FP,", GETDEFCOLOR(), "6000", 칼라_오렌지)
-			PRINTFORML   스킬 「환상의 장막」을 습득할 수 있다
+			PRINTFORML   스킬 「환상의 장막」을 습득한다
 			PRINTFORML   스킬 효과 「자부대에 무적을 부여」
 			PRINTFORML   발동율:10.0
 			PRINTL
 			WAIT
 			CALL COLOR_PRINTL("  【특수장비 「무공훈장」】 필요 FP,", GETDEFCOLOR(), "6000", 칼라_오렌지)
-			PRINTFORML   스킬 「기사의 맹세」를 습득할 수 있다
+			PRINTFORML   스킬 「기사의 맹세」를 습득한다
 			PRINTFORML   스킬 효과 「아군 단체에 근성 상태를 부여」
 			PRINTFORML   발동율:50.0
 			PRINTL
 			WAIT
 			CALL COLOR_PRINTL("  【무명의 장검의 습득】 필요 FP,", GETDEFCOLOR(), "9000", 칼라_오렌지)
-			PRINTFORML   스킬 【무명의 장검】를 습득할 수 있다
+			PRINTFORML   스킬 【무명의 장검】를 습득한다
 			PRINTFORML   스킬 효과 「적부대에 데미지를 줘, 자신 무투·방위를 업」
 			PRINTFORML   발동율:20.0
 			PRINTL
 			WAIT
 			CALL COLOR_PRINTL("  【무명의 마창의 습득】 필요 FP,",,"9000", GETDEFCOLOR(), "9000", 칼라_오렌지)
-			PRINTFORML   스킬 【무명의 마창】를 습득할 수 있다
+			PRINTFORML   스킬 【무명의 마창】를 습득한다
 			PRINTFORML   스킬 효과 「적부대에 데미지를 줘, 자신의 방위를 업」
 			PRINTFORML   발동율:20.0
 			PRINTL
 			WAIT
 			CALL COLOR_PRINTL("  【무명의 강궁의 습득】 필요 FP,", GETDEFCOLOR(), "9000", 칼라_오렌지)
-			PRINTFORML   스킬 【무명의 강궁】를 습득할 수 있다
+			PRINTFORML   스킬 【무명의 강궁】를 습득한다
 			PRINTFORML   스킬 효과 「적부대에 연속 데미지」
 			PRINTFORML   발동율:20.0
 			PRINTL
 			WAIT
 			CALL COLOR_PRINTL("  【무명의 대도끼의 습득】 필요 FP,", GETDEFCOLOR(), "9000", 칼라_오렌지)
-			PRINTFORML   스킬 【무명의 대도끼】를 습득할 수 있다
+			PRINTFORML   스킬 【무명의 대도끼】를 습득한다
 			PRINTFORML   스킬 효과 「적부대에 데미지를 줘, 자신 무투를 업」
 			PRINTFORML   발동율:20.0
 			PRINTL
 			WAIT
 			CALL COLOR_PRINTL("  【무명의 단도의 습득】 필요 FP,", GETDEFCOLOR(), "9000", 칼라_오렌지)
-			PRINTFORML   스킬 【무명의 단도】를 습득할 수 있다
+			PRINTFORML   스킬 【무명의 단도】를 습득한다
 			PRINTFORML   스킬 효과 「적한사람 무투와 방위를 다운해, 저확률로 전투 불능 상태를 부여」
 			PRINTFORML   발동율:20.0
 			PRINTL
 			WAIT
 			CALL COLOR_PRINTL("  【무명의 준마의 습득】 필요 FP,", GETDEFCOLOR(), "9000", 칼라_오렌지)
-			PRINTFORML   스킬 【무명의 준마】를 습득할 수 있다
+			PRINTFORML   스킬 【무명의 준마】를 습득한다
 			PRINTFORML   스킬 효과 「전투에 앞서, 자부대가 돌격을 건다」
 			PRINTFORML   발동율:20.0
 			PRINTL
 			WAIT
 			CALL COLOR_PRINTL("  【무명의 지팡이의 습득】 필요 FP,", GETDEFCOLOR(), "9000", 칼라_오렌지)
-			PRINTFORML   스킬 【무명의 지팡이】를 습득할 수 있다
+			PRINTFORML   스킬 【무명의 지팡이】를 습득한다
 			PRINTFORML   스킬 효과 「자신의 지략·신비·스킬 발동율을 업」
 			PRINTFORML   발동율:20.0
 			PRINTL
@@ -104,8 +104,8 @@ CALL ASK_MULTI ("상품을 교환한다","상품 설명을 본다","돌아온다
 	ELSEIF RESULT == 2
 		SETCOLOR COLOR("실버")
 		PRINTL 
-		PRINTFORML   「아라, 돌아오는 길입니까?」
-		PRINTFORML   「FP가 모이면 부디 또 이용하십시오군요」
+		PRINTFORML   「어라, 돌아가는 거야?」
+		PRINTFORML   「FP가 모이면 부디 또 이용해주세요~」
 		RESETCOLOR
 		PRINTL 
 		PRINTFORMW  이번은 그만두기로 했다

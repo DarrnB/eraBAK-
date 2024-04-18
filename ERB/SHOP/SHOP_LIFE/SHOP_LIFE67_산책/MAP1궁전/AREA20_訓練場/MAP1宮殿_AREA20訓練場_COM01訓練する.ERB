@@ -89,59 +89,59 @@ SELECTCASE RAND:2
 	CASE 0
 		IF DISPLAY_SEASON() == "봄"
 			IF WEATHERNUM == 기후_구름
-				PRINTFORM  햇살의 온화한 낮에
+				PRINTFORM  햇살이 비치는 포근한 낮에
 			ELSEIF WEATHERNUM == 기후_강우
-				PRINTFORM  봄비의 내리는 낮에
+				PRINTFORM  봄비가 내리는 낮에
 			ELSE
-				PRINTFORM  화창한 햇볕 속에서
+				PRINTFORM  화창한 햇볕 아래에서
 			ENDIF
 		ELSEIF DISPLAY_SEASON() == "여름"
 			IF WEATHERNUM == 기후_구름
-				PRINTFORM  구름이 더위를 완화시키고 있는 동안에
+				PRINTFORM  구름이 더위를 식혀주고 있는 동안에
 			ELSEIF WEATHERNUM == 기후_강우
 				PRINTFORM  상쾌한 단비 속
 			ELSE
-				PRINTFORM  내리쬐는 햇빛 마주 앉음 속
+				PRINTFORM  내리쬐는 뙤약볕 아래에서
 			ENDIF
 		ELSEIF DISPLAY_SEASON() == "가을"
 			IF WEATHERNUM == 기후_구름
-				PRINTFORM  시원한 바람속에서
+				PRINTFORM  시원한 바람 속에서
 			ELSEIF WEATHERNUM == 기후_강우
-				PRINTFORM  비가 내리는 으스스 추운 날에
+				PRINTFORM  비가 내리는 약간 추운 날에
 			ELSE
-				PRINTFORM  깨끗이개인 낮에
+				PRINTFORM  깨끗이 개인 낮에
 			ENDIF
 		ELSE
 			IF WEATHERNUM == 기후_구름
-				PRINTFORM  북풍이 휘몰아치는
+				PRINTFORM  찬 공기가 휘몰아치는
 			ELSEIF WEATHERNUM == 기후_강설
-				PRINTFORM  눈에 솜씨가 무디어지지 않게
+				PRINTFORM  눈에 솜씨가 무뎌지지 않도록
 			ELSE
-				PRINTFORM  개여 있는 동안에
+				PRINTFORM  하늘이 개여 있는 동안에
 			ENDIF
 		ENDIF
 	CASEELSE
 		IF DISPLAY_SEASON() == "봄"
 			IF WEATHERNUM == 기후_구름
-				PRINTFORM  밤벚꽃의
+				PRINTFORM  벚꽃이 핀
 			ELSEIF WEATHERNUM == 기후_강우
-				PRINTFORM  이슬비의 내리는 밤의
+				PRINTFORM  이슬비가 내리는 밤의
 			ELSE
-				PRINTFORM  밤도 따뜻해진
+				PRINTFORM  밤에도 따뜻해진
 			ENDIF
 		ELSEIF DISPLAY_SEASON() == "여름"
 			IF WEATHERNUM == 기후_구름
 				PRINTFORM  조금 시원한 밤에
 			ELSEIF WEATHERNUM == 기후_강우
-				PRINTFORM  조금 시원한 비의 밤에
+				PRINTFORM  조금 시원한 비 내리는 밤에
 			ELSE
-				PRINTFORM  더위가 겨우 침착한
+				PRINTFORM  더위가 겨우 가라앉은
 			ENDIF
 		ELSEIF DISPLAY_SEASON() == "가을"
 			IF WEATHERNUM == 기후_구름
-				PRINTFORM  차가워져 온 밤에
+				PRINTFORM  쌀쌀한 밤에
 			ELSEIF WEATHERNUM == 기후_강우
-				PRINTFORM  비가 내리는 으스스 추운 날에
+				PRINTFORM  비가 내려 약간 추운 날에
 			ELSE
 				PRINTFORM  가을의 긴 밤에
 			ENDIF
@@ -156,7 +156,7 @@ SELECTCASE RAND:2
 		ENDIF
 ENDSELECT
 
-PRINTFORML  훈련장에서 훈련하고 있으면, %조사처리(ANAME(대상),"가")% 무기를 가져 왔다
+PRINTFORML  훈련장에서 훈련하고 있었더니, %조사처리(ANAME(대상),"가")% 무기를 가지고 왔다.
 
 ;-------------------------------------------------
 ; 묘사 2
@@ -171,43 +171,43 @@ PRINTFORML  훈련장에서 훈련하고 있으면, %조사처리(ANAME(대상),
 PRINTL 
 주인공서투름플래그 = 0
 IF ABL:(MASTER):무투 < 30
-	PRINTFORM  비틀비틀 무기를 취급하는 %조사처리(ANAME(MASTER),"를")% 봐 불안하게 되었는지,
+	PRINTFORM  자꾸만 표적이 아니라 엉뚱한 곳을 쏘는 %조사처리(ANAME(MASTER),"가")% 불안해 보였는지,
 	주인공서투름플래그 = 2
 ELSEIF ABL:(MASTER):무투 < 50
-	PRINTFORM  익숙해지지 않는 움직임으로 무기를 취급하고 있는 %조사처리(ANAME(MASTER),"를")% 보기 힘들어인가,
+	PRINTFORM  어색한 움직임으로 총을 다루는 %조사처리(ANAME(MASTER),"를")% 내버려 둘 수 없었는지,
 	주인공서투름플래그 = 1
 ELSE
 	주인공서투름플래그 = 0
-	PRINTFORM  호쾌하게 무기를 조종하는 %조사처리(ANAME(MASTER),"를")% 봐 감탄 한 모습으로,
+	PRINTFORM  대충 쏘면서도 백발백중인 %ANAME(MASTER)%의 실력에 감탄한 모습으로,
 ENDIF
-PRINTFORML  %조사처리(ANAME(대상),"는")% 함께 훈련해도 좋은가 물어 왔다
+PRINTFORML  %조사처리(ANAME(대상),"가")% 함께 훈련해도 괜찮은지 물어 왔다.
 
 IF ABL:(대상):무투 < 30
 	대상서투름플래그 = 2
 	IF 주인공서투름플래그 == 2
-		PRINTFORML  하지만 %ANAME(대상)%의 수중도 상당한 위태로움이다…
+		PRINTFORML  하지만 %ANAME(대상)%의 사격 실력도 상당히 심각했다…
 	ELSEIF 주인공서투름플래그 == 1
-		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%에 한 술 더 떠 발밑이 미덥지 않다…
+		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%보다도 총을 다루는 데 서툴렀다…
 	ELSE
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 잡은 무기가 휘두른 기세로 날아 갈 것 같은 무력함이다…
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 자꾸만 표적이 아니라 엉뚱한 곳을 쏘았다…
 	ENDIF
 ELSEIF ABL:(대상):무투 < 50
 	대상서투름플래그 = 1
 	IF 주인공서투름플래그 == 2
-		PRINTFORML  하지만 %ANAME(대상)%의 취급도 익숙해져 있다고는 말할 수 없는 것 같다…
+		PRINTFORML  하지만 %ANAME(대상)%의 사격 실력도 그리 좋지는 않았다…
 	ELSEIF 주인공서투름플래그 == 1
-		PRINTFORML  하지만 %ANAME(대상)%의 취급도 %조사처리(ANAME(MASTER),"와")% 도토리의 키재기다…
+		PRINTFORML  하지만 %ANAME(대상)%도 %조사처리(ANAME(MASTER),"와")% 비슷한 동작을 반복했다…
 	ELSE
-		PRINTFORML  무기의 취급이 능숙하게 가지 않은 것인지 %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%에 지시를 받아 온다…
+		PRINTFORML  사격 자세에서 위화감을 느낀 %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%의 자세를 교정해 주었다…
 	ENDIF
 ELSE
 	대상서투름플래그 = 0
 	IF 주인공서투름플래그 == 2
-		PRINTFORML  %ANAME(MASTER)%의 옆에서 실천해 보이면서 %조사처리(ANAME(대상),"는")% 정확한 조언을 주었다…
+		PRINTFORML  %ANAME(MASTER)%의 옆에서 직접 시범을 보이면서 %조사처리(ANAME(대상),"는")% 정확한 조언을 해주었다…
 	ELSEIF 주인공서투름플래그 == 1
-		PRINTFORML  %ANAME(MASTER)%에 정확한 조언을 들은 %조사처리(ANAME(대상),"는")% 호쾌하게 무기를 조종하고 있다…
+		PRINTFORML  %ANAME(MASTER)%에게 적절한 조언을 들은 %조사처리(ANAME(대상),"는")% 온갖 자세로 표적을 쏘았으나, 표적에는 단 한 개의 구멍만이 존재했다…
 	ELSE
-		PRINTFORML  훈련은 어느덧 대국이 되어 매우 훈련이 진전되었다…
+		PRINTFORML  훈련은 어느덧 대결이 되어 매우 훈련이 진전되었다…
 	ENDIF
 ENDIF
 

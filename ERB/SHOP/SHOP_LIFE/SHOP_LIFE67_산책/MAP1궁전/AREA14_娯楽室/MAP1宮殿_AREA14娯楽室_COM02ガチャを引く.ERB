@@ -93,7 +93,7 @@ RETURN 1
 	CALL TITLE_CATEGORY_GENERAL("FP의 교환")
 	PRINTL 
 	SETCOLOR COLOR("실버")
-	PRINTFORML   금을 가챠로 사용할 수 있는 「FP」로 교환할 수가 있는 것 같다
+	PRINTFORML   금을 가챠에 사용할 수 있는 「FP」로 교환할 수 있는 것 같다
 	PRINTFORML   몇 포인트 교환할까? （입력 또는 선택）
 	RESETCOLOR
 	CALL COLOR_LINE
@@ -168,7 +168,7 @@ RETURN 1
 	LOCAL:1 = ABS(RESULT) * 1000
 	IF RESULT > 0
 		IF LOCAL:1 > MONEY
-			PRINTFORML  금이 부족함
+			PRINTFORML  금이 부족하다
 			RETURN
 
 		ELSE
@@ -236,7 +236,7 @@ INPUT 0
 @Gacha
 
 	IF GAMBLE_MONEY > 200
-		PRINTFORML  가챠를 당기는 회수를 입력해 주세요. (MAX {MIN(99,GAMBLE_MONEY / 100)})
+		PRINTFORML  가챠를 돌릴 횟수를 입력해 주세요. (MAX {MIN(99,GAMBLE_MONEY / 100)})
 		INPUT
 		SIF RESULT > 99
 			RESULT = 99

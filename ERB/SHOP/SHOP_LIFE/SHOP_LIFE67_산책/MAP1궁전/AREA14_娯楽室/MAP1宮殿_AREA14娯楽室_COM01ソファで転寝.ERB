@@ -8,7 +8,7 @@ RETURN 1
 ; 「소파에서 선잠」의 명칭
 ;-------------------------------------------------
 @SHOP_LIFE67_MAP1_AREA14_COM1_NAME
-RESULTS:0 '= "소파에서 선잠"
+RESULTS:0 '= "소파에서 낮잠을 잔다"
 RETURN 1
 
 ;-------------------------------------------------
@@ -87,20 +87,20 @@ RETURN 1
 @SHOP_LIFE67_MAP1_AREA14_COM1_TEXT(대상)
 #DIM 대상
 
-PRINTFORML  %조사처리(ANAME(MASTER),"가")% 소파에서 선잠 하고 있으면, 누군가에게 흔들어 깨워졌다
+PRINTFORML  %조사처리(ANAME(MASTER),"가")% 소파에서 낮잠을 자고 있던 와중, 누군가가 흔들어 잠에서 깼다.
 WAIT
 PRINTL 
-PRINTFORML  일으켜 준 것은 %조사처리(ANAME(대상),"였")%다
-PRINTFORML  서려고 했지만 손발이 움직이지 않고, 보면 완전히 단단히 묶어지고 있었다
-PRINTFORML  %조사처리(ANAME(대상),"는")% 오락이 될 것 같은 『완구』를 손에 넣었다고 할듯한 웃는 얼굴이다
+PRINTFORML  깨운 것은 %조사처리(ANAME(대상),"였")%다.
+PRINTFORML  일어나려고 했지만 손발이 움직이지 않아, 아래를 보니 완전히 단단히 묶여있었다.
+PRINTFORML  %조사처리(ANAME(대상),"는")% 재미있는 『장난감』이라도 손에 넣은 듯 웃는 얼굴을 했다.
 WAIT
 PRINTL 
 IF GET_COUNTRY_BOSS(CFLAG:MASTER:소속) == MASTER
-	PRINTFORML  그러고 보니 오늘 아침, 청소를 위해서(때문에) 열쇠를 빌려 주었으면 좋겠다고 들어 맡기고 있었지만
-	PRINTFORML  계획적인 범행이었을까…
+	PRINTFORML  그러고 보니 오늘 아침, 청소를 해야 하니 열쇠를 빌려 주었으면 좋겠다는 말에 열쇠를 맡겨 뒀었다.
+	PRINTFORML  계획적인 범행인 건가…
 ELSE
-	PRINTFORML  열쇠는 잠그어 있는 것 같다
-	PRINTFORML  청소를 위해서(때문에) 차 해 나오는 일이 있지만…
+	PRINTFORML  문은 잠겨있는 것 같다.
+	PRINTFORML  누군가 청소를 하러 오면 나갈 수 있겠지…
 ENDIF
 
 RETURN 0
