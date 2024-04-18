@@ -102,43 +102,43 @@ RETURN 1
 #DIM 대상
 
 IF GET_COUNTRY_BOSS(CFLAG:MASTER:소속) == MASTER
-	PRINTFORML  %조사처리(ANAME(MASTER),"가")% 목욕통으로 편히 쉬고 있으면 탈의실로부터 %조사처리(ANAME(대상),"가")% 말을 걸어 왔다
-	PRINTFORML  %조사처리(ANAME(MASTER),"가")% 타올을 감아 %조사처리(ANAME(대상),"를")% 맞아들이면
-	PRINTFORML  %조사처리(ANAME(대상),"는")% 자세력의 군주인 %ANAME(MASTER)%에 당황하면서도 목욕통에 들어 왔다
+	PRINTFORML  %조사처리(ANAME(MASTER),"가")% 욕조에서 편히 쉬던 와중, 탈의실에서 %조사처리(ANAME(대상),"가")% 말을 걸어 왔다.
+	PRINTFORML  %조사처리(ANAME(MASTER),"가")% 타올을 감고 %조사처리(ANAME(대상),"를")% 맞아들이자
+	PRINTFORML  %조사처리(ANAME(대상),"는")% 자세력의 군주인 %ANAME(MASTER)%에 당황하면서도 욕조에 들어왔다.
 ELSE
-	PRINTFORML  %조사처리(ANAME(MASTER),"가")% 목욕통으로 편히 쉬고 있으면 탈의실로부터 %조사처리(ANAME(대상),"가")% 말을 걸어 왔다
+	PRINTFORML  %조사처리(ANAME(MASTER),"가")% 욕조에서 편히 쉬던 와중, 탈의실에서 %조사처리(ANAME(대상),"가")% 말을 걸어 왔다.
 	IF HAS_SAME_FATHER(MASTER, 대상) || HAS_SAME_MOTHER(MASTER, 대상)
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 형제 자매인 %조사처리(ANAME(MASTER),"와")% 함께 목욕탕을 즐기려고 생각한 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 형제 자매인 %조사처리(ANAME(MASTER),"와")% 함께 목욕을 즐길 생각인 것 같다.
 	ELSEIF CFLAG:MASTER:부친 == GET_ID(대상)
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 부친으로서 우리 아이인 %조사처리(ANAME(MASTER),"와")% 목욕탕을 즐기려고 생각한 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 부친으로서 자신의 아이인 %조사처리(ANAME(MASTER),"와")% 함께 목욕을 즐길 생각인 것 같다.
 	ELSEIF CFLAG:MASTER:모친 == GET_ID(대상)
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 모친으로서 %조사처리(ANAME(MASTER),"와")% 함께 목욕탕에 잠기러 온 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 모친으로서 %조사처리(ANAME(MASTER),"와")% 함께 목욕물에 잠기러 온 것 같다.
 	ELSEIF CFLAG:대상:부친 == GET_ID(MASTER)
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 부친인 %조사처리(ANAME(MASTER),"와")% 함께 목욕탕에 들어가고 싶은 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 부친인 %조사처리(ANAME(MASTER),"와")% 함께 욕조에 들어가고 싶은 것 같다.
 	ELSEIF CFLAG:대상:모친 == GET_ID(MASTER)
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 모친인 %조사처리(ANAME(MASTER),"와")% 함께 목욕탕에 들어가고 싶은 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 모친인 %조사처리(ANAME(MASTER),"와")% 함께 욕조에 들어가고 싶은 것 같다.
 ;	ELSEIF TALENT:대상:의형제
-;		PRINTFORML  %조사처리(ANAME(대상),"는")% 의형제인 %조사처리(ANAME(MASTER),"와")% 함께 목욕탕을 즐기려고 생각한 것 같다
+;		PRINTFORML  %조사처리(ANAME(대상),"는")% 의형제인 %조사처리(ANAME(MASTER),"와")% 함께 목욕을 즐길 생각인 것 같다
 	ELSEIF TALENT:대상:연인
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 연인인 %조사처리(ANAME(MASTER),"와")% 함께 목욕탕에 들어가고 싶은 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 연인인 %조사처리(ANAME(MASTER),"와")% 함께 욕조에 들어가고 싶은 것 같다.
 	ELSEIF TALENT:대상:낙인
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 낙인의 주인인 %ANAME(MASTER)%의 얼굴을 볼 수 없으면 침착하지 않았던 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 낙인의 주인인 %ANAME(MASTER)%의 얼굴을 보지 못해 불안했던 것 같다.
 	ELSEIF GET_COUNTRY_FROM_BOSS_NAME(NAME:대상) == CFLAG:MASTER:소속
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 자세력의 사관인 %조사처리(ANAME(MASTER),"와")% 함께 목욕탕을 즐기려고 생각한 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 자세력의 사관인 %조사처리(ANAME(MASTER),"와")% 함께 목욕을 즐길 생각인 것 같다.
 	ELSEIF TALENT:대상:연모
-		PRINTFORML  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"와")% 함께 목욕탕을 즐기려고 생각한 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"와")% 함께 목욕을 즐길 생각인 것 같다.
 	ELSEIF TALENT:대상:복종
-		PRINTFORML  %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%의 등을 밀려고 온 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%의 등을 밀어주러 온 것 같다.
 	ELSEIF TALENT:대상:주인 ;|| TALENT:(대상):각인
-		PRINTFORML  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"와")% 목욕탕에서 즐기려고 온 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"와")% 함께 목욕을 즐기려고 온 것 같다.
 	ELSEIF TALENT:대상:친구
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 친구의 %조사처리(ANAME(MASTER),"와")% 목욕탕을 즐기려고 생각한 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 친구인 %조사처리(ANAME(MASTER),"와")% 함께 목욕을 즐길 생각인 것 같다.
 	ELSEIF CFLAG:대상:안면 == 0
-		PRINTFORML  동일 세력인 %조사처리(ANAME(MASTER),"와")% 교류가 깊어지려고 온 것 같다
+		PRINTFORML  같은 세력에 소속된 %조사처리(ANAME(MASTER),"와")% 관계를 다지기 위해 온 것 같다.
 	ELSE
-		PRINTFORML  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"와")% 교류가 깊어지려고 온 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"와")% 관계를 다지기 위해 온 것 같다.
 	ENDIF
-	PRINTFORML  %조사처리(ANAME(MASTER),"는")% 타올을 감아 %조사처리(ANAME(대상),"를")% 맞아들였다
+	PRINTFORML  %조사처리(ANAME(MASTER),"는")% 타올을 감고 %조사처리(ANAME(대상),"를")% 맞아들였다.
 ENDIF
 
 ;-------------------------------------------------
@@ -150,18 +150,18 @@ ENDIF
 IF !IS_SAMESEX(MASTER, 대상)
 	PRINTFORM  %조사처리(ANAME(대상),"는")%
 	IF TALENT:(대상):무관심 || TALENT:(대상):감정결핍 || TALENT:(대상):해방
-		PRINTFORML 이성과 함께 목욕통에 잠기고 있는 일을 신경쓰지 않은 것 같다
+		PRINTFORML 이성과 함께 욕조에 들어가 있는 것을 신경쓰지 않는 것 같다.
 	ELSEIF TALENT:(대상):수줍음 || TALENT:(대상):얌전함 || TALENT:(대상):보수적 || TALENT:(대상):정조관념
-		PRINTFORML 이성과 함께 목욕통에 잠기고 있는 것을 당황하고 있는 모습이다……
+		PRINTFORML 이성과 함께 욕조에 들어가 있는 것에 당황하고 있는 모습이다……
 	ELSEIF TALENT:(대상):쾌감에솔직 || TALENT:(대상):호기심 || TALENT:(대상):정조관념없음
-		PRINTFORML 이성과 함께 목욕탕을 즐길 수 있는 것을 기쁜 듯하다……
+		PRINTFORML 이성과 함께 목욕을 즐길 수 있어 기쁜 듯하다……
 	ELSEIF TALENT:(대상):소악마
-		PRINTFORML 빙그레 미소를 띄우면, %ANAME(MASTER)%에 가까워져 왔다
+		PRINTFORML 빙긋 웃는 미소를 띄우고, %ANAME(MASTER)%에게 다가갔다.
 	ELSE
-		PRINTFORML 이성과 함께 목욕통에 잠기는 것을 약간 사양을 보이고 있다
+		PRINTFORML 이성과 함께 욕조에 들어가는 것에 약간 거부감을 보이고 있다.
 	ENDIF
 ELSE
-	PRINTFORML  %조사처리(ANAME(대상),"는")% 목욕통에 잠기는 기분이 좋을 것 같다
+	PRINTFORML  %조사처리(ANAME(대상),"는")% 욕조에 들어가 기분이 좋은 것 같다.
 ENDIF
 
 PRINTFORML  우연히 만난 %조사처리(ANAME(MASTER),"와")% %조사처리(ANAME(대상),"는")% 함께 입욕했다…

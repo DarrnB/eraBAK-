@@ -8,7 +8,7 @@ RETURN 1
 ; 「군사를 배운다」의 명칭
 ;-------------------------------------------------
 @SHOP_LIFE67_MAP1_AREA11_COM1_NAME
-RESULTS:0 '= "군사를 배운다"
+RESULTS:0 '= "군략을 배운다"
 RETURN 1
 
 ;-------------------------------------------------
@@ -87,35 +87,35 @@ RETURN 1
 
 IF DISPLAY_SEASON() == "봄"
 	IF WEATHERNUM == 기후_강우
-		PRINTFORM  빗소리가 울려 오는 
+		PRINTFORM  빗소리가 들려 오는 
 	ELSE
 		PRINTFORM  아주 조용해진 
 	ENDIF
 ELSEIF DISPLAY_SEASON() == "여름"
 	IF WEATHERNUM == 기후_강우
-		PRINTFORM  격렬한 비의 내리는 날에 
+		PRINTFORM  비가 쏟아지듯 내리는 날에 
 	ELSE
 		PRINTFORM  찌는 듯이 더운 
 	ENDIF
 ELSEIF DISPLAY_SEASON() == "가을"
 	IF WEATHERNUM == 기후_강우
-		PRINTFORM  비의 내리는 추운 날에 
+		PRINTFORM  비가 내리는 추운 날에 
 	ELSE
 		PRINTFORM  상쾌한 가을날에 
 	ENDIF
 ELSE
 	IF WEATHERNUM == 기후_강설
-		PRINTFORM  눈의 내리는 날에 
+		PRINTFORM  눈이 내리는 날에 
 	ELSE
-		PRINTFORM  마루의 차가운 겨울의 
+		PRINTFORM  마루가 차가운 겨울의 
 	ENDIF
 ENDIF
 
-PRINTFORM 서고로 오면 %조사처리(ANAME(대상),"가")%
+PRINTFORM 도서관에 온 %조사처리(ANAME(대상),"가")%
 IF RAND:2 == 0
-	PRINTFORML  전술서의 정리를 하고 있었다
+	PRINTFORML  전술 BD를 정리하고 있었다
 ELSE
-	PRINTFORML  사관의 자료를 모으고 있었다
+	PRINTFORML  학생 정보를 정리하고 있었다
 ENDIF
 
 PRINTFORML  %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%의 옆에서 수학을 시작했다

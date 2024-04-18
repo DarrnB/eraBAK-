@@ -8,7 +8,7 @@ RETURN 1
 ; 「모두의 식사 준비」의 명칭
 ;-------------------------------------------------
 @SHOP_LIFE67_MAP1_AREA10_COM1_NAME
-RESULTS:0 '= "모두의 식사 준비"
+RESULTS:0 '= "급식 준비"
 RETURN 1
 
 ;-------------------------------------------------
@@ -75,56 +75,56 @@ RETURN 1
 
 SELECTCASE RAND:2
 	CASE 0
-	LOCALS:2 = 저녁식사
+	LOCALS:2 = 중식
 	CASEELSE
-	LOCALS:2 = 내일의 아침 식사
+	LOCALS:2 = 석식
 ENDSELECT
 
-PRINTFORML  %LOCALS:2%를 준비하려고 식당에 오면, 요리사의 %조사처리(ANAME(대상),"가")% 이미 준비를 시작하고 있었다
-PRINTFORMW  %조사처리(ANAME(MASTER),"는")% 심부름을 신청했다
+PRINTFORML  %LOCALS:2%을 준비하려고 식당에 오니, 요리사인 %조사처리(ANAME(대상),"가")% 이미 준비를 시작하고 있었다.
+PRINTFORMW  %조사처리(ANAME(MASTER),"는")% 심부름을 하기로 했다.
 PRINTL 
 
 주인공서투름플래그 = 0
 IF ABL:(MASTER):요리 < 30
-	PRINTFORML  %조사처리(ANAME(MASTER),"는")% 떨리는 관계를 끊지 않게 신중하게 조리를 진행시키고 있다
-	PRINTFORML  %조사처리(ANAME(대상),"는")% 걱정인 것처럼 말을 걸어 왔다
+	PRINTFORML  %조사처리(ANAME(MASTER),"는")% 손을 떨며 과할 정도로 신중하게 조리하고 있다.
+	PRINTFORML  %조사처리(ANAME(대상),"는")% 걱정스럽게 말을 걸어 왔다.
 	주인공서투름플래그 = 2
 ELSEIF ABL:(MASTER):요리 < 50
-	PRINTFORML  %조사처리(ANAME(MASTER),"는")% 어디에 조미료가 있는지도 모르고 시간이 걸려 있다
-	PRINTFORML  %조사처리(ANAME(대상),"는")% 보기 힘든 것처럼 말을 걸어 왔다
+	PRINTFORML  %조사처리(ANAME(MASTER),"는")% 어디에 조미료가 있는지 몰라 시간을 지체했다.
+	PRINTFORML  %조사처리(ANAME(대상),"는")% 보기 힘든 것처럼 말을 걸어 왔다.
 	주인공서투름플래그 = 1
 ELSE
 	주인공서투름플래그 = 0
-	PRINTFORML  %조사처리(ANAME(MASTER),"는")% 속시원한 소리를 내 부엌칼을 취급하고 있다
-	PRINTFORML  %조사처리(ANAME(대상),"는")% 그것을 보며 감탄 한 모습으로 요리를 가르쳐 주셨으면 한다고 말해 왔다
+	PRINTFORML  %조사처리(ANAME(MASTER),"는")% 거침없이 부엌칼을 놀리고 있다.
+	PRINTFORML  %조사처리(ANAME(대상),"는")% 그것을 보며 감탄 한 모습으로 요리를 가르쳐 줬으면 좋겠다고 말해 왔다.
 ENDIF
 
 IF ABL:(대상):요리 < 30
 	대상서투름플래그 = 2
 	IF 주인공서투름플래그 == 2
-		PRINTFORML  하지만 %ANAME(대상)%의 수중도 상당한 위태로움이다
+		PRINTFORML  하지만 %ANAME(대상)%의 손도 상당히 떨리고 있었다.
 	ELSEIF 주인공서투름플래그 == 1
-		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%에 한 술 더 떠 서툴렀다
+		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%보다도 더 서툴렀다.
 	ELSE
-		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% 조금 한 눈을 팔면 손을 새길 것 같아 야채를 씻어 받기로 했다
+		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% 조금 한 눈을 팔면 손을 베일 것 같아 채소를 씻기게 했다.
 	ENDIF
 ELSEIF ABL:(대상):요리 < 50
 	대상서투름플래그 = 1
 	IF 주인공서투름플래그 == 2
-		PRINTFORML  하지만 %ANAME(대상)%의 솜씨도 익숙해져 있다고는 말할 수 없는 것 같다
+		PRINTFORML  하지만 %ANAME(대상)%의 실력도 능숙하다고는 말할 수 없었다.
 	ELSEIF 주인공서투름플래그 == 1
-		PRINTFORML  하지만 %ANAME(대상)%의 요리 솜씨도 %조사처리(ANAME(MASTER),"와")% 도토리의 키재기다
+		PRINTFORML  하지만 %ANAME(대상)%의 요리 실력도 %조사처리(ANAME(MASTER),"와")% 비슷했다.
 	ELSE
-		PRINTFORML  무엇을 하면 좋은 것인지 모르는 모습의 %ANAME(대상)%에 %조사처리(ANAME(MASTER),"는")% 요리를 가르쳤다
+		PRINTFORML  무엇을 해야 할지 몰라 허둥대는 %ANAME(대상)%에게 %조사처리(ANAME(MASTER),"는")% 요리를 가르쳤다.
 	ENDIF
 ELSE
 	대상서투름플래그 = 0
 	IF 주인공서투름플래그 == 2
-		PRINTFORML  %조사처리(ANAME(MASTER),"가")% 가지는 부엌칼을 뒤로부터 잡아 가르치면서 %조사처리(ANAME(대상),"는")% 요령 있게 야채를 잘게 썰어 간다
+		PRINTFORML  %조사처리(ANAME(MASTER),"가")% 손에 쥔 부엌칼을 뒤에서 잡고 가르치면서 %조사처리(ANAME(대상),"는")% 솜씨 좋게 채소를 잘게 썰었다.
 	ELSEIF 주인공서투름플래그 == 1
-		PRINTFORML  %ANAME(MASTER)%에 순서를 가르치면서 %조사처리(ANAME(대상),"는")% 솜씨 좋게 부엌칼을 취급하고 있다
+		PRINTFORML  %ANAME(MASTER)%에게 순서를 가르치면서 %조사처리(ANAME(대상),"는")% 솜씨 좋게 부엌칼을 다뤘다.
 	ELSE
-		PRINTFORML  솜씨 좋게 사전준비를 진행시키는 %조사처리(ANAME(대상),"와")% 마음이 맞은 작업을 할 수 있었다
+		PRINTFORML  솜씨 좋게 사전준비를 진행시키는 %조사처리(ANAME(대상),"와")% 임심동체가 되어 작업을 진행했다.
 	ENDIF
 ENDIF
 
@@ -143,13 +143,16 @@ CALL COOKING(MASTER, 대상)
 		CALL COLOR_PRINTL(@" %FOODNAME%", 칼라_오렌지, @"%조사만처리(FOODNAME,"를")% 만들었다", GETDEFCOLOR())
 
 IF ABL:(MASTER):요리 + ABL:(대상):요리 < 60
-	PRINTFORML  음식은 아닌 것 같은 식감이다
-	PRINTFORML  %조사처리(ANAME(대상),"는")% 입다물고 먹고 있다…
+	PRINTFORML  확실히 음식은 아닌 것 같은 식감이다.
+	PRINTFORML  슬쩍 식당을 보니 수저를 내려놓고 음식을 노려보며 고심하는 학생들이 보였다.
+	PRINTFORML  그 모습을 본 %조사처리(ANAME(대상),"는")% 말없이 자신의 음식을 먹었다…
 ELSEIF ABL:(MASTER):요리 + ABL:(대상):요리 < 100
-	PRINTFORML  노고의 보람 맞아 상당한 맛이다
-	PRINTFORML  함께 먹은 %ANAME(대상)%도 만족한 것 같게 하고 있다…
+	PRINTFORML  고생한 보람이 있는지 꽤 맛있었다.
+	PRINTFORML  슬쩍 식당을 보니 만족스럽게 식사를 하고 있는 학생들이 보였다.
+	PRINTFORML  함께 먹은 %ANAME(대상)%도 만족스러운 것 같다…
 ELSE
-	PRINTFORML  훌륭한 성과다
+	PRINTFORML  흠잡을 곳 없이 훌륭하다
+	PRINTFORML  슬쩍 식당을 보니 다시 배식을 받기 위해 줄을 선 학생들이 끊이질 않았다.
 	PRINTFORML  함께 먹은 %조사처리(ANAME(대상),"는")% 너무나 맛있어서 놀라고 있는 것 같다…
 	PRINTL 
 	IF ABL:(MASTER):요리 >= 100
@@ -157,6 +160,10 @@ ELSE
 		CFLAG:(대상):호감도 += 20
 	ENDIF
 ENDIF
+
+;---------------------------------------------------------------------- 
+;훌륭한 급식에 대한 인컴 보너스나 병력 피로도 감소가 있으면 좋을듯
+;---------------------------------------------------------------------- 
 
 ;---------------------------------------------------------------------- 
 ;경험치의 표시 대상
@@ -337,7 +344,7 @@ SELECTCASE RAND:121
 	CASE 21
 		요리명 = 구야시
 	CASE 22
-		요리명 = 북경오리
+		요리명 = 소시지 야채볶음
 	CASE 23
 		요리명 = 팔라펠
 	CASE 24
@@ -345,11 +352,11 @@ SELECTCASE RAND:121
 	CASE 25
 		요리명 = 케밥
 	CASE 26
-		요리명 = 점심
+		요리명 = 훈제 오리고기
 	CASE 27
-		요리명 = 일식
+		요리명 = 생선튀김
 	CASE 28
-		요리명 = 일본정식
+		요리명 = 돈까스
 	CASE 29
 		요리명 = 카레라이스
 	CASE 30
@@ -451,9 +458,9 @@ SELECTCASE RAND:121
 	CASE 78
 		요리명 = 팔보채
 	CASE 79
-		요리명 = 탄탄면
+		요리명 = 비빔면
 	CASE 80
-		요리명 = 텐진한
+		요리명 = 잔치국수
 	CASE 81
 		요리명 = 고추잡채
 	CASE 82
@@ -529,7 +536,7 @@ SELECTCASE RAND:121
 	CASE 117
 		요리명 = 로코모코
 	CASE 118
-		요리명 = 포크덮밥
+		요리명 = 돼지고기덮밥
 	CASE 119
 		요리명 = 사이민
 	CASE 120

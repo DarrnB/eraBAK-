@@ -11,7 +11,7 @@ RETURN 1
 IF GET_COUNTRY_BOSS(CFLAG:MASTER:소속) == MASTER
 	RESULTS:0 '= "사관의 모습"
 ELSE
-	RESULTS:0 '= "거실로 편히 쉰다"
+	RESULTS:0 '= "거실에서 편히 쉰다"
 ENDIF
 RETURN 1
 
@@ -103,41 +103,41 @@ RETURN 1
 #DIM 대상
 
 IF GET_COUNTRY_BOSS(CFLAG:MASTER:소속) == MASTER
-	PRINTFORML  %조사처리(ANAME(MASTER),"가")% 병사를 들여다 보러 가면, 사관의 %조사처리(ANAME(대상),"가")% 얼굴을 내밀었다
-	PRINTFORML  %조사처리(ANAME(대상),"는")% 자세력의 군주인 %조사처리(ANAME(MASTER),"를")% 만나 당황했는지, 거실에 권해 왔다
+	PRINTFORML  %조사처리(ANAME(MASTER),"가")% 병사들을 살피러 가자, 사관인 %조사처리(ANAME(대상),"가")% 얼굴을 내밀었다.
+	PRINTFORML  %조사처리(ANAME(대상),"는")% 자세력의 군주인 %조사처리(ANAME(MASTER),"를")% 만나 당황했는지, 거실로 안내했다.
 ELSE
-	PRINTFORML  %조사처리(ANAME(MASTER),"가")% 거실로 편히 쉬고 있으면, 문을 두드리는 소리가 들렸다
-	PRINTFORML  손님은 %조사처리(ANAME(대상),"였")%다
+	PRINTFORML  %조사처리(ANAME(MASTER),"가")% 거실에서 편히 쉬고 있었더니, 문을 두드리는 소리가 들렸다.
+	PRINTFORML  손님은 %조사처리(ANAME(대상),"였")%다.
 	IF HAS_SAME_FATHER(MASTER, 대상) || HAS_SAME_MOTHER(MASTER, 대상)
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 형제 자매인 %ANAME(MASTER)%의 상태를 보러 온 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 형제 자매인 %ANAME(MASTER)%의 상태를 보러 온 것 같다..
 	ELSEIF CFLAG:MASTER:부친 == GET_ID(대상)
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 부친으로서 우리 아이인 %ANAME(MASTER)%의 상태를 보러 온 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 부친으로서 자신의 자식인 %ANAME(MASTER)%의 상태를 보러 온 것 같다..
 	ELSEIF CFLAG:MASTER:모친 == GET_ID(대상)
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 모친으로서 %ANAME(MASTER)%의 상태를 보러 온 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 모친으로서 %ANAME(MASTER)%의 상태를 보러 온 것 같다..
 	ELSEIF CFLAG:대상:부친 == GET_ID(MASTER)
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 부친인 %조사처리(ANAME(MASTER),"를")% 만나고 싶어져 방문한 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 부친인 %조사처리(ANAME(MASTER),"를")% 만나고 싶어져 방문한 것 같다..
 	ELSEIF CFLAG:대상:모친 == GET_ID(MASTER)
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 모친인 %조사처리(ANAME(MASTER),"를")% 만나고 싶어져 방문한 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 모친인 %조사처리(ANAME(MASTER),"를")% 만나고 싶어져 방문한 것 같다..
 ;	ELSEIF TALENT:대상:의형제
-;		PRINTFORML  %조사처리(ANAME(대상),"는")% 의형제인 %ANAME(MASTER)%의 상태를 보러 온 것 같다
+;		PRINTFORML  %조사처리(ANAME(대상),"는")% 의형제인 %ANAME(MASTER)%의 상태를 보러 온 것 같다..
 	ELSEIF TALENT:대상:연인
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 연인인 %ANAME(MASTER)%에 아무래도 만나고 싶었던 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 연인인 %조사처리(ANAME(MASTER),"를")% 만나고 싶었던 것 같다..
 	ELSEIF TALENT:대상:낙인
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 낙인의 주인인 %ANAME(MASTER)%의 얼굴을 볼 수 없으면 침착하지 않았던 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 낙인의 주인인 %ANAME(MASTER)%의 얼굴을 보지 못해 불안했던 것 같다..
 	ELSEIF GET_COUNTRY_FROM_BOSS_NAME(NAME:대상) == CFLAG:MASTER:소속
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 자세력의 사관인 %ANAME(MASTER)%의 상태를 보러 온 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 자세력의 사관인 %ANAME(MASTER)%의 상태를 보러 온 것 같다..
 	ELSEIF TALENT:대상:연모
-		PRINTFORML  %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%의 얼굴을 보고 싶어진 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%의 얼굴을 보고 싶었던 것 같다..
 	ELSEIF TALENT:대상:복종
-		PRINTFORML  %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%에 상관하기를 원해서 방문한 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%에게 명령받고 싶어서 방문한 것 같다..
 	ELSEIF TALENT:대상:주인 ;|| TALENT:대상:각인
-		PRINTFORML  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"가")% 나날을 어떻게 보내고 있는지 확인하러 온 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"가")% 일상을 어떻게 보내고 있는지 확인하러 온 것 같다..
 	ELSEIF TALENT:대상:친구
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 짬을 주체 못해 친구의 %ANAME(MASTER)%의 원래로 놀러 온 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 남아도는 시간을 주체하지 못해 친구인 %조사처리(ANAME(MASTER),"가")% 있는 곳으로 놀러 온 것 같다..
 	ELSEIF CFLAG:대상:안면 == 0
-		PRINTFORML  동일 세력인 %ANAME(MASTER)%에 인사를 하려고 방문한 것 같다
+		PRINTFORML  같은 세력에 소속된 %ANAME(MASTER)%에게 인사를 하려고 방문한 것 같다..
 	ELSE
-		PRINTFORML  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"와")% 교류가 깊어지고 싶다고 생각하고 있는 것 같다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"와")% 관계를 다지고 싶어하는 것 같다..
 	ENDIF
 ENDIF
 
@@ -150,7 +150,7 @@ ENDIF
 IF GET_COUNTRY_BOSS(CFLAG:MASTER:소속) == MASTER
 	PRINTFORM %조사처리(ANAME(대상),"는")%
 	IF TALENT:대상:솔직함 || TALENT:대상:낙관적 || TALENT:대상:프라이드높음
-		PRINTFORM 살짝 붉어진 웃는 얼굴로 차를 끓여, 
+		PRINTFORM 살짝 붉어진 얼굴로 웃으며 차를 끓여, 
 	ELSEIF TALENT:대상:무관심 || TALENT:대상:감정결핍
 		PRINTFORM 담담하게 차를 끓여, 
 	ELSEIF TALENT:대상:겁쟁이 || TALENT:대상:비관적 || TALENT:대상:프라이드낮음
@@ -158,53 +158,53 @@ IF GET_COUNTRY_BOSS(CFLAG:MASTER:소속) == MASTER
 	ELSEIF TALENT:대상:반항적 || TALENT:대상:츤데레 ;|| TALENT:대상:인간혐오
 		PRINTFORM 차를 끓여, 퉁명스럽게 
 	ELSEIF TALENT:대상:헌신적
-		PRINTFORM 공손한 행동으로 차를 끓여, 입맛에 맞으면 하고 
+		PRINTFORM 공손한 태도로 차를 끓여, 입맛에 맞았으면 하고 
 	ENDIF
 ELSE
 	IF DISPLAY_SEASON() == "봄"
 		IF WEATHERNUM == 기후_구름
-			PRINTFORML  바깥은 화담으로 졸려지는 기후인것 같다
+			PRINTFORML  바깥은 구름이 껴 졸려지는 날씨다.
 		ELSEIF WEATHERNUM == 기후_강우
-			PRINTFORML  봄비에 촉촉하고 적셔진 것 같다
+			PRINTFORML  봄비에 촉촉하게 적셔지는 날씨다.
 		ELSE
-			PRINTFORML  화창한 맑은 하늘에서 산책하기 좋은 날씨인것 같다
+			PRINTFORML  화창한 맑은 하늘 아래에서 산책하기 좋은 날씨다.
 		ENDIF
 	ELSEIF DISPLAY_SEASON() == "여름"
 		IF WEATHERNUM == 기후_구름
-			PRINTFORML  바깥은 흐려도 여름인것 같고 더웠던 것 같다
+			PRINTFORML  바깥은 흐려도 여름이라고 더운 날씨다.
 		ELSEIF WEATHERNUM == 기후_강우
-			PRINTFORML  여름의 비로 찌고 있는 것 같다
+			PRINTFORML  여름의 장마에 습하고 불쾌한 날씨다.
 		ELSE
-			PRINTFORML  바깥은 구름 하나 없는 염천인것 같다
+			PRINTFORML  바깥은 구름 하나 없는 맑은 날씨다.
 		ENDIF
 	ELSEIF DISPLAY_SEASON() == "가을"
 		IF WEATHERNUM == 기후_구름
-			PRINTFORML  하늘에 약운이 퍼지고 있던 것 같다
+			PRINTFORML  하늘에 얕은 구름이 퍼지는 날씨다.
 		ELSEIF WEATHERNUM == 기후_강우
-			PRINTFORML  바깥은 소나기로 추웠던 것 같다
+			PRINTFORML  바깥은 소나기로 추운 날씨다.
 		ELSE
-			PRINTFORML  바깥은 맑게 개이는 가을의 맑은 날씨인것 같다
+			PRINTFORML  바깥은 구름 한 점 없는 가을의 맑은 날씨다.
 		ENDIF
 	ELSE
 		IF WEATHERNUM == 기후_구름
-			PRINTFORML  바깥은 동담으로 손가락끝까지 차가워진 것 같다
+			PRINTFORML  바깥은 구름이 껴 손가락 끝까지 추운 날씨다.
 		ELSEIF WEATHERNUM == 기후_강설
-			PRINTFORML  바깥은 함박눈이 내려 쌓이고 있는 것 같다
+			PRINTFORML  바깥은 함박눈이 내려 쌓이는 날씨다.
 		ELSE
-			PRINTFORML  맑은 하늘에 눈보라가 춤추고 있어 옷이 젖은 것 같다
+			PRINTFORML  맑은 하늘에 눈보라가 춤추며 옷을 적시는 날씨다.
 		ENDIF
 	ENDIF
 	PRINTFORM  %조사처리(ANAME(대상),"는")%
 	IF TALENT:대상:솔직함 || TALENT:대상:낙관적 || TALENT:대상:프라이드높음
-		PRINTFORM 살짝 붉어진 웃는 얼굴로 간단한 선물의 
+		PRINTFORM 살짝 붉어진 얼굴로 웃으며 간단한 선물이라며 
 	ELSEIF TALENT:대상:무관심 || TALENT:대상:감정결핍
 		PRINTFORM 담담하게 
 	ELSEIF TALENT:대상:겁쟁이 || TALENT:대상:비관적 || TALENT:대상:프라이드낮음
-		PRINTFORM 간단한 선물로서 조심스럽게 
+		PRINTFORM 별거 아닌 선물이라며 조심스럽게 
 	ELSEIF TALENT:대상:반항적 || TALENT:대상:츤데레 ;|| TALENT:대상:인간혐오
 		PRINTFORM 퉁명스럽게 
 	ELSEIF TALENT:대상:헌신적
-		PRINTFORM 공손한 행동으로, 입맛에 맞으면 하고 
+		PRINTFORM 공손한 태도로, 입맛에 맞았으면 하고 
 	ENDIF
 ENDIF
 PRINTDATA
@@ -255,15 +255,15 @@ PRINTDATA
 	DATAFORM 타르트를
 	DATAFORM 태피를
 	DATAFORM 도너츠를
-	DATAFORM 바움쿠헨
+	DATAFORM 바움쿠헨을
 	DATAFORM 파운드 케이크를
 	DATAFORM 버터 케이크를
 	DATAFORM 바바루아를
 	DATAFORM 프루츠 케이크를
 	DATAFORM 핫 케익을
 	DATAFORM 마카롱을
-	DATAFORM 마를렌
-	DATAFORM 머시멜로우를
+	DATAFORM 마를렌을
+	DATAFORM 마시멜로우를
 	DATAFORM 마롱 글라세를
 	DATAFORM 미트파이를
 	DATAFORM 밀피유를
@@ -298,67 +298,67 @@ PRINTDATA
 	DATAFORM 쿠구로후를
 	DATAFORM 브라우니를
 	DATAFORM 클라푸티를
-	DATAFORM 까놀로라는 통 모양의 이탈리아 과자를
-	DATAFORM 슈톨렌이라는 독일의 크림 빵을
-	DATAFORM 파나토네라는 이탈리아의 크림 빵을
-	DATAFORM 민스파이라는 영국의 과자를
-	DATAFORM 블랑망제라는 프랑스의 빙과를
-	DATAFORM 바스부사라는 터키의 케이크를
-	DATAFORM 카브리슈카라는 러시아의 쿠키를
-	DATAFORM 슈트르델이라는 독일의 전통적인 과자를
-	DATAFORM 쿠나파라는 이집트의 과자를
-	DATAFORM 블린츠라는 러시아의 크레페를
-	DATAFORM 루쿠마데스라는 그리스풍 도너츠를
-	DATAFORM 라스말라이라는 인도의 크림 과자를
-	DATAFORM 우피파이라는 미국의 구운 과자를
-	DATAFORM 파베·드·제네바라는 생 초콜릿을
-	DATAFORM 무할레비라는 터키의 푸딩를
-	DATAFORM 레체·플랑이라는 필리핀의 푸딩를
+	DATAFORM 까놀로라는 통 모양의 트리니티의 전통 과자를
+	DATAFORM 슈톨렌이라는 게헨나의 크림 빵을
+	DATAFORM 파나토네라는 트리니티의 전통 크림 빵을
+	DATAFORM 민스파이라는 트리니티의 과자를
+	DATAFORM 블랑망제라는 밀레니엄의 빙과를
+	DATAFORM 바스부사라는 붉은겨울의 케이크를
+	DATAFORM 카브리슈카라는 붉은겨울의 쿠키를
+	DATAFORM 슈트르델이라는 게헨나의 전통적인 과자를
+	DATAFORM 쿠나파라는 트리니티의 전통 과자를
+	DATAFORM 블린츠라는 붉은겨울의 크레페를
+	DATAFORM 루쿠마데스라는 발키리의 도너츠를
+	DATAFORM 라스말라이라는 산해경의 크림 과자를
+	DATAFORM 우피파이라는 밀레니엄의 구운 과자를
+	DATAFORM 파베·드·제네바라는 티리니티의 전통 생 초콜릿을
+	DATAFORM 무할레비라는 붉은겨울의 푸딩을
+	DATAFORM 레체·플랑이라는 백귀야행의 푸딩을
 ENDDATA
 
 IF GET_COUNTRY_BOSS(CFLAG:MASTER:소속) == MASTER
-	PRINTFORML  내몄다
-	PRINTFORML  %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%의 대접을 받기로 했다
+	PRINTFORML  내밀었다.
+	PRINTFORML  %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%의 대접을 받기로 했다.
 	IF TALENT:대상:연인
-		PRINTFORML  차의 준비를 끝내면, %조사처리(ANAME(대상),"가")% 조속히 밀착했다
+		PRINTFORML  차의 준비를 끝내고, %조사처리(ANAME(대상),"가")% 조속히 밀착했다.
 	ELSEIF TALENT:대상:낙인
-		PRINTFORML  차의 준비를 끝내면, %조사처리(ANAME(대상),"는")% 뭔가 명령이 있는 것은 아닌지라고 물어 왔다
+		PRINTFORML  차의 준비를 끝내고, %조사처리(ANAME(대상),"는")% 뭔가 더 명령할 일은 없냐고 물어 왔다.
 	ELSEIF TALENT:대상:연모
-		PRINTFORML  차의 준비를 끝내면, %조사처리(ANAME(대상),"는")% 미소지어, %ANAME(MASTER)%에 다가붙어 왔다
+		PRINTFORML  차의 준비를 끝내고, %조사처리(ANAME(대상),"는")% 미소지으며 %ANAME(MASTER)%에 다가와 붙어앉았다.
 	ELSEIF TALENT:대상:복종
-		PRINTFORML  차의 준비를 끝내면, %조사처리(ANAME(대상),"는")% 말석에 앉아 긴장하고 있는 것 같다
+		PRINTFORML  차의 준비를 끝내고, %조사처리(ANAME(대상),"는")% 바닥에 무릎을 꿇고 앉아 긴장하고 있다.
 	ELSEIF TALENT:대상:주인 ;|| TALENT:대상:각인
-		PRINTFORML  차의 준비를 끝내면, %조사처리(ANAME(대상),"는")% 군주를 앞으로 하고 있다고는 생각되지 않는 편히 쉼을 보이고 있다
+		PRINTFORML  차의 준비를 끝내고, %조사처리(ANAME(대상),"는")% 군주를 앞에 두고 있는 사람이라고는 생각지 못할 정도로 편히 쉬고 있다.
 	ELSEIF TALENT:대상:친구
-		PRINTFORML  차의 준비를 끝내면, %조사처리(ANAME(대상),"는")% 부모 해 기분에 잡담하기 시작했다
+		PRINTFORML  차의 준비를 끝내고, %조사처리(ANAME(대상),"는")% 마치 부모라도 된 기분으로 잡담하기 시작했다.
 	ENDIF
 ELSE
 	IF TALENT:대상:솔직함 || TALENT:대상:낙관적 || TALENT:대상:프라이드높음
-		PRINTFORML  건네주었다
+		PRINTFORML  건네주었다.
 	ELSEIF TALENT:대상:무관심 || TALENT:대상:감정결핍
-		PRINTFORML  포장해 건네주며 간단한 선물이라고 덧붙였다
+		PRINTFORML  포장해 건네주며 간단한 선물이라고 덧붙였다.
 	ELSEIF TALENT:대상:겁쟁이 || TALENT:대상:비관적 || TALENT:대상:프라이드낮음
-		PRINTFORML  내몄다
+		PRINTFORML  내밀었다.
 	ELSEIF TALENT:대상:반항적 || TALENT:대상:츤데레 ;|| TALENT:대상:인간혐오
-		PRINTFORML  강압해 왔다
+		PRINTFORML  받으라고 명령했다.
 	ELSEIF TALENT:대상:헌신적
-		PRINTFORML  내몄다
+		PRINTFORML  내밀었다.
 	ELSE
-		PRINTFORML  가져온 것 같다
+		PRINTFORML  가져온 것 같다.
 	ENDIF
-	PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 거실에 불러들여, 차를 끓여 대접하기로 했다
+	PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 거실로 부르고, 차를 끓여 대접해 주기로 했다.
 	IF TALENT:대상:연인
-		PRINTFORML  %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%에 다가붙어 방에 들어가, 밀착했다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%에게 다가가 밀착했다.
 	ELSEIF TALENT:대상:낙인
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 조속히, 뭔가 돕는 일은 없을까%ANAME(MASTER)%에게 물어 왔다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 조속히 다가와, 뭔가 도울 일은 없는지 %ANAME(MASTER)%에게 물어 왔다.
 	ELSEIF TALENT:대상:연모
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 미소지어, %ANAME(MASTER)%에 다가붙어 들어 왔다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 미소지으며, %ANAME(MASTER)%에게 다가가 붙어왔다.
 	ELSEIF TALENT:대상:복종
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 미안한 것같이 들어 와 말석에 앉아, 긴장하고 있다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 죄송스러워 하며 들어와서는, 바닥에 무릎을 꿇고 앉아 긴장했다.
 	ELSEIF TALENT:대상:주인 ;|| TALENT:대상:각인
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 당당히 들어 와, 우리 집과 같이 편히 쉬기 시작했다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 당당히 들어 와, 제집처럼 편히 쉬기 시작했다.
 	ELSEIF TALENT:대상:친구
-		PRINTFORML  %조사처리(ANAME(대상),"는")% 시선을 둘러싸게 해, 재미있는 것은 없을까 찾고 있다
+		PRINTFORML  %조사처리(ANAME(대상),"는")% 시선을 이리저리 돌리며, 재미있는 게 없나 찾고 있다.
 	ENDIF
 ENDIF
 

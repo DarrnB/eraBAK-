@@ -56,8 +56,8 @@ RETURN 1
 
 $SHOW_LOOP
 
-PRINTFORML  주방에는 요리사의 %조사처리(ANAME(대상),"가")% 있다
-PRINTFORML  %조사처리(ANAME(MASTER),"는")% 스스로 요리를 만들어 시식을 부탁하기로 했다
+PRINTFORML  주방에는 요리사인 %조사처리(ANAME(대상),"가")% 있었다.
+PRINTFORML  %조사처리(ANAME(MASTER),"는")% 자신이 만든 요리의 시식을 부탁했다.
 
 ;미약 있어, 연애 대상, 욕망 3의 경우미약들이 요리를 만들 수 있다
 IF ITEM:미약 > 0 && (!IS_SAMESEX(MASTER, (대상)) || TALENT:(MASTER):바이) && ABL:(MASTER):욕망 >= 3
@@ -87,12 +87,12 @@ PRINTL
 
 		;미약들이 요리치가 요리사보다 높으면, 미약들이 요리인 것이 상대에게 발각된다
 		IF 미약플래그 == 1 && ABL:(MASTER):요리 < ABL:(대상):요리
-			PRINTFORML  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"가")% 만든 %조사처리(요리명,"가")% 이상한 것을 깨달았다
+			PRINTFORML  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"가")% 만든 %조사처리(요리명,"가")% 이상한 것을 깨달았다.
 			IF GETBIT(TALENT:(대상):음란계, 소질_음란_새드) || (ABL:(대상):주도도Ｕ >= 300 || ABL:(대상):욕망 >= 5 || TALENT:(대상):소악마 || TALENT:(대상):소유자) && TALENT:(대상):합의 ;||TALENT:(대상):각인
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%에 요리를 먹도록(듯이) 말했다
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%에게 요리를 먹어보라고 말했다.
 				미약플래그 = 2
 			ELSE
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% 화내 %ANAME(MASTER)%에 나가도록(듯이) 말했다
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% 화를 내며 %ANAME(MASTER)%에 나가라고 말했다.
 				CFLAG:대상:행동완료 = 1
 				SHOP_TIME ++
 				LINES_SHOP = LINECOUNT
@@ -100,11 +100,11 @@ PRINTL
 			ENDIF
 		ELSE
 			IF ABL:(MASTER):요리 < 30
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% 완성된 %조사처리(요리명,"를")% 두 번 보고 했지만, 먹어 주었다
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% 완성된 %조사처리(요리명,"를")% 떨떠름하게 바라봤지만, 먹어 주었다.
 			ELSEIF ABL:(대상):요리 < 50
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% 만족한 것 같게 먹어 주었다
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% 만족스럽게 먹어 주었다.
 			ELSE
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%의 %요리명%의 성과에 감동하고 있는 것 같다
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"가")% 만든 %요리명%의 맛에 감동한 것 같다.
 				;요리 Lv100 이상이 만든 요리를 먹은 상대의 호감도도 상승한다
 				IF ABL:(MASTER):요리 >= 100
 					CALL COLOR_PRINTL(@" %ANAME(대상)%의 호감도가 아주 조금 올랐다", 칼라_주의)
@@ -155,30 +155,30 @@ IF 미약플래그 >= 1
 	LOCALS:1 = %ANAME(대상)%
 	CALL TITLE_LABEL_START("예상밖의 음란한 일", 0, "", LOCALS:1)
 	IF 미약플래그 == 1 
-		PRINTFORML  식사해 뒷정리를 끝냈다. %조사처리(ANAME(대상),"는")% 침착하지 않은 모습이다
+		PRINTFORML  식사를 마치고 뒷정리를 끝냈다. %조사처리(ANAME(대상),"는")% 왠지 안절부절 못하는 모습이다.
 		PRINTL 
 		CALL ASK_MULTI("그대로 헤어진다", "쓰러트린다", "유혹한다")
 		PRINTL 
 		IF RESULT == 0
-			PRINTFORML  갖고 싶어하는 것 같은 얼굴을 한 %조사처리(ANAME(대상),"를")% 남겨 자기 방에 돌아왔다…
+			PRINTFORML  뭔갈 바라는 것 같은 얼굴을 한 %조사처리(ANAME(대상),"를")% 남겨두고 자기 방으로 돌아왔다…
 			CALL AFTER_SELF_CHECK(대상)
 		ELSEIF RESULT == 1
-			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 쓰러트리기
+			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 쓰러트렸다.
 			IF TALENT:(대상):합의 || TALENT:(대상):복종 ||TALENT:(대상):주인
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% 기쁜 듯한 얼굴을 하고 있다…
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% 기쁜 듯한 표정을 짓고 있다…
 				GOTO END_MODE
 			ELSE
 				PRINTFORML  %조사처리(ANAME(대상),"는")% 당황하고 있다…
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"를")% 되물리쳐 식당을 떠났다
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"를")% 밀쳐내고 식당을 떠났다.
 			ENDIF
 		ELSE
-			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 권했다
+			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 유혹했다.
 			IF TALENT:(대상):합의 || TALENT:(대상):예속 ||TALENT:(대상):소유자
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% 의기 양양한 얼굴을 하고 있다…
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% 흥분으로 떨리는 표정을 짓고 있다…
 				GOTO END_MODE
 			ELSE
 				PRINTFORMW  %조사처리(ANAME(대상),"는")% 당황하고 있다…
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"를")% 되물리쳐 식당을 떠났다
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"를")% 밀쳐내고 식당을 떠났다.
 			ENDIF
 		ENDIF
 	ELSEIF 미약플래그 == 2 && ABL:(MASTER):욕망 >= 3
@@ -192,20 +192,20 @@ IF 미약플래그 >= 1
 		ELSEIF RESULT == 1
 			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 쓰러트렸다
 			IF TALENT:(대상):합의 || TALENT:(대상):복종 ||TALENT:(대상):주인
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% 만족기분이다…
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% 기쁜 듯한 표정을 짓고 있다…
 				GOTO END_MODE
 			ELSE
 				PRINTFORMW  %조사처리(ANAME(대상),"는")% 당황하고 있다…
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"를")% 되물리쳐 식당을 떠났다
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"를")% 밀쳐내고 식당을 떠났다.
 			ENDIF
 		ELSE
-			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 권했다
+			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 유혹했다.
 			IF TALENT:(대상):합의 || TALENT:(대상):예속 ||TALENT:(대상):소유자
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% 의기양양한 얼굴이다…
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% 흥분으로 떨리는 표정을 짓고 있다…
 				GOTO END_MODE
 			ELSE
 				PRINTFORMW  %조사처리(ANAME(대상),"는")% 당황하고 있다…
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"를")% 되물리쳐 식당을 떠났다
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"를")% 밀쳐내고 식당을 떠났다.
 			ENDIF
 		ENDIF
 	ELSEIF 미약플래그 == 3
@@ -220,20 +220,20 @@ IF 미약플래그 >= 1
 		ELSEIF RESULT == 1
 			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 쓰러트렸다
 			IF TALENT:(대상):합의 || TALENT:(대상):복종 ||TALENT:(대상):주인
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% 만족기분이다…
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% 기쁜 듯한 표정을 짓고 있다…
 				GOTO END_MODE
 			ELSE
 				PRINTFORMW  %조사처리(ANAME(대상),"는")% 당황하고 있다…
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"를")% 되물리쳐 식당을 떠났다
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"를")% 밀쳐내고 식당을 떠났다.
 			ENDIF
 		ELSE
-			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 권했다
+			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 유혹했다.
 			IF TALENT:(대상):합의 || TALENT:(대상):예속 ||TALENT:(대상):소유자
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% 의기양양한 얼굴이다…
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% 흥분으로 떨리는 표정을 짓고 있다…
 				GOTO END_MODE
 			ELSE
 				PRINTFORMW  %조사처리(ANAME(대상),"는")% 당황하고 있다…
-				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"를")% 되물리쳐 식당을 떠났다
+				PRINTFORMW  %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"를")% 밀쳐내고 식당을 떠났다.
 			ENDIF
 		ENDIF
 	ENDIF
