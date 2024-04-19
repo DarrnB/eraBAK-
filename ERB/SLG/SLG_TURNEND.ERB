@@ -154,7 +154,7 @@ IF DAY >= SLG_PP:1
 	;#; USETIME = GETMILLISECOND() - USETIME;
 	;#; DEBUGPRINTFORML PERSUASION TOTAL: {USETIME}ms
 	CUSTOMDRAWLINE =
-	PRINTFORML 재야 무장 고용 페이즈
+	PRINTFORML 방랑 학생 고용 페이즈
 	CALL COLOR_LINE
 	CALL SLG_AI_OFFICER_JOBHUNT()
 ELSE
@@ -654,9 +654,9 @@ COUNTRY_SOLDIER:(ARG:0) += 증가량
 
 IF ARG:0 == CFLAG:MASTER:소속
 	IF 증가량 == 0
-		CALL COLOR_PRINTL(@"징병의 한계에 이르고 있습니다, 더 이상 군사를 조달하려면 경제를 늘리는지, 임시 징병을 할 필요가 있습니다", 칼라_주의)
+		CALL COLOR_PRINTL(@"도시에서 자원받을 수 있는 용병의 수가 한계에 도달했습니다, 이 이상 용병을 자원받으려면 경제를 늘리거나, 외부 용병을 고용해야 합니다", 칼라_주의)
 	ELSE
-		PRINTFORMW 우리 나라의 병수가 {증가량}만 증가했습니다
+		PRINTFORMW 우리 학원의 병력이 {증가량}명 증가했습니다
 	ENDIF
 ENDIF
 
@@ -672,7 +672,7 @@ FOR LOCAL:0, 0, MAX_CITY
 		COUNTRY_SOLDIER:(ARG:0) -= 방위배분수
 		방위배분표시 = 1
 		SIF ARG:0 == CFLAG:MASTER:소속
-			PRINTFORML %GET_CITYNAME(LOCAL:0)%의 방위병수를 {방위배분수}만 보충했습니다
+			PRINTFORML %GET_CITYNAME(LOCAL:0)%의 방위군을 {방위배분수}명 보충했습니다
 	ENDIF
 NEXT
 IF ARG:0 == CFLAG:MASTER:소속 && 방위배분표시
@@ -815,10 +815,10 @@ FOR TAX_COUNT, 0, MAX_CITY
 NEXT
 
 IF TAX:1
-	PRINTFORML 영지로부터의 징세를 했습니다
+	PRINTFORML 도시에서 세금을 걷었습니다
 	PRINTFORML 국고＋{TAX:1}（현재:{MONEY:(CFLAG:MASTER:소속)}）
 ENDIF
-
+;-----------------국고를 예산으로 바꿔야 함-----------------
 
 ;-------------------------------------------------
 ;ARG:0 세력의 도시의 경제 규모를 합계 ARG:1만 성장시키는 함수

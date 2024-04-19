@@ -54,17 +54,17 @@ FOR LOCAL, 0, CHARANUM
 		CALL TREAT_PRISONER(LOCAL, 멸망세력, 멸한세력)
 	;다른 CPU 세력의 포로가 되어 있으면 등용 판정을 실시한다. 실패하면 해방·방랑
 	ELSEIF JUDGE_ASSIGN(LOCAL, CFLAG:(LOCAL:0):소속, CFLAG:(LOCAL:0):포로처) == 1
-		CALL COLOR_PRINTL(@"붙잡히고 있었던 %조사처리(ANAME(LOCAL),"는")%, %ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL:0):포로처))%에 등용되었다", 칼라_주의)
+		CALL COLOR_PRINTL(@"붙잡혀 있던 %조사처리(ANAME(LOCAL),"는")%, %ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL:0):포로처))%의 세력에 입부했다", 칼라_주의)
 		CALL CHANGE_COUNTRY(LOCAL, CFLAG:LOCAL:포로처, 1)
 	ELSE
-		CALL COLOR_PRINTL(@"%ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL:0):포로처))%에 붙잡히고 있었던 %조사처리(ANAME(LOCAL),"는")% 해방되어 방랑했다", 칼라_주의)
+		CALL COLOR_PRINTL(@"%ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL:0):포로처))%에 붙잡혀 있던 %조사처리(ANAME(LOCAL),"는")% 해방되어 방랑했다", 칼라_주의)
 		CALL CHANGE_COUNTRY(LOCAL:0, 0, 1)
 	ENDIF
 NEXT
 
 ;●우선 군주에 대해 처리한다(주인공을 포함한다)
 ;도주 판정
-PRINTFORML ----------군주의 도망----------
+PRINTFORML ----------군주의 도주----------
 CALL JUDGE_ESCAPE(멸망군주, 멸망세력, 멸한세력)
 
 ;도주 실패
@@ -73,7 +73,7 @@ IF RESULT == 1
 ENDIF
 
 
-PRINTFORML ----------사관의 도망----------
+PRINTFORML ----------사관의 도주----------
 ;그 외 사관(주인공은 최후)
 FOR LOCAL:0, 0, CHARANUM
 	SIF CFLAG:LOCAL:소속 != 멸망세력 || CFLAG:LOCAL:포로처 || LOCAL == 멸망군주 || LOCAL == MASTER
@@ -88,7 +88,7 @@ NEXT
 FOR LOCAL:0, 0, CHARANUM
 	IF CFLAG:(LOCAL:0):포로처 == 멸망세력 && CFLAG:LOCAL:소속 == 멸한세력
 		CALL CAPTURE(LOCAL:0, 0)
-		CALL COLOR_PRINTL(@"%ANAME(멸망군주)% 세력에 수 얻어지고 있었던 %조사처리(ANAME(LOCAL:0),"는")%, 원래의 세력에 복귀했다", 칼라_주의)
+		CALL COLOR_PRINTL(@"%ANAME(멸망군주)% 세력에 포로로 잡혀있던 %조사처리(ANAME(LOCAL:0),"는")%, 원래의 세력에 복귀했다", 칼라_주의)
 	ENDIF
 NEXT
 ;제 3살력의 사관이라면, 멸한 측이 취급을 결정
@@ -138,13 +138,13 @@ SIF 대상 == MASTER
 ;주인공 세력이 멸해, 대상이 함락완료
 IF 멸한세력 == CFLAG:MASTER:소속 && (IS_LOVER(대상) || IS_SLAVE(대상))
 	CALL KOJO_EVENT(대상, 331)
-	PRINTFORML %조사처리(ANAME(대상),"는")% 스스로 포박 되러 왔습니다
+	PRINTFORML %조사처리(ANAME(대상),"는")% 스스로 찾아왔습니다
 	RETURN 1
 ;오히려 멸한 측이 좋아해
 ELSEIF REL_LIKE:대상:멸한군주 - REL_LIKE:대상:멸망군주 > 300 && REL_HATE:대상:멸한군주 - REL_HATE:대상:멸망군주 < 300
 	IF 멸한세력 == CFLAG:MASTER:소속
 		CALL KOJO_EVENT(대상, 331)
-		PRINTFORML %조사처리(ANAME(대상),"는")% 얌전하고 포박 되었습니다
+		PRINTFORML %조사처리(ANAME(대상),"는")% 얌전히 포박되었습니다
 	ELSE
 		PRINTFORML %조사처리(ANAME(대상),"는")% 잡힌 것 같습니다…
 	ENDIF
@@ -190,7 +190,7 @@ ENDIF
 IF RAND:10000 < 포박율
 	IF 멸한세력 == CFLAG:MASTER:소속
 		CALL KOJO_EVENT(대상, 331)
-		PRINTFORML %조사처리(ANAME(대상),"를")% 포박 했습니다
+		PRINTFORML %조사처리(ANAME(대상),"를")% 포박했습니다
 	ELSE
 		PRINTFORML %조사처리(ANAME(대상),"는")% 잡힌 것 같습니다…
 	ENDIF
@@ -254,15 +254,15 @@ ELSE
 		CASE 1
 			$ASSIGN_ACCEPT
 			IF 대상 == 패배군주
-				PRINTFORMW 군주인 %조사처리(ANAME(대상),"는")% %ANAME(카츠토시군주)%의 전에 끌어내졌다…
-				PRINTFORMW %조사처리(ANAME(대상),"는")% 머리를 늘어뜨리며 %ANAME(카츠토시군주)%에 충성을 맹세했습니다
+				PRINTFORMW 군주인 %조사처리(ANAME(대상),"는")% %ANAME(카츠토시군주)%의 앞에 끌려갔다…
+				PRINTFORMW %조사처리(ANAME(대상),"는")% 고개를 조아리며 %ANAME(카츠토시군주)%에게 충성을 맹세했습니다
 			ELSE
 				IF CFLAG:대상:소속 == CFLAG:MASTER:소속
 					SETCOLOR 칼라_경고
-					PRINTFORMW %조사처리(ANAME(대상),"가")% 등용에 응했습니다
+					PRINTFORMW %조사처리(ANAME(대상),"가")% 입부 요청에 응했습니다
 				ELSE
 					SETCOLOR 칼라_주의
-					PRINTFORML %조사처리(ANAME(대상),"는")% 등용에 응한 것 같습니다
+					PRINTFORML %조사처리(ANAME(대상),"는")% 입부 요청에 응한 것 같습니다
 				ENDIF
 				RESETCOLOR
 			ENDIF
@@ -272,13 +272,13 @@ ELSE
 			IF 대상 != 패배군주
 				요구액 = JUDGE_ASSIGN_REQUIRE_MONEY(대상, 패배세력, 승리세력)
 				지불한도 = MIN(MONEY:승리세력, SCOUT_CALC_PRICE_BASIS(대상) * (1500 + REL_LIKE:카츠토시군주:대상 - REL_HATE:카츠토시군주:대상) / 1500)
-				PRINTFORML %조사처리(ANAME(대상),"는")% 돈{요구액}를 요구한 것 같습니다
+				PRINTFORML %조사처리(ANAME(대상),"는")% 돈{요구액}을 요구한 것 같습니다
 				IF 요구액　<= 지불한도
 					MONEY:승리세력 -= 요구액
-					PRINTFORML %ANAME(카츠토시군주)%는 받아들였습니다
+					PRINTFORML %조사처리(ANAME(카츠토시군주),"는")% 받아들였습니다
 					GOTO ASSIGN_ACCEPT
 				ELSE
-					PRINTFORML %ANAME(카츠토시군주)%는 거부했습니다
+					PRINTFORML %조사처리(ANAME(카츠토시군주),"는")% 거부했습니다
 				ENDIF
 			ENDIF
 	ENDSELECT
@@ -295,18 +295,18 @@ IF 우호도 < 100 && 적대도 >= 800 && (CONFIG:304 == 0 || (CONFIG:304 == 2 &
 		SETCOLOR 칼라_경고
 		;군주
 		IF 대상 == 패배군주
-			PRINTFORMW 군주인 %조사처리(ANAME(대상),"는")% %ANAME(카츠토시군주)%의 전에 끌어내졌다…
-			PRINTFORMW %ANAME(대상)%에 너무 좋은 감정을 가지지 않는 %ANAME(카츠토시군주)%는, 주저 없게 부하에게 %ANAME(대상)%의 처형을 명했다
+			PRINTFORMW 군주인 %조사처리(ANAME(대상),"는")% %ANAME(카츠토시군주)%의 앞에 끌려갔다…
+			PRINTFORMW %ANAME(대상)%에 그닥 좋은 감정이 없던 %조사처리(ANAME(카츠토시군주),"는")%, 주저 없이 부원에게 %ANAME(대상)%의 처형을 명령했다
 			PRINTFORMW ………………
 		ELSEIF CFLAG:대상:포로처 == 패배세력
 			LOCALS:0 = %ANAME(GET_COUNTRY_BOSS(CFLAG:대상:포로처))%
-			PRINTFORMW 포로가 되고 있었던 %LOCALS:0% 세력의 %조사처리(ANAME(대상),"는")% 처형된 것 같습니다…
+			PRINTFORMW 포로로 잡혀 있던 %LOCALS:0% 세력의 %조사처리(ANAME(대상),"는")% 처형된 것 같습니다…
 		ELSE
 			PRINTFORMW %조사처리(ANAME(대상),"는")% 처형된 것 같습니다…
 		ENDIF
 		RESETCOLOR
 	ELSE
-		CALL COLOR_PRINTL(@"%조사처리(ANAME(대상),"가")% 처형되었다는 보고가 들어가 있습니다", 칼라_주의)
+		CALL COLOR_PRINTL(@"%조사처리(ANAME(대상),"가")% 처형되었다는 보고가 들어왔습니다", 칼라_주의)
 	ENDIF
 	CALL EXECUTION(대상)
 	CFLAG:대상:특수상태 = 특수상태_사망
@@ -315,12 +315,12 @@ IF 우호도 < 100 && 적대도 >= 800 && (CONFIG:304 == 0 || (CONFIG:304 == 2 &
 ELSEIF 우호도 >= 800 && 적대도 < 100
 	IF 패배세력 == CFLAG:MASTER:소속
 		IF 대상 == 패배군주
-			PRINTFORMW 군주인 %조사처리(ANAME(대상),"는")% %ANAME(카츠토시군주)%의 전에 끌어내졌다…
-			PRINTFORMW 이지만 %ANAME(카츠토시군주)%에 %ANAME(대상)%의 목을 잡을 생각은 없는 것 같다
+			PRINTFORMW 군주인 %조사처리(ANAME(대상),"는")% %ANAME(카츠토시군주)%의 앞에 끌려갔다…
+			PRINTFORMW 하지만 %조사처리(ANAME(카츠토시군주),"는")% %ANAME(대상)%의 목을 칠 생각은 없는 것 같다
 			PRINTFORMW %조사처리(ANAME(대상),"는")% 해방되었습니다
 		ELSEIF CFLAG:대상:포로처 == 패배세력
 			LOCALS:0 = %ANAME(GET_COUNTRY_BOSS(CFLAG:대상:포로처))%
-			PRINTFORMW 포로가 되고 있었던 %LOCALS:0% 세력의 %조사처리(ANAME(대상),"는")% 해방된 것 같습니다
+			PRINTFORMW 포로로 잡혀 있던 %LOCALS:0% 세력의 %조사처리(ANAME(대상),"는")% 해방된 것 같습니다
 		ELSE
 			PRINTFORMW %조사처리(ANAME(대상),"는")% 해방된 것 같습니다
 		ENDIF
@@ -341,12 +341,12 @@ ELSEIF 우호도 >= 800 && 적대도 < 100
 ELSE
 	IF 패배세력 == CFLAG:MASTER:소속
 		IF 대상 == 패배군주
-			PRINTFORMW 군주인 %조사처리(ANAME(대상),"는")% %ANAME(카츠토시군주)%의 전에 끌어내졌다…
-			PRINTFORMW 이지만 %ANAME(카츠토시군주)%에 %ANAME(대상)%의 목을 잡을 생각은 없는 것 같다
+			PRINTFORMW 군주인 %조사처리(ANAME(대상),"는")% %ANAME(카츠토시군주)%의 앞에 끌려갔다…
+			PRINTFORMW 하지만 %조사처리(ANAME(카츠토시군주),"는")% %ANAME(대상)%의 목을 칠 생각은 없는 것 같다
 			PRINTFORMW %조사처리(ANAME(대상),"는")% 투옥되었습니다
 		ELSEIF CFLAG:대상:포로처 == 패배세력
 			LOCALS:0 = %ANAME(GET_COUNTRY_BOSS(CFLAG:대상:포로처))%
-			PRINTFORMW 포로가 되고 있었던 %LOCALS:0% 세력의 %조사처리(ANAME(대상),"는")%, 계속 투옥된 것 같습니다
+			PRINTFORMW 포로로 잡혀 있던 %LOCALS:0% 세력의 %조사처리(ANAME(대상),"는")%, 다시 투옥된 것 같습니다
 		ELSE
 			PRINTFORMW %조사처리(ANAME(대상),"는")% 투옥된 것 같습니다
 		ENDIF
@@ -377,17 +377,17 @@ CALL PRINT_STATE_IMAGE(대상)
 IF IS_COUNTRY(대상세력) && CFLAG:대상:포로처 == 대상세력
 	LOCAL:1 = GET_COUNTRY_BOSS(대상세력)
 	LOCAL:2 = GET_COUNTRY_BOSS(CFLAG:대상:소속)
-	PRINTFORML %LOCAL:1 != -1 ? ANAME(LOCAL:1) + "의" # ""%포로가 되고 있었던 %LOCAL:2 != -1 ? ANAME(LOCAL:2) + "소속의" # ""%%조사처리(ANAME(대상),"를")% 보호했습니다
+	PRINTFORML %LOCAL:1 != -1 ? ANAME(LOCAL:1) + "의" # ""%포로로 잡혀 있던 %LOCAL:2 != -1 ? ANAME(LOCAL:2) + "소속의" # ""%%조사처리(ANAME(대상),"를")% 구출했습니다
 	PRINTFORML %ANAME(대상)%의 처우를 결정해 주세요
 ELSE
 	PRINTFORML %ANAME(대상)%의 처우를 결정해 주세요
 ENDIF
 CALL SHOW_SIMPLE_INFO(대상)
 IF !거부플래그
-	PRINTL [0] 등용
+	PRINTL [0] 입부
 ELSE
 	SETCOLOR 칼라_선택불가
-	PRINTPLAIN [0] 등용
+	PRINTPLAIN [0] 입부
 	PRINTL 
 	RESETCOLOR
 ENDIF
@@ -406,15 +406,15 @@ IF RESULT == 0 && !거부플래그
 		CASE 1
 			$ACCEPT
 			CALL KOJO_EVENT(대상, 332)
-			PRINTFORMW %조사처리(ANAME(대상),"를")% 등용했습니다
+			PRINTFORMW %조사처리(ANAME(대상),"가")% 입부했습니다
 			CALL CHANGE_COUNTRY(대상, 포획세력, 1)
 			;호감도를 상승, 적대치를 감소
 			CALL CHANGE_RELATION_O_TO_C(대상, 포획세력, 50, -50)
 		CASE 2
 			요구액 = JUDGE_ASSIGN_REQUIRE_MONEY(대상, 대상세력,　포획세력)
-			CALL ICPRINT(@"%조사처리(ANAME(대상),"는")% 돈<{요구액}>를 요구해 왔습니다", "L", 칼라_주의)
-			PRINTFORML 현재의 소지금:{MONEY}
-			CALL ASK_MULTI_JUDGE("지불한다", 요구액 <= MONEY, "지불하지 않는다", 1)
+			CALL ICPRINT(@"%조사처리(ANAME(대상),"는")% 돈<{요구액}>을 요구했습니다", "L", 칼라_주의)
+			PRINTFORML 현재 소지금:{MONEY}
+			CALL ASK_MULTI_JUDGE("준다", 요구액 <= MONEY, "주지 않는다", 1)
 			IF RESULT == 0
 				MONEY -= 요구액
 				GOTO ACCEPT
@@ -431,7 +431,7 @@ IF RESULT == 0 && !거부플래그
 	RETURN 0
 ELSEIF RESULT == 1
 	CALL KOJO_EVENT(대상, 334)
-	PRINTFORMW %조사처리(ANAME(대상),"를")% 해방했습니다
+	PRINTFORMW %조사처리(ANAME(대상),"를")% 해방시켰습니다
 	IF CFLAG:대상:포로처 != 0
 		;포로 설정을 해제
 		CALL CAPTURE(대상, 0)
@@ -446,13 +446,13 @@ ELSEIF RESULT == 1
 
 ELSEIF RESULT == 2
 	CALL KOJO_EVENT(대상, 335)
-	PRINTFORMW %조사처리(ANAME(대상),"를")% 투옥했습니다
+	PRINTFORMW %조사처리(ANAME(대상),"를")% 반성실에 가뒀습니다
 	CALL CAPTURE(대상, 포획세력)
 	RETURN 2
 
 ELSEIF RESULT == 4
 	CALL KOJO_EVENT(대상, 335)
-	PRINTFORMW %조사처리(ANAME(대상),"를")% 연금 했습니다
+	PRINTFORMW %조사처리(ANAME(대상),"를")% 연금시켰습니다
 	CALL CAPTURE(대상, 포획세력)
 	CFLAG:대상:연금중 = 1
 	RETURN 4
@@ -483,7 +483,7 @@ ENDIF
 ;등용에 응할지 어떨지를 판정
 IF JUDGE_ASSIGN(대상, 대상세력, 포획세력) == 1
 	CALL KOJO_EVENT(대상, 332)
-	PRINTFORMW %조사처리(ANAME(대상),"를")% 등용했습니다
+	PRINTFORMW %조사처리(ANAME(대상),"가")% 입부했습니다
 	CALL CHANGE_COUNTRY(대상, 포획세력, 1)
 	;호감도를 상승, 적대치를 감소
 	CALL CHANGE_RELATION_O_TO_C(대상, 포획세력, 50, -50)
@@ -491,7 +491,7 @@ IF JUDGE_ASSIGN(대상, 대상세력, 포획세력) == 1
 ENDIF
 
 CALL KOJO_EVENT(대상, 333)
-PRINTFORMW %조사처리(ANAME(대상),"는")% 등용에 응할 생각은 없는 것 같습니다…
+PRINTFORMW %조사처리(ANAME(대상),"는")% 입부 요청에 응할 생각은 없는 것 같습니다…
 ;호감도를 상승, 적대치를 감소
 CALL CHANGE_RELATION_O_TO_C(대상, 포획세력, 50, -50)
 
@@ -511,7 +511,7 @@ IF CONFIG:301 == 1
 	RETURN 1
 ELSEIF CONFIG:301 == 2
 	CALL KOJO_EVENT(대상, 335)
-	PRINTFORMW %조사처리(ANAME(대상),"를")% 투옥했습니다
+	PRINTFORMW %조사처리(ANAME(대상),"를")% 반성실에 가뒀습니다
 	CALL CAPTURE(대상, 포획세력)
 	RETURN 2
 ENDIF
@@ -538,22 +538,22 @@ CATCH
 ENDCATCH
 
 IF CFLAG:MASTER:포로처
-	PRINTFORMW 포로로서 잡혀지고 있었던 %조사처리(ANAME(MASTER),"는")%, %ANAME(군주)%의 전에 닫혀졌다…
+	PRINTFORMW 포로로 잡혀있던 %조사처리(ANAME(MASTER),"는")%, %ANAME(군주)%의 앞에 끌려갔다…
 ELSE
-	PRINTFORMW 잡힌 %조사처리(ANAME(MASTER),"는")% %ANAME(군주)%의 전에 끌어내졌다…
+	PRINTFORMW 포박당한 %조사처리(ANAME(MASTER),"는")% %ANAME(군주)%의 앞에 끌려갔다…
 ENDIF
 
 ;왕으로부터의 호감도가 낮게 적대치가 특히 높은 경우로, 왕의 호감도·의존도·의존도가 함께 500 미만이라면 선택지를 표시하지 않고 처형
 IF 우호도 < 100 && 적대도 >= 800 && MAX(CFLAG:군주:호감도, CFLAG:군주:의존도, CFLAG:군주:종속도, CFLAG:군주:지배도) < 500
-	PRINTFORMW %ANAME(MASTER)%에 너무 좋은 감정을 가지지 않는 %조사처리(ANAME(군주),"는")%, 주저 없게 부하에게 %ANAME(MASTER)%의 처형을 명했다
+	PRINTFORMW %ANAME(MASTER)%에 그닥 좋은 감정이 없던 %조사처리(ANAME(군주),"는")%, 주저 없이 부원에게 %ANAME(MASTER)%의 처형을 명령했다
 	CALL EXECUTION(MASTER)
 	FLAG:강제엔드플래그 = 1
 	RETURN 3
 ENDIF
 
 IF CFLAG:MASTER:포로처
-	PRINTFORML %조사처리(ANAME(군주),"는")% %ANAME(MASTER)%에 대해, 도와줄 생각은 없을까 가져 걸어 왔다
-	CALL ASK_MULTI("나로 좋다면 기뻐해", "거절이다", "해방 해 주었으면 한다")
+	PRINTFORML %조사처리(ANAME(군주),"는")% %ANAME(MASTER)%에게, 앞으로 자신을 도와주지 않겠느냐고 물었다
+	CALL ASK_MULTI("나라도 좋다면 기꺼이", "거절한다", "해방시켜 줬으면 한다")
 
 	SELECTCASE RESULT 
 		CASE 0
@@ -563,21 +563,21 @@ IF CFLAG:MASTER:포로처
 			RETURN 0
 		CASE 1
 			IF 우호도 > 300 && 적대도 < 300
-				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 관직에 오름을 거절하면, %조사처리(ANAME(군주),"는")% 조금 유감스러운 듯이 하면서도 %조사처리(ANAME(MASTER),"를")% 해방했다
+				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 입부 요청을 거절하자, %조사처리(ANAME(군주),"는")% 조금 유감스러워 하면서도 %조사처리(ANAME(MASTER),"를")% 해방시켰다
 				CALL CAPTURE(MASTER, 0)
 				RETURN 1
 			ELSE
-				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 관직에 오름을 거절하면, %조사처리(ANAME(군주),"는")% %조사처리(ANAME(MASTER),"를")% 투옥했다
+				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 입부 요청을 거절하자, %조사처리(ANAME(군주),"는")% %조사처리(ANAME(MASTER),"를")% 반성실에 가뒀다
 				CALL CAPTURE(MASTER, 세력)
 				RETURN 2
 			ENDIF
 		CASE 2
 			IF 우호도 > 300 && 적대도 < 300
-				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 해방해 주고라고 부탁하면, %조사처리(ANAME(군주),"는")% 조금 유감스러운 듯이 하면서도 %조사처리(ANAME(MASTER),"를")% 해방했다
+				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 해방시켜 달라고 부탁하자, %조사처리(ANAME(군주),"는")% 조금 유감스러워 하면서도 %조사처리(ANAME(MASTER),"를")% 해방시켰다
 				CALL CAPTURE(MASTER, 0)
 				RETURN 1
 			ELSE
-				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 해방해 주고라고 부탁하면, %조사처리(ANAME(군주),"는")% 목을 옆에 흔들어, %조사처리(ANAME(MASTER),"를")% 투옥했다
+				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 해방시켜 달라고 부탁하자, %조사처리(ANAME(군주),"는")% 고개를 저으며, %조사처리(ANAME(MASTER),"를")% 반성실에 가뒀다
 				CALL CAPTURE(MASTER, 세력)
 				RETURN 2
 			ENDIF
@@ -593,18 +593,18 @@ ELSE
 			RETURN 0
 		CASE 2
 			IF 우호도 > 300 && 적대도 < 300
-				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 해방해 주고라고 부탁하면, %조사처리(ANAME(군주),"는")% 조금 유감스러운 듯이 하면서도 %조사처리(ANAME(MASTER),"를")% 해방했다
+				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 해방시켜 달라고 부탁하자, %조사처리(ANAME(군주),"는")% 조금 유감스러워 하면서도 %조사처리(ANAME(MASTER),"를")% 해방시켰다
 				CALL CAPTURE(MASTER, 0)
 				RETURN 1
 			ELSE
-				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 해방해 주고라고 부탁하면, %조사처리(ANAME(군주),"는")% 목을 옆에 흔들어, %조사처리(ANAME(MASTER),"를")% 투옥했다
+				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 해방시켜 달라고 부탁하자, %조사처리(ANAME(군주),"는")% 고개를 저으며, %조사처리(ANAME(MASTER),"를")% 반성실에 가뒀다
 				CALL CAPTURE(MASTER, 세력)
 				RETURN 2
 			ENDIF
 		CASE 1
 			CALL MASTER_CAPTURED_DOES_EXECUTE(세력)
 			IF RESULT == 1
-				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 관직에 오름을 거절하면, %조사처리(ANAME(군주),"는")% 유감스러운 듯이 하면서도 부하에게 %ANAME(MASTER)%의 처형을 명했다
+				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 입부 요청을 거절하자, %조사처리(ANAME(군주),"는")% 유감스러워 하면서도 부원에게 %ANAME(MASTER)%의 처형을 명령했다
 				CALL EXECUTION(MASTER)
 				FLAG:강제엔드플래그 = 1
 				RETURN 3
@@ -651,17 +651,17 @@ NEXT
 
 ;조건을 채우는 캐릭터가 발견되었을 경우
 IF 의사표현캐릭터 >= 0
-	PRINTFORML %조사처리(ANAME(MASTER),"가")% 관직에 오름을 거절하면, 그것을 보며 있었던 %ANAME(의사표현캐릭터)%가 %ANAME(군주)%에게,
-	PRINTFORMW 자신에게 설득을 맡기면 좋겠다고 신청했다
-	PRINTFORMW %조사처리(ANAME(군주),"는")% %ANAME(의사표현캐릭터)%의 말을 들어주어, %ANAME(MASTER)%의 처우를 %ANAME(의사표현캐릭터)%에 맡겼다…
+	PRINTFORML %조사처리(ANAME(MASTER),"가")% 입부 요청을 거절하자, 그것을 보고있던 %ANAME(의사표현캐릭터)%가 %ANAME(군주)%에게,
+	PRINTFORMW 자신에게 설득을 맡겨달라고 했다
+	PRINTFORMW %조사처리(ANAME(군주),"는")% %ANAME(의사표현캐릭터)%의 요청을 받아들여, %ANAME(MASTER)%의 처우를 %ANAME(의사표현캐릭터)%에게 맡겼다…
 	CALL COLOR_PRINTW(@"%조사처리(ANAME(MASTER),"는")% %ANAME(군주)%의 포로가 되었습니다", 칼라_주의)
 	FLAG:역조교메인조교자 = GET_ID(의사표현캐릭터)
 	RETURN 0
 ENDIF
 
 IF MAX(CFLAG:군주:호감도, CFLAG:군주:의존도, CFLAG:군주:종속도, CFLAG:군주:지배도) >= 1500
-	PRINTFORMW %ANAME(군주)%에는 %조사처리(ANAME(MASTER),"를")% 베는 것이 할 수 없는 것 같다…
-	PRINTFORMW %조사처리(ANAME(군주),"는")% 부하에 대해, %조사처리(ANAME(MASTER),"를")% 투옥하도록(듯이) 명했다
+	PRINTFORMW %조사처리(ANAME(군주),"는")% 도저히 %조사처리(ANAME(MASTER),"를")% 처형할 수 없는 것 같다…
+	PRINTFORMW %조사처리(ANAME(군주),"는")% 부원을 불러, %조사처리(ANAME(MASTER),"를")% 반성실에 가두라고 명령했다
 	CALL COLOR_PRINTW(@"%조사처리(ANAME(MASTER),"는")% %ANAME(군주)%의 포로가 되었습니다", 칼라_주의)
 	RETURN 0
 ENDIF
@@ -680,18 +680,18 @@ NEXT
 
 ;조건을 채우는 캐릭터가 발견되었을 경우
 IF 의사표현캐릭터 >= 0
-	PRINTFORMW %조사처리(ANAME(MASTER),"가")% 관직에 오름을 거절하면, %조사처리(ANAME(군주),"는")% 부하에게 %ANAME(MASTER)%의 처형을 명했다
-	PRINTFORMW 하면, 그것을 보며 있었던 %ANAME(의사표현캐릭터)%가 %ANAME(군주)%에 달려들어, 필사적으로 %ANAME(MASTER)%의 조명을 탄원 했다…
+	PRINTFORMW %조사처리(ANAME(MASTER),"가")% 입부 요청을 거절하자, %조사처리(ANAME(군주),"는")% 부원에게 %ANAME(MASTER)%의 처형을 명령했다
+	PRINTFORMW 그러자, 그것을 보고있던 %ANAME(의사표현캐릭터)%가 %ANAME(군주)%에게 달려들어, 필사적으로 %조사처리(ANAME(MASTER),"를")% 살려달라고 애원했다…
 	PRINTFORML %ANAME(의사표현캐릭터)%의 기세에 밀린 %조사처리(ANAME(군주),"는")%,
-	PRINTFORMW 아무래도 %ANAME(MASTER)%의 목을 잡지 않고 포로로서 투옥해 두기로 한 것 같다
+	PRINTFORMW 아무래도 %ANAME(MASTER)%의 목을 치지 않고 포로로서 반성실에 가둬두기로 한 것 같다
 	CALL COLOR_PRINTW(@"%조사처리(ANAME(MASTER),"는")% %ANAME(군주)%의 포로가 되었습니다", 칼라_주의)
 	RETURN 0
 ENDIF
 
 ;3능력에 응한 확률로
 IF ABL:MASTER:무투 + ABL:MASTER:방위 + ABL:MASTER:지략 + ABL:MASTER:정치 >= RAND:400
-	PRINTFORMW %조사처리(ANAME(군주),"는")%, %조사처리(ANAME(MASTER),"와")% 같은 인재를 베는 것을 아낀 것 같다
-	PRINTFORMW %조사처리(ANAME(군주),"는")% 부하에 대해, %조사처리(ANAME(MASTER),"를")% 투옥하도록(듯이) 명했다
+	PRINTFORMW %조사처리(ANAME(군주),"는")%, %조사처리(ANAME(MASTER),"와")% 같은 인재를 베는 것을 아깝다고 여긴 것 같다
+	PRINTFORMW %조사처리(ANAME(군주),"는")% 부원을 불러, %조사처리(ANAME(MASTER),"를")% 반성실에 가두라고 명령했다
 	CALL COLOR_PRINTW(@"%조사처리(ANAME(MASTER),"는")% %ANAME(군주)%의 포로가 되었습니다", 칼라_주의)
 	RETURN 0
 ENDIF

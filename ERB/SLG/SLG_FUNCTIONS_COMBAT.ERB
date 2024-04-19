@@ -303,8 +303,8 @@ SIF LOCAL == MAX_TREATY_COUNTRY
 
 보장금 = RAND(3000, 5000)
 
-PRINTFORML 연합 토벌대상인 %ANAME(GET_COUNTRY_BOSS(토벌대상))%를 격파한 것으로, 연합 참가국으로부터의 %ANAME(GET_COUNTRY_BOSS(세력))%의 평가가 향상했다
-CALL ICPRINT(@"또, 보장금으로 해서 돈<{보장금}>가 주어졌다", "L", 칼라_주의)
+PRINTFORML 연합 토벌대상인 %ANAME(GET_COUNTRY_BOSS(토벌대상))%를 격파하여, 연합 참가국들 사이에서 %ANAME(GET_COUNTRY_BOSS(세력))%의 평가가 올랐다
+CALL ICPRINT(@"또, 보상금으로 돈<{보장금}>가 주어졌다", "L", 칼라_주의)
 FOR LOCAL, 0, MAX_TREATY_COUNTRY
 	루프세력 = TREATY_U_COUNTRY:연합번호:LOCAL
 	SIF IS_COUNTRY(루프세력) && 루프세력 != 세력

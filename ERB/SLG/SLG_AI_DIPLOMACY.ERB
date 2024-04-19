@@ -317,17 +317,18 @@ IF 상대세력 == CFLAG:MASTER:소속
 	SIF RESULT == 0
 		RETURN 
 ELSE
-	PRINTFORM %조사처리(ANAME(군주),"는")% %조사처리(ANAME(상대세력군주),"와")%의 정전을 시도했습니다
+	PRINTFORM %조사처리(ANAME(군주),"는")% %조사처리(ANAME(상대세력군주),"와")% 정전 협상을 시도했습니다
 	;상대의 외교 대상으로 들어가지 않고, 한편 난수 판정에 실패하면 거부 플래그가 끊는다
 	IF !GROUPMATCH(CHECK_AI_DIPLOMACY_PLAN(상대세력, 세력), AI_외교계획_동맹, AI_외교계획_정전) && RAND:MAX(판정치, 1000) < 1500
-		PRINTFORML 가, %조사처리(ANAME(상대세력군주),"는")% 거부했습니다
+		PRINTFORML 그러나, %조사처리(ANAME(상대세력군주),"는")% 거부했습니다
 		IF !RAND:3
 			CALL CHANGE_AI_DIPLOMACY_PLAN(세력, 상대세력, AI_외교계획_회담)
 			PRINTFORML %조사처리(ANAME(군주),"는")% 회담을 거듭할 방침으로 전환한 것 같습니다
+			;--------------------이거 원문이 뭐임??-----------------------
 		ENDIF
 		RETURN
 	ELSE
-		PRINTFORML 。%조사처리(ANAME(상대세력군주),"는")% 정전에 동의 했습니다
+		PRINTFORML 。%조사처리(ANAME(상대세력군주),"는")% 정전에 동의했습니다
 	ENDIF
 ENDIF
 
@@ -385,17 +386,17 @@ IF 상대세력 == CFLAG:MASTER:소속
 	SIF RESULT == 0
 		RETURN 
 ELSE
-	PRINTFORM %조사처리(ANAME(군주),"는")% %조사처리(ANAME(상대세력군주),"와")%의 동맹을 시도했습니다
+	PRINTFORM %조사처리(ANAME(군주),"는")% %조사처리(ANAME(상대세력군주),"와")% 동맹 체결을 시도했습니다
 	;상대의 외교 대상으로 들어가지 않고, 한편 난수 판정에 실패하면 거부 플래그가 끊는다
 	IF !CHECK_AI_DIPLOMACY_PLAN(상대세력, 세력) == AI_외교계획_동맹 && RAND:MAX(판정치, 1000) < 2000
-		PRINTFORML 가, %조사처리(ANAME(상대세력군주),"는")% 거부했습니다
+		PRINTFORML 그러나, %조사처리(ANAME(상대세력군주),"는")% 거부했습니다
 		IF !RAND:3
 			CALL CHANGE_AI_DIPLOMACY_PLAN(세력, 상대세력, AI_외교계획_회담)
 			PRINTFORML %조사처리(ANAME(군주),"는")% 회담을 거듭할 방침으로 전환한 것 같습니다
 		ENDIF
 		RETURN
 	ELSE
-		PRINTFORML 。%조사처리(ANAME(상대세력군주),"는")% 동맹에 동의 했습니다
+		PRINTFORML 。%조사처리(ANAME(상대세력군주),"는")% 동맹 체결에 동의했습니다
 	ENDIF
 ENDIF
 
@@ -490,7 +491,7 @@ NEXT
 IF 상대세력 == CFLAG:MASTER:소속
 	CALL COLOR_PRINTL(@"%조사처리(ANAME(군주),"가")% %ANAME(상대세력군주)%에 대한 악평을 %군주명%에 흘렸습니다", 칼라_주의)
 ELSE
-	PRINTFORML %조사처리(ANAME(군주),"는")% %ANAME(상대세력군주)%의 악평을 %군주명%에 흘렸습니다
+	PRINTFORML %조사처리(ANAME(군주),"는")% %ANAME(상대세력군주)%에 대한 악평을 %군주명%에게 흘렸습니다
 ENDIF
 
 ;베이스 효과량 계산
@@ -572,7 +573,7 @@ ENDSELECT
 
 
 IF CFLAG:MASTER:소속 == 상대세력
-	CALL COLOR_PRINTL(@"%조사처리(ANAME(군주),"가")% %ANAME(상대세력군주)%에 %요구내용:내용%%효과량문자열%를 요구해 왔습니다", 칼라_주의)
+	CALL COLOR_PRINTL(@"%조사처리(ANAME(군주),"가")% %ANAME(상대세력군주)%에게 %요구내용:내용%%효과량문자열%를 요구해 왔습니다", 칼라_주의)
 
 	CALL ASK_YN("받아들인다", "거절한다")
 	IF RESULT == 0
@@ -581,7 +582,7 @@ IF CFLAG:MASTER:소속 == 상대세력
 		거부플래그 = 1
 	ENDIF
 ELSE
-	PRINTFORML %조사처리(ANAME(군주),"가")%, %ANAME(상대세력군주)%에 %요구내용:내용%%효과량문자열%를 요구했습니다
+	PRINTFORML %조사처리(ANAME(군주),"가")%, %ANAME(상대세력군주)%에게 %요구내용:내용%%효과량문자열%를 요구했습니다
 ENDIF
 
 IF 거부플래그
@@ -600,19 +601,19 @@ SELECTCASE 내용
 		TMP_SUM_SOLDIER:세력 += 효과량
 		TMP_SUM_SOLDIER:상대세력 -= -효과량
 		CALL SHIFT_SOLDIER(상대세력, 세력, 효과량)
-		PRINTFORML %조사처리(ANAME(상대세력군주),"는")% %ANAME(군주)%에 군사{효과량}를 제공했습니다
+		PRINTFORML %조사처리(ANAME(상대세력군주),"는")% %ANAME(군주)%에게 군사{효과량}를 제공했습니다
 	CASE 요구_경제
 		TMP_SUM_ECONOMY:세력 += 효과량
 		TMP_SUM_ECONOMY:상대세력 -= -효과량
 		CALL SHIFT_ECONOMY(상대세력, 세력, 효과량)
-		PRINTFORML %조사처리(ANAME(상대세력군주),"는")% %ANAME(군주)%에 경제{효과량}를 제공했습니다
+		PRINTFORML %조사처리(ANAME(상대세력군주),"는")% %ANAME(군주)%에게 경제{효과량}를 제공했습니다
 	CASE 요구_사관
 		IF 사관수 == 0
-			PRINTFORML ……가, 건네줄 수 있는 사관이 없었던 것 같다……
-			PRINTFORML 이것에는 그렇게도의 %ANAME(군주)%도 쓴 웃음이었다
+			PRINTFORML ……하지만, 보내줄 사관이 없다……
+			PRINTFORML 이 대답에 %ANAME(군주)%조차 쓴웃음을 지었다…
 			CALL CLEAR_AI_DIPLOMACY_PLAN(세력, 상대세력)
 		ELSE
-			PRINTFORML %효과량문자열%가 %ANAME(세력)%에 이적했습니다
+			PRINTFORML %효과량문자열%가 %ANAME(세력)% 세력으로 이적했습니다
 			CALL CHANGE_COUNTRY(효과량, 세력, 1)
 		ENDIF
 ENDSELECT

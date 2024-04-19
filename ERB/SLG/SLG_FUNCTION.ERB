@@ -1626,8 +1626,8 @@ RETURN RESULT
 #DIM 도시
 참가군주:0 = GET_COUNTRY_BOSS(참가세력:0)
 참가군주:1 = GET_COUNTRY_BOSS(참가세력:1)
-CALL COLOR_PRINTL(@"%ANAME(참가군주:0)%·%ANAME(참가군주:1)% 동맹은 해산했습니다", 칼라_주의)
-CALL COLOR_PRINTL(@"%ANAME(참가군주:1)%의 도시에 있는 %ANAME(참가군주:0)%의 부대, %ANAME(참가군주:0)%의 도시에 있는 %ANAME(참가군주:1)%의 부대는 이동합니다", 칼라_주의)
+CALL COLOR_PRINTL(@"%ANAME(참가군주:0)%──%ANAME(참가군주:1)% 간의 동맹 협정이 만료되었습니다", 칼라_주의)
+CALL COLOR_PRINTL(@"%ANAME(참가군주:1)%의 도시에 있는 %ANAME(참가군주:0)%의 부대와 %ANAME(참가군주:0)%의 도시에 있는 %ANAME(참가군주:1)%의 부대는 각자의 도시로 이동합니다", 칼라_주의)
 FOR 도시, 1, GET_CITY_NUM() + 1
 	SIF GROUPMATCH(CITY_OWNER:도시, 참가세력:0, 참가세력:1)
 		이동처도시:(CITY_OWNER:도시 == 참가세력:0 ? 0 # 1) = 도시
@@ -1654,7 +1654,7 @@ TREATY_A_TERM:조약 = 0
 #DIM 조약
 참가군주:0 = GET_COUNTRY_BOSS(참가세력:0)
 참가군주:1 = GET_COUNTRY_BOSS(참가세력:1)
-CALL COLOR_PRINTL(@"%ANAME(참가군주:0)%·%ANAME(참가군주:1)%의 정전 조약은 실효했습니다", 칼라_주의)
+CALL COLOR_PRINTL(@"%ANAME(참가군주:0)%──%ANAME(참가군주:1)% 간의 정전 협정은 만료되었습니다", 칼라_주의)
 TREATY_C_COUNTRY:조약:0 = 0
 TREATY_C_COUNTRY:조약:1 = 0
 TREATY_C_TERM:조약 = 0
@@ -1666,7 +1666,7 @@ TREATY_C_TERM:조약 = 0
 #DIM 조약
 #DIM 군주
 군주 = GET_COUNTRY_BOSS(TREATY_U_TARGET:조약)
-CALL COLOR_PRINTL(@"%ANAME(군주)%토벌 조약은 실효했습니다", 칼라_주의)
+CALL COLOR_PRINTL(@"%ANAME(군주)% 토벌 연합은 해체됐습니다", 칼라_주의)
 TREATY_U_TARGET:조약 = 0
 TREATY_U_TERM:조약 = 0
 
@@ -2165,9 +2165,9 @@ FOR LOCAL:0, 0, CHARANUM
 		CALL CHANGE_COUNTRY(LOCAL:0, 0)
 	IF CFLAG:(LOCAL:0):포로처 == ARG:0
 		IF IS_COUNTRY(CFLAG:(LOCAL:0):소속)
-			PRINTFORML %ANAME(LOCAL:3)%의 멸망에 의해, %조사처리(ANAME(LOCAL),"는")% %ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL):소속))%에 돌아갔습니다
+			PRINTFORML %ANAME(LOCAL:3)% 세력의 멸망으로, %조사처리(ANAME(LOCAL),"는")% %ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL):소속))%에게 복귀했습니다
 		ELSE
-			PRINTFORML %ANAME(LOCAL:3)%의 멸망에 의해, %조사처리(ANAME(LOCAL),"는")% 방랑했습니다
+			PRINTFORML %ANAME(LOCAL:3)% 세력의 멸망으로, %조사처리(ANAME(LOCAL),"는")% 해방되어 방랑했습니다
 		ENDIF
 		CALL CAPTURE(LOCAL:0, 0)
 	ENDIF
@@ -2311,7 +2311,7 @@ CITY_OWNER:(ARG:1) = ARG:0
 @TOSTR_UNIT_POWER(ARG:0)
 #FUNCTIONS
 IF ARG:0 <= ABL_POWER(50, -1)
-	RETURNF "최저"
+	RETURNF "최약"
 ELSEIF ARG:0 < 6400
 	RETURNF "오합지졸"
 ELSEIF ARG:0 < 12800
@@ -2332,8 +2332,8 @@ RETURNF "신의 영역"
 @TOSTR_UNIT_POWER_SHORT(ARG:0)
 #FUNCTIONS
 SELECTCASE TOSTR_UNIT_POWER(ARG:0)
-	CASE "최저"
-		RETURNF "최저"
+	CASE "최약"
+		RETURNF "최약"
 	CASE "오합지졸"
 		RETURNF "오합"
 	CASE "약병"
@@ -2349,7 +2349,7 @@ SELECTCASE TOSTR_UNIT_POWER(ARG:0)
 	CASE "천하 무쌍"
 		RETURNF "무쌍"
 	CASEELSE
-		RETURNF "신사의 경내"
+		RETURNF "신의 영역"
 ENDSELECT
 RETURNF "불명"
 
@@ -2359,11 +2359,11 @@ RETURNF "불명"
 @SET_COOLTIME(ARG:0, ARG:1, ARG:2 = 1)
 
 IF ARG:2
-	CALL COLOR_PRINTL(@"%ANAME(ARG:0)%의 쿨 타임이 {ARG:1}턴이 되었다", 칼라_주의)
+	CALL COLOR_PRINTL(@"%ANAME(ARG:0)%의 쿨타임이 {ARG:1}턴이 되었다", 칼라_주의)
 	SIF ARG:0 == MASTER && ITEM:대역인형 > 0 && COOLTIME:MASTER:0 < ARG:1
-		CALL COLOR_PRINTL(@"……라고 생각했지만, 대역인형이 대역으로 되어 주었다(나머지:{ITEM:대역인형 - 1}개)", 칼라_주의)
+		CALL COLOR_PRINTL(@"……그런 줄 알았는데, 대역인형이 대신 받아주었다(나머지:{ITEM:대역인형 - 1}개)", 칼라_주의)
 	IF TALENT:(ARG:0):행운 && RAND:2
-		CALL COLOR_PRINTL(@"……라고 생각했지만, 운 좋게 회피할 수 있던 것 같다", 칼라_주의)
+		CALL COLOR_PRINTL(@"……그런 줄 알았는데, 운 좋게 회피할 수 있었다", 칼라_주의)
 		RETURN
 	ENDIF	
 ENDIF
@@ -2381,11 +2381,11 @@ ENDIF
 @ADD_COOLTIME(ARG:0, ARG:1, ARG:2 = 1, ARG:3 = 1)
 
 IF ARG:2
-	CALL COLOR_PRINTL(@"%ANAME(ARG:0)%에{ARG:1}턴의 쿨 타임이 가산되었다", 칼라_주의)
+	CALL COLOR_PRINTL(@"%ANAME(ARG:0)%에게 {ARG:1}턴의 쿨타임이 더해졌다", 칼라_주의)
 	SIF ARG:0 == MASTER && ITEM:대역인형 > 0
-		CALL COLOR_PRINTL(@"……라고 생각했지만, 대역인형이 대역으로 되어 주었다(나머지:{ITEM:대역인형 - 1}개)", 칼라_주의)
+		CALL COLOR_PRINTL(@"……그런 줄 알았는데, 대역인형이 대신 받아주었다(나머지:{ITEM:대역인형 - 1}개)", 칼라_주의)
 	IF TALENT:(ARG:0):행운 && RAND:2
-		CALL COLOR_PRINTL(@"……라고 생각했지만, 운 좋게 회피할 수 있던 것 같다", 칼라_주의)
+		CALL COLOR_PRINTL(@"……그런 줄 알았는데, 운 좋게 회피할 수 있었다", 칼라_주의)
 		RETURN
 	ENDIF	
 ENDIF

@@ -262,58 +262,58 @@ SIF CFLAG:배반자:호감도 <= 300
 ;그 나름대로 사이가 좋으면 함께 오지 않을까 묻는다
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 어느 날, %ANAME(배반자)%에 갑자기 불려 갔다
-PRINTFORMW 주위 사람을 없게 함을 한 %PRONOUN(배반자)%의 방에서, %ANAME(배반자)%에 전해듣는다
+PRINTFORML 어느 날, 갑자기 %조사처리(ANAME(배반자),"가")% 불러 찾아갔다.
+PRINTFORMW 주위 사람을 모두 물린 %PRONOUN(배반자)%의 방에서, %조사처리(ANAME(배반자),"가")% 다가와 속삭였다.
 PRINTFORML
-PRINTFORML 자신은 %ANAME(배반전군주)%로부터 배반 하려고 생각하고 있다. %조사처리(ANAME(MASTER),"는")% 사용할 수 있을 것 같고, 부디 데리고 가고 싶다
-PRINTFORML 갑작스러운 이야기이고, 주군을 배반하는 것이니까 헤매겠지만, 곧 대답을 갖고 싶다
-PRINTFORMW 대답할 때까지 돌려보낼 수는 없다. %조사처리(ANAME(MASTER),"가")% %ANAME(배반전군주)%에 밀고하지 않다고도 할 수 없기 때문이다……
+PRINTFORML 자신은 %조사처리(ANAME(배반전군주),"를")% 배반할 생각이다. %조사처리(ANAME(MASTER),"는")% 유능하니, 부디 데려가고 싶다.
+PRINTFORML 갑작스러운 소리이고, 주군을 배반하는 것이 내키지 않겠지만, 지금 바로 대답을 듣고 싶다.
+PRINTFORMW 대답하기 전까지는 돌려보내 줄 수 없다. %조사처리(ANAME(MASTER),"가")% %ANAME(배반전군주)%에게 밀고하지 않으리라고 장담할 수 없기 때문이다……
 PRINTFORML
-PRINTFORML 대단한 것을 (들)물어 버렸다. 이것은, 대답을 할 때까지 돌아갈 수 없을 것이다
-PRINTFORMW 향후의 어떻게 할지에게 관련되어 오는 것이다, 신중하게 선택하지 않으면……
-CALL ASK_MULTI(@"%ANAME(배반자)%에 붙는다", @"%ANAME(배반전군주)%측에 남는다", "바보 같은 (일)것은 그만두라고 설득한다")
+PRINTFORML 엄청난 것을 들어 버렸다. 이렇게 된 이상, 대답하기 전에는 돌아가지 못을 것이다.
+PRINTFORMW 미래의 운명이 달린 일인 만큼, 신중하게 선택해야 한다……
+CALL ASK_MULTI(@"%ANAME(배반자)%에게 붙는다", @"%ANAME(배반전군주)%측에 남는다", "바보 같은 짓은 그만두라고 설득한다")
 IF RESULT == 0
 	CALL CHANGE_COUNTRY(MASTER, 신세력, 1)
-	PRINTFORML 너라면 그렇게 말해 준다고 생각하고 있었다……%조사처리(ANAME(배반자),"는")% 흉악한 미소를 생긋 띄워 보였다
-	PRINTFORML 하고 주자, %조사처리(ANAME(배반자),"는")% %조사처리(ANAME(MASTER),"와")% 단단한 악수를 주고 받았다……
-	PRINTFORMW 어쩐지 대단한 것에 머리를 들이밀어 버린 것 같다. 괜찮을 것일까……
+	PRINTFORML 너라면 그렇게 말해줄 거라고 생각하고 있었다…… %조사처리(ANAME(배반자),"는")% 사악한 미소를 생긋 띄웠다.
+	PRINTFORML 그런 %조사처리(ANAME(배반자),"를")% 마주보고 웃으며, %조사처리(ANAME(배반자),"과")% %조사처리(ANAME(MASTER),"는")% 단단히 악수했다……
+	PRINTFORMW 어쩐지 엄청난 일에 말려들어 버린 것 같다. 괜찮을까……
 	RETURN 대응_수락
 ELSEIF RESULT == 1
-	PRINTFORMW %ANAME(배반전군주)%를 배반할 수는 없는……그렇게 고하면, %조사처리(ANAME(배반자),"는")% 노골적으로 실망한 표정을 띄웠다
-	PRINTFORML 그렇다면 냉큼 나가라, 후회하지 마, 지금부터 만드는 나라는, 너의 나라 따위 눈 깜짝할 순간에 다 먹는, 그처럼 전해들었다
-	PRINTFORML 그것 뿐%조사처리(ANAME(배반자),"는")% 이쪽에 흥미를 잃었는지, 외면해 버렸다
-	PRINTFORMW 여기서 %ANAME(MASTER)%에 위해를 줄 생각은 없는 것 같지만, 다음을 만날 때는 적끼리가 될 것이다……
+	PRINTFORMW %ANAME(배반전군주)%를 배반할 수는 없다…… 그렇게 대답하자, %조사처리(ANAME(배반자),"는")% 노골적으로 실망한 표정을 띄웠다.
+	PRINTFORML 그렇다면 냉큼 꺼져라, 후회해도 늦었다, 지금부터 세울 나라는, 너희 나라 따위는 눈 깜짝할 사이에 무너뜨릴 거다, 라는 말을 들었다.
+	PRINTFORML 그 후로 %조사처리(ANAME(배반자),"는")% 이쪽에 흥미를 잃었는지, %조사처리(ANAME(MASTER),"를")% 외면했다.
+	PRINTFORMW 여기서 %조사처리(ANAME(MASTER),"를")% 해칠 생각은 없는 것 같지만, 다음에 만났을 땐 적이 되어 있을 것이다……
 	PRINTL
 	RETURN 대응_거부
 ELSEIF RESULT == 2
-	PRINTFORM 바보 같은 (일)것은 그만두어라……
+	PRINTFORM 바보 같은 짓은 그만둬라……
 	;어떠한 당신에 대한 함락소질이 있으면 단념한다
 	IF (IS_LOVER(배반자) || IS_SLAVE(배반자) || IS_SLAVED_BY(배반자))
-		PRINTFORMW %조사처리(ANAME(MASTER),"가")% 필사적으로 설득하면, %조사처리(ANAME(배반자),"는")% 한숨을 쉬었다
-		PRINTFORML %ANAME(MASTER)%에 그런 일을 얘기한다고는 생각하지 않았었다
-		PRINTFORML 하지만, %조사처리(ANAME(MASTER),"가")% 말하는 것을 거절하고 싶지는 않다. 어쩔 수 없기에 이번은 참는다
-		PRINTFORMW 그 대신에, 자신을 다양하게 만족시켜 주면 기쁘다……
+		PRINTFORMW %ANAME(MASTER)%의 필사적인 설득에, %조사처리(ANAME(배반자),"는")% 한숨을 쉬었다.
+		PRINTFORML %조사처리(ANAME(MASTER),"가")% 그런 말을 할 줄은 몰랐는데……
+		PRINTFORML 하지만, %ANAME(MASTER)%의 말을 거절하고 싶지는 않다. 그렇다면 이번엔 참겠다.
+		PRINTFORMW 그 대신, 자신을 여러모로 만족시켜 줬으면 좋겠다……
 		PRINTFORMW 아무래도 %조사처리(ANAME(배반자),"는")% 배반을 포기해 준 것 같다……
 		RETURN -1
 	;없으면 d100가 현재의 호감도의 것 1/10보다 크면 이성을 잃는다
 	ELSEIF RAND:100 > CFLAG:(배반자):호감도 / 10
-		PRINTFORMW %조사처리(ANAME(MASTER),"가")% 필사적으로 설득하면, %조사처리(ANAME(배반자),"는")% 이성을 잃었다
-		PRINTFORML 이니까 너에게 그런 말을 듣지 않으면 안 되는 것인지
-		PRINTFORML 그런 일이라면 %조사처리(ANAME(MASTER),"는")% 필요없다. 자신이 야기하는 선풍에 말려 들어가 사라져 버리면 된다
-		PRINTFORMW 나가라, 자신의 전부터 사라져라……
-		PRINTFORML 그렇게 말해 분노를 거두는 일 없이 %조사처리(ANAME(배반자),"는")% 당신을 방으로부터 내쫓았다
-		PRINTFORMW 다음에 %조사처리(ANAME(배반자),"와")% 만나는 것은 전장인가, 그렇지 않으면……
+		PRINTFORMW %ANAME(MASTER)%의 필사적인 설득에, %조사처리(ANAME(배반자),"는")% 분노했다.
+		PRINTFORML 내가 왜 너에게 그런 소리를 들어야 하지?
+		PRINTFORML 그렇다면 %조사처리(ANAME(MASTER),"는")% 필요없다. 내가 몰고 올 태풍에 말려 들어가 사라져 버려라.
+		PRINTFORMW 꺼져라, 내 눈앞에서 사라져라……
+		PRINTFORML 그렇게 말하며 분노를 참지 못하고 %조사처리(ANAME(배반자),"는")% 당신을 방에서 내쫓았다.
+		PRINTFORMW 다음에 %조사처리(ANAME(배반자),"와")% 만날 장소는 전장인가, 아니면……
 		PRINTL
 		RETURN 대응_분노
 	;그렇지 않으면 보통으로 헤어진다, 더 대사는 코피페인 채로 끝내고 싶지 않았기 때문에 촐랑촐랑 바꾸어 보았다
 	ELSE
-		PRINTFORMW %조사처리(ANAME(MASTER),"가")% 필사적으로 설득하면, %조사처리(ANAME(배반자),"는")% 혐오의 표정을 띄웠다
-		PRINTFORML 여기에 붙을 생각이 없으면, 나가 줘
-		PRINTFORMW %조사처리(ANAME(MASTER),"가")% %ANAME(배반전군주)%에 집착인 것은 알았다. 지금 서로 겨우 밀통하고 있는 편이 좋다……
-		PRINTFORMW 다르다, 그렇게 반론하려고 하는 것보다도 빨리%조사처리(ANAME(배반자),"는")% 말을 계속했다
-		PRINTFORMW 곧바로 자신의 나라가, 색노망 하고 있는 %ANAME(배반전군주)%와도 너희를 멸할 것이다……
-		PRINTFORML 분노의 표정을 숨기지 않는 %ANAME(배반자)%의 모습을 등에, %조사처리(ANAME(MASTER),"는")% 방에서 나갔다
-		PRINTFORMW %조사처리(ANAME(MASTER),"와")% 칼날을 섞을 때, 서로 어떠한 얼굴을 하고 있을까……
+		PRINTFORMW %ANAME(MASTER)%의 필사적인 설득에, %조사처리(ANAME(배반자),"는")% 혐오스럽다는 표정을 지었다.
+		PRINTFORML 이쪽에 붙을 생각이 없으면, 나가 줘.
+		PRINTFORMW %조사처리(ANAME(MASTER),"가")% %ANAME(배반전군주)%에게 집착하는 건 잘 알았다. 지금처럼 계속 서로 은밀한 시간을 즐기고 싶겠지……
+		PRINTFORMW 그런 게 아냐, 라고 반론하려던 %ANAME(MASTER)%의 말을 자르고 %조사처리(ANAME(배반자),"는")% 계속해서 말했다.
+		PRINTFORMW 이제 곧 자신의 나라가, 쾌락에 빠져 타락한 %조사처리(ANAME(배반전군주),"과")% 너희를 멸망시킬 것이다……
+		PRINTFORML 분노한 표정을 숨기지 않는 %ANAME(배반자)%의 모습을 뒤로하고, %조사처리(ANAME(MASTER),"는")% 방에서 나왔다.
+		PRINTFORMW %조사처리(ANAME(MASTER),"와")% %조사처리(ANAME(배반자),"가")% 서로에게 총구를 향하게 되었을 때, 서로는 어떤 얼굴을 하고 있을까……
 		PRINTL
 		RETURN 대응_거부
 	ENDIF

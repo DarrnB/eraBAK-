@@ -23,7 +23,7 @@ ENDIF
 
 ;지정된 도시 또는 중계지점이 존재하지 않는 경우
 IF GET_RELAYNAME(ARG:0) == "무명"
-	PRINT 자세력의 도시, 자세력과 인접하는 도시의 정보를 볼 수가 있습니다
+	PRINT 자세력의 도시, 자세력과 인접한 도시의 정보를 볼 수 있습니다
 	;이하 빈행
 	IF ARG:1 == 0
 		CALL COLUMN_RIGHT_CLEAR_SLG
@@ -220,9 +220,9 @@ ELSE
 				LOCAL:2 = 1
 			ENDIF
 			PRINT  
-			PRINTBUTTON "[병 수설정]" , ARG:0 + 200
+			PRINTBUTTON "[방위군 설정]" , ARG:0 + 200
 			PRINT  
-			PRINTBUTTON "[수장설정]" , ARG:0 + 400
+			PRINTBUTTON "[지휘관 설정]" , ARG:0 + 400
 			PRINT  
 			PRINTBUTTON "[방위해제]" , ARG:0 + 800
 			PRINT  

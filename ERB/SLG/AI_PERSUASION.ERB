@@ -26,9 +26,9 @@ FOR LOCAL, 0, AI_PERSUASION_MAX_TAREGET
 	SIF CFLAG:대상:소속
 		CALL CHANGE_RELATION_O_TO_C(대상, CFLAG:대상:소속, RAND(5, 10) * -1, RAND(5, 10))
 	IF (CFLAG:대상:소속 && REL_LIKE:대상:세력군주 - REL_HATE:대상:세력군주 > REL_LIKE:대상:대상군주 - REL_HATE:대상:대상군주 + 300) || (CFLAG:대상:소속 == 0 && REL_LIKE:대상:세력군주 - REL_HATE:대상:세력군주 > 300)
-		PRINTFORML %조사처리(ANAME(세력군주),"는")% 잡은 %조사처리(ANAME(대상),"를")% 설득하고 있다……
-		CALL COLOR_PRINTL(@"설득의 끝, %조사처리(ANAME(대상),"는")% 이적의 의지를 굳혔다", CFLAG:대상:소속 > 0 && CFLAG:대상:소속 == CFLAG:MASTER:소속 ? 칼라_경고 # 칼라_주의)
-		CALL COLOR_PRINTL(@"%조사처리(ANAME(대상),"가")% %ANAME(세력군주)%에 이적했다", CFLAG:대상:소속 > 0 && CFLAG:대상:소속 == CFLAG:MASTER:소속 ? 칼라_경고 # 칼라_주의)
+		PRINTFORML %조사처리(ANAME(세력군주),"는")% 잡혀있는 %조사처리(ANAME(대상),"를")% 설득했다……
+		CALL COLOR_PRINTL(@"설득한 끝에, %조사처리(ANAME(대상),"는")% 이적하기로 마음먹었다", CFLAG:대상:소속 > 0 && CFLAG:대상:소속 == CFLAG:MASTER:소속 ? 칼라_경고 # 칼라_주의)
+		CALL COLOR_PRINTL(@"%조사처리(ANAME(대상),"가")% %ANAME(세력군주)% 세력으로 이적했다", CFLAG:대상:소속 > 0 && CFLAG:대상:소속 == CFLAG:MASTER:소속 ? 칼라_경고 # 칼라_주의)
 		CALL CHANGE_COUNTRY(대상, 세력, 1)
 	ENDIF
 NEXT
