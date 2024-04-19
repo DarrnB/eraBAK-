@@ -80,7 +80,7 @@ SELECTCASE RAND:2
 	LOCALS:2 = 석식
 ENDSELECT
 
-PRINTFORML  %LOCALS:2%을 준비하려고 식당에 오니, 요리사인 %조사처리(ANAME(대상),"가")% 이미 준비를 시작하고 있었다.
+PRINTFORML  %LOCALS:2%을 준비하려고 식당에 오니, 요리 담당인 %조사처리(ANAME(대상),"가")% 이미 준비를 시작하고 있었다.
 PRINTFORMW  %조사처리(ANAME(MASTER),"는")% 심부름을 하기로 했다.
 PRINTL 
 
@@ -106,12 +106,12 @@ IF ABL:(대상):요리 < 30
 	ELSEIF 주인공서투름플래그 == 1
 		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%보다도 더 서툴렀다.
 	ELSE
-		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% 조금 한 눈을 팔면 손을 베일 것 같아 채소를 씻기게 했다.
+		PRINTFORML  하지만 %조사처리(ANAME(대상),"는")% 조금만 한 눈을 팔면 손을 베일 것 같아 채소를 씻기게 했다.
 	ENDIF
 ELSEIF ABL:(대상):요리 < 50
 	대상서투름플래그 = 1
 	IF 주인공서투름플래그 == 2
-		PRINTFORML  하지만 %ANAME(대상)%의 실력도 능숙하다고는 말할 수 없었다.
+		PRINTFORML  하지만 %ANAME(대상)%도 능숙하다고 할 수 있는 실력은 아니었다.
 	ELSEIF 주인공서투름플래그 == 1
 		PRINTFORML  하지만 %ANAME(대상)%의 요리 실력도 %조사처리(ANAME(MASTER),"와")% 비슷했다.
 	ELSE
@@ -124,7 +124,7 @@ ELSE
 	ELSEIF 주인공서투름플래그 == 1
 		PRINTFORML  %ANAME(MASTER)%에게 순서를 가르치면서 %조사처리(ANAME(대상),"는")% 솜씨 좋게 부엌칼을 다뤘다.
 	ELSE
-		PRINTFORML  솜씨 좋게 사전준비를 진행시키는 %조사처리(ANAME(대상),"와")% 임심동체가 되어 작업을 진행했다.
+		PRINTFORML  솜씨 좋게 사전준비를 진행시키는 %조사처리(ANAME(대상),"와")% 일심동체가 되어 작업을 진행했다.
 	ENDIF
 ENDIF
 
@@ -145,7 +145,7 @@ CALL COOKING(MASTER, 대상)
 IF ABL:(MASTER):요리 + ABL:(대상):요리 < 60
 	PRINTFORML  확실히 음식은 아닌 것 같은 식감이다.
 	PRINTFORML  슬쩍 식당을 보니 수저를 내려놓고 음식을 노려보며 고심하는 학생들이 보였다.
-	PRINTFORML  그 모습을 본 %조사처리(ANAME(대상),"는")% 말없이 자신의 음식을 먹었다…
+	PRINTFORML  그 모습을 본 %조사처리(ANAME(대상),"는")% 자리로 돌아와 말없이 자신의 음식을 먹었다…
 ELSEIF ABL:(MASTER):요리 + ABL:(대상):요리 < 100
 	PRINTFORML  고생한 보람이 있는지 꽤 맛있었다.
 	PRINTFORML  슬쩍 식당을 보니 만족스럽게 식사를 하고 있는 학생들이 보였다.

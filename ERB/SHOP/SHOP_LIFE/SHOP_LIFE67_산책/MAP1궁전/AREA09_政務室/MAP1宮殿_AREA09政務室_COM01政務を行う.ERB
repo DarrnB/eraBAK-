@@ -93,7 +93,7 @@ IF DISPLAY_SEASON() == "봄"
 	ENDIF
 ELSEIF DISPLAY_SEASON() == "여름"
 	IF WEATHERNUM == 기후_강우
-		PRINTFORM  격렬한 비가 내리는 날씨에
+		PRINTFORM  비가 쏟아지듯 내리는 날씨에
 	ELSE
 		PRINTFORM  찌는 듯이 더운
 	ENDIF
@@ -105,14 +105,14 @@ ELSEIF DISPLAY_SEASON() == "가을"
 	ENDIF
 ELSE
 	IF WEATHERNUM == 기후_강설
-		PRINTFORM  눈의 내리는 날씨에
+		PRINTFORM  눈이 내리는 날씨에
 	ELSE
-		PRINTFORM  발밑의 차가워지는 겨울의
+		PRINTFORM  발밑이 차가워지는 겨울의
 	ENDIF
 ENDIF
 
-PRINTFORML  회장실에 들어가자 업무를 보고 있던 %조사처리(ANAME(대상),"가")% 고개를 들었다.
-PRINTFORML  %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%의 업무를 보조하기로 했다.
+PRINTFORML  학생회실에 들어가자 업무를 보고 있던 %조사처리(ANAME(대상),"가")% 고개를 들었다.
+PRINTFORML  %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%의 업무를 돕기로 했다.
 
 ;-------------------------------------------------
 ; 묘사 2
@@ -136,16 +136,16 @@ ELSEIF ABL:(대상):정치 < 50
 	대상서투름플래그 = 1
 ELSE
 	대상서투름플래그 = 0
-	PRINTFORML  %조사처리(ANAME(대상),"는")% 술술 장부를 기록해 실수 없이 정무를 해내고 있다.
+	PRINTFORML  %조사처리(ANAME(대상),"는")% 막힘없이 장부를 기록하며 빈큼없이 업무를 처리하고 있다.
 	PRINTFORMW  %조사처리(ANAME(MASTER),"가")% 심부름을 시키자, %조사처리(ANAME(대상),"는")% 아직 처리되지 않은 파일을 몇 개 보내주었다.
 ENDIF
 
 PRINTL 
 IF ABL:(MASTER):정치 < 30
 	주인공서투름플래그 = 2
-	IF 주인공서투름플래그 == 2
-		PRINTFORML  하지만 %ANAME(MASTER)%에게도 난해한 내용이라 컴퓨터로 계산하지 못하고 주판을 쓰기로 했다…
-	ELSEIF 주인공서투름플래그 == 1
+	IF 대상서투름플래그 == 2
+		PRINTFORML  하지만 %ANAME(MASTER)%에게도 난해한 내용이라 컴퓨터로 계산하지 못하고 주판을 사용해 계산했다…
+	ELSEIF 대상서투름플래그 == 1
 		PRINTFORML  하지만 %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%에 한 술 더 떠 계산도 느린 것 같다…
 	ELSE
 		PRINTFORML  하지만 %ANAME(MASTER)%에게도 난해한 내용이라 어찌할 도리가 없는 것 같다…

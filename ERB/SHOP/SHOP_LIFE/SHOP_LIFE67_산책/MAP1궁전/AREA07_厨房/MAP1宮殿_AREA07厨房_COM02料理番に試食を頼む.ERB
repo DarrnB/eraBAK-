@@ -190,7 +190,7 @@ IF 미약플래그 >= 1
 			PRINTFORMW  솟구치는 충동을 억제해 %조사처리(ANAME(MASTER),"는")% 자기 방으로 돌아갔다…
 			CALL AFTER_SELF_CHECK(MASTER)
 		ELSEIF RESULT == 1
-			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 쓰러트렸다
+			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 쓰러트렸다.
 			IF TALENT:(대상):합의 || TALENT:(대상):복종 ||TALENT:(대상):주인
 				PRINTFORMW  %조사처리(ANAME(대상),"는")% 기쁜 듯한 표정을 짓고 있다…
 				GOTO END_MODE
@@ -209,7 +209,7 @@ IF 미약플래그 >= 1
 			ENDIF
 		ENDIF
 	ELSEIF 미약플래그 == 3
-		PRINTFORML  식사해 뒷정리를 끝냈다. 몸이 쑤시는 것 같다. %조사처리(ANAME(대상),"가")% 열정적인 눈으로 이쪽을 보고 있다
+		PRINTFORML  식사해 뒷정리를 끝냈다. 몸이 쑤시는 것 같다. %조사처리(ANAME(대상),"가")% 열정적인 눈으로 이쪽을 보고 있다.
 		PRINTL 
 		CALL ASK_MULTI("그대로 헤어진다", "쓰러트린다", "유혹한다")
 		PRINTL 
@@ -218,7 +218,7 @@ IF 미약플래그 >= 1
 			CALL AFTER_SELF_CHECK(MASTER)
 			CALL AFTER_SELF_CHECK(대상)
 		ELSEIF RESULT == 1
-			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 쓰러트렸다
+			PRINTFORML  %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 쓰러트렸다.
 			IF TALENT:(대상):합의 || TALENT:(대상):복종 ||TALENT:(대상):주인
 				PRINTFORMW  %조사처리(ANAME(대상),"는")% 기쁜 듯한 표정을 짓고 있다…
 				GOTO END_MODE

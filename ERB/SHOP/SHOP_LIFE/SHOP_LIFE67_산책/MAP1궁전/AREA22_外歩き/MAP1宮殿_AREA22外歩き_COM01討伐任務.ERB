@@ -198,8 +198,8 @@ CALL ASK_MULTI ("참가한다","설명을 본다","상품 일람","돌아온다"
 			PRINTL
 			WAIT
 			PRINTFORML   ◇◇승리 조건◇◇
-			PRINTFORML   상대의 Lv보다 높은 【책략】을 취하면 승리합니다
-			PRINTFORML   【책략】은 총 3종이 있으며, 싸울 때마다 선택합니다
+			PRINTFORML   상대의 Lv보다 높은 【전략】을 취하면 승리합니다
+			PRINTFORML   【전략】은 총 3종이 있으며, 싸울 때마다 선택합니다
 			PRINTL
 			PRINTFORML   정면돌파로 싸운다（【무투】의 능력으로 판정）,
 			PRINTFORML   상대의 움직임을 예측해 싸운다（【지략】의 능력으로 판정）
@@ -402,7 +402,7 @@ PRINTL
 	PRINTFORML   \@ 연승 == 0 ?# {연승} 연승중\@	
 	SETCOLOR COLOR("Default")
 	;◆커맨드
-	PRINTFORML   어떤 작전을 쓸까?
+	PRINTFORML   어떤 전략을 쓸까?
 			PRINTL 
 			CALL ASK_MULTI("정면돌파로 싸운다","상대의 움직임을 예측해 싸운다","공격의 카운터를 노리고 싸운다","후퇴한다")
 			IF 전투상태 =="정상"
