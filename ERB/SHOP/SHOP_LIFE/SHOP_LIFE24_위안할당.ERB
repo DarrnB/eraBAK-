@@ -1,5 +1,5 @@
 ﻿;-------------------------------------------------
-;「위안할당」의 명칭
+;「위안할당」의 명칭 -----------성활교육이나 성활실습, 보건교육, 성 교육 으로 바꾸는게 어떰?------------
 ;-------------------------------------------------
 @SHOP_LIFE_NAME24
 RESULTS:0 '= "위안할당"
@@ -117,7 +117,7 @@ FOR LOCAL:0, 0, CHARANUM
 		CFLAG:(LOCAL:0):침실호출선택중 = 0
 	ENDIF
 NEXT
-
+;------------------성처리 담당/체험 담당 으로 하면 알아보기 편할듯------------근데 이거 쓴 놈은 못알아봐서 못고침-----------
 CALL COLUMN_RIGHT_TITLE("대상자 선택", TOSTR(선택인원수), TOSTR(최대인원수), "인원수", "피임시만 3, 000")
 CALL COLUMN_RIGHT_PRINTL
 CALL COLUMN_RIGHT_LINE
@@ -133,7 +133,7 @@ ENDIF
 
 PRINTPLAIN   
 IF FLAG:위안피임약
-	PRINTBUTTON "[피임 있어]", 2
+	PRINTBUTTON "[피임 한다]", 2
 ELSE
 	IF MONEY > 선택인원수 * 3000
 		PRINTBUTTON "[피임 없음]", 2

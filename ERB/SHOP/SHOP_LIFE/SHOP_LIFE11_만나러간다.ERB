@@ -265,20 +265,20 @@ ELSE
 		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 출산을 앞에 두고 행동이 제한되고 있습니다
 		PRINTFORML %조사처리(ANAME(ARG:0),"를")% 만나러 갑니까?
 	ELSEIF CFLAG:(ARG:0):행동불능상태 == 행동불능_육아
-		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 육아중에 대해 행동이 제한되고 있습니다
+		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 육아중이므로 행동이 제한되고 있습니다
 		PRINTFORML %조사처리(ANAME(ARG:0),"를")% 만나러 갑니까?
 	ELSEIF CFLAG:(ARG:0):행동불능상태 == 3
-		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 중증에 대해 행동이 제한되고 있습니다
+		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 중상을 입어 행동이 제한되고 있습니다
 		PRINTFORML %ANAME(ARG:0)%의 병문안 하러 갑니까?
 	ELSEIF CFLAG:(ARG:0):행동불능상태 == 행동불능_아이
-		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 아직 어리기 때문에 육아 모드로 개시합니다
+		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 아직 어리기 때문에 육아 모드로 진행됩니다
 		PRINTFORML %조사처리(ANAME(ARG:0),"를")% 만나러 갑니까?
 	ELSE
 		PRINTFORML %조사처리(ANAME(ARG:0),"를")% 만나러 갑니까?
 	ENDIF
 	IF CFLAG:(ARG:0):행동불능상태 == 행동불능_아이
 		LOCALS = %EDUCATION(CFLAG:ARG:교육방침)%
-		PRINTL [0] 보통으로 만나는[1] 집중 교육을 실행 [2] 역시 그만둔다
+		PRINTL [0] 평범하게 만난다[1] 집중 교육을 실행 [2] 역시 그만둔다
 		PRINTFORM   현재의 교육 방침 -  
 		PRINTBUTTON "["+LOCALS+"]",10
 		INPUT
