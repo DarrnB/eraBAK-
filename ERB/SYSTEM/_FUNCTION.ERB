@@ -1895,11 +1895,11 @@ RETURNF 100
 #DIMS 시츄문자열
 
 SIF TFLAG:54 == 8
-	시츄문자열 = 공중의면전에서 %시츄문자열%
+	시츄문자열 = 공개 %시츄문자열%
 SIF TFLAG:70 == 1
 	시츄문자열 = 촬영중에 %시츄문자열%
 SIF TCVAR:대상:최면중 > 1
-	시츄문자열 = 최면을걸쳐지면서 %시츄문자열%
+	시츄문자열 = 최면에 걸린 상태에서 %시츄문자열%
 
 SEXUAL_LAST_EXPERIENCE:대상:첫체험_키스 = %상대%
 SEXUAL_LAST_EXPERIENCE_SITUATION:대상:첫체험_키스 = %시츄문자열%
@@ -1936,11 +1936,11 @@ SIF !HAS_PENIS(대상)
 	RETURN 0
 
 SIF TFLAG:54 == 8
-	시츄문자열 = 공중의면전에서 %시츄문자열%
+	시츄문자열 = 공개 %시츄문자열%
 SIF TFLAG:70 == 1
 	시츄문자열 = 촬영중에 %시츄문자열%
 SIF TCVAR:대상:최면중 > 1
-	시츄문자열 = 최면을걸쳐지면서 %시츄문자열%
+	시츄문자열 = 최면에 걸린 상태에서 %시츄문자열%
 
 SEXUAL_LAST_EXPERIENCE:대상:첫체험_동정 = %상대%
 SEXUAL_LAST_EXPERIENCE_SITUATION:대상:첫체험_동정 = %시츄문자열%
@@ -1977,11 +1977,11 @@ SIF !HAS_VAGINA(대상)
 	RETURN 0
 
 SIF TFLAG:54 == 8
-	시츄문자열 = 공중의면전에서 %시츄문자열%
+	시츄문자열 = 공개 %시츄문자열%
 SIF TFLAG:70 == 1
 	시츄문자열 = 촬영중에 %시츄문자열%
 SIF TCVAR:대상:최면중 > 1
-	시츄문자열 = 최면을걸쳐지면서 %시츄문자열%
+	시츄문자열 = 최면에 걸린 상태에서 %시츄문자열%
 
 
 SEXUAL_LAST_EXPERIENCE:대상:첫체험_처녀 = %상대%
@@ -2016,11 +2016,11 @@ TALENT:대상:처녀 = 0
 #DIMS 시츄문자열
 
 SIF TFLAG:54 == 8
-	시츄문자열 = 공중의면전에서 %시츄문자열%
+	시츄문자열 = 공개 %시츄문자열%
 SIF TFLAG:70 == 1
 	시츄문자열 = 촬영중에 %시츄문자열%
 SIF TCVAR:대상:최면중 > 1
-	시츄문자열 = 최면을걸쳐지면서 %시츄문자열%
+	시츄문자열 = 최면에 걸린 상태에서 %시츄문자열%
 
 
 SEXUAL_LAST_EXPERIENCE:대상:첫체험_애널처녀 = %상대%
@@ -2043,6 +2043,167 @@ SEXUAL_EXPERIENCE_SITUATION:대상:첫체험_애널처녀 = %시츄문자열%
 
 
 TALENT:대상:애널처녀 = 0
+
+;-------------------------------------------------------------
+;강제로 당하는 경우
+;-------------------------------------------------------------
+
+@KISS_FORCE(대상, 상대, 시츄문자열 = "", ARG:2 = 1)
+#DIM 대상
+#DIMS 상대
+#DIMS 시츄문자열
+
+SIF TFLAG:54 == 8
+	시츄문자열 = 공개 %시츄문자열%
+SIF TFLAG:70 == 1
+	시츄문자열 = 촬영당하며 %시츄문자열%
+SIF TCVAR:대상:최면중 > 1
+	시츄문자열 = 최면에 걸린 상태에서 %시츄문자열%
+
+SEXUAL_LAST_EXPERIENCE:대상:첫체험_키스 = %상대%
+SEXUAL_LAST_EXPERIENCE_SITUATION:대상:첫체험_키스 = %시츄문자열%
+
+SIF !TALENT:대상:키스미경험
+	RETURN 0
+
+IF ARG:2
+	SETCOLOR 칼라_주의
+	PRINTFORM %조사처리(ANAME(대상),"는")% 
+	SIF 시츄문자열 != ""
+		PRINTFORM %시츄문자열%당해 
+	PRINTFORMW <키스 미경험>을 잃었다…
+	RESETCOLOR
+ENDIF
+
+SEXUAL_EXPERIENCE:대상:첫체험_키스 = %상대%
+SEXUAL_EXPERIENCE_SITUATION:대상:첫체험_키스 = %시츄문자열%
+
+TALENT:대상:키스미경험 = 0
+
+
+;-------------------------------------------------
+;동정상실의 강간 처리
+;대상이 상대（문자열）로 동정상실
+;ARG:2는 메세지 표시 플래그
+;-------------------------------------------------
+@DOUTEI_FORCE(대상, 상대, 시츄문자열 = "", ARG:2 = 1)
+#DIM 대상
+#DIMS 상대
+#DIMS 시츄문자열
+
+SIF !HAS_PENIS(대상)
+	RETURN 0
+
+SIF TFLAG:54 == 8
+	시츄문자열 = 공개 %시츄문자열%
+SIF TFLAG:70 == 1
+	시츄문자열 = 촬영당하며 %시츄문자열%
+SIF TCVAR:대상:최면중 > 1
+	시츄문자열 = 최면에 걸린 상태에서 %시츄문자열%
+
+SEXUAL_LAST_EXPERIENCE:대상:첫체험_동정 = %상대%
+SEXUAL_LAST_EXPERIENCE_SITUATION:대상:첫체험_동정 = %시츄문자열%
+
+SIF !TALENT:대상:동정
+	RETURN 0
+
+IF ARG:2
+	SETCOLOR 칼라_주의
+	PRINTFORM %조사처리(ANAME(대상),"는")% 
+	SIF 시츄문자열 != ""
+		PRINTFORM %시츄문자열%당해
+	PRINTFORMW <동정>을 잃었다…
+	RESETCOLOR
+ENDIF
+
+SEXUAL_EXPERIENCE:대상:첫체험_동정 = %상대%
+SEXUAL_EXPERIENCE_SITUATION:대상:첫체험_동정 = %시츄문자열%
+
+TALENT:대상:동정 = 0
+
+;-------------------------------------------------
+;처녀상실의 강간 처리
+;대상이 상대로 처녀상실
+;시츄를 지정하면 문자열이 부여된다
+;ARG:2는 메세지를 표시하는 플래그 1으로 표시
+;-------------------------------------------------
+@VIRGIN_FORCE(대상, 상대, 시츄문자열 = "", ARG:2 = 1)
+#DIM 대상
+#DIMS 상대
+#DIMS 시츄문자열
+
+SIF !HAS_VAGINA(대상)
+	RETURN 0
+
+SIF TFLAG:54 == 8
+	시츄문자열 = 공개 %시츄문자열%
+SIF TFLAG:70 == 1
+	시츄문자열 = 촬영당하며 %시츄문자열%
+SIF TCVAR:대상:최면중 > 1
+	시츄문자열 = 최면에 걸린 상태에서 %시츄문자열%
+
+
+SEXUAL_LAST_EXPERIENCE:대상:첫체험_처녀 = %상대%
+SEXUAL_LAST_EXPERIENCE_SITUATION:대상:첫체험_처녀 = %시츄문자열%
+
+SIF !TALENT:대상:처녀
+	RETURN 0
+
+IF ARG:2
+	SETCOLOR 칼라_주의
+	PRINTFORM %조사처리(ANAME(대상),"는")% 
+	SIF 시츄문자열 != ""
+		PRINTFORM %시츄문자열%당해
+	PRINTFORMW <처녀>를 잃었다…
+	RESETCOLOR
+ENDIF
+
+SEXUAL_EXPERIENCE:대상:첫체험_처녀 = %상대%
+SEXUAL_EXPERIENCE_SITUATION:대상:첫체험_처녀 = %시츄문자열%
+
+TALENT:대상:처녀 = 0
+
+;-------------------------------------------------
+;애널처녀상실의 강간 처리
+;대상이 상대로 처녀상실
+;시츄를 지정하면 문자열이 부여된다
+;ARG:2는 메세지를 표시하는 플래그 1으로 표시
+;-------------------------------------------------
+@VIRGIN_FORCE_A(대상, 상대, 시츄문자열 = "", ARG:2 = 1)
+#DIM 대상
+#DIMS 상대
+#DIMS 시츄문자열
+
+SIF TFLAG:54 == 8
+	시츄문자열 = 공개 %시츄문자열%
+SIF TFLAG:70 == 1
+	시츄문자열 = 촬영당하며 %시츄문자열%
+SIF TCVAR:대상:최면중 > 1
+	시츄문자열 = 최면에 걸린 상태에서 %시츄문자열%
+
+
+SEXUAL_LAST_EXPERIENCE:대상:첫체험_애널처녀 = %상대%
+SEXUAL_LAST_EXPERIENCE_SITUATION:대상:첫체험_애널처녀 = %시츄문자열%
+
+SIF !TALENT:대상:애널처녀
+	RETURN 0
+
+IF ARG:2
+	SETCOLOR 칼라_주의
+	PRINTFORM %조사처리(ANAME(대상),"는")% 
+	SIF 시츄문자열 != ""
+		PRINTFORM %시츄문자열%당해
+	PRINTFORMW <애널처녀>를 잃었다…
+	RESETCOLOR
+ENDIF
+
+SEXUAL_EXPERIENCE:대상:첫체험_애널처녀 = %상대%
+SEXUAL_EXPERIENCE_SITUATION:대상:첫체험_애널처녀 = %시츄문자열%
+
+
+TALENT:대상:애널처녀 = 0
+
+
 
 ;-------------------------------------------------
 ;첫체험을 재생시키는 처리
@@ -2314,7 +2475,7 @@ RETURN RESULT
 ;-------------------------------------------------
 @COLORPRINT(ARGS:0, ARG:0, ARGS:1 = "")
 SIF ARG:0 < 0 || ARG:0 > 0xFFFFFF
-	THROW "@COLORPRINT의 색지정에 0~FFFFFF의 범위외의 수치를 던질 수 있었습니다"
+	THROW "@COLORPRINT의 색지정에 0~FFFFFF범위 밖의 수치를 입력받았습니다"
 GETCOLOR
 LOCAL:0 = RESULT
 
@@ -2358,7 +2519,7 @@ ORIGRES = RESULT
 ORIGRESS = %RESULTS%
 FOR LOCAL, 0, VARSIZE("COL")
 	SIF COL:LOCAL < 0 || COL:LOCAL > 0xFFFFFF
-		THROW "@ICPRINT의 색지정에 0~FFFFFF의 범위외의 수치를 던질 수 있었습니다"
+		THROW "@ICPRINT의 색지정에 0~FFFFFF범위 밖의 수치를 입력받았습니다"
 NEXT
 
 ;퇴피
