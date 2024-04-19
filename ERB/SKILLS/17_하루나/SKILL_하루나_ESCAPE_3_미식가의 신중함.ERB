@@ -1,18 +1,18 @@
 ﻿;-----------------------------------
 ;기본치 계산에 앞서 처리하는 것
 ;-----------------------------------
-@SKILL_39_SP_2_EXIST
+@SKILL_17_ESCPAE_3_EXIST
 RETURN 1
 
-@SKILL_39_SP_2_NAME
-RESULTS = 화려한 연출
+@SKILL_17_ESCPAE_3_NAME
+RESULTS = 미식가의 신중함
 
 ;레벨은 1-5까지
-@SKILL_39_SP_2_LEVEL
-RETURN 2
+@SKILL_17_ESCPAE_3_LEVEL
+RETURN 3
 
 ;대상 선택
-@SKILL_39_SP_2_SETTARGET(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
+@SKILL_17_ESCPAE_3_SETTARGET(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
 #DIM 발동자
 #DIM 발동번호
 #DIM 스킬
@@ -28,7 +28,7 @@ RETURN 2
 RETURN 1
 
 ;발동 판정
-@SKILL_39_SP_2_CAN_INVOKE(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
+@SKILL_17_ESCPAE_3_CAN_INVOKE(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
 #DIM 발동자
 #DIM 발동번호
 #DIM 스킬
@@ -40,19 +40,18 @@ RETURN 1
 #DIM 대상세력
 #DIM 대상부대
 대상측 = !발동측
- 
 RETURN 1
 
 ;발동 텍스트를 오바라이드 하고 싶을 때에.
 ;「아무개의 스킬 발동!   00했다!」의 「00했다!」의 부분을 실장하고 싶은 경우는,
 ;이것이 아니고 INVOKE로 쓰면 좋습니다.
-;@SKILL_39_SP_2_INVOKE_TEXT(발동자, 스킬, 장르)
+;@SKILL_17_ESCPAE_3_INVOKE_TEXT(발동자, 스킬, 장르)
 ;#DIM 발동자
 ;#DIM 스킬
 ;#DIMS 장르
 
 ;효과를 여기에 기술
-@SKILL_39_SP_2_INVOKE(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
+@SKILL_17_ESCPAE_3_INVOKE(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
 #DIM 발동자
 #DIM 발동번호
 #DIM 스킬
@@ -64,22 +63,17 @@ RETURN 1
 #DIM 대상세력
 #DIM 대상부대
 대상측 = !발동측
-PRINTFORML 아군의 포박율이 감소했다!
-;적 1인 능력 봉인
-FOR LOCAL, 0, BATTLE_COMMANDER_NUM:발동측
-	SIF BATTLE_SUMMONED_CHARA:발동측:LOCAL
-		CONTINUE
-    CAPTURE_RATE:LOCAL = MIN_DECREASE(CAPTURE_RATE:LOCAL, 150, 0)
-NEXT
+PRINTFORML 자신이 잡힐 확률이 감소되었다!
+CAPTURE_RATE:발동번호 = MIN_DECREASE(CAPTURE_RATE:발동번호, 1000, 0)
 
-@SKILL_39_SP_2_EXPLANATION
-RESULTS = 아군의 포박율을 감소시킨다.
+@SKILL_17_ESCPAE_3_EXPLANATION
+RESULTS = 자신이 잡힐 확률이 감소된다.
 
 
-@SKILL_39_SP_2_CANT_TELL
+@SKILL_17_ESCPAE_3_CANT_TELL
 
 
-@SKILL_39_SP_2_RATE(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
+@SKILL_17_ESCPAE_3_RATE(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
 #DIM 발동자
 #DIM 발동번호
 #DIM 스킬
@@ -90,4 +84,4 @@ RESULTS = 아군의 포박율을 감소시킨다.
 #DIM 대상측
 #DIM 대상세력
 #DIM 대상부대
-RETURN 200
+RETURN 600

@@ -8,7 +8,7 @@ RETURN 1
 ; 「정무를 실시한다」의 명칭
 ;-------------------------------------------------
 @SHOP_LIFE67_MAP1_AREA9_COM1_NAME
-RESULTS:0 '= "정무를 실시한다"
+RESULTS:0 '= "업무를 본다"
 RETURN 1
 
 ;-------------------------------------------------
@@ -87,32 +87,32 @@ RETURN 1
 
 IF DISPLAY_SEASON() == "봄"
 	IF WEATHERNUM == 기후_강우
-		PRINTFORM  빗소리가 울려 온다
+		PRINTFORM  빗소리가 들려오는
 	ELSE
 		PRINTFORM  조용한
 	ENDIF
 ELSEIF DISPLAY_SEASON() == "여름"
 	IF WEATHERNUM == 기후_강우
-		PRINTFORM  격렬한 비의 내리는 날에
+		PRINTFORM  비가 쏟아지듯 내리는 날씨에
 	ELSE
-		PRINTFORM  찌는 듯이 덥다
+		PRINTFORM  찌는 듯이 더운
 	ENDIF
 ELSEIF DISPLAY_SEASON() == "가을"
 	IF WEATHERNUM == 기후_강우
-		PRINTFORM  비의 내리는 추운 날에
+		PRINTFORM  비가 내리는 추운 날씨에
 	ELSE
 		PRINTFORM  상쾌한 가을날에
 	ENDIF
 ELSE
 	IF WEATHERNUM == 기후_강설
-		PRINTFORM  눈의 내리는 날에
+		PRINTFORM  눈이 내리는 날씨에
 	ELSE
-		PRINTFORM  발밑의 차가워지는 겨울의
+		PRINTFORM  발밑이 차가워지는 겨울의
 	ENDIF
 ENDIF
 
-PRINTFORML  집무실에 들어가면 정무를 해내고 있던 %조사처리(ANAME(대상),"가")% 얼굴을 올렸다
-PRINTFORML  %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%의 심부름을 하기로 했다
+PRINTFORML  학생회실에 들어가자 업무를 보고 있던 %조사처리(ANAME(대상),"가")% 고개를 들었다.
+PRINTFORML  %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%의 업무를 돕기로 했다.
 
 ;-------------------------------------------------
 ; 묘사 2
@@ -127,46 +127,46 @@ PRINTFORML  %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%의 심부름을 
 PRINTL 
 대상서투름플래그 = 0
 IF ABL:(대상):정치 < 30
-	PRINTFORML  내용이 어려운 것 같고, %조사처리(ANAME(대상),"는")% 주판으로 놀고 있다
-	PRINTFORMW  %조사처리(ANAME(MASTER),"가")% 심부름을 신청하면, %조사처리(ANAME(대상),"는")% 일의 내용으로부터 가르쳐 주셨으면 한다고 말해 왔다
+	PRINTFORML  내용이 어려운 듯, %조사처리(ANAME(대상),"는")% 컴퓨터로 몰래 게임을 하고 있다.
+	PRINTFORMW  %조사처리(ANAME(MASTER),"가")% 심부름을 시키자, %조사처리(ANAME(대상),"는")% 어떻게 일을 해야 할지 가르쳐 줬으면 좋겠다고 말해 왔다.
 	대상서투름플래그 = 2
 ELSEIF ABL:(대상):정치 < 50
-	PRINTFORML  %조사처리(ANAME(대상),"는")% 휘청거린 문자를 장부에 쓰고 있다
-	PRINTFORMW  %조사처리(ANAME(MASTER),"가")% 심부름을 신청하면, %조사처리(ANAME(대상),"는")% 살아났다고 할듯한 표정을 띄웠다
+	PRINTFORML  %조사처리(ANAME(대상),"는")% 양손을 독수리처럼 모아쥐고, 키보드를 콕콕 찌르며 장부를 쓰고 있다.
+	PRINTFORMW  %조사처리(ANAME(MASTER),"가")% 심부름을 시키자, %조사처리(ANAME(대상),"는")% 살았다는 표정을 띄웠다.
 	대상서투름플래그 = 1
 ELSE
 	대상서투름플래그 = 0
-	PRINTFORML  %조사처리(ANAME(대상),"는")% 술술 장부를 기록해 실수 없이 정무를 해내고 있다
-	PRINTFORMW  %조사처리(ANAME(MASTER),"가")% 심부름을 신청하면, %조사처리(ANAME(대상),"는")% 미처리를 몇인가 건네주었다
+	PRINTFORML  %조사처리(ANAME(대상),"는")% 막힘없이 장부를 기록하며 빈큼없이 업무를 처리하고 있다.
+	PRINTFORMW  %조사처리(ANAME(MASTER),"가")% 심부름을 시키자, %조사처리(ANAME(대상),"는")% 아직 처리되지 않은 파일을 몇 개 보내주었다.
 ENDIF
 
 PRINTL 
 IF ABL:(MASTER):정치 < 30
 	주인공서투름플래그 = 2
-	IF 주인공서투름플래그 == 2
-		PRINTFORML  하지만 %ANAME(MASTER)%에도 난해해 손에 감당할 수 있지 못하고 주판을 몰기로 했다…
-	ELSEIF 주인공서투름플래그 == 1
-		PRINTFORML  하지만 %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%에 한 술 더 떠 계산이 늦은 것 같다…
+	IF 대상서투름플래그 == 2
+		PRINTFORML  하지만 %ANAME(MASTER)%에게도 난해한 내용이라 컴퓨터로 계산하지 못하고 주판을 사용해 계산했다…
+	ELSEIF 대상서투름플래그 == 1
+		PRINTFORML  하지만 %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%에 한 술 더 떠 계산도 느린 것 같다…
 	ELSE
-		PRINTFORML  하지만 %ANAME(MASTER)%에는 난해하고 어찌할 도리가 없는 것 같다…
+		PRINTFORML  하지만 %ANAME(MASTER)%에게도 난해한 내용이라 어찌할 도리가 없는 것 같다…
 	ENDIF
 ELSEIF ABL:(MASTER):정치 < 50
 	주인공서투름플래그 = 1
 	IF 대상서투름플래그 == 2
-		PRINTFORML  하지만 %ANAME(MASTER)%도 계산이 빠른 것은 같다…
+		PRINTFORML  하지만 %ANAME(MASTER)%도 계산 속도는 비슷했다…
 	ELSEIF 대상서투름플래그 == 1
-		PRINTFORML  하지만 %ANAME(MASTER)%의 문자도 %조사처리(ANAME(대상),"와")% 도토리의 키재기다…
+		PRINTFORML  하지만 %ANAME(MASTER)%의 타자도 %조사처리(ANAME(대상),"와")% 다를 바 없었다…
 	ELSE
-		PRINTFORML  계산이 맞지 않는 개소가 있었으므로 %ANAME(대상)%에 확인을 취했다…
+		PRINTFORML  계산이 맞지 않는 부분이 있었으므로 %조사처리(ANAME(대상),"가")% 다시 수정했다…
 	ENDIF
 ELSE
 	주인공서투름플래그 = 0
 	IF 대상서투름플래그 == 2
-		PRINTFORML  %ANAME(대상)%의 옆에서 장부를 써 진행하면서, 정확한 조언을 할 수가 있었다…
+		PRINTFORML  %ANAME(대상)%와 함께 장부를 써내려가면서, 정확한 조언을 해주었다…
 	ELSEIF 대상서투름플래그 == 1
-		PRINTFORML  %ANAME(대상)%에 정확한 조언을 품질 장부를 써 진행시켜 나간다…
+		PRINTFORML  %ANAME(대상)%에게 정확한 조언을 해주며 깔끔하게 장부를 써내려 갔다…
 	ELSE
-		PRINTFORML  모여 있던 장부가 보는 동안에 정리되어 매우 정무가 진전되었다…
+		PRINTFORML  모여 있던 장부들이 순식간에 정리되어 업무가 매우 진전되었다…
 	ENDIF
 ENDIF
 ;---------------------------------------------------------------------- 

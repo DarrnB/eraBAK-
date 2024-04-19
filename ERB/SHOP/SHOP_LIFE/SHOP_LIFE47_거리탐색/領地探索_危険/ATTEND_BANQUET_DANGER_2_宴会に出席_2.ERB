@@ -18,29 +18,29 @@ RETURN 1
 ;-------------------
 @TERRITORY_EVENT_ATTEND_BANQUET_DANGER_2(대상)
 #DIM 대상
-PRINTFORML 탐색의 도중, 즐거운 듯 하는 목소리가 들려 왔다
-PRINTFORML 소리의 하는 (분)편에 향하면, 그곳에서는 연회가 개최되고 있었다
-PRINTFORML 참가자에게 손짓함 되었지만, 뭔가 묘한 분위기다……
+PRINTFORML 탐색 도중, 즐거운 듯한 목소리가 들려왔다.
+PRINTFORML 소리가 나는 쪽으로 향하자, 그곳에서는 잔치가 벌어지고 있었다.
+PRINTFORML 잔치의 참가자에게 손짓을 받았지만, 뭔가 묘한 분위기다……
 PRINTL
 CALL PRINT_ABILITY(대상, GETNUM(ABL, "주량"))
-CALL ASK_YN("참가한다" ,"그 자리를 뒤로 한다")
+CALL ASK_YN("참여한다" ,"자리를 떠난다")
 
 IF RESULT == 1
-	PRINTFORML 그런 기분이 아니다
-	PRINTFORML %조사처리(ANAME(대상),"는")% 그 자리를 뒤로 했다
+	PRINTFORML 지금 그럴 기분 아니야
+	PRINTFORML %조사처리(ANAME(대상),"는")% 그 자리를 뒤로 했다.
 	RETURN 1
 ENDIF
 
-PRINTFORML 모처럼인 것으로 참가하기로 했다
-PRINTFORMW 그들은 %조사처리(ANAME(대상),"를")% 환영해, 즉시 술을 권해 왔다
+PRINTFORML 모처럼이므로 참여하기로 했다.
+PRINTFORMW 그들은 %조사처리(ANAME(대상),"를")% 환영하며, 즉시 술을 권해 왔다.
 PRINTFORML ·
 PRINTFORML ·
 PRINTFORMW ·
-PRINTFORML 아무래도 술에 뭔가 혼합하고 것이 되어 있던 것 같다
-PRINTFORML %조사처리(ANAME(대상),"는")% 취해 무너져 버렸다
+PRINTFORML 아무래도 술에 뭔가 섞여 있었던 것 같다.
+PRINTFORML %조사처리(ANAME(대상),"는")% 술에 취해 쓰러졌다.
 
 IF IS_MALE(대상)
-	PRINTFORML 눈치챘을 때에는 연회는 끝나 있어 지갑이 없어져 있었다
+	PRINTFORML 정신을 차렸을 때는 이미 잔치가 끝나고 지갑이 사라져 있었다.
 	PRINTFORML 아무래도 도둑맞은 것 같다……
 	LOCAL = MIN(MONEY, 5000)
 	CALL ICPRINT("금<{LOCAL}>를 잃었다", "L", 칼라_주의)
@@ -48,16 +48,16 @@ IF IS_MALE(대상)
 	RETURN 1
 ENDIF
 
-PRINTFORMW 연회의 참가자는 본성을 나타내, 몽롱해지고 있는 %조사처리(ANAME(대상),"를")% 그늘에 데리고 들어갔다
+PRINTFORMW 연회 참가자는 본색을 드러내며, 술에 취해 몽롱한 %조사처리(ANAME(대상),"를")% 그늘 아래로 데려갔다.
 PRINTFORML 
-PRINTFORML 만취하고 있는 %조사처리(ANAME(대상),"는")% 남자들에게 (듣)묻는 대로 봉사 당하고 있다
-PRINTFORML 드러눕는 남자에 걸쳐 온순하게 페니스를 물어 허리를 흔드는 %조사처리(ANAME(대상),"는")%, 녹은 표정으로 뜨거운 한숨을 토하고 있다
-PRINTFORML %ANAME(대상)%의 머릿속은 하복부로부터 주어지는 열과 쾌락으로 다 메워져, 이미 그들의 하라는 대로 되어 있다
-PRINTFORMW 이윽고 만족한 남자에 의해 포상이라고 칭해 대량의 정액을 발해지면서, %조사처리(ANAME(대상),"는")% 단정치 못한 소리를 높여 절정 했다
+PRINTFORML 만취해 있는 %조사처리(ANAME(대상),"는")% 남자들이 시키는 대로 봉사하고 있다.
+PRINTFORML 드러누운 남자에게 올라타 순종적으로 페니스를 물고 허리를 흔드는 %조사처리(ANAME(대상),"는")%, 녹아내린 표정으로 뜨거운 입김을 내뿜고 있다.
+PRINTFORML %ANAME(대상)%의 머릿속은 하복부에서부터 올라오는 열기와 쾌락으로 가득 차 있어, 이젠 그들이 시키는 대로 따르고 있다.
+PRINTFORMW 이윽고 만족한 남자에게 보상이라는 말과 함께 대량의 정액이 뿌려지자, %조사처리(ANAME(대상),"는")% 짐승같은 소리를 내지르며 절정에 달했다.
 CALL FUCK(대상, "욕망, 성교, 봉사, 봉사, Ｖ, Ｂ, Ｃ, Ｖ성교, 윤간", "키스상실, 처녀상실, 질내사정", GET_SPERM_ID("불량배"), @"불량배의 \@RAND:2 ? 페니스 # 입술\@", "불량배", "", "제정신을 잃은 끝의 윤간")
 PRINTFORML 
-PRINTFORML 깨달았을 때에는 연회는 끝나 있었다
-PRINTFORMW %조사처리(ANAME(대상),"는")% 머리를 움켜 쥐어, 본인도 눈치채지 않는 동안에 허벅지에 새어나온 정액을 늘어뜨리면서에 돌아왔다
+PRINTFORML 정신을 차렸을 때는 이미 잔치가 끝나 있었다.
+PRINTFORMW %조사처리(ANAME(대상),"는")% 머리를 부여잡고, 본인도 모르는 사이 허벅지에서 새어나오는 정액을 흘리며 돌아갔다.
 CALL ADD_COOLTIME(대상, 1)
 
 RETURN 1
