@@ -1,18 +1,18 @@
 ﻿;-----------------------------------
 ;기본치 계산에 앞서 처리하는 것
 ;-----------------------------------
-@SKILL_13_SP_3_EXIST
+@SKILL_65_ESCAPE_3_EXIST
 RETURN 1
 
-@SKILL_13_SP_3_NAME
-RESULTS = 철두철미
+@SKILL_65_ESCAPE_3_NAME
+RESULTS = 불굴의 용기
 
 ;레벨은 1-5까지
-@SKILL_13_SP_3_LEVEL
-RETURN 3
+@SKILL_65_ESCAPE_3_LEVEL
+RETURN 2
 
 ;대상 선택
-@SKILL_13_SP_3_SETTARGET(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
+@SKILL_65_ESCAPE_3_SETTARGET(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
 #DIM 발동자
 #DIM 발동번호
 #DIM 스킬
@@ -25,14 +25,10 @@ RETURN 3
 #DIM 대상부대
 대상측 = !발동측
 ;부대 대상
-SIF BATTLE_COMMANDER_NUM:대상측 == 0
-	RETURN 0
-COMBAT_SKILL_TARGET = RAND:(BATTLE_COMMANDER_NUM:대상측)
-RETURN !BATTLE_SUMMONED_CHARA:대상측:COMBAT_SKILL_TARGET
-
+RETURN 1
 
 ;발동 판정
-@SKILL_13_SP_3_CAN_INVOKE(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
+@SKILL_65_ESCAPE_3_CAN_INVOKE(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
 #DIM 발동자
 #DIM 발동번호
 #DIM 스킬
@@ -51,13 +47,13 @@ RETURN 1
 ;발동 텍스트를 오바라이드 하고 싶을 때에.
 ;「아무개의 스킬 발동!   00했다!」의 「00했다!」의 부분을 실장하고 싶은 경우는,
 ;이것이 아니고 INVOKE로 쓰면 좋습니다.
-;@SKILL_13_SP_3_INVOKE_TEXT(발동자, 스킬, 장르)
+;@SKILL_65_ESCAPE_3_INVOKE_TEXT(발동자, 스킬, 장르)
 ;#DIM 발동자
 ;#DIM 스킬
 ;#DIMS 장르
 
 ;효과를 여기에 기술
-@SKILL_13_SP_3_INVOKE(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
+@SKILL_65_ESCAPE_3_INVOKE(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
 #DIM 발동자
 #DIM 발동번호
 #DIM 스킬
@@ -69,16 +65,17 @@ RETURN 1
 #DIM 대상세력
 #DIM 대상부대
 대상측 = !발동측
-CAPTURE_RATE:COMBAT_SKILL_TARGET += 150
-
-@SKILL_13_SP_3_EXPLANATION
-RESULTS = 적 포박을을 증가시킨다.
+PRINTFORML 자신의 포박률이 감소했다!
+CAPTURE_RATE:발동번호 = MIN_DECREASE(CAPTURE_RATE:발동번호, 100, 0)
 
 
-@SKILL_13_SP_3_CANT_TELL
+@SKILL_65_ESCAPE_3_EXPLANATION
+RESULTS = 자신의 포박률을 감소시킨다.
+
+@SKILL_65_ESCAPE_3_CANT_TELL
 
 
-@SKILL_13_SP_3_RATE(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
+@SKILL_65_ESCAPE_3_RATE(발동자, 발동번호, 발동측, 발동세력, 발동부대, 대상세력, 대상부대)
 #DIM 발동자
 #DIM 발동번호
 #DIM 스킬
@@ -89,4 +86,4 @@ RESULTS = 적 포박을을 증가시킨다.
 #DIM 대상측
 #DIM 대상세력
 #DIM 대상부대
-RETURN 800
+RETURN 150
