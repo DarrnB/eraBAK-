@@ -8,7 +8,7 @@ RETURN 1
 ; 「감옥의 순찰」의 명칭
 ;-------------------------------------------------
 @SHOP_LIFE67_MAP1_AREA13_COM1_NAME
-RESULTS:0 '= "감옥의 순찰"
+RESULTS:0 '= "반성실을 순찰한다"
 RETURN 1
 
 ;-------------------------------------------------
@@ -85,16 +85,16 @@ RETURN 1
 @SHOP_LIFE67_MAP1_AREA13_COM1_TEXT(대상)
 #DIM 대상
 
-PRINTFORML  %조사처리(ANAME(MASTER),"가")% 감옥의 돌아보러 가면, %조사처리(ANAME(대상),"가")% 감옥 중(안)에서 웅크리고 앉고 있었다
+PRINTFORML  %조사처리(ANAME(MASTER),"가")% 반성실을 돌아보러 갔더니, %조사처리(ANAME(대상),"가")% 반성실 안에서 웅크리고 앉아있는 것을 발견했다.
 WAIT
 PRINTL 
-PRINTFORML  놀라 말을 걸어, 누군가에게 투옥되었는지 묻는다
-PRINTFORML  %조사처리(ANAME(대상),"는")% 고개를 저어 열쇠를 보여 왔다
-PRINTFORML  쇠창살에 둘러싸여 침착하고 있던 『것』같다
+PRINTFORML  놀라서 %조사처리(ANAME(대상),"를")% 불러 누가 이곳에 밀어넣은 건지 물었다.
+PRINTFORML  그러나 %조사처리(ANAME(대상),"는")% 고개를 젓더니 키카드를 보여 주었다.
+PRINTFORML  반성실에 갇힌 채 혼자 부끄러운 짓을 하고 있던 것 같다.
 WAIT
 PRINTL 
-PRINTFORML  모르는 동안에 퇴보 할 수 없는 곳까지 저속해지고 있던 것 같다
-PRINTFORML  이것은 예의 범절의 필요가 있을 것이다…
+PRINTFORML  못보던 사이에 더 떨어질 수 없을 정도로 저속해져 버린 것 같다.
+PRINTFORML  이건 『생활 지도』가 필요할 것 같다…
 
 RETURN 0
 

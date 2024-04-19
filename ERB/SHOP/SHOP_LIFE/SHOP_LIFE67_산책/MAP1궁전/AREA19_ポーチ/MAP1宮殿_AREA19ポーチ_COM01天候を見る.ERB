@@ -8,7 +8,7 @@ RETURN 1
 ; 「기후를 본다」의 명칭
 ;-------------------------------------------------
 @SHOP_LIFE67_MAP1_AREA19_COM1_NAME
-RESULTS:0 '= "기후를 본다"
+RESULTS:0 '= "날씨를 확인한다"
 RETURN 1
 
 ;-------------------------------------------------
@@ -90,45 +90,45 @@ RETURN 1
 @SHOP_LIFE67_MAP1_AREA19_COM1_TEXT(대상)
 #DIM 대상
 
-PRINTFORML  %조사처리(ANAME(MASTER),"는")% 날씨가 좋다면 산책이라도 하러 갈까하고 엔트렌스에 왔다
+PRINTFORML  %조사처리(ANAME(MASTER),"는")% 날씨가 좋다면 산책이라도 나갈까 싶어 현관에 나왔다.
 IF DISPLAY_SEASON() == "봄"
 	IF WEATHERNUM == 기후_구름
-		PRINTFORML  화담의 졸려지는 날씨다
+		PRINTFORML  구름이 낀 졸려지는 날씨다.
 	ELSEIF WEATHERNUM == 기후_강우
-		PRINTFORML  봄비에 공기가 촉촉히 하고 있다
+		PRINTFORML  봄비에 공기가 습해진 날씨다.
 	ELSE
-		PRINTFORML  화창한 맑은 하늘에서 산책하기 좋은 날씨다
+		PRINTFORML  화창한 맑은 하늘 아래에서 산책하기 좋은 날씨다.
 	ENDIF
 ELSEIF DISPLAY_SEASON() == "여름"
 	IF WEATHERNUM == 기후_구름
-		PRINTFORML  흐려도 여름인것 같고 덥다
+		PRINTFORML  흐려도 흐려도 여름이라고 더운 날씨다.
 	ELSEIF WEATHERNUM == 기후_강우
-		PRINTFORML  여름의 비로 찌고 있다
+		PRINTFORML  여름의 장마에 습하고 불쾌한 날씨다.
 	ELSE
-		PRINTFORML  구름 하나 없는 염천이다
+		PRINTFORML  바깥은 구름 하나 없는 맑은 날씨다.
 	ENDIF
 ELSEIF DISPLAY_SEASON() == "가을"
 	IF WEATHERNUM == 기후_구름
-		PRINTFORML  하늘에 약운이 퍼지고 있다
+		PRINTFORML  하늘에 얕은 구름이 퍼지는 날씨다.
 	ELSEIF WEATHERNUM == 기후_강우
-		PRINTFORML  소나기로 조금 으스스 춥다
+		PRINTFORML  소나기로 조금 추운 날씨다.
 	ELSE
-		PRINTFORML  외는 맑게 개이는 가을의 맑은 날씨다
+		PRINTFORML  구름 한 점 없는 가을의 맑은 날씨다.
 	ENDIF
 ELSE
 	IF WEATHERNUM == 기후_구름
-		PRINTFORML  동담으로 손가락이 차가와진다
+		PRINTFORML  구름이 껴 손가락 끝까지 추운 날씨다.
 	ELSEIF WEATHERNUM == 기후_강설
-		PRINTFORML  함박눈이 내려 쌓이고 있다
+		PRINTFORML  함박눈이 함박눈이 내려 쌓이는 날씨다.
 	ELSE
-		PRINTFORML  맑은 하늘에 후우카가 마이는 있다
+		PRINTFORML  맑은 하늘에 눈보라가 춤추며 옷을 적시는 날씨다.
 	ENDIF
 ENDIF
-PRINTFORML  밖을 바라보고 있으면, 배후로부터 발소리가 접근해 와 말을 걸려졌다
+PRINTFORML  밖을 바라보고 있었더니, 뒤에서 발소리가 들려오며 누군가가 말을 걸어왔다.
 WAIT
 PRINTL 
-PRINTFORML  연인의 %조사처리(ANAME(대상),"다")%. 나간다면 함께 가고 싶은 것 같다
-PRINTFORML  자, 그럼, 어떻게 하지
+PRINTFORML  연인인 %조사처리(ANAME(대상),"다")%. 나간다면 함께 가고 싶은 것 같다.
+PRINTFORML  자, 그럼, 어떻게 할까.
 
 RETURN 0
 
