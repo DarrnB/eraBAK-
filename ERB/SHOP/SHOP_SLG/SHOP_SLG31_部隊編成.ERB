@@ -34,7 +34,7 @@ LOCAL:5 = ARG:0
 LOCAL:6 = GET_SUM_ARMY_DF(LOCAL:5)
 
 CALL SINGLE_DRAWLINE
-PRINTL ●부대편성(적지에 있는 부대, 현재지에 적이 있는 부대는 붉게 표시됩니다)
+PRINTL ●부대편성(적지에 있는 부대, 소재지에 적이 있는 부대는 붉게 표시됩니다)
 CALL SINGLE_DRAWLINE
 PRINTFORML 총병수:  %NUM_FORMAT(GET_SUM_SOLDIER(LOCAL:5))%
 PRINTFORML 방위병수:%NUM_FORMAT(GET_SUM_ARMY_DF(LOCAL:5))%
@@ -54,7 +54,7 @@ FOR LOCAL:0, 0, MAX_UNIT
 	ENDIF
 NEXT
 IF !LOCAL:3
-	PRINTFORML 현재 편성중의 부대는 없습니다
+	PRINTFORML 현재 배치된 부대가 없습니다
 ENDIF
 
 CALL SINGLE_DRAWLINE
@@ -170,13 +170,13 @@ ELSEIF ARG:2 == 0 && LOCAL:5 < 1
 	PRINTL
 	RESETCOLOR
 ELSE
-	PRINTBUTTON " 0[이 부대에서 결정]", 0
+	PRINTBUTTON " 0[이 부대로 결정]", 0
 	PRINTL 
 ENDIF
 IF LOCAL:5 >= 1
-	PRINTBUTTON " 1[병 수의 변경]", 1
+	PRINTBUTTON " 1[병력 수 변경]", 1
 	PRINTL 
-	PRINTBUTTON " 2[  장의 변경]", 2
+	PRINTBUTTON " 2[ 지휘관 변경]", 2
 	PRINTL 
 	PRINTBUTTON " 3[      해산]", 3
 	PRINTL 
@@ -186,9 +186,9 @@ IF LOCAL:5 >= 1
 	PRINTL 
 ELSE
 	SETCOLOR 칼라_선택불가
-	PRINTPLAIN  1[병 수의 변경]
+	PRINTPLAIN  1[병력 수 변경]
 	PRINTL 
-	PRINTPLAIN  2[  장의 변경]
+	PRINTPLAIN  2[ 지휘관 변경]
 	PRINTL 
 	PRINTPLAIN  3[      해산]
 	PRINTL 
@@ -211,9 +211,9 @@ IF RESULT == 0 && ARG:2 == 0 && LOCAL:5 >= 1
 	CALL RESET_CITY_COLOR
 	CALL SINGLE_DRAWLINE
 
-	PRINTFORML 부대{ARG:1 + 1}의 이동처를 결정해 주세요
-	PRINTFORML 자세력의 도시, 동맹·연합 세력의 도시, 및 그것들에 인접한 적대 도시만이 선택 가능합니다
-	PRINTFORML 현재의 위치:%GET_RELAYNAME(UNIT_POSITION:(ARG:0):(ARG:1))%
+	PRINTFORML 부대{ARG:1 + 1}의 목표지를 결정해 주십시오
+	PRINTFORML 자세력의 도시, 동맹·연합 세력의 도시 및 해당 도시와 인접한 적대 도시만이 선택 가능합니다
+	PRINTFORML 현재 위치:%GET_RELAYNAME(UNIT_POSITION:(ARG:0):(ARG:1))%
 	PRINTBUTTON "[캔슬]", 0
 	PRINTL 
 
@@ -231,7 +231,7 @@ IF RESULT == 0 && ARG:2 == 0 && LOCAL:5 >= 1
 
 		;정전중의 세력에의 이동
 		IF LOCAL:7 == 1
-			PRINTFORMW 정전중의 세력의 도시에 부대를 이동시킬 수 없습니다
+			PRINTFORMW 정전중인 세력의 도시에 부대를 이동시킬 수 없습니다
 			RESTART
 
 		;현재 위치와 같은 장소를 선택
@@ -248,7 +248,7 @@ IF RESULT == 0 && ARG:2 == 0 && LOCAL:5 >= 1
 			UNIT_TARGET:(ARG:0):(ARG:1) = 0
 			PRINTFORML 부대{ARG:1 + 1}를 %GET_RELAYNAME(LOCAL:2)%에 이동했습니다
 			IF LOCAL:3 >= 1 && LOCAL:3 != LOCAL:4
-				PRINTFORML 현재의 이동 목표는 해제됩니다
+				PRINTFORML 기존의 이동 목표는 해제됩니다
 			ENDIF
 			WAIT
 			RESTART
@@ -268,9 +268,9 @@ ELSEIF RESULT == 1 && LOCAL:5 >= 1
 	LOCAL:2 = UNIT_SOLDIER:(ARG:0):(ARG:1)
 	LOCAL:3 = COUNTRY_SOLDIER:(ARG:0) + LOCAL:2
 	CALL SINGLE_DRAWLINE
-	PRINTFORML 부대의 병수를 입력해 주세요(잔존병수:%NUM_FORMAT(LOCAL:3)%)
-	PRINTFORML 현재의 병수는 %NUM_FORMAT(LOCAL:2)%입니다
-	PRINTFORML 0 이하의 수를 입력한다고 변경하지 않고 돌아옵니다
+	PRINTFORML 부대의 병력 수를 입력해 주세요(잔존병수:%NUM_FORMAT(LOCAL:3)%)
+	PRINTFORML 현재의 병력 수는 %NUM_FORMAT(LOCAL:2)%입니다
+	PRINTFORML 0 이하의 수를 입력하면 변경하지 않고 돌아옵니다
 
 	CALL DRAW_SOLDIER_INPUT(LOCAL:3)
 
@@ -281,18 +281,18 @@ ELSEIF RESULT == 1 && LOCAL:5 >= 1
 		RESTART
 	ELSEIF RESULT < 500
 		CLEARLINE 1
-		PRINTL 최악이어도 500의 병수가 필요합니다
+		PRINTL 최소한 500 이상의 병력 수가 필요합니다
 		GOTO INPUT_LOOP3
 	ELSEIF RESULT <= LOCAL:3
 		COUNTRY_SOLDIER:(ARG:0) += LOCAL:2
 		UNIT_SOLDIER:(ARG:0):(ARG:1) = RESULT
 		COUNTRY_SOLDIER:(ARG:0) -= RESULT
-		PRINTFORMW {ARG:1 + 1}번대의 병수를 %NUM_FORMAT(RESULT)%로 설정합니다
+		PRINTFORMW {ARG:1 + 1}번대의 병력 수를 %NUM_FORMAT(RESULT)%로 설정합니다
 		RESTART
 	ENDIF
 
 	CLEARLINE 1
-	PRINTL 병 수가 부족합니다
+	PRINTL 병력이 부족합니다
 	GOTO INPUT_LOOP3
 
 ;장의 변경
@@ -319,8 +319,8 @@ ELSEIF RESULT == 3 && LOCAL:5 >= 1
 
 ;강제 해산
 ELSEIF RESULT == 4 && LOCAL:5 < 1
-	PRINTFORML 부대{ARG:1 + 1}를 전선으로부터 이탈시켜, 해산시킵니다
-	PRINTFORML 병의 반(정도)만큼이 없어져 무장에 3 턴의 쿨 타임이 다합니다. 좋습니까?
+	PRINTFORML 부대{ARG:1 + 1}를 전선에서 이탈시켜, 해산시킵니다
+	PRINTFORML 병력의 절반이 탈영하고 지휘관에게 3 턴의 쿨타임이 붙습니다. 좋습니까?
 	CALL ASK_YN
 	IF RESULT == 0
 		COUNTRY_SOLDIER:(ARG:0) += UNIT_SOLDIER:(ARG:0):(ARG:1) * RAND(40, 60) / 100
@@ -358,7 +358,7 @@ INPUT
 
 IF RESULT > 0 && RESULT < 500
 	CLEARLINE 1
-	PRINTL 최악이어도 500의 병수가 필요합니다
+	PRINTL 최소한 500 이상의 병력이 필요합니다
 	GOTO INPUT_LOOP1
 ELSEIF RESULT >= 500 && RESULT <= LOCAL:3
 	COUNTRY_SOLDIER:(CITY_OWNER:(ARG:0)) += CITY_SOLDIER:(ARG:0)
@@ -366,7 +366,7 @@ ELSEIF RESULT >= 500 && RESULT <= LOCAL:3
 	COUNTRY_SOLDIER:(CITY_OWNER:(ARG:0)) -= CITY_SOLDIER:(ARG:0)
 ELSEIF RESULT > LOCAL:3
 	CLEARLINE 1
-	PRINTL 병 수가 부족합니다
+	PRINTL 병력이 부족합니다
 	GOTO INPUT_LOOP1
 ENDIF
 
@@ -417,7 +417,7 @@ CALL SET_BATTLE_MIRROR_VAL(0, RESULT:0, RESULT:1, RESULT:2)
 LOCAL:1 = MAX(GET_DIGIT(도시공격), GET_DIGIT(도시방어), GET_DIGIT(도시지략), GET_DIGIT(도시신비), 6) + 1
 
 CALL SINGLE_DRAWLINE
-PRINTFORML %GET_CITYNAME(ARG:0)%의 수장을 설정해 주세요(최대 2명까지)
+PRINTFORML %GET_CITYNAME(ARG:0)%의 지휘관을 설정해 주세요(최대 2명까지)
 PRINTFORML 【현재의 방위 능력】
 PRINTFORM 공격:
 CALL PRINT_ALPHABET_RANK(랭크_부대, 도시공격)
@@ -599,7 +599,7 @@ ELSE
 	NEXT
 
 	CLEARLINE 2
-	PRINTFORML 장의 수가 최대입니다
+	PRINTFORML 이미 지휘관을 최대로 배치했습니다
 ENDIF
 GOTO INPUT_LOOP2
 
@@ -618,7 +618,7 @@ CALL DRAWMAP
 CALL RESET_CITY_COLOR
 CALL SINGLE_DRAWLINE
 
-PRINTL 부대를 편성하는 도시를 설정해 주세요
+PRINTL 부대를 편성할 도시를 설정해 주세요
 PRINTBUTTON " 0[캔슬]", 0
 PRINTL 
 
@@ -633,7 +633,7 @@ ELSEIF RESULT >= 1001 && RESULT <= 1001 + CITY_NUM
 		UNIT_POSITION:(ARG:0):(ARG:1) = LOCAL:5
 	ELSE
 		CLEARLINE 1
-		PRINTL 부대를 편성할 수 있는 것은 자국 영내 뿐입니다
+		PRINTL 부대를 편성할 수 있는 것은 세력권 내부 뿐입니다
 		GOTO INPUT_LOOP0
 	ENDIF
 ELSE
@@ -643,7 +643,7 @@ ENDIF
 $POSITIONING_CANCEL
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 부대의 병수를 입력해 주세요(잔존병수:{COUNTRY_SOLDIER:(ARG:0)})
+PRINTFORML 부대의 병력 수를 입력해 주세요(잔존병수:{COUNTRY_SOLDIER:(ARG:0)})
 
 CALL DRAW_SOLDIER_INPUT(COUNTRY_SOLDIER:(ARG:0))
 
@@ -655,7 +655,7 @@ IF RESULT <= 0
 	RETURN
 ELSEIF RESULT < 500
 	CLEARLINE 1
-	PRINTL 최악이어도 500의 병수가 필요합니다
+	PRINTL 최소한 500 이상의 병력이 필요합니다
 	GOTO INPUT_LOOP1
 ELSEIF RESULT <= COUNTRY_SOLDIER:(ARG:0)
 	UNIT_SOLDIER:(ARG:0):(ARG:1) = RESULT
@@ -663,7 +663,7 @@ ELSEIF RESULT <= COUNTRY_SOLDIER:(ARG:0)
 	PRINTFORMW {ARG:1 + 1}번대의 병수를 {RESULT}로 설정합니다
 ELSE
 	CLEARLINE 1
-	PRINTL 국의 병수가 부족합니다
+	PRINTL 병력이 부족합니다
 	GOTO INPUT_LOOP1
 ENDIF
 
@@ -721,8 +721,8 @@ CALL SET_BATTLE_MIRROR_VAL(0, RESULT:0, RESULT:1, RESULT:2)
 LOCAL:1 = MAX(GET_DIGIT(부대공격), GET_DIGIT(부대방어), GET_DIGIT(부대지략), GET_DIGIT(부대신비), 6) + 1
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 부대의 장을 설정해 주세요(최대 3명까지)
-PRINTFORML 임신중（황색)  임월（적색)  육아중(황록)의 사관은 통상보다 약체화 합니다
+PRINTFORML 부대의 지휘관 설정해 주세요(최대 3명까지)
+PRINTFORML 임신중（황색)  임월（적색)  육아중(황록)인 사관은 평소보다 약체화 됩니다
 PRINTFORML 【현재의 부대 능력】
 PRINTFORM 공격:
 CALL PRINT_ALPHABET_RANK(랭크_부대, 부대공격)
@@ -929,7 +929,7 @@ ELSE
 	NEXT
 
 	CLEARLINE 2
-	PRINTFORML 장의 수가 최대입니다
+	PRINTFORML 이미 지휘관을 최대로 배치했습니다
 ENDIF
 GOTO INPUT_LOOP2
 
@@ -1058,8 +1058,8 @@ NEXT
 
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 부대편성·수장설정에 있어서의 「추천 편성」으로부터 제외하는 캐릭터를 설정할 수 있습니다
-PRINTFORML 클릭으로 타글·제외된 캐릭터는 분홍색 표시됩니다
+PRINTFORML 부대편성·수장설정 부분의 「추천 편성」에서 제외할 캐릭터를 설정할 수 있습니다
+PRINTFORML 클릭으로 토글·제외된 캐릭터는 분홍색 표시됩니다
 CALL SINGLE_DRAWLINE
 FIRST_LINE = LINECOUNT
 $SHOW_LOOP
@@ -1109,7 +1109,7 @@ IF 총페이지수 >= 2
 	CALL SINGLE_DRAWLINE
 ENDIF
 
-PRINTL [ 0]이것으로 좋아
+PRINTL [ 0]이렇게 결정
 REDRAW 0
 INPUT
 IF RESULT == 8 && 표시페이지 > 1
@@ -1166,12 +1166,12 @@ FIRST_LINE = LINECOUNT
 $SHOW_LOOP
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 보충 가능한 부대에 군사를 일괄로 보충합니다
-PRINTFORML 보충하는 병수를 입력해 주세요(0 이하로 캔슬)
-PRINTFORML 현재 할당하고 가능한 병수:{COUNTRY_SOLDIER:(ARG:0)}
+PRINTFORML 보충 가능한 부대에 병력을 일괄적으로 보충합니다
+PRINTFORML 보충할 병력 수를 입력해 주세요(0 이하로 캔슬)
+PRINTFORML 현재 할당 가능한 병력 수:{COUNTRY_SOLDIER:(ARG:0)}
 CALL SINGLE_DRAWLINE
 
-PRINTBUTTON "[가능할 뿐(만큼) 보충]", COUNTRY_SOLDIER:(ARG:0)
+PRINTBUTTON "[최대한 보충]", COUNTRY_SOLDIER:(ARG:0)
 
 INPUT
 

@@ -127,7 +127,7 @@ RETURN 1
 SIF !CFLAG:(ARG:0):외교조교중
 	RETURN 0
 
-PRINTFORML %ANAME(ARG:0)%의 몸을 자유롭게 할 권리를 손놓습니다
+PRINTFORML %ANAME(ARG:0)%의 몸을 사용할 권리를 포기합니다
 PRINTFORML 좋습니까?
 CALL ASK_YN
 
@@ -191,8 +191,8 @@ FLAG:조교모드 = 7
 ;우후후플래그를 ON에
 FLAG:우후후플래그 = 1
 
-PRINTFORMW 알몸으로 한 %조사처리(ANAME(ARG:0),"를")% 마을의 광장까지 데려 왔다
-PRINTFORMW 영지민을 위로하는데, 겨우 도움이 되어 받는다고 하자……
+PRINTFORMW 나체 상태인 %조사처리(ANAME(ARG:0),"를")% 마을의 광장까지 데려 왔다.
+PRINTFORMW 영지민을 위로하는데, 조금 도움을 받도록 하자……
 
 ;행동 개시시의 공통 처리
 CALL START_TRAIN_COMMON
@@ -210,7 +210,7 @@ SIF CFLAG:(ARG:0):소속 == CFLAG:MASTER:소속
 SIF CFLAG:(ARG:0):외교조교중
 	RETURN 0
 
-PRINTFORML %조사처리(ANAME(ARG:0),"를")% 감옥에서 내, 방을 주고 연금 합니다
+PRINTFORML %조사처리(ANAME(ARG:0),"를")% 반성실에서 꺼내, 방을 주고 연금 합니다
 PRINTFORML 좋습니까?
 CALL ASK_YN
 SIF RESULT == 1
@@ -235,14 +235,14 @@ SIF CFLAG:(ARG:0):소속 != CFLAG:MASTER:소속
 SIF CFLAG:(ARG:0):외교조교중
 	RETURN 0
 
-PRINTFORML %조사처리(ANAME(ARG:0),"를")% 감옥에서 냅니다
+PRINTFORML %조사처리(ANAME(ARG:0),"를")% 반성실에서 꺼내줍니다
 PRINTFORML 좋습니까?
 CALL ASK_YN
 
 SIF RESULT == 1
 	RETURN 0
 
-PRINTFORMW %조사처리(ANAME(ARG:0),"를")% 감옥에서 냈습니다
+PRINTFORMW %조사처리(ANAME(ARG:0),"를")% 반성실에서 꺼내줬습니다
 CALL CAPTURE(ARG:0, 0, TALENT:(ARG:0):붕괴)
 
 SIF FINDELEMENT(PRISONER_TARGET, ARG:0) != -1
@@ -290,10 +290,10 @@ SIF CFLAG:(ARG:0):소속 != CFLAG:MASTER:소속
 SIF FLAG:클리어플래그
 	RETURN 0
 
-PRINTFORML 정말로 %조사처리(ANAME(ARG:0),"를")% 나라로부터 추방합니까?
+PRINTFORML 정말로 %조사처리(ANAME(ARG:0),"를")% 학원에서 추방합니까?
 
 SIF CALC_SHOP_TIME(!IS_ANIMAL(ARG:0)) == SHOP_TIME
-	CALL COLOR_PRINTL("추방했을 경우, 최대 행동횟수 감소에 의해 즉시 금기의 거점 페이즈가 종료합니다!", 칼라_경고)
+	CALL COLOR_PRINTL("추방할 경우, 최대 행동횟수가 감소되어 즉시 이번 거점 페이즈가 종료됩니다!", 칼라_경고)
 
 CALL ASK_YN
 SIF RESULT == 1
@@ -309,7 +309,7 @@ SIF FINDELEMENT(PRISONER_TARGET, ARG:0) != -1
 	PRISONER_TARGET:(FINDELEMENT(PRISONER_TARGET, ARG:0)) = -1
 
 IF CALC_SHOP_TIME() == SHOP_TIME
-	PRINTFORMW 인원수 부족에 의한 일의 악영향에 의해 자유시간이 없어졌으므로 거점 페이즈를 종료합니다
+	PRINTFORMW 부족한 인원수 탓에 업무가 지체되어 자유시간이 사라졌으므로 거점 페이즈를 종료합니다
 	LINES_SHOP = LINECOUNT
 	BEGIN TURNEND
 ENDIF
@@ -331,7 +331,7 @@ ENDIF
 
 PRINTFORML 정말로 %조사처리(ANAME(ARG:0),"를")% 처형합니까?
 SIF CFLAG:(ARG:0):소속 == CFLAG:MASTER:소속 && CALC_SHOP_TIME(!IS_ANIMAL(ARG:0)) == SHOP_TIME
-	CALL COLOR_PRINTL("추방했을 경우, 최대 행동횟수 감소에 의해 즉시 금기의 거점 페이즈가 종료합니다!", 칼라_경고)
+	CALL COLOR_PRINTL("처형할 경우, 최대 행동횟수가 감소되어 즉시 이번 거점 페이즈가 종료됩니다!", 칼라_경고)
 
 CALL ASK_YN
 
@@ -353,7 +353,7 @@ SIF FINDELEMENT(PRISONER_TARGET, ARG:0) != -1
 
 IF CALC_SHOP_TIME() == SHOP_TIME
 	PRINTL 
-	PRINTFORMW 인원수 부족에 의한 일의 악영향에 의해 자유시간이 없어졌으므로 거점 페이즈를 종료합니다
+	PRINTFORMW 부족한 인원수 탓에 업무가 지체되어 자유시간이 사라졌으므로 거점 페이즈를 종료합니다
 	LINES_SHOP = LINECOUNT
 	BEGIN TURNEND
 ENDIF
@@ -376,8 +376,8 @@ SIF !ITEM:촉수의방 || 관리인 < 0
 	RETURN 0
 
 IF !IS_SYOKUSYU_MANAGE(ID_TO_CHARA(FLAG:촉수의방관리자))
-	PRINTFORML 설정된 촉수의방의 관리자（%ANAME(관리인)%）가, 현재 관리 가능한 상황에 있지 않습니다
-	PRINTW 촉수의방의 관리자를 다시 설정해 주세요
+	PRINTFORML 설정된 촉수의 방의 관리자（%ANAME(관리인)%）가, 현재 관리 가능한 상황이 아닙니다
+	PRINTW 촉수의 방의 관리자를 다시 설정해 주십시오
 	RETURN 0
 ENDIF
 
@@ -386,11 +386,11 @@ IF TALENT:(ARG:0):임신 && !TALENT:(ARG:0):아이인질
 	RETURN RESULT
 ENDIF
 
-PRINTFORMW 촉수의방의 관리자인 %ANAME(관리인)%가 처형을 실행합니다
+PRINTFORMW 촉수의 방의 관리자인 %ANAME(관리인)%가 처형을 실행합니다
 PRINTFORML 정말로 %조사처리(ANAME(ARG:0),"를")% 처형합니까?
 
 SIF CFLAG:(ARG:0):소속 == CFLAG:MASTER:소속 && CALC_SHOP_TIME(!IS_ANIMAL(ARG:0)) == SHOP_TIME
-	CALL COLOR_PRINTL("추방했을 경우, 최대 행동횟수 감소에 의해 즉시 금기의 거점 페이즈가 종료합니다!", 칼라_경고)
+	CALL COLOR_PRINTL("처형할 경우, 최대 행동횟수가 감소되어 즉시 이번 거점 페이즈가 종료됩니다!", 칼라_경고)
 
 CALL ASK_YN
 
@@ -417,7 +417,7 @@ CALL TRAIN_AUTO_ABLUP(관리인)
 WAIT
 
 IF CALC_SHOP_TIME() == SHOP_TIME
-	PRINTFORMW 인원수 부족에 의한 일의 악영향에 의해 자유시간이 없어졌으므로 거점 페이즈를 종료합니다
+	PRINTFORMW 부족한 인원수 탓에 업무가 지체되어 자유시간이 사라졌으므로 거점 페이즈를 종료합니다
 	LINES_SHOP = LINECOUNT
 	BEGIN TURNEND
 ENDIF
@@ -428,27 +428,27 @@ RETURN 1
 ;-------------------------------------------------
 @PRISONER_TRAIT_EXECUTE_PREGNANT(ARG:0)
 
-PRINTFORML 처형장에 따라 올 수 있었던 %조사처리(ANAME(ARG:0),"는")%, 울면서 목숨구걸을 시작했다
-PRINTFORML 『두 번 다시 거역하지 않는, 어떤 일이라도 하기 때문에, 배의 아이만은 도와』라고, 필사적인 모습으로 간원 하고 있다
+PRINTFORML 처형장에 끌려온 %조사처리(ANAME(ARG:0),"는")%, 울면서 목숨구걸을 시작했다
+PRINTFORML 『두 번 다시 거역하지 않을게, 무슨 일이든 할테니, 배 속의 아이만은 살려줘』라고, 필사적인 모습으로 애원하고 있다.
 PRINTL 
 PRINTFORML 정말로 %조사처리(ANAME(ARG:0),"를")% 처형합니까?
 
 SIF CFLAG:(ARG:0):소속 == CFLAG:MASTER:소속 && CALC_SHOP_TIME(!IS_ANIMAL(ARG:0)) == SHOP_TIME
-	CALL COLOR_PRINTL("추방했을 경우, 최대 행동횟수 감소에 의해 즉시 금기의 거점 페이즈가 종료합니다!", 칼라_경고)
+	CALL COLOR_PRINTL("처형할 경우, 최대 행동횟수가 감소되어 즉시 이번 거점 페이즈가 종료됩니다!", 칼라_경고)
 
-CALL ASK_YN("처형한다", "자비를 걸친다")
+CALL ASK_YN("처형한다", "자비를 베푼다")
 
 IF RESULT == 0
 	CALL KOJO_EVENT(ARG:0, 341)
 	PRINTFORMW ……………………
 	PRINTFORMW ……
-	PRINTFORMW %조사처리(ANAME(ARG:0),"를")% 배의 아이공처형했습니다
+	PRINTFORMW %조사처리(ANAME(ARG:0),"를")% 배 속의 아이와 함께 처형했습니다
 	PRINTL 
 	CALL EXECUTION(ARG:0)
 	WAIT
 	;타국으로부터의 평가를 내린다
 	PRINTL 
-	PRINTFORMW 이 소행에 각 세력으로부터 비난의 소리가 쇄도하고 있습니다
+	PRINTFORMW 이 소행에 각 학원들로부터 비난하는 소리가 쇄도하고 있습니다
 
 	FOR LOCAL, 1, MAX_COUNTRY
 		SIF !IS_COUNTRY(LOCAL) || LOCAL == CFLAG:MASTER:소속
@@ -466,7 +466,7 @@ IF RESULT == 0
 		PRISONER_TARGET:(FINDELEMENT(PRISONER_TARGET, ARG:0)) = -1
 
 	IF CALC_SHOP_TIME() == SHOP_TIME
-		PRINTFORMW 인원수 부족에 의한 일의 악영향에 의해 자유시간이 없어졌으므로 거점 페이즈를 종료합니다
+		PRINTFORMW 부족한 인원수 탓에 업무가 지체되어 자유시간이 사라졌으므로 거점 페이즈를 종료합니다
 		LINES_SHOP = LINECOUNT
 		BEGIN TURNEND
 	ENDIF
@@ -474,9 +474,9 @@ ELSE
 	CALL KOJO_EVENT(ARG:0, 344)
 	PRINTFORMW ……………………
 	PRINTFORMW ……
-	PRINTFORMW 집행인에 처형의 중지를 명했습니다
-	PRINTFORMW %조사처리(ANAME(ARG:0),"는")% 그 자리에 웅크리고 앉아, 고귀한 생명이 머문 배를 양팔로 지키도록(듯이) 안아, 떨리는 소리로 흐느껴 울었다
-	PRINTFORMW %조사처리(ANAME(ARG:0),"는")%【아이를 인질】에 빼앗겼다…
+	PRINTFORMW 집행인에게 처형 중지를 명령했습니다
+	PRINTFORMW %조사처리(ANAME(ARG:0),"는")% 그 자리에 웅크리고 앉아, 소중한 생명을 품은 배를 양팔로 감싸듯이 안고, 떨리는 목소리로 흐느껴 울었다.
+	PRINTFORMW %조사처리(ANAME(ARG:0),"는")% 【아이를 인질】로 빼앗겼다…
 	CFLAG:(ARG:0):종속도 += 500
 	CFLAG:(ARG:0):호감도 -= 1000
 	EXP:(ARG:0):트라우마경험 += 16
@@ -493,27 +493,27 @@ RETURN 1
 #DIM 효과량
 
 PRINTL 
-PRINTFORML 촉수에 형성해진 처형 방에 따라 올 수 있었던 %조사처리(ANAME(ARG:0),"는")%, 울면서 목숨구걸을 시작했다
-PRINTFORMW 『두 번 다시 거역하지 않는, 어떤 일이라도 하기 때문에, 배의 아이만은 도와』라고, 필사적인 모습으로 간원 하고 있다
+PRINTFORML 촉수가 형성해진 처형실에 끌려온 %조사처리(ANAME(ARG:0),"는")%, 울면서 목숨구걸을 시작했다
+PRINTFORMW 『두 번 다시 거역하지 않을게, 무슨 일이든 할테니, 배 속의 아이만은 살려줘』라고, 필사적인 모습으로 애원하고 있다.
 PRINTL 
 PRINTFORML 정말로 %조사처리(ANAME(ARG:0),"를")% 처형합니까?
 
 SIF CFLAG:(ARG:0):소속 == CFLAG:MASTER:소속 && CALC_SHOP_TIME(!IS_ANIMAL(ARG:0)) == SHOP_TIME
-	CALL COLOR_PRINTL("추방했을 경우, 최대 행동횟수 감소에 의해 즉시 금기의 거점 페이즈가 종료합니다!", 칼라_경고)
+	CALL COLOR_PRINTL("처형할 경우, 최대 행동횟수가 감소되어 즉시 이번 거점 페이즈가 종료됩니다!", 칼라_경고)
 
-CALL ASK_YN("처형한다", "자비를 걸친다")
+CALL ASK_YN("처형한다", "자비를 베푼다")
 
 
 IF RESULT == 0
 	CALL KOJO_EVENT(ARG:0, 343)
 	PRINTFORMW ……………………
 	PRINTFORMW ……
-	PRINTFORMW %조사처리(ANAME(ARG:0),"를")% 배의 아이공처형했습니다
+	PRINTFORMW %조사처리(ANAME(ARG:0),"를")% 배 속의 아이와 함께 처형했습니다
 	PRINTL 
 	WAIT
 	;타국으로부터의 평가를 내린다
 	PRINTL 
-	PRINTFORMW 이 소행에 각 세력으로부터 비난의 소리가 쇄도하고 있습니다
+	PRINTFORMW 이 소행에 각 학원들로부터 비난하는 소리가 쇄도하고 있습니다
 
 	FOR LOCAL, 1, MAX_COUNTRY
 		SIF !IS_COUNTRY(LOCAL) || LOCAL == CFLAG:MASTER:소속
@@ -541,7 +541,7 @@ IF RESULT == 0
 	CALL TRAIN_AUTO_ABLUP(관리인)
 	WAIT
 	IF CALC_SHOP_TIME() == SHOP_TIME
-		PRINTFORMW 인원수 부족에 의한 일의 악영향에 의해 자유시간이 없어졌으므로 거점 페이즈를 종료합니다
+		PRINTFORMW 부족한 인원수 탓에 업무가 지체되어 자유시간이 사라졌으므로 거점 페이즈를 종료합니다
 		LINES_SHOP = LINECOUNT
 		BEGIN TURNEND
 	ENDIF
@@ -549,9 +549,9 @@ ELSE
 	CALL KOJO_EVENT(ARG:0, 345)
 	PRINTFORMW ……………………
 	PRINTFORMW ……
-	PRINTFORMW 굶은 촉수들에게 처형의 중지를 명했습니다
-	PRINTFORMW %조사처리(ANAME(ARG:0),"는")% 그 자리에 웅크리고 앉아, 고귀한 생명이 머문 배를 양팔로 지키도록(듯이) 안아, 떨리는 소리로 흐느껴 울었다
-	PRINTFORMW %조사처리(ANAME(ARG:0),"는")%【아이를 인질】에 빼앗겼다…
+	PRINTFORMW 굶주린 촉수들에게 처형의 중지를 명했습니다
+	PRINTFORMW %조사처리(ANAME(ARG:0),"는")% 그 자리에 웅크리고 앉아, 소중한 생명을 품은 배를 양팔로 감싸듯이 안고, 떨리는 목소리로 흐느껴 울었다.
+	PRINTFORMW %조사처리(ANAME(ARG:0),"는")% 【아이를 인질】로 빼앗겼다…
 	CFLAG:(ARG:0):종속도 += 500
 	CFLAG:(ARG:0):호감도 -= 1000
 	EXP:(ARG:0):트라우마경험 += 16

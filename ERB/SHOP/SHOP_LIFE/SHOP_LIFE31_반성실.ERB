@@ -297,7 +297,7 @@ NEXT
 VARSET PRISONER_TARGET, -1
 
 IF CALC_SHOP_TIME() <= SHOP_TIME
-	PRINTFORML 인원수 부족에 의한 일의 악영향에 의해 자유시간이 없어졌으므로 거점 페이즈를 종료합니다
+	PRINTFORML 부족한 인원수 탓에 업무가 지체되어 자유시간이 사라졌으므로 거점 페이즈를 종료합니다
 	LINES_SHOP = LINECOUNT
 	BEGIN TURNEND
 ENDIF
@@ -349,24 +349,24 @@ NEXT
 
 
 IF 판정치:후보 > RAND:10000
-	PRINTFORMW %조사처리(ANAME(MASTER),"가")% %ANAME(대상)%의 조교를 개시하려고 하면, %조사처리(ANAME(후보),"가")% 달라붙어 왔다
-	PRINTFORML 자신이 대신에 되는, 그러니까%조사처리(ANAME(대상),"은")% 놓쳤으면 좋은, 라는 것이라고 하지만……
+	PRINTFORMW %조사처리(ANAME(MASTER),"가")% %조사처리(ANAME(대상),"를")% 조교하려던 순간, %조사처리(ANAME(후보),"가")% 매달려 왔다
+	PRINTFORML 자신이 대신 받을 테니 %조사처리(ANAME(대상),"은")% 건드리지 말아주었으면 한다, 라고 하는데……
 	CALL ASK_MULTI("받아들인다", @"받아들이면서, %ANAME(대상)%에 과시한다", "무시한다")
 	SELECTCASE RESULT
 		CASE 0
-			PRINTFORMW 거기까지 말한다면, 인정해 주자
+			PRINTFORMW 그렇게까지 하겠다면, 원하는 대로 해 주지
 			PRINTFORMW %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(후보),"를")% 조교하기로 했다……
 			PRISONER_TARGET:FINDELEMENT(PRISONER_TARGET, 대상) = 후보
 		CASE 1
-			PRINTFORMW 거기까지 말한다면, 인정해 주자
-			PRINTFORMW 다만, %조사처리(ANAME(후보),"가")% 범해지는 모양을, %ANAME(대상)%에 과시해 주자
-			PRINTFORMW 어떤 얼굴을 하는지, 지금부터 즐거움이다……
+			PRINTFORMW 그렇게까지 하겠다면, 원하는 대로 해 주지
+			PRINTFORMW 다만, %조사처리(ANAME(후보),"가")% 범해지는 모습을 %ANAME(대상)%에게 과시해 주자
+			PRINTFORMW 과연 어떤 표정을 지을지, 기대가 된다……
 			PRISONER_TARGET:FINDELEMENT(PRISONER_TARGET, 대상) = 후보
 			CFLAG:대상:포로조교의조수 = 1
 			CFLAG:대상:조교중돌아가지않는다 = 1
 		CASE 2
-			PRINTFORMW 무엇을 바보 같은 말을 하고 있을 것이다
-			PRINTFORMW %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(후보),"를")% 무시해, %ANAME(대상)%의 조교 니토리 걸렸다
+			PRINTFORMW 무슨 멍청한 소리를 하는 건지
+			PRINTFORMW %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(후보),"를")% 무시하고, %ANAME(대상)%의 조교를 시작했다
 	ENDSELECT
 ELSE
 	RETURN 0
