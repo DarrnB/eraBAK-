@@ -28,7 +28,7 @@ IF CONFIG:500 == 1
     PRINTFORM %LOCALS:0, 36, RIGHT% -
     PRINTBUTTON " 1[변경] ", 1
     IF CONFIG:501 == 0
-        PRINTFORM 라이벌이 %ANAME(MASTER)%의 국가 내에서 움직입니다.
+        PRINTFORM 라이벌이 %ANAME(MASTER)%의 학원 안에서 움직입니다.
     ELSE
         PRINTFORM 라이벌은 어디든지 다닙니다.
     ENDIF
@@ -42,7 +42,7 @@ IF CONFIG:500 == 1
     ELSEIF CONFIG:502 == 1
         PRINTFORM 라이벌이 %조사처리(ANAME(MASTER),"을")% 연모하고 있는 학생만 만납니다.
     ELSE
-        PRINTFORM 라이벌이 %조사처리(ANAME(MASTER),"을")% 연모하고 있는 학생 빼고 만납니다.
+        PRINTFORM 라이벌이 %조사처리(ANAME(MASTER),"을")% 연모하고 있는 학생을 제외하고 만납니다.
     ENDIF
     PRINTL
 
@@ -56,7 +56,7 @@ IF CONFIG:500 == 1
     ELSEIF CONFIG:503 == 2
         PRINT 라이벌이 약점을 잡은 학생의 처녀를 가져갑니다.
     ELSE
-        PRINT 라이벌이 인정사정도 없이 처녀를 가져갑니다.
+        PRINT 라이벌이 인정사정 없이 처녀를 가져갑니다.
     ENDIF
     PRINTL
 
@@ -68,7 +68,7 @@ IF CONFIG:500 == 1
     ELSEIF CONFIG:504 == 1
         PRINT 그래도 남자다운 면은 보여줍니다.
     ELSEIF CONFIG:504 == 2
-        PRINT 험란하게 다뤄집니다.
+        PRINT 험하게 다룹니다.
     ELSE
         PRINT 조교의 마스터.
     ENDIF
