@@ -70,7 +70,7 @@ LOCAL:2 = LIMIT(ABL:발동자:지략/10, 1, 15)
 
 LOCAL:1 = RAND(LOCAL:2, 15)
 FOR LOCAL, 0, LOCAL:1
-	CALL DECREASE_SOLDIER(대상세력, 대상부대, ABL:발동자:지략*2, 1)
+	CALL DECREASE_SOLDIER(대상세력, 대상부대, ABL:발동자:지략*3/2, 1)
 NEXT
 
 
