@@ -114,9 +114,9 @@ ELSE
 	상대이름 = %ANAME(출장캐릭터)%
 	상대남 = IS_MALE(출장캐릭터)
 ENDIF
-;-------------이름 마지막에 받침 붙는 캐릭이 슌, 카린, 슈에링밖에 없음ㅋㅋㅋㅋㅋㅋㅋㅋ
+
 PRINTFORML 「좋아, 그렇다면 이 녀석이 상대다.」
-PRINTFORMW 상대 이름은 %조사처리(상대이름,"다")%.
+PRINTFORMW 상대 이름은 %상대이름%이다.
 PRINTFORML 「죽지만 않는 선에서 마음껏 싸우라고, 흐흐흐.」
 PRINTFORMW %조사처리(ANAME(대상),"는")% 접수처를 빠져 나가, 검투장으로 향했다.
 
@@ -294,7 +294,7 @@ IF !상대남
 		CALL ARENA_RAPE_MALE(대상, 상대이름, 상대캐릭터)
 		IF 상대캐릭터 != -1
 			IF GET_COUNTRY_BOSS(CFLAG:상대캐릭터:소속) == 상대캐릭터
-				PRINTFORMW %조사처리(ANAME(상대캐릭터,"가"))% 패배해 능욕당했다는 소식은 곧바로 암암리에 키보토스 전체로 퍼져나갔다……
+				PRINTFORMW %조사처리(ANAME(상대캐릭터),"가")% 패배해 능욕당했다는 소식은 곧바로 암암리에 키보토스 전체로 퍼져나갔다……
 				FOR LOCAL, 0, MAX_COUNTRY
 					SIF !IS_COUNTRY(LOCAL) || GROUPMATCH(LOCAL, CFLAG:대상:소속, CFLAG:상대캐릭터:소속)
 						CONTINUE
