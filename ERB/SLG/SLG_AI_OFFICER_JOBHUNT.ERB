@@ -77,8 +77,8 @@ FOR LOCAL, 0, VARSIZE("후보")
 
 	;주인공 세력만 특수 취급
 	IF 세력 == CFLAG:MASTER:소속
-		CALL COLOR_PRINTL(@"%조사처리(ANAME(대상),"가")% 관직에 오름을 신청했습니다", 칼라_주의)
-		CALL ASK_MULTI("받아들인다", "거부한다", "투옥한다")
+		CALL COLOR_PRINTL(@"%조사처리(ANAME(대상),"가")% 입부를 신청했습니다", 칼라_주의)
+		CALL ASK_MULTI("받아들인다", "거부한다", "가둔다")
 		SELECTCASE RESULT
 			CASE 0
 				PRINTFORML 받아들였습니다
@@ -89,12 +89,12 @@ FOR LOCAL, 0, VARSIZE("후보")
 			CASE 1
 				PRINTFORML 거부했습니다
 			CASE 2
-				PRINTFORML 투옥했습니다
+				PRINTFORML 반성실에 가뒀습니다
 				CALL CAPTURE(대상, 세력)
 		ENDSELECT
 	;통상 처리
 	ELSE
-		PRINTFORML %조사처리(ANAME(대상),"가")% %ANAME(세력군주)%에 관직에 오름을 신청했습니다
+		PRINTFORML %조사처리(ANAME(대상),"가")% %ANAME(세력군주)%에게 입부를 신청했습니다
 		IF REL_LIKE:세력군주:대상 < REL_HATE:세력군주:대상 - 300
 			PRINTFORML %조사처리(ANAME(세력군주),"는")% 거부했습니다
 		ELSE
