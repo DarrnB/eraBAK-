@@ -14,7 +14,7 @@ SETCOLOR 칼라_주석
 SIF GET_COUNTRY_BOSS(CITY_OWNER:(LOCAL:5)) != -1
 	PRINTFORM %ANAME(GET_COUNTRY_BOSS(CITY_OWNER:(LOCAL:5)))%의 지역인 
 PRINTFORML %GET_RELAYNAME(LOCAL:5)%에서
-PRINTFORML %조사처리(BATTLE_NAME:0,"과")% %BATTLE_NAME:1%의 전투가 발생했습니다
+PRINTFORML %BATTLE_NAME:0%와 %BATTLE_NAME:1%의 전투가 발생했습니다
 
 RESETCOLOR
 
@@ -101,7 +101,7 @@ IF UNIT_SOLDIER:(ARG:0):(ARG:1) <= 0
 		ELSE
 			LOCALS:2 = <%LOCALS:2%>
 		ENDIF
-		CALL COLOR_PRINTW(@"%LOCALS:2%의 부대가 패주했습니다……", 칼라_경고)
+		CALL COLOR_PRINTW(@"%LOCALS:2%부대가 패주했습니다……", 칼라_경고)
 	ELSE
 		PRINTFORML %BATTLE_NAME:0% 부대는 패주했습니다
 	ENDIF
@@ -129,7 +129,7 @@ IF UNIT_SOLDIER:(ARG:2):(ARG:3) <= 0
 		ELSE
 			LOCALS:2 = <%LOCALS:2%>
 		ENDIF
-		CALL COLOR_PRINTW(@"%LOCALS:2%의 부대가 패주했습니다……", 칼라_경고)
+		CALL COLOR_PRINTW(@"%LOCALS:2%부대가 패주했습니다……", 칼라_경고)
 	ELSE
 		PRINTFORML %BATTLE_NAME:1% 부대는 패주했습니다
 	ENDIF
@@ -184,14 +184,14 @@ SETCOLOR 칼라_주석
 SIF GET_COUNTRY_BOSS(CITY_OWNER:(ARG:2)) != -1
 	PRINTFORM %ANAME(GET_COUNTRY_BOSS(CITY_OWNER:(ARG:2)))%의 도시인 
 PRINTFORML %조사처리(GET_CITYNAME(ARG:2),"가")%, 
-PRINTFORML %BATTLE_NAME:0%에게 침공되었습니다
+PRINTFORML %BATTLE_NAME:0%에 침공되었습니다
 RESETCOLOR
 
 FIRST_LINE = LINECOUNT
 
 ;그 도시가 그 세력에 있어 마지막 1 도시라면, 전병력을 기울인다
 IF LOCAL:5 >= 0 && GET_OWN_CITY(CITY_OWNER:(ARG:2)) == 1
-	PRINTFORML %조사처리(BATTLE_NAME:1,"는")% 마지막 도시에서 최후의 항전을 시작했다!
+	PRINTFORML %BATTLE_NAME:1%는 마지막 영지의 방위에 전병력을 따랐다!
 	CALL TMP_CREATE_IS_FREE_MAP
 	PRINTFORM 변동전:
 	CALL PRINT_CITY_INFO(ARG:2, 0)
@@ -264,7 +264,7 @@ IF CITY_SOLDIER:(ARG:2) <= 0
 	CITY_IS_ATTACKED:(ARG:2) = 0
 
 	;도시 점령에 의한 약탈
-	;LOCAL 10:그 도시에 비축되혀 있던 재산
+	;LOCAL 10:그 도시에 비축되고 있던 재산
 	;무소속의 도시는 경제 규모의 30%를 비축하고 있으면 간주한다
 	IF LOCAL:6 > 0
 		LOCAL:10 = MONEY:(LOCAL:6) * CITY_ECONOMY:(ARG:2) / GET_SUM_ECONOMY(LOCAL:6)
@@ -321,21 +321,21 @@ IF CITY_SOLDIER:(ARG:2) <= 0
 		IF COUNTRY_EVENT_ID:(LOCAL:6) == SP_COUNTRY_ID:(특수세력_카이저_코퍼레이션)
 			IF CFLAG:MASTER:소속 == LOCAL:6
 				SETCOLOR 칼라_경고
-				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 소속되어 있던 %조사처리(BATTLE_NAME:1,"는")%, 도시를 모두 잃었습니다…
-				PRINTFORMW 그 여파로, 잡혀 있던 포로들이 모두 도망쳐 버렸습니다.
-				PRINTFORMW 그렇지만, %조사처리(BATTLE_NAME:1,"는")% 멸망한 것이 아닙니다.
-				PRINTFORMW 어디에라도 솟아 오르는 것이 %BATTLE_NAME:1%, 쓰러져도 다시 일어서면 됩니다…
+				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 시중들고 있었던 %BATTLE_NAME:1%들은, 도시를 모두 잃었습니다…
+				PRINTFORMW 그 너저분으로, 잡고 있던 포로들이 모두 도망쳐 가 버렸습니다
+				PRINTFORMW 입니다만, %BATTLE_NAME:1%들은 멸망 했을 것이 아닙니다
+				PRINTFORMW 어디에라도 솟아 오르는 것이 %BATTLE_NAME:1%, 또 봉기 하면 좋습니다…
 				RESETCOLOR
 			ELSE
 				SETCOLOR 칼라_주의
 				PRINTFORMW %BATTLE_NAME:1%가 빼앗은 도시는 모두 만회해졌습니다!
-				PRINTFORMW 그 여파로, 잡혀 있던 포로들이 모두 해방되었습니다
-				PRINTFORMW 하지만, %조사처리(BATTLE_NAME:1,"는")% 멸망한 것이 아닙니다.
-				PRINTFORMW 어디에라도 솟아 오르는 것이 %BATTLE_NAME:1%, 완전히 근절시키는 것은 불가능합니다
+				PRINTFORMW 그 너저분으로, 잡고 있던 포로들이 모두 해방되었습니다
+				PRINTFORMW 하지만, %BATTLE_NAME:1%들은 멸망 했을 것이 아닙니다
+				PRINTFORMW 어디에라도 솟아 오르는 것이 %BATTLE_NAME:1%, 근절 하게 하는 것은 불가능합니다
 				RESETCOLOR
 			ENDIF
 			SETCOLOR 칼라_시안
-			PRINTFORMW %BATTLE_NAME:1%를 철수시킨 %조사처리(ANAME(GET_COUNTRY_BOSS(ARG:0)),"는")%, 다른 학원들로부터 깊게 감사받고 있습니다…
+			PRINTFORMW %BATTLE_NAME:1%를 철수 하게한 %ANAME(GET_COUNTRY_BOSS(ARG:0))%는, 다른 세력으로부터 깊게 감사받고 있습니다…
 			RESETCOLOR
 			FOR LOCAL:0, 0, CHARANUM
 				SIF CFLAG:LOCAL:포로처 == LOCAL:6
@@ -350,11 +350,11 @@ IF CITY_SOLDIER:(ARG:2) <= 0
 		ELSE
 			IF CFLAG:MASTER:소속 == LOCAL:6
 				SETCOLOR 칼라_경고
-				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 소속되어 있던 %BATTLE_NAME:1% 세력은 멸망해 버렸습니다…
+				PRINTFORMW %조사처리(ANAME(MASTER),"가")% 시중들고 있었던 %BATTLE_NAME:1% 세력은 멸망 해 버렸습니다…
 				RESETCOLOR
 			ELSE
 				SETCOLOR 칼라_경고
-				PRINTFORMW %BATTLE_NAME:1% 세력은 멸망했습니다
+				PRINTFORMW %BATTLE_NAME:1% 세력은 멸망 했습니다
 				RESETCOLOR
 			ENDIF
 			SIF !IS_SP_COUNTRY(LOCAL:6)
@@ -382,7 +382,7 @@ IF UNIT_SOLDIER:(ARG:0):(ARG:1) <= 0
 		ELSE
 			LOCALS:2 = <%LOCALS:2%>
 		ENDIF
-		CALL COLOR_PRINTL(@"%LOCALS:2% 부대가 패주했습니다……", 칼라_경고)
+		CALL COLOR_PRINTL(@"%LOCALS:2%부대가 패주했습니다……", 칼라_경고)
 	ELSE
 		PRINTFORML %BATTLE_NAME:0%군은 패주했습니다
 	ENDIF
@@ -831,16 +831,16 @@ ENDIF
 ;보정은 비 0.1마다 5%
 LOCAL = FINDELEMENT(무투비, MAXARRAY(무투비))
 LOCAL:1 = MIN((무투비:LOCAL - 100) / 2, 50)
-BATTLE_ATK:LOCAL = BATTLE_ATK:LOCAL * (100 + LOCAL:1) / 300
+BATTLE_ATK:LOCAL = BATTLE_ATK:LOCAL * (300 + LOCAL:1) / 300
 ;PRINTFORML 무투보정:%BATTLE_NAME:LOCAL + "군", MAX_CHARANAME_LENGTH, LEFT% 공격 강화{LOCAL:1, 2}％
 LOCAL = FINDELEMENT(방위비, MAXARRAY(방위비))
 LOCAL:1 = MIN((방위비:LOCAL - 100) / 2, 50)
-BATTLE_DEF:LOCAL = BATTLE_DEF:LOCAL * (100 + LOCAL:1) / 300
+BATTLE_DEF:LOCAL = BATTLE_DEF:LOCAL * (300 + LOCAL:1) / 300
 ;PRINTFORML 방위 보정:%BATTLE_NAME:LOCAL + "군", MAX_CHARANAME_LENGTH, LEFT% 방어 강화{LOCAL:1, 2}％
 
 LOCAL = FINDELEMENT(지략비, MAXARRAY(지략비))
 LOCAL:1 = MIN((지략비:LOCAL - 100) / 2, 50)
-BATTLE_INT:LOCAL = BATTLE_INT:LOCAL * (100 + LOCAL:1) / 200
+BATTLE_INT:LOCAL = BATTLE_INT:LOCAL * (200 + LOCAL:1) / 200
 ;PRINTFORML 지략 보정:%BATTLE_NAME:LOCAL + "군", MAX_CHARANAME_LENGTH, LEFT% 지략 강화{LOCAL:1, 2}％
 
 ;-------------------------------------------------
@@ -1014,9 +1014,9 @@ PRINTFORML %BATTLE_NAME:(발동측)%의 계략 발동!
 IF RAND:MAX(BATTLE_ATK:(대상측), 1) + BATTLE_ATK:(대상측) >= RAND:MAX(BATTLE_INT:(발동측) * 3, 1) + BATTLE_INT:(발동측)
 	PRINTFORM 《관계》
 	PRINTDATAL
-		DATAFORM %BATTLE_NAME:(대상측)% 부대는 힘으로 %BATTLE_NAME:(발동측)%의 계략을 꺾어눌러 파훼했다
-		DATAFORM %BATTLE_NAME:(대상측)% 부대는 %BATTLE_NAME:(발동측)%의 계략을 압도적인 힘으로 파훼했다
-		DATAFORM %BATTLE_NAME:(발동측)% 부대의 계략은 %조사처리(BATTLE_NAME:(대상측),"이")% 가진 힘 앞에 무의미했다
+		DATAFORM %BATTLE_NAME:(대상측)% 부대는 힘으로 %BATTLE_NAME:(발동측)%의 계략을 꺾어누르고 무효화했다
+		DATAFORM %BATTLE_NAME:(대상측)% 부대는 %BATTLE_NAME:(발동측)%의 계략을 압도적인 힘으로 무효화했다
+		DATAFORM %BATTLE_NAME:(발동측)% 부대의 계략은 %조사처리(BATTLE_NAME:(대상측),"이")% 가지는 힘의 전에서는 무의미했다
 	ENDDATA
 	BATTLE_RATE_DMG:대상측 += 5
 	BATTLE_RATE_ATC:대상측 += 30
@@ -1036,7 +1036,7 @@ ELSE
 			CONTINUE
 		IF FIND_PASSIVE_SKILL(통찰캐릭터, "통찰") && 30 > RAND:100
 			PRINTFORM 《통찰》
-			PRINTFORML %ANAME(통찰캐릭터)%는 적의 계략을 간파했다
+			PRINTFORML %ANAME(통찰캐릭터)%는 적부대의 계략을 간파했다
 			BATTLE_RATE_DMG:대상측 += 10
 			BATTLE_RATE_ATC:대상측 += 25
 			BATTLE_RATE_GRD:대상측 += 20
@@ -1116,27 +1116,27 @@ SELECTCASE IFRAND("0, 1", 1, "2", TINT >= ABL_POWER(50, -1), "3", TINT >= ABL_PO
  "6", TINT >= ABL_POWER(90, -1), "7", TINT >= ABL_POWER(100, -1), "8, 9", TINT >= ABL_POWER(110, -1))
 }
 	CASE 0
-		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군을 도발해, 도시 밖으로 빠져나오게 했다
+		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군을 도발해, 성으로부터 토벌해 내게 했다
 		BATTLE_RATE_DMG:(ARG:0) += 0
 		BATTLE_RATE_ATC:(ARG:0) += 60
 		BATTLE_RATE_GRD:(ARG:0) += 0
 	CASE 1
-		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군의 선봉대를 유인해 본대와 단절시키고, 우세한 상황에서 전투를 시작했다
+		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군의 선봉 부대를 꾀어내 고립시켜, 우위에 전투를 진행시켰다
 		BATTLE_RATE_DMG:(ARG:0) += 0
 		BATTLE_RATE_ATC:(ARG:0) += 50
 		BATTLE_RATE_GRD:(ARG:0) += 25
 	CASE 2
-		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군이 병력을 넓게 전개시킨 틍을 타 각개 격파 했다
+		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군이 내민 부대를 포위해 각개 격파 했다
 		BATTLE_RATE_DMG:(ARG:0) += 0
 		BATTLE_RATE_ATC:(ARG:0) += 60
 		BATTLE_RATE_GRD:(ARG:0) += 30
 	CASE 3
-		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군을 야습해 전술적 우위를 점했다
+		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군에 야습을 걸어 전과를 올렸다
 		BATTLE_RATE_DMG:(ARG:0) += 0
 		BATTLE_RATE_ATC:(ARG:0) += 70
 		BATTLE_RATE_GRD:(ARG:0) += 30
 	CASE 4
-		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군의 부대를 둘로 분단시켜 지휘 계통을 혼란시켰다
+		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군의 부대를 분단 해 지휘 계통을 혼란시켰다
 		BATTLE_RATE_DMG:(ARG:0) += 2
 		BATTLE_RATE_ATC:(ARG:0) += 80
 		BATTLE_RATE_GRD:(ARG:0) += 40
@@ -1146,22 +1146,22 @@ SELECTCASE IFRAND("0, 1", 1, "2", TINT >= ABL_POWER(50, -1), "3", TINT >= ABL_PO
 		BATTLE_RATE_ATC:(ARG:0) += 80
 		BATTLE_RATE_GRD:(ARG:0) += 50
 	CASE 6
-		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군을 지뢰밭으로 끌어들여 엄청난 손실을 입혔다
+		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군을 유리한 지형으로 끌어들여 대타격을 주었다
 		BATTLE_RATE_DMG:(ARG:0) += 12
 		BATTLE_RATE_ATC:(ARG:0) += 70
 		BATTLE_RATE_GRD:(ARG:0) += 70
 	CASE 7
-		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 대규모 포격과 함께 %BATTLE_NAME:(ARG:1)%군에 대공세를 가했다
+		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 병기를 이용해 %BATTLE_NAME:(ARG:1)%군에 대공세를 걸었습니다
 		BATTLE_RATE_DMG:(ARG:0) += 5
 		BATTLE_RATE_ATC:(ARG:0) += 120
 		BATTLE_RATE_GRD:(ARG:0) += 60
 	CASE 8
-		PRINTFORML %BATTLE_NAME:(ARG:0)%군의 계책에 의해 %BATTLE_NAME:(ARG:1)%군은 내부에서 자중지란을 일으켰다
+		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 주도한 책모에 의해 %BATTLE_NAME:(ARG:1)%군을 동지사이의 싸움시키는 것을 성공했다
 		BATTLE_RATE_DMG:(ARG:0) += 20
 		BATTLE_RATE_ATC:(ARG:0) += 60
 		BATTLE_RATE_GRD:(ARG:0) += 80
 	CASE 9
-		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군의 치졸한 계책을 역으로 이용했다
+		PRINTFORML %BATTLE_NAME:(ARG:0)%군은 %BATTLE_NAME:(ARG:1)%군의 치졸한 책을 반대로 이용했다
 		BATTLE_RATE_DMG:(ARG:0) += 20
 		BATTLE_RATE_ATC:(ARG:0) += 80
 		BATTLE_RATE_GRD:(ARG:0) += 80
@@ -1386,7 +1386,7 @@ FOR LOCAL, 0, BATTLE_COMMANDER_NUM:패배측
 	;도주했을 경우
 	ELSE
 		IF COUNTRY_L == CFLAG:MASTER:소속
-			PRINTFORML %조사처리(ANAME(LOCAL:4),"는")% 어떻게든 도망쳤습니다
+			PRINTFORML %조사처리(ANAME(LOCAL:4),"는")% 어떻게든 도망갔습니다
 		ELSEIF COUNTRY_W == CFLAG:MASTER:소속
 			PRINTFORML %조사처리(ANAME(LOCAL:4),"는")% 도주한 것 같습니다…
 		ELSE
@@ -1408,8 +1408,8 @@ FOR LOCAL, 0, BATTLE_COMMANDER_NUM:패배측
 			IF COOLTIME:(LOCAL:4):0 > 1 && (LOCAL:2 == LOCAL:4 || RAND:100 < 15)
 				COOLTIME:(LOCAL:4):0 = MAX(COOLTIME:(LOCAL:4):0 - 2, 1)
 				SETCOLOR 칼라_스킬발동
-				PRINTFORML %ANAME(LOCAL:2)%의 치료로, %ANAME(LOCAL:4)%의 상처가 완화되었다
-				PRINTFORML 병세가 전치 {COOLTIME:(LOCAL:4):0}주로 줄었다!
+				PRINTFORML %ANAME(LOCAL:2)%의 치료로, %ANAME(LOCAL:4)%의 상처가 가벼워졌다
+				PRINTFORML 전치{COOLTIME:(LOCAL:4):0}턴이 되었다!
 				RESETCOLOR
 			ENDIF
 		NEXT
