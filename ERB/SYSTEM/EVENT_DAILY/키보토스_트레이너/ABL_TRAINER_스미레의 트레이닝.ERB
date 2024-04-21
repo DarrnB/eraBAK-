@@ -42,32 +42,32 @@ RETURN 데일리_장르_트래이너
 #DIM 대금
 
 대금 = 20000
-
+;----------------농땡이마왕 -> 은둔형 외톨이 / 비행청소년
 IF DVAR:소질트래이너_발생플래그 == 0 && CFLAG:129:17 == 0
-	PRINTFORML %조사처리(ANAME(MASTER),"가")% 일을 하던 중, 어떤 학생이 손님으로 왔다고 한다.
-	PRINTFORML 들어보니, 「건강한 학생이 왔다」라고 한다
-	PRINTFORMW 건강한게 뭘까 생각한 %조사처리(ANAME(MASTER),"는")%, 만나기로 해 보았다
+	PRINTFORML %조사처리(ANAME(MASTER),"가")% 일을 하던 도중, 어떤 학생이 손님으로 왔다는 소식이 전해졌다.
+	PRINTFORML 들기로는, 「건강한 학생이 왔다」라고 한다.
+	PRINTFORMW 건강한 학생이라는 게 무슨 의미인지 몰라 고개를 갸웃한 %조사처리(ANAME(MASTER),"는")%, 그 학생을 만나보기로 했다.
 	PRINTFORML ·
 	PRINTFORML ·
 	PRINTFORML ·
 	PRINTFORML 「안녕하십니까.」
-	PRINTFORMW 「저는 『밀레니엄 사이언스 스쿨 트레이닝 클럽』의   오토하나 스미레 입니다.」
-	PRINTFORML 「실은, 오늘은 %조사처리(ANAME(MASTER),"에게")% 근처에 나태한 학생이 있다고 들었습니다.」
-	PRINTFORML 「【농땡이마왕】 인 학생이 있을까요?   저는 그러한 사람의 근성을 근육으로 트레이닝하고 있습니다.」
-	PRINTFORML 「농땡이마왕의 학생은 좀처럼 성장하지 않아서 말썽입니다. 매일매일 단련해야 하죠.」
+	PRINTFORMW 「저는 『밀레니엄 사이언스 스쿨 트레이닝 클럽』의 오토하나 스미레 입니다.」
+	PRINTFORML 「실은, 오늘은 %ANAME(MASTER)%의 근처에 나태한 학생이 있다고 들어 찾아왔습니다.」
+	PRINTFORML 「【농땡이마왕】 인 학생이 있을까요? 저는 그러한 사람의 근성을 근육으로 트레이닝하고 있습니다.」
+	PRINTFORML 「농땡이마왕인 학생은 좀처럼 성장하지 않아서 말썽입니다. 매일매일 단련해야 하죠.」
 ELSE
-	PRINTFORML 「아아,   또 만났군요.」
-	PRINTFORMW 「기억하고 계십니까?   트레이닝 클럽의 스미레입니다.」
-	PRINTFORML 「【농땡이마왕】 인 학생이 있을까요?   저는 그러한 사람의 근성을 근육으로 트레이닝하고 있습니다.」
-	PRINTFORML 「농땡이마왕의 학생은 좀처럼 성장하지 않아서 말썽입니다. 매일매일 단련해야 하죠.」
+	PRINTFORML 「아아, 또 만났군요.」
+	PRINTFORMW 「기억하고 계십니까? 트레이닝 클럽의 스미레입니다.」
+	PRINTFORML 「【농땡이마왕】 인 학생이 있을까요? 저는 그러한 사람의 근성을 근육으로 트레이닝하고 있습니다.」
+	PRINTFORML 「농땡이마왕인 학생은 좀처럼 성장하지 않아서 말썽입니다. 매일매일 단련해야 하죠.」
 ENDIF
 ;스미레와 만남 처리
 CFLAG:129:17 = 1
-CALL ICPRINT(@"「가격은 돈<{대금}>입니다.", "W", 칼라_주의)
-PRINTFORMW 「좋은 이야기라고 생각하시지 않습니까?」
+CALL ICPRINT(@"「가격은 <{대금}>크레딧 입니다.", "W", 칼라_주의)
+PRINTFORMW 「괜찮은 이야기라고 생각하시지 않습니까?」
 PRINTFORML 이 학생이 가져온 이야기 자체는 상당히 괜찮았다.
-PRINTFORML 확실히 싸지는 않지만, 트레이닝의 효과가 있다면 고려해볼만 하다.
-PRINTFORMW 그런데, 어떻게 할까……
+PRINTFORML 확실히 트레이닝치고 싼 가격은 아니지만, 트레이닝의 효과가 확실하다면 고려해볼만 하다.
+PRINTFORMW 그럼, 어떻게 할까……
 PRINTFORML
 
 CALL ASK_MULTI_JUDGE("부탁해도 될까?", MONEY >= 대금, "그만둔다", 1)
@@ -93,7 +93,7 @@ SIF RESULT == -1
 대상 = RESULT
 
 PRINTFORMW 「%ANAME(대상)%씨입니까.  알겠습니다.」
-PRINTFORMW 「자, %ANAME(대상)%씨와 트레이닝 하고 오겠습니다.」
+PRINTFORMW 「그럼, %ANAME(대상)%씨와 몸의 대화를 나누고 오겠습니다.」
 PRINTFORMW ·
 PRINTFORMW ·
 PRINTFORMW ·
@@ -113,7 +113,7 @@ PRINTFORMW ·
 PRINTFORMW ·
 PRINTFORMW 「후우, 좋은 운동이었습니다.」
 PRINTFORMW 「결과는 확실합니다. 이렇게 땀이 흘렀으니까요.」
-PRINTFORMW 「그러면, 저는 이만 가보겠습니다. 언젠가 다시 만날 일이 있다면.」
+PRINTFORMW 「그럼, 저는 이만 가보겠습니다. 언젠가 다시 만날 일이 있다면.」
 PRINTFORMW 스미레는 떠나갔다.
 
 CALL COLOR_PRINTW(@"%ANAME(대상)%의【농땡이마왕】이 고쳐졌다.", 칼라_주의)

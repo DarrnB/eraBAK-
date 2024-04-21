@@ -69,97 +69,97 @@ CALL FISHER_YATES_SHAFFLE(DAILY_TARGET_NUM)
 
 ;대사를 삭제
 ;구상 데일리가 아니기 때문에
-PRINTFORML 체육복 차림의 %조사처리(ANAME(대상),"를")% 만났다
-PRINTFORML 지금부터 조깅에 가는 것 같다
-PRINTFORMW %조사처리(ANAME(대상),"은")% %ANAME(MASTER)%도 함께 조깅하자며 권유했다
+PRINTFORML 체육복 차림의 %조사처리(ANAME(대상),"를")% 만났다.
+PRINTFORML 지금부터 조깅을 하러 가는 것 같다.
+PRINTFORMW %조사처리(ANAME(대상),"가")% %ANAME(MASTER)%도 함께 조깅하자며 권유했다.
 PRINTFORML 어떻게 할까?
 CALL ASK_YN("조깅한다", "거절한다")
 IF RESULT == 1
-	PRINTFORML 거절했다
-	PRINTFORMW %조사처리(ANAME(대상),"은")% 아쉬운 표정으로 인사하고는 운동장으로 달려갔다
+	PRINTFORML 거절했다.
+	PRINTFORMW %조사처리(ANAME(대상),"은")% 아쉬운 표정으로 인사하고는 운동장으로 달려갔다.
 ELSEIF RESULT == 0
-	PRINTFORML 오랜만에 달리기로 했다
-	PRINTFORMW %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"와")% 함께 운동장을 달렸다
+	PRINTFORML 오랜만에 달리기로 했다.
+	PRINTFORMW %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"와")% 함께 운동장을 달렸다.
 	PRINTFORML ·
 	PRINTFORML ·
 	PRINTFORMW ·
 	IF (MAXBASE:MASTER:체력 / 100) * (RAND:10 + 1) >= (MAXBASE:대상:체력 / 100) * (RAND:10 + 1)
 		PRINTFORML %조사처리(ANAME(대상),"은")% 지쳤는지 그늘 밑에 앉아 숨을 고르고 있다.
-		PRINTFORML 땀투성이가 되어 체육복이 젖어 몸에 착 달라붙어서 몸매가 그대로 드러나고 있다.
-		PRINTFORMW 그 모습과 갸쁜 숨을 몰아쉬고 있는 %조사처리(ANAME(대상),"은")% 쓸데없이 요염하다
+		PRINTFORML 땀범벅이 된 몸에 체육복이 착 달라붙어서 몸매가 그대로 드러나 있다.
+		PRINTFORMW 그 모습과 갸쁜 숨을 몰아쉬고 있는 %조사처리(ANAME(대상),"은")% 쓸데없이 요염했다.
 		PRINTFORML 어떻게 할까?
 		CALL ASK_YN("물을 건네준다", "덮친다")
 		IF RESULT == 0
-			PRINTFORML %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%에게 물을 건네주었다
-			PRINTFORMW 그녀는 웃는 얼굴로 고맙다고 말하며 물을 마셨다
+			PRINTFORML %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%에게 물을 건네주었다.
+			PRINTFORMW 그녀는 웃는 얼굴로 고맙다고 말하며 물을 마셨다.
 			CFLAG:대상:호감도 += 150
 			CALL COLOR_PRINT(@"%ANAME(대상)%의 호감도가 150 올랐다", 칼라_주의)
 			PRINTFORMW 
 		ELSE
-			PRINTFORML %조사처리(ANAME(MASTER),"는")% 참지 못하고 %조사처리(ANAME(대상),"을")% 덮쳤다
+			PRINTFORML %조사처리(ANAME(MASTER),"는")% 참지 못하고 %조사처리(ANAME(대상),"을")% 덮쳤다.
 			IF HAS_PENIS(MASTER)
 				PRINTFORMW %조사처리(ANAME(대상),"는")% %ANAME(MASTER)%의 행동에 당황하면서도 사타구니의 커다래진 물건을 보고는 얼굴이 새빨개졌다
 			ELSE
-				PRINTFORMW %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"가")% 덮쳐오자 당황한다
+				PRINTFORMW %조사처리(ANAME(대상),"는")% %조사처리(ANAME(MASTER),"가")% 덮쳐오자 당황했다.
 			ENDIF
 
 			IF (CFLAG:대상:호감도 >= 1500 || CFLAG:대상:종속도 >= 1500 || CFLAG:대상:지배도 >= 1500 || TALENT:대상:합의 == 0)
-				PRINTFORML %조사처리(ANAME(MASTER),"가")% %ANAME(대상)%의 허리에 손을 대자 곧바로 비명을 질렀다
-				PRINTFORMW %조사처리(ANAME(대상),"는")% 비명에 놀란 %조사처리(ANAME(MASTER),"를")% 냅다 밀치고 도망쳤다
+				PRINTFORML %조사처리(ANAME(MASTER),"가")% %ANAME(대상)%의 허리에 손을 대자 그녀는 곧바로 비명을 질렀다.
+				PRINTFORMW %조사처리(ANAME(대상),"는")% 비명에 놀란 %조사처리(ANAME(MASTER),"를")% 냅다 밀치고 도망쳤다.
 				CFLAG:대상:호감도 -= 300
 				CALL COLOR_PRINT(@"%ANAME(대상)%의 호감도가 300 내렸다…", 칼라_주의)
 				PRINTFORMW 
 			ELSE
-				PRINTFORML %조사처리(ANAME(MASTER),"가")% %ANAME(대상)%의 신체에 손을 뻗자 작게 신음을 냈다
-				PRINTFORML 그대로 천천히 애무를 해도 %조사처리(ANAME(대상),"는")% 저항하지 않고 손이 가는 대로 느끼고 있다
+				PRINTFORML %조사처리(ANAME(MASTER),"가")% %ANAME(대상)%의 몸에 손을 대자 작게 신음을 냈다.
+				PRINTFORML 그대로 천천히 애무를 해도 %조사처리(ANAME(대상),"는")% 저항하지 않고 애무당하는 대로 느끼고 있다.
 				IF HAS_PENIS(MASTER)
-					PRINTFORML 숨을 거칠게 하고 뺨을 붉히고 몸부림치는 그 표정에 %ANAME(MASTER)%의 물건은 터질듯이 딱딱해진다
+					PRINTFORML 거친 숨을 내쉬며 뺨을 붉히고 몸을 떠는 그녀의 얼굴에 %ANAME(MASTER)%의 물건은 터질듯이 딱딱해졌다.
 				ELSE
-					PRINTFORML 숨을 거칠게 하고 뺨을 붉히고 몸부림치는 그 표정에 %ANAME(MASTER)%도 덩달아 몸이 달아오른다
+					PRINTFORML 거친 숨을 내쉬며 뺨을 붉히고 몸을 떠는 그녀의 얼굴에 %ANAME(MASTER)%도 덩달아 몸이 달아올랐다.
 				ENDIF
-				PRINTFORMW 참지 못하고 %ANAME(대상)%의 옷에 손을 대자, %조사처리(ANAME(대상),"는")%는 부끄러운 듯이 하면서 고개를 끄덕였다
+				PRINTFORMW 참지 못하고 %ANAME(대상)%의 옷을 손으로 잡아들자, %조사처리(ANAME(대상),"는")%는 부끄러운 듯 시선을 피하며 고개를 끄덕였다.
 				PRINTFORML 
 				;자지를 가지고 있을 때
 				IF HAS_PENIS(MASTER)
 					SELECTCASE RAND:2
 						CASE 0
-							PRINTFORML 수풀 안쪽에서 요염한 신음소리가 주위에 울려퍼진다
-							PRINTFORML %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 가까운 수풀의 안쪽으로 데리고 들어가 후배위로 격렬하게 교접하고 있다
-							PRINTFORML %ANAME(대상)%의 몸은 달아올라서 %ANAME(MASTER)%의 물건을 밀어넣을 때마다 민감하게 반응하고 있다
-							PRINTFORML 특히 자궁을 집중적으로 찌를 때마다 %ANAME(대상)%의 눈동자엔 ♡를 띄우면서 그 감촉을 느낀다
-							PRINTFORML 한동안의 교접 후 %ANAME(대상)%의 안쪽이 움찔 거리면서 사정을 재촉하여
-							PRINTFORML 그 기대에 응하듯 %ANAME(대상)%의 깊은 곳에서 사정한다
-							PRINTFORML 뜨거운 정액의 감촉에 %조사처리(ANAME(대상),"는")% 신음하며 갸쁜 숨을 내쉰며 다리를 후들거리며 풀밭에 털썩 주저 않는다
-							PRINTFORML 방금까지 %ANAME(대상)%의 깊숙한 곳에 있었던 물건을 %ANAME(대상)%에게 들이밀자 부끄러워하며 입으로 깨끗히 청소한다
+							PRINTFORML 수풀 안쪽에서 요염한 신음소리가 주위로 울려퍼진다.
+							PRINTFORML %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 가까운 수풀 속으로 데리고 들어가 후배위로 격렬하게 교접하고 있다.
+							PRINTFORML %ANAME(대상)%의 몸은 뜨겁게 달아올라 %ANAME(MASTER)%의 물건에 박힐 때마다 민감한 반응을 보였다.
+							PRINTFORML 특히 자궁을 집중적으로 찌를 때마다 %조사처리(ANAME(대상),"는")% 눈동자에 ♡를 띄우며 그 감촉을 느꼈다.
+							PRINTFORML 한동안 교접이 이어진 후, %ANAME(대상)%의 몸이 움찔거리며 사정을 재촉하기 시작했다.
+							PRINTFORML 그 기대에 응하듯, %조사처리(ANAME(MASTER),"는")% %ANAME(대상)%의 깊은 곳에 정액을 쏟아냈다.
+							PRINTFORML 뜨거운 정액이 자궁을 가득 채우는 감각에 %조사처리(ANAME(대상),"는")% 신음하며 갸쁜 숨을 내쉬고, 후들거리는 다리로 풀밭에 털썩 주저앉았다.
+							PRINTFORML 방금까지 %ANAME(대상)%의 깊숙한 곳에 있었던 물건을 %ANAME(대상)%에게 들이밀자, 그녀는 부끄러워하면서도 입으로 깨끗이 청소해 주었다.
 							CALL FUCK_MAKELOVE(대상, GET_ID(MASTER), @"%ANAME(MASTER)%의 페니스", ANAME(MASTER))
 							CALL FUCK(MASTER, "Ｃ, 사정, Ｖ삽입", "동정상실", 0, "", "", @"%ANAME(대상)%의 질")
 						CASE 1
-							PRINTFORML 체육관 창고에서 두 사람이 교접하고 있다
-							PRINTFORML 먼지쌓인 매트리스에 누워있는 %ANAME(대상)%의 질 내에 정상위로 %ANAME(MASTER)%의 물건이 왕복한다
-							PRINTFORML 거칠게 허리를 흔들자 괴롭다는 듯 신음하며 안쪽을 더욱더 조인다
-							PRINTFORML 거친 숨을 내쉬며 갈 것 같다 말하자 %ANAME(대상)%의 다리가 허리를 감싸 안쪽에 싸달라고 말한다
-							PRINTFORML %조사처리(ANAME(MASTER),"는")% 절정에 달하여 %ANAME(대상)%의 안쪽에 뜨거운 액체를 내뿜는다
-							PRINTFORML %ANAME(대상)%도 가버렸는지 사정하는 자지를 꾸욱 조인다
-							PRINTFORML 사정이 끝난 뒤 %조사처리(ANAME(대상),"는")% 베시시 웃으며 %ANAME(MASTER)%의 입술에 자신의 입술을 포갠다
-							PRINTFORML 잠시동안의 키스가 끝난 뒤 %ANAME(MASTER)%의 물건을 꺼내자 다 들어가지 못한 정액이 새어나온다
-							PRINTFORML %조사처리(ANAME(대상),"는")% 상체를 일으켜서 자신의 틈에 새어나오는 액체을 보고 양 손으로 그 틈을 벌리고는
-							PRINTFORML 자신의 안쪽이 그렇게 기분좋았냐며 %ANAME(MASTER)%에게 과시한다
+							PRINTFORML 인적이 없는 체육관 창고 안, 그곳에서 요염한 신음소리가 울려퍼진다.
+							PRINTFORML 먼지쌓인 매트리스에 누워있는 %ANAME(대상)%의 질 내부를 정상위로 삽입된 %ANAME(MASTER)%의 물건이 왕복했다.
+							PRINTFORML 거칠게 허리를 흔들자 %조사처리(ANAME(대상),"는")% 괴롭다는 듯 신음하면서도 안쪽을 더욱더 조였다.
+							PRINTFORML 거친 숨을 내쉬며 갈 것 같다 말하자 %조사처리(ANAME(대상),"는")% 두 다리로 %ANAME(MASTER)%의 허리를 감싸며 안쪽에 싸달라고 애원했다
+							PRINTFORML 그 유혹을 버티지 못한 %조사처리(ANAME(MASTER),"는")% 절정에 달하며 %ANAME(대상)%의 안쪽에 뜨거운 액체를 내뿜었다.
+							PRINTFORML %ANAME(대상)%도 가버렸는지 사정하는 자지를 꾸욱 조였다.
+							PRINTFORML 사정이 끝난 뒤 %조사처리(ANAME(대상),"는")% 베시시 웃으며 %ANAME(MASTER)%의 입술에 자신의 입술을 포갰다.
+							PRINTFORML 잠깐의 키스가 끝난 뒤 %조사처리(ANAME(MASTER),"가")% 물건을 꺼내자 다 들어가지 못한 정액이 새어나왔다.
+							PRINTFORML %조사처리(ANAME(대상),"는")% 누워있던 몸을 일으켜 자신의 안에서 새어나오는 액체를 보고, 양 손으로 그녀의 소중한 곳을 벌리고는
+							PRINTFORML 자신의 안쪽이 그렇게 기분 좋았냐며 %ANAME(MASTER)%에게 과시했다.
 							CALL FUCK_MAKELOVE(대상, GET_ID(MASTER), @"%ANAME(MASTER)%의 입술", ANAME(MASTER))
 							CALL FUCK(MASTER, "Ｃ, 사정, Ｖ삽입", "동정상실", 0, "", "", @"%ANAME(대상)%의 질")
 					ENDSELECT
-				;자지가 없음(보빔)
+				;자지가 없음(보빔ㅈ조처
 				ELSE
 					SELECTCASE RAND:2
 						CASE 0
-							PRINTFORML %조사처리(ANAME(대상),"를")% 탈의실로 데려가 부르마와 팬티를 벗긴 다음 바닥에 눕힌 다음 다리를 벌렸다
-							PRINTFORML %조사처리(ANAME(대상),"는")% 당황하며 땀냄새가 날까 걱정된다 말하지만 %조사처리(ANAME(MASTER),"는")% 아랑곳 않고 %ANAME(대상)%의 음부를 빤다
-							PRINTFORML 당황하는 %조사처리(ANAME(대상),"를")% 무시하며 꿋꿋히 빨아올리자 %ANAME(대상)%의 숨이 거칠어온다
-							PRINTFORML %ANAME(MASTER)%도 팬티를 벗고 %ANAME(대상)%에게 자신의 음부를 빨아달라고 내민다
-							PRINTFORML 애무에 달아오른 %ANAME(대상)%도 %ANAME(MASTER)%의 음부를 혀로 핥는다
-							PRINTFORML 69 자세로 얼마간의 애무가 이어지고 %조사처리(ANAME(대상),"가")% 먼저 절정에 달하였고 %ANAME(MASTER)%도 뒤이어 절정했다
+							PRINTFORML %조사처리(ANAME(대상),"를")% 탈의실로 데려가 부르마와 팬티를 벗기고 바닥에 쓰러트려 다리를 벌렸다.
+							PRINTFORML %조사처리(ANAME(대상),"는")% 당황하며 땀냄새가 날까 걱정된다 말했지만 %조사처리(ANAME(MASTER),"는")% 아랑곳 않고 %ANAME(대상)%의 음부를 빨았다.
+							PRINTFORML 당황하는 %조사처리(ANAME(대상),"를")% 무시하며 꿋꿋이 혀와 입술을 놀리자 %ANAME(대상)%의 숨이 점점 거칠어졌다.
+							PRINTFORML 그런 %조사처리(ANAME(대상),"를")% 알아챈 %ANAME(MASTER)%도 팬티를 벗고 %ANAME(대상)%에게 자신의 음부를 빨아달라고 내밀었다.
+							PRINTFORML 애무에 달아오른 %ANAME(대상)%도 %ANAME(MASTER)%의 음부를 혀로 핥았다.
+							PRINTFORML 69 자세의 애무가 이어지자 얼마 지나지 않아 %조사처리(ANAME(대상),"가")% 먼저 절정에 이르렀고, %ANAME(MASTER)%도 뒤이어 절정했다.
 							PRINTFORML 절정의 여운을 느끼던 두 사람은 정신을 차린 뒤 상황을 수습한다
 							PRINTFORML 탈의실 벽면에 붙어있던 거울 속 두 사람의 얼굴엔 애액과 침 범벅에 녹아버릴것 같은 얼굴을 하고 있었다
-							CALL FUCK_MAKELOVE(대상, GET_ID(MASTER), @"%ANAME(MASTER)%의 음부", ANAME(MASTER))
+							CALL FUCK_MAKELOVE(대상, GET_ID(MASTER), @"%ANAME(MASTER)%의 음부", ANAME(MASTER))ㅈ
 
 						CASE 1
 							PRINTFORML 사람이 없는 체육창고에 %조사처리(ANAME(대상),"를")% 눕히고 서로의 옷을 전부 벗는다
