@@ -33,21 +33,21 @@ RETURN 데일리_장르_에로
 SIF FLAG:데일리이벤트_미검수 == 0
 	RETURN 0
 
-PRINTFORML 조금 시간이 생겼다
-PRINTFORMW 수중에는 술이 있지만…어떻게 하지?
-CALL ASK_MULTI("부하와 마신다" ,"병사들과 연회를 연다" ,"동료를 유혹한다" ,"혼자서 한가로이 마신다")
+PRINTFORML 일을 마치고 조금 여유가 생겼다
+PRINTFORMW 마침 술이 꽤 있는데… 어떻게 할까?
+CALL ASK_MULTI("부원과 마신다" ,"용병들과 파티를 연다" ,"동료를 유혹한다" ,"혼자서 한가로이 마신다")
 IF RESULT == 3
 	PRINTFORMW 혼자서 한가롭게 마시기로 했다
 ELSEIF RESULT == 1
-	PRINTFORMW 학생들의 평소의 스트레스를 위로하기 위해서 연회를 열었다
-	PRINTFORMW …연회는 많이 분위기를 살려, 그들도 기뻐해 준 것 같다
+	PRINTFORMW 용병들의 충성심을 다지는 차원에서 연회를 열었다
+	PRINTFORMW …연회는 즐거운 분위기 속에 진행되어, 그들도 기뻐해 준 것 같다
 	IF MASTER != GET_COUNTRY_BOSS(CFLAG:MASTER:소속)
-		PRINTFORMW 연회에 대해 군주의 귀에 들려와, 평가를 올렸다
+		PRINTFORMW 학생회장이 연회 소식을 듣고, 평판을 올렸다
 		CFLAG:GET_COUNTRY_BOSS(CFLAG:MASTER:소속):호감도 += 100 + RAND:100
 	ENDIF
 ELSEIF RESULT == 0
-	PRINTFORMW 비서와 서로 마시기로 했다
-	PRINTFORMW …술의 덕분인가, 본심을 털어놓는 서로 이야기할 수 있었다
+	PRINTFORMW 부원과 함께 마시기로 했다
+	PRINTFORMW …알코올의 힘인지, 서로 본심을 털어놓고 이야기할 수 있었다
 	SELECTCASE RAND:4
 		CASE 0
 			CALL PRINT_ADD_EXP(MASTER, "무투경험치", RAND(5, 10), 1)
@@ -59,21 +59,22 @@ ELSEIF RESULT == 0
 			CALL PRINT_ADD_EXP(MASTER, "정치경험치", RAND(5, 10), 1)
 	ENDSELECT
 	PRINTFORMW 
-	IF IS_FEMALE(MASTER)
+	;------------------------남자일 경우-부원-안는다-키스,동정상실 테스트 성공----------------------하지만 사용하지 않으므로 수정 중단
+	IF IS_MALE(MASTER)
 		PRINTFORMW 
-		PRINTFORML 기분 좋게 취해 왔을 무렵, 그가 자연스럽게 신체에 닿아 왔다
-		PRINTFORMW 그를 올려보면, 얼굴을 대어 응시하고 돌려주었다
-		CALL ASK_YN("저항한다", "저항하지 않는다")
-		IF RESULT == 0
-			PRINTFORMW  가볍게 딱밤을 때리면, 그는 유감스러운 듯이 어깨를 움츠렸다
+		PRINTFORML 기분 좋게 취했을 무렵, 함께 마시던 소녀가 자연스럽게 어깨에 기대왔다.
+		PRINTFORMW 그녀를 내려다보니, 소녀도 고개를 들고 눈을 마주치며 응시했다.
+		CALL ASK_YN("안는다", "밀어낸다")
+		IF RESULT == 1
+			PRINTFORMW  가볍게 딱밤을 때려주자, 소녀는 유감스러운 듯이 이마를 만지작거리며 어깨를 움츠렸다.
 		ELSE
-			PRINTFORML 달아오른 기분으로, %조사처리(ANAME(MASTER),"는")% 저항하지 않고 그에게 의지했다
-			PRINTFORMW 그는 %ANAME(MASTER)%의 어깨를 안아 입술을 차지해, 천천히 쓰러트렸다
+			PRINTFORML 달아오른 기분으로, %조사처리(ANAME(MASTER),"는")% 거부하지 않고 소녀의 어깨를 끌어안아 품에 넣었다.
+			PRINTFORMW 그녀는 그 손길에 저항하지 않고 품에 안겨, %ANAME(MASTER)%의 입술에 입을 맞추고 함께 옆으로 쓰러졌다.
 			PRINTFORML ·
 			PRINTFORML ·
 			PRINTFORMW ·
-			PRINTFORMW 밤새, 그의 정열적인 섹스로 한껏 귀여워해졌다
-			CALL FUCK(MASTER, "욕망, 봉사, 성교, 성기술, 사랑, Ｖ, Ｂ, Ｃ, Ｍ, 키스, 펠라티오, Ｖ성교", "키스상실, 처녀상실, 질내사정, 구강사정", GET_SPERM_ID("병사"), @"부하의 입술", @"부하", "", "화간")
+			PRINTFORMW 다음 날 아침까지, 그녀를 정열적인 섹스로 한껏 귀여워해줬다.
+			CALL FUCK(MASTER, "Ｃ, 사정, 키스", "동정상실, 키스상실", 0, @"부원의 입술", "", @"부원의 질", "화간")
 		ENDIF
 	ENDIF
 ELSE
