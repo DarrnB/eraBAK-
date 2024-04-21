@@ -59,13 +59,13 @@ ELSEIF RESULT == 0
 			CALL PRINT_ADD_EXP(MASTER, "정치경험치", RAND(5, 10), 1)
 	ENDSELECT
 	PRINTFORMW 
-	;------------------------남자 부원은 없다----------------------하지만 사용하지 않으므로 수정 중단
+	;------------------------남자일 경우-부원-안는다-키스,동정상실 테스트 성공----------------------하지만 사용하지 않으므로 수정 중단
 	IF IS_MALE(MASTER)
 		PRINTFORMW 
 		PRINTFORML 기분 좋게 취했을 무렵, 함께 마시던 소녀가 자연스럽게 어깨에 기대왔다.
 		PRINTFORMW 그녀를 내려다보니, 소녀도 고개를 들고 눈을 마주치며 응시했다.
 		CALL ASK_YN("안는다", "밀어낸다")
-		IF RESULT == 0
+		IF RESULT == 1
 			PRINTFORMW  가볍게 딱밤을 때려주자, 소녀는 유감스러운 듯이 이마를 만지작거리며 어깨를 움츠렸다.
 		ELSE
 			PRINTFORML 달아오른 기분으로, %조사처리(ANAME(MASTER),"는")% 거부하지 않고 소녀의 어깨를 끌어안아 품에 넣었다.
