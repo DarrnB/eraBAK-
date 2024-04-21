@@ -252,10 +252,10 @@ NEXT
 IF 상대세력 == CFLAG:MASTER:소속
 	CALL COLOR_PRINTL(@"%조사처리(ANAME(군주),"가")% %조사처리(ANAME(상대세력군주),"와")% 회담했습니다", 칼라_주의)
 ELSE
-	PRINTFORM %조사처리(ANAME(군주),"는")% %ANAME(상대세력군주)%에의 회담을 시도했습니다
+	PRINTFORM %조사처리(ANAME(군주),"는")% %ANAME(상대세력군주)%에게 회담을 요청했습니다
 	;상대의 외교 대상으로 들어가지 않고, 한편 난수 판정에 실패하면 거부 플래그가 끊는다
 	IF !GROUPMATCH(CHECK_AI_DIPLOMACY_PLAN(상대세력, 세력), AI_외교계획_회담, AI_외교계획_동맹, AI_외교계획_정전) && RAND:MAX(1500 + REL_LIKE:상대세력군주:군주 - REL_HATE:상대세력군주:군주, 1000) < 500
-		PRINTFORML 가, %조사처리(ANAME(상대세력군주),"는")% 환영하지 않았습니다
+		PRINTFORML  하지만, %조사처리(ANAME(상대세력군주),"는")% 환영하지 않았습니다
 		거부플래그 = 1
 	ELSE
 		PRINTFORML 。%조사처리(ANAME(상대세력군주),"는")% 환영한 것 같습니다
