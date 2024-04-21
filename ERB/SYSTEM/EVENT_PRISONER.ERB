@@ -40,7 +40,7 @@ FIRST_LINE = LINECOUNT
 $SHOW_LOOP
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 각 포로의취급을 설정해 주세요
+PRINTFORML 각 포로의 취급을 설정해 주세요
 CALL SINGLE_DRAWLINE
 
 PRINTFORM %TOSTR_SPACE(47)%
@@ -200,7 +200,7 @@ IF !LOCAL:20
 	NEXT
 	IF LOCAL:21
 		SETCOLOR 칼라_주의
-		PRINTFORMW ※촉수의방을 사용 할 수 없기에, 일부의 포로의취급을 「촉수조교」로부터 「구류」로 변경했습니다
+		PRINTFORMW ※촉수의방을 사용 할 수 없기에, 일부 포로의 취급을 「촉수조교」에서 「구류」로 변경했습니다
 		RESETCOLOR
 	ENDIF
 ENDIF
@@ -250,17 +250,17 @@ IF TALENT:(ARG:0):붕괴 || TALENT:(ARG:0):공허
 
 ELSE
 	IF ABL:(ARG:0):무투 >= 70 || TALENT:(ARG:0):아픔에강함
-		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 이를 악물어 필사적으로 아픔과 굴욕에 참고 있다…
+		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 이를 악물고 필사적으로 아픔과 굴욕을 참고 있다…
 		IF TALENT:(ARG:0):아픔에강함
 			CFLAG:(ARG:0):포로포 = 2500
 		ELSE
 			CFLAG:(ARG:0):포로포 = 3300
 		ENDIF
 	ELSEIF TALENT:(ARG:0):아픔에약함 || TALENT:(ARG:0):유치
-		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 아픔의 너무 울부짖으면서 용서를 빌고 있다…
+		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 지나친 아픔에 울부짖으면서 용서를 빌고 있다…
 		CFLAG:(ARG:0):포로포 = 4100
 	ELSE
-		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 채찍으로 맞을 때마다 비명을 올리고 있다…
+		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 채찍에 맞을 때마다 비명을 올리고 있다…
 		CFLAG:(ARG:0):포로포 = 3500
 	ENDIF
 	CFLAG:(ARG:0):포로포 = CFLAG:(ARG:0):포로포 * (200 - ABL:(ARG:0):무투 / 2) / 200
@@ -509,9 +509,9 @@ IF !TALENT:(ARG:0):모유체질 && (!IS_MALE(ARG:0) || (IS_MALE(ARG:0) && TALENT
 		EXP:(ARG:0):착유경험치 += 2
 	IF EXP:(ARG:0):착유경험치 >= 50
 		IF TALENT:(ARG:0):모유체질
-			PRINTFORML 거듭되는 강행인 착유에 %조사처리(ANAME(ARG:0),"는")% 유선이 망가져 버린 것을 느꼈다
+			PRINTFORML 거듭되는 강제 착유에 %조사처리(ANAME(ARG:0),"는")% 유선이 망가져 버린 것을 느꼈다
 		ELSE
-			PRINTFORML 거듭되는 강행인 착유에 마침내 %ANAME(ARG:0)%의 가슴으로부터 모유가 새기 시작했다
+			PRINTFORML 거듭되는 강제 착유에 마침내 %ANAME(ARG:0)%의 가슴으로부터 모유가 새기 시작했다
 		ENDIF
 		TALENT:(ARG:0):모유체질 = 1
 		CFLAG:(ARG:0):일시적모유체질 = 0
@@ -547,7 +547,7 @@ ELSE
 		CASE 0
 			PRINTFORML 이지만, %조사처리(ANAME(ARG:0),"로")%부터 모유를 짤 수 없었다
 		CASE 1
-			PRINTFORML %조사처리(ANAME(ARG:0),"는")% 근지러움에 얼굴을 비뚤어지게 했지만 결국 모유는 나오지 않았다
+			PRINTFORML %조사처리(ANAME(ARG:0),"는")% 간지러운 느낌을 버티지 못하고 표정을 찡그렸지만 결국 모유는 나오지 않았다
 	ENDSELECT
 ENDIF
 ;처리 내용을 기본으로 능력이 오르는지 체크하는 경험이 들어가지 않는 것이 분명한 경우 필요없다
