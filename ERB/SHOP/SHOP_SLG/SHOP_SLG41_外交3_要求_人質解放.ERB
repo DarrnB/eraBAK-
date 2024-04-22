@@ -5,14 +5,14 @@
 LOCAL:4 = GET_COUNTRY_BOSS(CFLAG:MASTER:소속)
 LOCAL:5 = GET_COUNTRY_BOSS(ARG:0)
 
-PRINTFORMW %조사처리(ANAME(MASTER),"는")% %ANAME(LOCAL:5)%에게, 무조건으로 인질을 해방하도록(듯이) 요구했다
+PRINTFORMW %조사처리(ANAME(MASTER),"는")% %ANAME(LOCAL:5)%에게 알아서 인질을 해방하라고 요구했다
 
 CALL DIPLOMACY_REQUEST_COMMON(ARG:0, 250)
 LOCAL:2 = RESULT
 SIF LOCAL:2 <= 0
 	RETURN 0
 
-PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% 수네라고 있던 우리 나라의 포로를 전원 해방했다…
+PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% 붙잡고 있던 우리 학원 소속의 포로를 전부 해방했다…
 SETCOLOR 칼라_주의
 FOR LOCAL:0, 0, CHARANUM
 	IF CFLAG:(LOCAL:0):소속 == CFLAG:MASTER:소속 && CFLAG:(LOCAL:0):포로처 == ARG:0

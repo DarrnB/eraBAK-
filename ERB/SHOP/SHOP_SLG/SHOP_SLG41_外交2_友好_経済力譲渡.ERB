@@ -15,11 +15,11 @@ PRINTFORML %ANAME(LOCAL:5), LOCAL:20%의 경제력:{LOCAL:7 / 100, LOCAL:21}
 CALL SINGLE_DRAWLINE
 
 IF LOCAL:6 < 250
-	PRINTFORMW 최악이어도 250이상의 경제력이 필요합니다
+	PRINTFORMW 최소한 250이상의 경제력이 필요합니다
 	RETURN 0
 ENDIF
 
-PRINTFORML 양도하는 경제력을 입력해 주세요（0 이하로 캔슬, 최대로 경제력의 20％까지）
+PRINTFORML 양도할 경제력을 입력해 주세요（0 이하 숫자를 입력해 캔슬, 최대 양도 수치는 경제력의 20％까지）
 
 CALL DRAW_ECONOMY_INPUT(LOCAL:6 / 500)
 
@@ -32,18 +32,18 @@ IF LOCAL:2 <= 0
 	RETURN 0
 ELSEIF LOCAL:2 < 50
 	CLEARLINE 1
-	PRINTL 최악이어도 50이상의 경제력을 양도할 필요가 있습니다
+	PRINTL 최소한 50이상의 경제력을 양도해야 합니다
 	GOTO INPUT_LOOP
 ELSEIF RESULT > LOCAL:6 / 500
 	CLEARLINE 1
-	PRINTFORML 상한을 넘고 있습니다({LOCAL:6 / 500}까지)
+	PRINTFORML 경제력 양도 상한을 넘었습니다({LOCAL:6 / 500}까지)
 	GOTO INPUT_LOOP
 ENDIF
 
 ;경제력의 이동 처리
 CALL SHIFT_ECONOMY(CFLAG:MASTER:소속, ARG:0, LOCAL:2 * 100)
 
-PRINTFORMW %조사처리(ANAME(MASTER),"는")% %ANAME(LOCAL:5)%에 경제력{LOCAL:2}를 양도했다
+PRINTFORMW %조사처리(ANAME(MASTER),"는")% %ANAME(LOCAL:5)%에게 경제력{LOCAL:2}을 양도했다
 
 ;호감도 상승치·적대치 하강치의 계산
 ;같은 경제력에서도, 자국의 규모가 작을 정도(수록), 또 상대 세력의 규모가 작을 정도 효과가 높다

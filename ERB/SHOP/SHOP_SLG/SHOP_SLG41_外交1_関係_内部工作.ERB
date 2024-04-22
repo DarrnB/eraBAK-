@@ -14,14 +14,14 @@ FIRST_LINE = LINECOUNT
 상대군주 = GET_COUNTRY_BOSS(ARG:0)
 
 CALL SINGLE_DRAWLINE
-PRINTFORML %ANAME(상대군주)% 소속의, %ANAME(MASTER)%에 심취하고 있는 사관을 이용해, 내부 공작을 걸게 합니다
-CALL COLOR_PRINTL("한사람 참가시킬 때 마다 국고", GETDEFCOLOR(), "1000", 칼라_주의,  "를 소비합니다. 최대 3명입니다")
+PRINTFORML %ANAME(상대군주)% 세력에 소속된 이들 중, %ANAME(MASTER)%에게 함락당한 간부에게 내부 공작을 시킵니다
+CALL COLOR_PRINTL("한 명 참가시킬 때마다 활동비로 학원의 예산", GETDEFCOLOR(), "1000", 칼라_주의,  "을 지원해야 합니다. 최대 3명입니다")
 PRINTFORML 누구를 참가시킵니까?
 CALL SINGLE_DRAWLINE
 CALL SELECT_CHARA_LIST_MULTI_ONLY_LOGIC_SLG(MIN(MONEY:(CFLAG:MASTER:소속) / 1000, 3), "DIPLOMACY_SABOTAGE", "DIPLOMACY_SABOTAGE")
 
 IF SELECTED_CHARA_NUM == -1
-	PRINTFORML 그만둡니다
+	PRINTFORML 그만두었다
 	RETURN 0
 ENDIF
 
@@ -33,19 +33,19 @@ FOR LOCAL, 0, SELECTED_CHARA_NUM
 	LOCAL:1 = SELECTED_CHARA:LOCAL
 	SELECTCASE RAND:3
 		CASE 0
-			PRINTFORML %조사처리(ANAME(LOCAL:1),"는")% %ANAME(상대군주)% 세력에 대해, %ANAME(군주)%의 인상을 자주(잘) 할 수 있도록 로비 활동을 실시하고 있다……
+			PRINTFORML %조사처리(ANAME(LOCAL:1),"는")% %ANAME(상대군주)% 세력 내부에서, %ANAME(군주)%에 대한 평판을 높히기 위한 로비 활동을 실시했다……
 			CALL DIPLOMACY_IMPROVE_RELATION(ARG:0, SQRT(ABL_POWER(ABL:(LOCAL:1):정치, LOCAL:1)) / 2)
 		CASE 1
-			PRINTFORML %조사처리(ANAME(LOCAL:1),"는")% %ANAME(상대군주)%의 재력을 %ANAME(군주)%에 부정유출 하고 있다……
-			CALL COLOR_PRINTL("경제력을", GETDEFCOLOR(), TOSTR(GET_SUM_ECONOMY(ARG:0) * ABL:(LOCAL:1):정치 / 100 / 40), 칼라_주의, "빼앗았다", GETDEFCOLOR())
+			PRINTFORML %조사처리(ANAME(LOCAL:1),"는")% %ANAME(상대군주)%의 재산을 %ANAME(군주)%에게 몰래 빼돌렸다……
+			CALL COLOR_PRINTL("경제력을", GETDEFCOLOR(), TOSTR(GET_SUM_ECONOMY(ARG:0) * ABL:(LOCAL:1):정치 / 100 / 40), 칼라_주의, "빼돌렸다", GETDEFCOLOR())
 			CALL SHIFT_ECONOMY(ARG:0, CFLAG:MASTER:소속, GET_SUM_ECONOMY(ARG:0) * ABL:(LOCAL:1):정치 / 100 / 40)
 		CASE 2
-			PRINTFORML %조사처리(ANAME(LOCAL:1),"는")% %ANAME(상대군주)% 세력내에서 공작 활동을 실시하고 있다……
+			PRINTFORML %조사처리(ANAME(LOCAL:1),"는")% %ANAME(상대군주)% 세력 내부에서 공작 활동을 실시하고 있다……
 			CALL SELECT_CHARA_RANDOM("DIPLOMACY_SABOTAGE")
 			IF !GROUPMATCH(RESULT, LOCAL:1 , -1) || RAND:100 < 50
 				CALL ADD_COOLTIME(RESULT, 2)
 			ELSE
-				PRINTFORML ……가, 잘 되지 않았던 것 같다……
+				PRINTFORML ……하지만, 잘 되지 않은 것 같다……
 			ENDIF
 	ENDSELECT
 NEXT

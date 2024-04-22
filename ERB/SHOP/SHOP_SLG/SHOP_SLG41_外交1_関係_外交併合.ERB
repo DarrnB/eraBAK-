@@ -13,12 +13,12 @@
 세력 = CFLAG:MASTER:소속
 
 IF CHECK_COUNTRY_RELATION_F(세력, 상대세력) != 3
-	PRINTFORMW 외교 병합은, 현재 동맹중의 세력으로밖에 제안할 수가 없습니다
+	PRINTFORMW 외교 병합은 현재 동맹중인 세력에게만 제안할 수 있습니다
 	RETURN 0
 ENDIF
 
 IF IS_SP_COUNTRY(상대세력)
-	PRINTFORMW 이런 무리와 병합 할 수는 없습니다
+	PRINTFORMW 이런 무리와 병합할 수는 없습니다
 	RETURN 0
 ENDIF
 
@@ -29,11 +29,11 @@ ENDIF
 CALL TMP_CREATE_COUNTRY_NEIBORING_MAP
 
 IF !TMP_COUNTRY_IS_NEIBORING:세력:상대세력
-	PRINTW 인접하고 있지 않는 세력과 외교 병합을 실시할 수 없습니다
+	PRINTW 인접해 있지 않은 세력과 외교 병합을 실시할 수 없습니다
 	RETURN 0
 ENDIF
 
-PRINTFORMW %조사처리(ANAME(군주),"는")% %ANAME(상대군주)%에게, 외교 병합 하는 제안을 했다
+PRINTFORMW %조사처리(ANAME(군주),"는")% %ANAME(상대군주)%에게, 외교 병합을 제안했다
 
 성공플래그 = 0
 
@@ -50,12 +50,12 @@ ENDIF
 
 
 IF !성공플래그
-	PRINTFORMW 유감스럽지만, %조사처리(ANAME(상대군주),"는")% 우리 나라의 외교 병합에 응하지 않았습니다…
+	PRINTFORMW 유감스럽지만, %조사처리(ANAME(상대군주),"는")% 우리 학원의 외교 병합 요청에 응하지 않았습니다…
 	RETURN 1
 ENDIF
 
 
-PRINTFORMW 훌륭하다!%조사처리(ANAME(상대군주),"는")% 우리 나라와 1개가 되었습니다
+PRINTFORMW 훌륭한 성과입니다! %조사처리(ANAME(상대군주),"는")% 우리 학원과 하나가 되었습니다
 RESETCOLOR
 
 ;병 수의 이동
@@ -66,25 +66,25 @@ COUNTRY_SOLDIER:상대세력 = 0
 ;영지의 접수
 PRINTL 
 SETCOLOR 칼라_주의
-PRINTFORML %ANAME(상대군주)%의 영지였던 도시는 우리 나라의 영토가 되었습니다
+PRINTFORML %ANAME(상대군주)%의 관리를 받던 도시들이 우리 학원의 체계에 편입되었습니다
 RESETCOLOR
 FOR LOCAL:0, 0, MAX_CITY
 	IF CITY_OWNER:(LOCAL:0) == 상대세력
 		CITY_OWNER:(LOCAL:0) = 세력
-		PRINTFORML %GET_CITYNAME(LOCAL:0)%를 우리 나라의 지배하에 두었습니다
+		PRINTFORML %조사처리(GET_CITYNAME(LOCAL:0),"는")% 이제부터 우리 학원이 관리합니다
 	ENDIF
 NEXT
 WAIT
 
 PRINTL 
-PRINTFORMW %ANAME(상대군주)%군의 병사가 우리 나라의 병력으로서 더해졌습니다
+PRINTFORMW %ANAME(상대군주)%군의 병력이 우리 학원의 병력으로 예편되었습니다
 
 ;자동으로 등용
 IF CONFIG:303 == 0
 	;사관의 편입
 	PRINTL 
 	SETCOLOR 칼라_주의
-	PRINTFORML %조사처리(ANAME(상대군주),"를")% 시중들고 있던 사관은 우리 나라의 사관으로서 짜넣어졌습니다
+	PRINTFORML %조사처리(ANAME(상대군주),"를")% 따르던 간부들이 우리 학원의 간부로서 편입되었습니다
 	RESETCOLOR
 	FOR LOCAL:0, 0, CHARANUM
 		;SIF CFLAG:(LOCAL:0):포로처 ==상대 세력:0
@@ -92,11 +92,11 @@ IF CONFIG:303 == 0
 		IF CFLAG:(LOCAL:0):소속 == 상대세력
 			IF !CFLAG:(LOCAL:0):포로처 || CFLAG:(LOCAL:0):포로처 == CFLAG:MASTER:소속
 				CALL CHANGE_COUNTRY(LOCAL:0, CFLAG:MASTER:소속, 1)
-				PRINTFORML %조사처리(ANAME(LOCAL:0),"를")% 등용했습니다
+				PRINTFORML %조사처리(ANAME(LOCAL:0),"가")% 입부했습니다
 			ELSE
 				CALL CHANGE_COUNTRY(LOCAL:0, CFLAG:MASTER:소속)
 				SETCOLOR 칼라_시안
-				PRINTFORML %조사처리(ANAME(LOCAL:0),"는")% %ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL:0):포로처))%에 붙잡히고 있습니다
+				PRINTFORML %조사처리(ANAME(LOCAL:0),"는")% %ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL:0):포로처))%에게 붙잡혀 있습니다
 				RESETCOLOR
 			ENDIF
 		ENDIF
@@ -108,7 +108,7 @@ ELSEIF CONFIG:303 == 1
 	;사관의 편입
 	PRINTL 
 	SETCOLOR 칼라_주의
-	PRINTFORML %조사처리(ANAME(상대군주),"를")% 시중들고 있던 사관을 투옥했습니다
+	PRINTFORML %조사처리(ANAME(상대군주),"를")% 따르던 간부를 반성실에 가뒀습니다
 	RESETCOLOR
 	FOR LOCAL:0, 0, CHARANUM
 		;SIF CFLAG:(LOCAL:0):포로처 ==상대 세력
@@ -117,11 +117,11 @@ ELSEIF CONFIG:303 == 1
 			IF !CFLAG:(LOCAL:0):포로처 || CFLAG:(LOCAL:0):포로처 == CFLAG:MASTER:소속
 				CALL CHANGE_COUNTRY(LOCAL:0, 0, 1)
 				CALL CAPTURE(LOCAL:0, CFLAG:MASTER:소속)
-				PRINTFORML %조사처리(ANAME(LOCAL:0),"를")% 투옥했습니다
+				PRINTFORML %조사처리(ANAME(LOCAL:0),"를")% 반성실에 가뒀습니다
 			ELSE
 				CALL CHANGE_COUNTRY(LOCAL:0, CFLAG:MASTER:소속)
 				SETCOLOR 칼라_시안
-				PRINTFORML %조사처리(ANAME(LOCAL:0),"는")% %ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL:0):포로처))%에 붙잡히고 있습니다
+				PRINTFORML %조사처리(ANAME(LOCAL:0),"는")% %ANAME(GET_COUNTRY_BOSS(CFLAG:(LOCAL:0):포로처))%에게 붙잡혀 있습니다
 				RESETCOLOR
 			ENDIF
 		ENDIF
@@ -137,7 +137,7 @@ ENDIF
 ;상대 세력 세력이 포로 가지고 있을까
 IF CMATCH(CFLAG:포로처, 상대세력)
 	PRINTL
-	PRINTFORMW %ANAME(상대군주)%에 붙잡히고 있던 포로를 찾아냈습니다
+	PRINTFORMW %ANAME(상대군주)%에게 붙잡혀 있던 포로를 찾아냈습니다
 	LOCAL:2 = 0
 	FOR LOCAL:0, 0, CHARANUM
 		IF CFLAG:(LOCAL:0):포로처 == 상대세력
@@ -145,7 +145,7 @@ IF CMATCH(CFLAG:포로처, 상대세력)
 			IF CFLAG:(LOCAL:0):소속 == CFLAG:MASTER:소속
 				CALL CAPTURE(LOCAL:0, 0)
 				SETCOLOR 칼라_주의
-				PRINTFORML %ANAME(상대군주)% 세력에 수 얻어지고 있었던 %조사처리(ANAME(LOCAL:0),"는")%, 우리 나라에 복귀했다
+				PRINTFORML %ANAME(상대군주)% 세력에 붙잡혀 있던 %조사처리(ANAME(LOCAL:0),"가")% 우리 학원에 복귀했다
 				RESETCOLOR
 				LOCAL:2 = 1
 			ENDIF

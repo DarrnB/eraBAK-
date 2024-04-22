@@ -73,7 +73,7 @@ ENDIF
 ;요구의 무게와 대상 캐릭터에게로의 판정치의 크기에 응해 일수를 산출  최대 7일간
 TRAINING_DAY = MIN(MAX(ABS(LOCAL:10)*(ARG:1), 1), 7)
 
-PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 마시는 대신에{TRAINING_DAY}일간 조교시켜라라고 요구했다
+PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 받아들이는 대가로 {TRAINING_DAY}턴간 조교받으라고 요구했다
 
 CALL ASK_YN("받아들인다", "거절한다")
 IF RESULT == 1
@@ -86,7 +86,7 @@ IF LOCAL:6 == MASTER
 	DIPLOMACY_TRAINING_CHARA = LOCAL:5
 	PRINTL 
 ELSE
-	PRINTFORMW %조사처리(ANAME(MASTER),"는")% %ANAME(LOCAL:6)%에게, 요구를 마시도록(듯이) 설득했다…
+	PRINTFORMW %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(LOCAL:6),"가")%, 요구를 받아들이도록 설득했다…
 	;역조교요구 일수를 설정
 	DIPLOMACY_TRAINED_DAY -= TRAINING_DAY
 	DIPLOMACY_TRAINING_CHARA = LOCAL:5

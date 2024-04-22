@@ -140,21 +140,21 @@ ENDIF
 
 SELECTCASE LOCAL:15
 	CASE 0
-		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 마시는 대신에 이 장소에서 키스를 하라고 요구했다
+		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 받아들이는 대가로 이곳에서 키스하라고 요구했다
 	CASE 1
-		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 마시는 대신에 이 장소에서 다리를 빨라고 요구했다
+		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 받아들이는 대가로 이곳에서 발가락을 핥으라고 요구했다
 	CASE 2
-		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 마시는 대신에 이 장소에서 자위 하라고 요구했다
+		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 받아들이는 대가로 이곳에서 자위하라고 요구했다
 	CASE 10
-		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 마시는 대신에 페라로 봉사하라고 요구했다
+		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 받아들이는 대가로 페라로 봉사하라고 요구했다
 	CASE 11
-		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 마시는 대신에 파이즈리로 봉사하라고 요구했다
+		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 받아들이는 대가로 파이즈리로 봉사하라고 요구했다
 	CASE 20
-		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 마시는 대신에 쿤닐링구스로 봉사하라고 요구했다
+		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 받아들이는 대가로 쿤닐링구스로 봉사하라고 요구했다
 	CASE 30
-		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 마시는 대신에 하룻밤%ANAME(LOCAL:5)%의 노리겟감이 되도록(듯이) 요구했다
+		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 받아들이는 대가로 하룻밤 %ANAME(LOCAL:5)%의 노리개가 되라고 요구했다
 	CASE 50
-		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 마시는 대신에 병들의 상대를 하라고 요구했다
+		PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% %ANAME(LOCAL:6)%에게, 이쪽의 제안을 받아들이는 대가로 용병들의 상대를 하라고 요구했다
 ENDSELECT
 
 CALL ASK_YN("받아들인다", "거절한다")
@@ -163,10 +163,10 @@ IF RESULT == 1
 ENDIF
 
 IF LOCAL:6 != MASTER
-	PRINTFORMW %조사처리(ANAME(MASTER),"는")% %ANAME(LOCAL:6)%에게, 요구를 마시도록(듯이) 설득했다…
+	PRINTFORMW %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(LOCAL:6),"가")%, 요구를 받아들이도록 설득했다…
 	PRINTL 
 ENDIF
-
+;-----------------------이 아래는 나중에 수정-----------------
 SELECTCASE LOCAL:15
 	CASE 0
 		IF LOCAL:11 >= 20

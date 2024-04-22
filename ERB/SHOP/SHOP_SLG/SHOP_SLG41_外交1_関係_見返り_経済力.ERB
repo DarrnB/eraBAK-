@@ -14,8 +14,8 @@ ELSEIF ARG:1 == 1
 ELSE
 	LOCAL:11 = LOCAL:12 / 7 / 100 * 100
 ENDIF
-PRINTFORML %조사처리(ANAME(LOCAL:5),"는")%, 이쪽의 제안을 마시는 대신에 경제력{LOCAL:11 / 100}를 요구했다
-PRINTFORML 현재의 경제력:{LOCAL:12 / 100}
+PRINTFORML %조사처리(ANAME(LOCAL:5),"는")%, 이쪽의 제안을 받아들이는 대가로 경제력{LOCAL:11 / 100}를 요구했다
+PRINTFORML 현재 경제력:{LOCAL:12 / 100}
 WAIT
 CALL ASK_YN("받아들인다", "거절한다")
 IF RESULT != 0

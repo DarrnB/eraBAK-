@@ -36,12 +36,12 @@ RETURN 1
 #DIM FIRST_LINE
 FIRST_LINE = LINECOUNT
 IF DAY < SLG_PP:0
-	PRINTFORMW {SLG_PP:0}기까지는 외교를 실시할 수가 없습니다
+	PRINTFORMW {SLG_PP:0}까지는 외교를 실시할 수 없습니다
 	RETURN
 ENDIF
 
 IF COUNTRY_NOTDIPLOMACY_TERM:(CFLAG:MASTER:소속)
-	PRINTFORMW 현재 우리 세력과 외교를 실시하려고 하는 세력이 없습니다（잔{COUNTRY_NOTDIPLOMACY_TERM:(CFLAG:MASTER:소속),2}턴）
+	PRINTFORMW 현재 우리 세력과 외교를 실시하려는 세력이 없습니다（잔{COUNTRY_NOTDIPLOMACY_TERM:(CFLAG:MASTER:소속),2}턴）
 	RETURN
 ENDIF
 
@@ -54,7 +54,7 @@ CALL TMP_CREATE_POLITICS_POWER_MAP
 CALL TMP_CREATE_SUM_SOLDIER_MAP
 
 CALL SINGLE_DRAWLINE
-PRINTL 외교를 실시하는 세력을 선택해 주세요
+PRINTL 외교를 실시할 세력을 선택해 주세요
 PRINTFORML 현재의 외교 경계치:{DIPLOMACY_HATE:(CFLAG:MASTER:소속)}
 CALL SINGLE_DRAWLINE
 PRINTFORM %"군주",10,LEFT%
@@ -395,7 +395,7 @@ RESETCOLOR
 
 CALL SINGLE_DRAWLINE
 
-PRINT 조약 체결 가능수 
+PRINT 체결 가능한 조약 수 
 PRINTFORM  정전:{COUNTRY_TREATY_NO:(CFLAG:MASTER:소속):1, 2}/{MAX(REST_COUNTRY / 3, 1), 2}, 
 PRINTFORML 동맹:{COUNTRY_TREATY_NO:(CFLAG:MASTER:소속):0, 2}/{MAX(REST_COUNTRY / 3, 1), 2}
 
@@ -408,20 +408,20 @@ LOCALS:3 = 외교 병합을 신청한다
 LOCALS:4 = 동맹(정전)을 파기한다
 LOCALS:5 = 추문을 퍼뜨린다
 LOCALS:6 = 내부 공작
-LOCALS:7 = 토벌령을 낸다
+LOCALS:7 = 토벌령을 선포한다
 LOCALS:10 = 회담한다
-LOCALS:11 = 병을 양도한다
+LOCALS:11 = 병력을 양도한다
 LOCALS:12 = 경제력을 양도한다
 LOCALS:13 = 사관을 이적시킨다
-LOCALS:14 = 영토를 할양 한다
+LOCALS:14 = 통제권을 양도한다
 LOCALS:20 = 항복 권고를 실시한다
-LOCALS:21 = 병을 요구한다
+LOCALS:21 = 병력을 요구한다
 LOCALS:22 = 경제력을 요구한다
 LOCALS:23 = 인질을 요구한다
 LOCALS:24 = 인질 해방을 요구한다
-LOCALS:25 = 조교한다
-LOCALS:26 = 부하를 조교한다
-LOCALS:27 = 영토 할양을 요구한다
+LOCALS:25 = 학생회장을 조교한다
+LOCALS:26 = 간부를 조교한다
+LOCALS:27 = 영토를 요구한다
 LOCALS:30 = 포로 반환 교섭
 
 
@@ -487,7 +487,7 @@ IF DONE_DIPLOMACY_REQUEST:(ARG:0)
 	VARSET LOCAL, 1, 120, 130
 ENDIF
 
-PRINT ◇관계를 묶는다◇
+PRINT ◇관계를 다진다◇
 LOCAL:1 = 0
 FOR LOCAL:0, 0, 10
 	IF LOCALS:(LOCAL:0) != ""
@@ -508,7 +508,7 @@ NEXT
 PRINTL 
 PRINTL 
 
-PRINT ◇우호가 깊어진다◇
+PRINT ◇호감을 산다◇
 LOCAL:1 = 0
 FOR LOCAL:0, 10, 20
 	IF LOCALS:(LOCAL:0) != ""
