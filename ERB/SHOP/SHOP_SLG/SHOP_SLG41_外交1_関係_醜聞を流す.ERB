@@ -13,9 +13,9 @@ FIRST_LINE = LINECOUNT
 군주 = GET_COUNTRY_BOSS(CFLAG:MASTER:소속)
 상대군주 = GET_COUNTRY_BOSS(ARG:0)
 CALL SINGLE_DRAWLINE
-PRINTFORML 국고를 소비해, %ANAME(상대군주)%에 관한 추문을 타세력에 흘립니다.
-PRINTFORML 외 세력으로부터 %ANAME(상대군주)%에의 관계가 악화됩니다
-PRINTFORML 아무리 소비합니까? (손입력·버튼으로부터 입력, 0 이하로 캔슬, 최대 50000)
+PRINTFORML 예산을 소비해, %ANAME(상대군주)%에 관한 추문을 다른 학원에 흘립니다.
+PRINTFORML 다른 세력들과 %ANAME(상대군주)%의 관계가 악화됩니다
+PRINTFORML 얼마나 소비합니까? (손입력·버튼으로 입력, 0 이하의 숫자 입력으로 캔슬, 최대 50000)
 FOR LOCAL, 0, VARSIZE("지불액리스트")
 	SIF MONEY:(CFLAG:MASTER:소속) < 지불액리스트:LOCAL
 		BREAK
@@ -34,7 +34,7 @@ ELSEIF MONEY:(CFLAG:MASTER:소속) < RESULT || RESULT > 50000
 	RESTART
 ENDIF
 지불액 = RESULT
-CALL ICPRINT(@"%조사처리(ANAME(MASTER),"는")% 돈<{지불액}>를 지불해, %ANAME(상대군주)%에 관한 추문을 퍼뜨렸다……", "W", 칼라_주의)
+CALL ICPRINT(@"%조사처리(ANAME(MASTER),"는")% <{지불액}>크레딧을 지불해, %ANAME(상대군주)%에 관한 추문을 퍼뜨렸다……", "W", 칼라_주의)
 MONEY:(CFLAG:MASTER:소속) -= 지불액
 효과 = CALC_SEND_MONEY_EFFECT(지불액)
 ;호감도 상승·적대치 하강 기준치

@@ -13,7 +13,7 @@
 #DIM 상대세력경제
 
 IF IS_SP_COUNTRY(상대세력)
-	PRINTFORMW 동맹을 꺼냈습니다만, 저 편은 코로 웃어 왔습니다
+	PRINTFORMW 동맹을 제안했지만, 상대는 코웃음치며 거절했다
 	RETURN 0
 ENDIF
 세력 = CFLAG:MASTER:소속
@@ -24,7 +24,7 @@ ENDIF
 
 ;상대의 외교 계획내라면, 무조건으로 성립
 IF 상대외교계획 == AI_외교계획_동맹
-	PRINTFORMW %조사처리(ANAME(MASTER),"가")% 동맹을 걸면, %조사처리(ANAME(LOCAL:5),"는")% 기분 좋게 승낙했다…
+	PRINTFORMW %조사처리(ANAME(MASTER),"가")% 동맹을 제안하자, %조사처리(ANAME(LOCAL:5),"는")% 기분 좋게 승낙했다…
 	GOTO SUCCESS
 ENDIF
 
@@ -46,15 +46,15 @@ SIF !TMP_COUNTRY_IS_NEIBORING:세력:상대세력
 
 SELECTCASE 판정치
 	CASE IS >= 50
-		PRINTFORMW %조사처리(ANAME(군주),"가")% 동맹을 꺼내면, %조사처리(ANAME(상대군주),"는")% 기분 좋게 승낙했다…
+		PRINTFORMW %조사처리(ANAME(군주),"가")% 동맹을 제안하자, %조사처리(ANAME(상대군주),"는")% 기분 좋게 승낙했다…
 	CASE 35 TO 49
 		CALL DIPLOMACY_REQUESTED(상대세력)
 		;요구할 수 있는 것 없음
 		IF RESULT == -1
 			IF INRANGE(판정치, 40, 49)
-				PRINTFORMW %조사처리(ANAME(군주),"가")% 동맹을 꺼내면, %조사처리(ANAME(상대군주),"는")% 고민하면서도 승낙했다…
+				PRINTFORMW %조사처리(ANAME(군주),"가")% 동맹을 제안하자, %조사처리(ANAME(상대군주),"는")% 고민 끝에 승낙했다…
 			ELSE
-				PRINTFORMW %조사처리(ANAME(군주),"가")% 동맹을 꺼내면, %조사처리(ANAME(상대군주),"는")% 고민하면서도 거절했다…
+				PRINTFORMW %조사처리(ANAME(군주),"가")% 동맹을 제안하자, %조사처리(ANAME(상대군주),"는")% 고민 끝에 거절했다…
 				RETURN
 			ENDIF
 		ELSEIF RESULT == 0
@@ -63,7 +63,7 @@ SELECTCASE 판정치
 	CASEELSE
 		PRINTFORMW %조사처리(ANAME(군주),"는")% 동맹을 제안했지만, %조사처리(ANAME(상대군주),"는")% 거절했다…
 		SIF !TMP_COUNTRY_IS_NEIBORING:세력:상대세력
-			PRINTFORMW 영지가 인접하고 있지 않는 상태에서의 동맹은, 통상보다 어려운 것이 되는 것 같다…
+			PRINTFORMW 세력이 맞닿아 있지 않은 상태에서 동맹을 맺는 것은, 그렇지 않을 때보다 더 어려울 것 같다…
 		RETURN
 ENDSELECT
 
@@ -74,6 +74,6 @@ CALL INIT_ALLIANCE(세력, 상대세력, 기간)
 
 PRINTL 
 SETCOLOR 칼라_주의
-PRINTFORMW %조사처리(ANAME(상대군주),"와")% {기간}기간의 동맹이 성립했습니다
+PRINTFORMW %조사처리(ANAME(상대군주),"와")% {기간}턴간 동맹을 맺었습니다
 RESETCOLOR
 

@@ -15,13 +15,13 @@ ELSEIF ARG:1 == 1
 ELSE
 	LOCAL:11 = MIN(GET_SUM_ECONOMY(CFLAG:MASTER:소속) * 20 / 1000, LOCAL:12)
 ENDIF
-PRINTFORML %조사처리(ANAME(LOCAL:5),"는")%, 이쪽의 제안을 마시는 대신에 군사{LOCAL:11}를 요구했다
-PRINTFORML 현재의 총병수:{LOCAL:12}(우리집 미할당병수:{COUNTRY_SOLDIER:(CFLAG:MASTER:소속)})
+PRINTFORML %조사처리(ANAME(LOCAL:5),"는")%, 이쪽의 제안을 받아들이는 대가로 병력 {LOCAL:11}을 요구했다
+PRINTFORML 현재 총 병력수:{LOCAL:12}(우리의 미할당 병력 수:{COUNTRY_SOLDIER:(CFLAG:MASTER:소속)})
 IF LOCAL:11 > COUNTRY_SOLDIER:(CFLAG:MASTER:소속)
 	IF LOCAL:11 > COUNTRY_SOLDIER:(CFLAG:MASTER:소속) + LOCAL:13
-		PRINTFORML ※요구병수가 현재의 미할당병수보다 많기 때문에, 전부대를 해산해, 방위에 도착해 있는 군사도 건네줄 필요가 있습니다
+		PRINTFORML ※요구병력이 현재 미할당 병력 수보다 많기 때문에, 모든 부대를 해산하고 도시방위에 배치된 병력도 넘겨줘야 합니다
 	ELSE
-		PRINTFORML ※요구병수가 현재의 미할당병수보다 많기 때문에, 방위에 도착해 있는 군사도 건네줄 필요가 있습니다
+		PRINTFORML ※요구병력이 현재 미할당 병력 수보다 많기 때문에, 도시방위에 배치된 병력을 넘겨줘야 합니다
 	ENDIF
 ENDIF
 WAIT

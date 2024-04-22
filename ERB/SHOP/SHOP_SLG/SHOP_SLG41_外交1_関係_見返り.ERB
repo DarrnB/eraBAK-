@@ -151,18 +151,18 @@ SELECTCASE LOCAL:10
 	;에러 체크
 	CASEELSE
 		;에러 메세지를 출력
-		THROW 외교의 요구 종별이 부정합니다(종별 번호 LOCAL:10={LOCAL:10})
+		THROW 외교 리퀘스트 타입 에러 (타입 번호 LOCAL:10={LOCAL:10})
 ENDSELECT
 
 IF LOCAL:20
-	PRINTFORMW %조사처리(ANAME(LOCAL:4),"가")% 요구를 마시면, %조사처리(ANAME(LOCAL:5),"는")% 간신히 이쪽의 제안을 승낙했다…
+	PRINTFORMW %조사처리(ANAME(LOCAL:4),"가")% 요구를 마아들이자, %조사처리(ANAME(LOCAL:5),"는")% 그제야 이쪽의 제안을 승낙했다…
 	IF LOCAL:10 == 10 || LOCAL:10 == 11
 		RETURN 2
 	ENDIF
 	RETURN 1
 ENDIF
 
-PRINTFORMW 교섭은 성립하지 않았다…
+PRINTFORMW 교섭은 결렬되었다…
 
 RETURN 0
 

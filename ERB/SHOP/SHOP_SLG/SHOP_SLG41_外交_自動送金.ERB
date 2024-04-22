@@ -7,9 +7,9 @@
 FIRST_LINE = LINECOUNT
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 징세해 국고가 증가한 타이밍으로, 자동으로 각 세력과 회담해 송금할 수가 있습니다
-PRINTFORML 국고가 설정액에 부족했을 경우, 있을 뿐(만큼) 지불합니다
-PRINTFORML 징병 따위에서도 필요하게 되므로, 여유를 갖게하는 편이 좋을 것입니다
+PRINTFORML 세금을 거둬 학원의 예산이 늘어나는 시점에, 자동으로 각 세력과 회담해 예산을 송금합니다
+PRINTFORML 예산이 설정된 액수보다 부족할 경우, 가능한 만큼만 송금합니다
+PRINTFORML 예산이 없으면 징병과 도시 개발을 지시할 수 없게 되므로, 여유를 두고 송금하는 것이 좋습니다
 CALL SINGLE_DRAWLINE
 
 FOR LOCAL, 0, MAX_COUNTRY
@@ -77,7 +77,7 @@ FOR LOCAL, 0, MAX_COUNTRY
 	CALL SEND_MONEY(LOCAL, 송금액)
 	DONE_DIPLOMACY_FRIENDSHIP:LOCAL = 1
 	IF MONEY:(CFLAG:MASTER:소속) <= 0
-		PRINTFORML (국고가 바닥났으므로, 자동 송금을 종료합니다)
+		PRINTFORML (예산이 바닥났으므로, 자동 송금을 종료합니다)
 		BREAK
 	ENDIF
 NEXT

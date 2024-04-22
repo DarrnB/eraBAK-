@@ -287,7 +287,7 @@ ELSEIF RESULT == 1 && LOCAL:5 >= 1
 		COUNTRY_SOLDIER:(ARG:0) += LOCAL:2
 		UNIT_SOLDIER:(ARG:0):(ARG:1) = RESULT
 		COUNTRY_SOLDIER:(ARG:0) -= RESULT
-		PRINTFORMW {ARG:1 + 1}번대의 병력 수를 %NUM_FORMAT(RESULT)%로 설정합니다
+		PRINTFORMW {ARG:1 + 1}번 부대의 병력 수를 %NUM_FORMAT(RESULT)%로 설정합니다
 		RESTART
 	ENDIF
 
@@ -302,7 +302,7 @@ ELSEIF RESULT == 2 && LOCAL:5 >= 1
 
 ;해산
 ELSEIF RESULT == 3 && LOCAL:5 >= 1
-	PRINTFORML 부대{ARG:1 + 1}를 해산합니다. 좋습니까?
+	PRINTFORML {ARG:1 + 1}번 부대를 해산합니다. 좋습니까?
 	CALL ASK_YN
 	IF RESULT == 0
 		FOR LOCAL, 0, 3
@@ -319,7 +319,7 @@ ELSEIF RESULT == 3 && LOCAL:5 >= 1
 
 ;강제 해산
 ELSEIF RESULT == 4 && LOCAL:5 < 1
-	PRINTFORML 부대{ARG:1 + 1}를 전선에서 이탈시켜, 해산시킵니다
+	PRINTFORML {ARG:1 + 1}번 부대를 전선에서 이탈시켜, 해산시킵니다
 	PRINTFORML 병력의 절반이 탈영하고 지휘관에게 3 턴의 쿨타임이 붙습니다. 좋습니까?
 	CALL ASK_YN
 	IF RESULT == 0

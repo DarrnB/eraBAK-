@@ -38,11 +38,12 @@ RETURN IS_FREE(대상) && CFLAG:대상:포로처 == 0 && TALK_CAN_GIVE_SEX(대�
 VARSET 만족도
 $SELECT_CHARA
 CALL SINGLE_DRAWLINE
-PRINTFORML %조사처리(ANAME(MASTER),"는")% 「즐거움」를 제공하기로 했다
-PRINTFORML 어느 정도의 성지식이 없으면 원래 이야기가 되지 않고,
-PRINTFORML 명하면 타인에게 신체를 열 정도로 굴복 하고 있을 필요도 있다
-PRINTFORML 혹은, 타인에게 신체를 여는 것을 저항이 없는 왈패라도 좋겠지만……
-PRINTFORML 그런데, 누구에게 해야 하는가……
+PRINTFORML %조사처리(ANAME(MASTER),"는")% 「즐거움」을 제공하기로 했다
+PRINTFORML 상대에게 최소한의 성지식도 없을 경우엔 이야기 자체가 성립되지 않고,
+PRINTFORML 명령이라면 남에게 몸을 내어 줄 정도로 굴복한 상태인 간부도 필요하다
+PRINTFORML 혹은, 남에게 몸을 내어주는 데 거부감이 없는 양아치라도 좋겠지만……
+PRINTFORML 그럼, 누구에게 부탁해야 할까……
+;------------------------이 아래는 나중에-----------------
 CALL SINGLE_DRAWLINE
 CALL SELECT_CHARA_LIST("DIPLOMACY_TALK_SEX", "DIPLOMACY_TALK_SEX", "DEFAULT", "욕망", "성기술", "봉사", "성교", "정치")
 SIF RESULT == -1

@@ -17,7 +17,7 @@ FOR LOCAL:0, 0, CHARANUM
 NEXT
 
 IF LOCAL:6 <= 0
-	PRINTFORMW 이적 당하는 사관이 없습니다（의존도 100이 필요합니다）
+	PRINTFORMW 전학보낼 간부가 없습니다（의존도 100이 필요합니다）
 	RETURN 0
 ENDIF
 
@@ -26,7 +26,7 @@ FIRST_LINE = LINECOUNT
 $CHARA_LIST_LOOP
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 이적시키는 사관을 선택해 주세요
+PRINTFORML 전학보낼 간부를 선택해 주세요
 CALL SINGLE_DRAWLINE
 
 CALL SELECT_CHARA_LIST_ONLY_LOGIC_SLG("GIVE_CHARA", "NONE")
@@ -41,7 +41,7 @@ LOCAL:15 = RESULT
 CALL SINGLE_DRAWLINE
 CALL SHOW_INFO(LOCAL:15)
 CALL SINGLE_DRAWLINE
-PRINTFORML 이 캐릭터를 이적시킵니까?
+PRINTFORML 이 캐릭터를 전학보냅니까?
 
 ;네／아니오 입력 처리
 CALL ASK_YN()
@@ -50,7 +50,7 @@ IF RESULT == 1
 	GOTO CHARA_LIST_LOOP
 ENDIF
 
-PRINTFORML %ANAME(LOCAL:15)%는 %ANAME(LOCAL:5)% 세력의 사관이 되었습니다
+PRINTFORML %ANAME(LOCAL:15)%는 %ANAME(LOCAL:5)% 세력으로 편입되었습니다
 CALL CHANGE_COUNTRY(LOCAL:15, ARG:0, 1)
 ;호감도 상승치·적대치 하강치의 계산
 ;주로 능력에 의해 결정. 상대 군주가 그 캐릭터에게 좋은 인상을 받고 있으면 보너스
