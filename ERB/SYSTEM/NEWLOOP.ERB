@@ -107,40 +107,112 @@ PRINTFORML
 $INPUT_LOOP_0
 CALL SINGLE_DRAWLINE
 PRINTFORML ☆ 데일리이벤트 등장의 설정
-CALL ASK_MULTI("기본 설정으로 한다.", "수동으로 설정한다.", "예시에서 고른다")
+CALL ASK_MULTI("기본 설정으로 한다.", "수동으로 설정한다.")
 IF RESULT == 0
 	CALL SINGLE_DRAWLINE
 	PRINTFORML ☆ 데일리이벤트 기본 설정
 	PRINTFORML 
-	PRINTFORML 데일리이벤트 등장이 원작 설정에 맞게 설정됩니다.
-	PRINTFORML (주인공 외 인간남성 미등장, NTR OFF, 여주인공 위험한 이벤트 미등장 등)
+	PRINTFORML 모든 데일리 이벤트가 활성화 된 상태로 시작합니다.
 	PRINTFORML
 	PRINTFORML 해당 설정으로 시작하겠습니까?
 	CALL ASK_YN
 	IF RESULT == 0
-		
+	FLAG:데일리이벤트_NTR = 1
+	FLAG:데일리이벤트_인간남성 = 1
+	FLAG:데일리이벤트_에로 = 1
+	FLAG:데일리이벤트_미검수 = 1
+	SIF HAS_VAGINA(MASTER)
+	FLAG:데일리이벤트_여주위험 = 1
 	ELSEIF RESULT == 1
 		GOTO INPUT_LOOP_0
 	ENDIF
 ELSEIF RESULT == 1
 	CALL START_CONFIG_SETTING_EVENTMANUALLY
-
-ELSEIF RESULT == 2
-	CALL START_CONFIG_SETTING_EVENTSAMPLE
-
+PRINTFORML
+PRINTFORML 해당 설정으로 시작하겠습니까?
+CALL ASK_YN
+	IF RESULT == 0		
+	ELSEIF RESULT == 1
+		GOTO INPUT_LOOP_0
+	ENDIF
 ENDIF
 
 
-
 @START_CONFIG_SETTING_EVENTMANUALLY
+CALL 데일리_설정_수동
+CALL 데일리_설정_출력
 
 
+@데일리_설정_출력
+#DIM FIRST_LINE
+FIRST_LINE = LINECOUNT
+SIF FLAG:데일리이벤트_NTR == 0
+	PRINTFORML [%"NTR계열 이벤트", 30, RIGHT%] - OFF
+SIF FLAG:데일리이벤트_NTR == 1
+	PRINTFORML [%"NTR계열 이벤트", 30, RIGHT%] - ON
+SIF FLAG:데일리이벤트_인간남성 == 0
+	PRINTFORML [%"인간남성 등장 이벤트", 30, RIGHT%] - OFF
+SIF FLAG:데일리이벤트_인간남성 == 1
+	PRINTFORML [%"인간남성 등장 이벤트", 30, RIGHT%] - ON
+SIF FLAG:데일리이벤트_에로 == 0
+	PRINTFORML [%"에로 이벤트", 30, RIGHT%] - OFF
+SIF FLAG:데일리이벤트_에로 == 1
+	PRINTFORML [%"에로 이벤트", 30, RIGHT%] - ON
+SIF FLAG:데일리이벤트_미검수 == 0
+	PRINTFORML [%"미검수 이벤트", 30, RIGHT%] - OFF
+SIF FLAG:데일리이벤트_미검수 == 1
+	PRINTFORML [%"미검수 이벤트", 30, RIGHT%] - ON
+IF HAS_VAGINA(MASTER)
+SIF FLAG:데일리이벤트_여주위험 == 0
+	PRINTFORML [%"여주위험 이벤트", 30, RIGHT%] - OFF
+SIF FLAG:데일리이벤트_여주위험 == 1
+	PRINTFORML [%"여주위험 이벤트", 30, RIGHT%] - ON
+ENDIF
 
+@데일리_설정_수동
+#DIM FIRST_LINE
+FIRST_LINE = LINECOUNT
 
+$SHOW_LOOP
 
-@START_CONFIG_SETTING_EVENTSAMPLE
+CALL SINGLE_DRAWLINE
+PRINTFORML 
+PRINTFORML ☆데일리 이벤트 수동 설정
+PRINTFORML 
+CALL SINGLE_DRAWLINE
+PRINTBUTTON @"[%@"NTR계열 이벤트 : \@ FLAG:데일리이벤트_NTR ? %" ON"% # OFF \@", 30, RIGHT%]", 0
+PRINTL
+PRINTBUTTON @"[%@"인간남성 등장 이벤트 : \@ FLAG:데일리이벤트_인간남성 ? %" ON"% # OFF \@", 30, RIGHT%]", 1
+PRINTL
+PRINTBUTTON @"[%@"에로계열 이벤트 : \@ FLAG:데일리이벤트_에로 ? %" ON"% # OFF \@", 30, RIGHT%]", 2
+PRINTL
+PRINTBUTTON @"[%@"미검수 이벤트 : \@ FLAG:데일리이벤트_미검수 ? %" ON"% # OFF \@", 30, RIGHT%]", 3
+PRINTL
+SIF HAS_VAGINA(MASTER)
+PRINTBUTTON @"[%@"여주인공 위험 이벤트 : \@ FLAG:데일리이벤트_여주위험 ? %" ON"% # OFF \@", 30, RIGHT%]", 4
+PRINTL
+PRINTFORML [99] 확인
 
-
+INPUT
+IF RESULT == 99
+CLEARLINE LINECOUNT - FIRST_LINE
+	RETURN
+ELSE
+	SELECTCASE RESULT
+		CASE 0
+		FLAG:데일리이벤트_NTR = !FLAG:데일리이벤트_NTR
+		CASE 1
+		FLAG:데일리이벤트_인간남성 = !FLAG:데일리이벤트_인간남성
+		CASE 2
+		FLAG:데일리이벤트_에로 = !FLAG:데일리이벤트_에로
+		CASE 3
+		FLAG:데일리이벤트_미검수 = !FLAG:데일리이벤트_미검수
+		CASE 4
+		FLAG:데일리이벤트_여주위험 = !FLAG:데일리이벤트_여주위험
+	ENDSELECT
+ENDIF
+CLEARLINE LINECOUNT - FIRST_LINE
+RESTART
 
 
 ;-------------------------------------
