@@ -127,4 +127,5 @@ SHOP_SLG 스크립트 수정
 
 데일리 미검수 이벤트 활성화
 SHOP_SLG 외교 압박 스크립트 수정
-SLG_AI_PILOMANCY 빼먹은 스크립트 수정
+SLG_AI_DIPLOMACY 빼먹은 스크립트 수정
+뉴게임 데일리 설정 완성
