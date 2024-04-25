@@ -1,0 +1,84 @@
+﻿;---------------------
+
+; ☆ 이벤트 발생 확률(천분율, 100이라면 10%)
+
+;  - 확률 : 100%
+
+;---------------------
+
+@KOJO_DAILY_K50_FUTANAGISA_RATE(대상)
+#DIM 대상
+RETURN 1000
+
+
+
+
+
+;---------------------
+
+; ☆ 확률 외의 발생 조건
+
+;  - 이벤트 자체가 걸러지는 필터 조건을 기입
+
+;  - RETURN이 0이면 발동 x, RETURN이 1이면 발동
+
+;  - ex) 에로계열 필터 OFF시 이벤트 작동 X
+
+@KOJO_DAILY_K50_FUTANAGISA_DECISION(대상)
+#DIM 대상
+SIF KDVAR:대상:나기사_후타나리화 != 0
+    RETURN 0
+;같은 세력일때,포로가 아닐때,안면이 있을때 발생
+RETURN CHECK_KOJO_DAILY_HAPPEN(대상, 1, 0, 1)
+RETURN 0
+
+
+;---------------------
+
+; ☆ 장르
+
+;---------------------
+
+@KOJO_DAILY_K50_FUTANAGISA_GENRE(대상)
+#DIM 대상
+
+RETURN 데일리_장르_그외
+
+;---------------------
+; ☆ 본체
+;  - 이벤트가 발생했을 경우는 1, 발생하지 않았던 경우는 0을 돌려준다
+;---------------------
+
+@KOJO_DAILY_K50_FUTANAGISA(대상)
+#DIM 대상
+
+PRINTFORMW 어느 날, 블랙마켓에서 정말 자지처럼 생긴 롤케이크를 발견했다.
+PRINTFORMW 먹는다면 기묘한 일이 일어난다고 홍보하고 있다...
+PRINTFORMW 문득, 나기사가 롤케이크를 좋아한다는 게 떠올랐다.
+PRINTFORMW 이 롤케이크를 사서 나기사에게 보내 볼까?
+PRINTL
+
+CALL ASK_MULTI("사서 보내 본다", "그만둔다.")
+
+IF RESULT == 0
+    CALL FACE_IMAGE_N("얼굴_의복_통상_50")
+    PRINTFORML 「이, 이게 무슨 일이죠?」
+    PRINTL
+    PRINTFORMW 나기사는 사색이 된 채 거울을 보고 있다.
+    PRINTFORMW 그녀의 고간에는 어제까지만 해도 없던 자지가 자라나 있다.
+    PRINTFORMW 아무래도 '기묘한 일'이란 건 자지가 생기는 일이었던 것 같다...
+    PRINTL
+    PRINTFORMW 나기사가 후타나리가 되었습니다.
+    PRINTFORMW 또한, 후타나리가 된 영향으로 여성에게도 끌리게 된 것 같습니다...
+    TALENT:대상:성별 = 2
+    TALENT:대상:바이 = 1
+    TALENT:대상:페니스사이즈 = 0
+    KDVAR:대상:나기사_후타나리화 = 1
+ELSE
+    PRINTFORMW 역시 그만두기로 했다.
+    KDVAR:대상:나기사_후타나리화 = -1
+ENDIF
+
+KDVAR:대상:나기사_후타나리화 = 1
+
+RETURN 1
