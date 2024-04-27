@@ -71,7 +71,7 @@ CALL ICPRINT("이 글은 <빨간색>이고 이 글은 <노란색>이다","L",칼
 ;0으로 해놨음 알아서 바꿀 것
 ;---------------------
 @EVENT_DAILY_WANDERING_RATE()
-RETURN 0
+RETURN 1000
 
 ;---------------------
 ;확률 이외의 발생 판정
@@ -140,8 +140,7 @@ INPUT
 [SKIPEND]
 ;--------여기까지 방문세력을 선택하는 부분임--------
 
-
-
+선택학생 = 0
 
 ;----------방문세력을 랜덤으로 뽑는 부분임-----------
 LOCAL = 0
@@ -160,15 +159,15 @@ NEXT
 PRINTFORMW %ANAME(해당세력수장)% 의 세력으로 간다
 ;------여기까지 방문세력을 랜덤으로 뽑는 부분임-------
 $거절루프
-CALL 학생선택함수(랜덤선택세력)
-;해당 세력의 랜덤 학생을 선택학생에 저장
-선택학생 = RESULT
 IF 학원방랑거절플래그 == 0
+	CALL 학생선택함수(랜덤선택세력)
+	;해당 세력의 랜덤 학생을 선택학생에 저장
+	선택학생 = RESULT
 	PRINTFORMW %ANAME(해당세력수장)% 의 세력이 지배하고 있는 도시를 돌아다니던 중, %조사처리(ANAME(선택학생),"을")% 만났다.
 ELSE 
 CALL 학생선택함수(랜덤선택세력)
 	;학생선택함수에서 뽑은 랜덤 학생 번호가 이미 저장 돼있는 선택학생과 일치할 경우
-	IF RESULT == 선택학생
+	IF 선택학생 == RESULT
 		PRINTFORMW 얼마나 거리를 걸었을까, 눈가가 붉어진 %조사처리(ANAME(선택학생),"을")% 길에서 다시 마주쳤다.
 		PRINTFORMW %조사처리(ANAME(MASTER),"와")%와 다시 마주치자 깜짝 놀라 우물쭈물하던 %조사처리(ANAME(선택학생),"은")%, 이내 자신의 얼굴을 옆으로 돌리더니, 고개를 숙이고 %ANAME(MASTER)%의 옆을 스쳐지나갔다.
 		;일단 적어놓은대로 구현하려고 RETURN 1 을 사용하긴 했는데 함수 끝내려고 여기저기다 RETURN 넣는거 안좋은 방식임 
@@ -189,9 +188,9 @@ IF TALENT:선택학생:연모 || TALENT:선택학생:친애
 	PRINTL
 	CALL ASK_MULTI("그래","아니","입부하러 왔다")
 	PRINTL
-	CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 	;"그래"의 경우
 	IF RESULT == 0
+		CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 		PRINTW 「나도… 보고싶었어…」
 		;선택학생이 하루나일 경우 /하루나인 경우인데 %ANAME(선택학생)%을 쓸 필요가 있나?
 		IF 선택학생 == 17
@@ -253,7 +252,7 @@ IF TALENT:선택학생:연모 || TALENT:선택학생:친애
 			ENDIF
 		ENDIF
 	;"아니"의 경우
-	ELSEIF  RESULT == 1
+	ELSEIF RESULT == 1
 		CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 		PRINTW 「아… 그, 그렇구나…」
 		PRINTW 「그, 내,내가 너무 오래 붙잡고 있었네! 나,난 이만 가볼게!」
@@ -403,11 +402,13 @@ RETURN 1
 ;해당 세력에서 랜덤한 학생을 뽑는 함수
 ;첫번째 인자에 해당 세력의 번호넣으면 됨
 @학생선택함수(ARG:0)
-#DIM 해당세력학생수
-#DIM 랜덤선택
-#DIM 선택학생
+#DIM DYNAMIC 해당세력학생수
+#DIM DYNAMIC 랜덤선택
+#DIM DYNAMIC 선택학생
 ;해당 세력의 학생 수를 알아 내기 위한 부분
 LOCAL = 0
+LOCAL:1 = 0
+LOCAL:2 = 0
 FOR LOCAL, 0, CHARANUM
 	;대상이 남자, 남자(후타), 오토코노코, 오토코노코(후타) 일 경우 넘김
 	SIF TALENT:LOCAL:성별 == 0 || TALENT:LOCAL:성별 == 3 || TALENT:LOCAL:성별 == 4 || TALENT:LOCAL:성별 == 5
@@ -417,9 +418,9 @@ FOR LOCAL, 0, CHARANUM
 	CONTINUE
 	해당세력학생수 ++
 NEXT
+LOCAL:1 = (RAND:해당세력학생수) + 1
 ;여기가 랜덤 학생을 뽑는 부분
 FOR 랜덤선택, 0, CHARANUM
-	LOCAL:1 = (RAND:해당세력학생수) + 1
 	SIF LOCAL:1 == LOCAL:2
 	BREAK
 	;대상이 남자, 남자(후타), 오토코노코, 오토코노코(후타) 일 경우 넘김
@@ -432,7 +433,6 @@ FOR 랜덤선택, 0, CHARANUM
 	선택학생 = 랜덤선택
 NEXT
 RETURN 선택학생
-
 
 ;방랑중에도 발생하게 해주는 함수임 이거 없으면 방랑중엔 발생 안함
 @EVENT_DAILY_WANDERING_ALLOW_WHEN_WANDERING()
