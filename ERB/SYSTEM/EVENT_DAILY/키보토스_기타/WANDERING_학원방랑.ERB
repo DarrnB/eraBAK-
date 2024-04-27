@@ -1,0 +1,439 @@
+﻿;------------------글자 색 관련한 함수--------------------------
+;호출하지 않았으니 아무 문제 없지만 확인 후 지울 것
+@글자_색_테스트
+;색 관련 함수는 크게 3가지가 있음
+
+;첫번째
+;SETCOLOR 는 RESETCOLOR가 나오기 전까지 모든 텍스트를 해당 색으로 바꿈
+;색은 COLOR.ERH에 이미 저장된 색, HEX값, RGB값을 사용할 수 있음
+SETCOLOR 칼라_빨강
+PRINTL 빨간색
+SETCOLOR 0xFF0000
+PRINTL 빨간색
+SETCOLOR 255,0,0 
+PRINTL 빨간색
+RESETCOLOR
+;셋다 동일한 색으로 출력됨 사용 후 RESETCOLOR를 반드시 사용해야함
+
+;두번째
+;COLOR_PRINT는 SETCOLOR 보다 조금 업그레이드 된 함수임
+;홀수번 인수는 출력할 텍스트
+;짝수번 인수는 앞의 텍스트의 색
+CALL COLOR_PRINT("빨간색",칼라_빨강)
+;아래와 똑같이 출력됨 RESETCOLOR를 안써도 되서 더 편리함
+SETCOLOR 칼라_빨강
+PRINTL 빨간색
+RESETCOLOR
+CALL COLOR_PRINT("빨간색",칼라_빨강,"노란색",칼라_노랑)
+;이런식으로 한 문장에 여러 색 출력하는것도 가능 최대 10개까지 가능
+;줄넘김이 필요하면
+CALL COLOR_PRINTL
+CALL COLOR_PRINTW
+;이 함수로 PRINTL PRINW 와 동일하게 사용가능함
+
+;세번째
+;ICPRINT는 특정 부분만 색이 필요할때 사용함
+;첫번째 인수는 출력할 텍스트
+;두번째 인수는 W 또는 L PRINTW 와 PRINTL의 기능을 넣음
+;세번째 인수부터는 색을 넣음
+CALL ICPRINT("<빨간색>이다","W",칼라_빨강)
+;이렇게 사용하면 "빨간색" 만 빨강으로 나오고 "이다" 는 흰색으로 나옴
+CALL ICPRINT("<빨간색>이다, <노란색>이다","W",칼라_빨강,칼라_노랑)
+;이런식으로 여러 색을 지정하는 것도 가능
+
+;예문
+PRINT 이 글은
+SETCOLOR 칼라_빨강
+PRINT 빨간색
+RESETCOLOR
+PRINT 이고 
+PRINT 이 글은 
+SETCOLOR 칼라_빨강
+PRINT 노란색
+RESETCOLOR
+PRINTL 이다
+
+CALL COLOR_PRINTL("이 글은 ",칼라_흰색,"빨간색",칼라_빨강,"이고 이 글은 ",칼라_흰색,"노란색",칼라_노랑,"이다",칼라_흰색)
+
+CALL ICPRINT("이 글은 <빨간색>이고 이 글은 <노란색>이다","L",칼라_빨강,칼라_노랑)
+
+;세가지 모두 동일하게 출력 됨
+;필요한 부분에 맞게 사용하면 됨
+;---------------------------------------------------------------
+
+
+
+
+
+
+;---------------------
+;발생 확률(1000분 율 100으로 10%)
+;0으로 해놨음 알아서 바꿀 것
+;---------------------
+@EVENT_DAILY_WANDERING_RATE()
+RETURN 0
+
+;---------------------
+;확률 이외의 발생 판정
+;---------------------
+@EVENT_DAILY_WANDERING_DECISION()
+;소속이 있거나 포로인 경우 스킵
+SIF FLAG:데일리이벤트_미검수 == 0
+	RETURN 0
+SIF CFLAG:MASTER:소속 || CFLAG:MASTER:포로처
+	RETURN 0
+SIF FLAG:클리어플래그
+	RETURN 0
+RETURN 1
+
+
+
+;---------------------
+;장르
+;---------------------
+@EVENT_DAILY_WANDERING_GENRE()
+RETURN 데일리_장르_고용
+
+
+;---------------------
+;본체
+;---------------------
+@EVENT_DAILY_WANDERING
+#DIM 선택학생
+#DIM 해당세력학생수
+#DIM 해당세력수장
+#DIM 임시저장
+;데일리 새로 불러올때마다 초기화 하려고 DYNAMIC 변수로 사용함
+#DIM DYNAMIC 학원방랑거절플래그 = 0
+;이 부분 부터 랜덤세력 선택 시 필요한 변수임 선택으로 할 경우 필요없으니 지울 것
+#DIM 랜덤세력, MAX_COUNTRY
+#DIM 세력수
+#DIM 랜덤선택세력
+;방문하는 세력을 선택하는 방법
+;랜덤으로 방문하는 방법 두개 다 만들어 놓음 필요한 부분만 쓰면 됨
+
+;----------방문세력을 선택하는 부분임-----------
+;최대 세력 수 만큼 반복
+[SKIPSTART]
+LOCAL = 0
+FOR LOCAL, 0, MAX_COUNTRY
+	;해당세력의 수장이 없으면 넘김
+	SIF GET_COUNTRY_BOSS(LOCAL) == -1
+	CONTINUE
+	;해당하는 세력이 없으면 멈춤
+	SIF STRLENS(ANAME(GET_COUNTRY_BOSS(LOCAL))) == 0
+	BREAK
+	;15 부분이 칸 크기임 지금은 좀 크니까 편한대로 수정할 것
+	PRINTBUTTON @"[%ANAME(GET_COUNTRY_BOSS(LOCAL)), 15, LEFT%]", LOCAL
+	;6번마다 줄 변경 이것도 편한대로 수정할 것
+	LOCAL:1 ++
+	IF LOCAL:1 % 6 == 0
+		PRINTL
+	ELSE
+		PRINT     
+	ENDIF
+NEXT
+PRINTL
+PRINTL
+PRINTFORML [99] 돌아간다
+INPUT
+[SKIPEND]
+;--------여기까지 방문세력을 선택하는 부분임--------
+
+
+
+
+;----------방문세력을 랜덤으로 뽑는 부분임-----------
+LOCAL = 0
+랜덤세력 = 0
+세력수 = 0
+FOR LOCAL, 1, MAX_COUNTRY
+	IF IS_COUNTRY(LOCAL)
+		랜덤세력:(세력수) = LOCAL
+		세력수 ++
+	ENDIF
+NEXT
+;RAND는 0부터 세기때문에 + 1 해줌
+랜덤선택세력 = (RAND:세력수) + 1
+해당세력수장 = GET_COUNTRY_BOSS(랜덤선택세력)
+
+PRINTFORMW %ANAME(해당세력수장)% 의 세력으로 간다
+;------여기까지 방문세력을 랜덤으로 뽑는 부분임-------
+$거절루프
+CALL 학생선택함수(랜덤선택세력)
+;해당 세력의 랜덤 학생을 선택학생에 저장
+선택학생 = RESULT
+IF 학원방랑거절플래그 == 0
+	PRINTFORMW %ANAME(해당세력수장)% 의 세력이 지배하고 있는 도시를 돌아다니던 중, %조사처리(ANAME(선택학생),"을")% 만났다.
+ELSE 
+CALL 학생선택함수(랜덤선택세력)
+	;학생선택함수에서 뽑은 랜덤 학생 번호가 이미 저장 돼있는 선택학생과 일치할 경우
+	IF RESULT == 선택학생
+		PRINTFORMW 얼마나 거리를 걸었을까, 눈가가 붉어진 %조사처리(ANAME(선택학생),"을")% 길에서 다시 마주쳤다.
+		PRINTFORMW %조사처리(ANAME(MASTER),"와")%와 다시 마주치자 깜짝 놀라 우물쭈물하던 %조사처리(ANAME(선택학생),"은")%, 이내 자신의 얼굴을 옆으로 돌리더니, 고개를 숙이고 %ANAME(MASTER)%의 옆을 스쳐지나갔다.
+		;일단 적어놓은대로 구현하려고 RETURN 1 을 사용하긴 했는데 함수 끝내려고 여기저기다 RETURN 넣는거 안좋은 방식임 
+		;IF문 좀더 정교하게 수정해서 RETURN은 최후에 한번만 사용하게 수정하는게 좋을듯
+		RETURN 1
+	ELSE
+		임시저장 = 선택학생
+		선택학생 = RESULT
+	ENDIF
+	;이부분이 적혀있는 부분하고 조금 다른데 이렇게 쓰는게 훨씬 깔끔해서 수정함
+	;굳이 선택학생을 1,2 로 나누지 않아도 됨
+	PRINTFORMW 한동안 거리를 걷던 중, %조사처리(ANAME(선택학생),"을")% 만났다.
+ENDIF
+CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+;연모 혹은 친애의 경우
+IF TALENT:선택학생:연모 || TALENT:선택학생:친애
+	PRINTFORMW 「앗, %ANAME(MASTER)%?! 여긴 어쩐 일이야? 혹시,날 만나러 와준거야...?」
+	PRINTL
+	CALL ASK_MULTI("그래","아니","입부하러 왔다")
+	PRINTL
+	CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+	;"그래"의 경우
+	IF RESULT == 0
+		PRINTW 「나도… 보고싶었어…」
+		;선택학생이 하루나일 경우 /하루나인 경우인데 %ANAME(선택학생)%을 쓸 필요가 있나?
+		IF 선택학생 == 17
+			PRINTW 이후, 하루나와 함께 거리를 걸으며 데이트했다.
+		ELSE
+			SELECTCASE RAND:5
+			CASE 0
+				PRINTFORMW 이후, %조사처리(ANAME(선택학생),"와")% 함께 레스토랑에 들어가 식사를 했다.
+			CASE 1 
+				PRINTFORMW 이후, %조사처리(ANAME(선택학생),"와")% 함께 분식집에 들어가 식사를 했다.
+			CASE 2
+				PRINTFORMW 이후, %조사처리(ANAME(선택학생),"와")%  함께 포장마차에 들어가 식사를 했다.
+			CASE 3
+				PRINTFORMW 이후, %조사처리(ANAME(선택학생),"와")% 함께 디저트 가게에 들어가 디저트를 먹었다.
+			CASE 4
+				PRINTFORMW 이후, %조사처리(ANAME(선택학생),"와")% 함께 거리를 걸으며 데이트했다.
+			ENDSELECT
+		ENDIF
+		PRINTFORMW %ANAME(선택학생)%도 %조사처리(ANAME(MASTER),"와")% 함께해서 즐거웠던 것 같다.
+		CALL ASK_MULTI("모텔로간다","헤어진다")
+		IF RESULT == 1
+			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+			PRINTW 「오늘 즐거웠어…」
+			PRINTFORMW %조사처리(ANAME(MASTER),"와")%  %조사처리(ANAME(선택학생),"은")% 헤어졌다.
+			CFLAG:선택학생:호감도 += 500
+			CALL ICPRINT(@"<%ANAME(선택학생)%>의 호감도가 500 올랐다.","W",칼라_노랑)
+		ELSE
+			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+			PRINTW 「…응」
+			PRINTL   · 
+			PRINTL   · 
+			PRINTL   · 
+			;이부분 선택 학생에게 페니스가 없을 경우라고 적어놨던데 이렇게 쓰는게 더 자연스러워서 바꿈
+			IF HAS_VAGINA(선택학생)
+				IF HAS_PENIS(MASTER)
+					PRINTFORML 은은한 조명이 어둑하게 비치는 방 안, 두 사람의 그림자가 침대 옆의 벽에서 격렬하게 흔들린다.
+					PRINTFORML 침대에 엎어지듯 쓰러져 엉덩이만을 겨우 들어올린  %ANAME(선택학생)%의 뒤에서, %조사처리(ANAME(MASTER),"은")% 격렬하게 허리를 처박으며 뜨거운 한숨을 내뱉었다.
+					PRINTFORML 격한 애무로 달아오른 두 사람의 몸은 땀과 체액으로 흠뻑 젖어, 서로의 살이 맞닿을 때마다 철썩거리는 음란한 물소리가 났다.
+					PRINTFORML 이윽고, %조사처리(ANAME(MASTER),"이")% %ANAME(선택학생)%의 허리를 붙잡고 강하게 허리를 찔러넣으며 사정하자, %조사처리(ANAME(선택학생),"은")% 밀려드는 쾌락에 붙잡힌 허리를 마구 튕기며 교성을 내질렀다.
+					PRINTFORML 한계까지 절정에 달해 꼴사나운 얼굴로 헤일로를 꺼트린 %ANAME(선택학생)%의 옆에 누운 %조사처리(ANAME(MASTER),"은")%, %조사처리(ANAME(선택학생),"을")% 사랑스럽게 끌어안고 입을 맞췄다...
+					;FUCK 함수 호출 인자들 전부 엉망 진창으로 되 있길래 다 정리함
+					CALL FUCK(선택학생, "Ｃ, Ｂ, Ｖ, Ｍ, 욕망, 성교, 봉사, 정애, 마조, 키스, Ｖ성교", "처녀상실, 키스상실, 질내사정", GET_SPERM_ID(MASTER), @"%ANAME(MASTER)%의 입술",@"%ANAME(MASTER)%의 페니스", "", "화간")
+					CALL FUCK(MASTER, "Ｃ,욕망, 성교, 봉사, 키스, 사정, Ｖ삽입", "동정상실, 키스상실", 0,@"%ANAME(선택학생)%의 입술" , "", @"%ANAME(선택학생)%의 질", "화간")
+					DVAR:학원방랑플래그 = 1
+				ELSE
+					PRINTFORML 은은한 조명이 어둑하게 비치는 방 안, 두 사람의 그림자가 침대 옆의 벽에서 격렬하게 흔들린다.
+					PRINTFORML 침대에 누워 다리를 벌린 %ANAME(선택학생)%의 젖은 음부 위를,  %조사처리(ANAME(MASTER),"이")% 마찬가지로 젖어 있는 자신의 음부로 눌러 격렬하게 비볐다.
+					PRINTFORML 서로의 클리토리스가 스칠 때마다 허리를 튕기고 서로를 향해 조수를 뿜기를 반복한 탓에, 두 사람의 몸은 땀과 애액으로 흠뻑 젖어, 서로의 살이 맞닿을 때마다 철썩거리는 음란한 물소리가 났다.
+					PRINTFORML 이윽고,  %조사처리(ANAME(MASTER),"이")% %ANAME(선택학생)%의 젖꼭지와 클리를 꼬집으며 허리를 격렬하게 비비자, %조사처리(ANAME(선택학생),"은")% 밀려드는 쾌락에 허리를 마구 튕기며 %ANAME(MASTER)%의 클리를 향해 세차게 조수를 내뿜었다.
+					PRINTFORML 그 자극으로 이미 한계에 달해 있던 %ANAME(MASTER)%도 함께 절정하며, 서로를 향해 조수를 뿜다가 %ANAME(선택학생)%의 위에 쓰러졌다.
+					PRINTFORML %조사처리(ANAME(선택학생),"은")% 자신의 위에 쓰러진 %ANAME(MASTER)%의 녹아내린 얼굴을 사랑스럽게 바라보며, 그 입술에 입을 맞췄다...
+					;보빔에 마조를...?
+					CALL FUCK(선택학생, "Ｃ, Ｂ, Ｍ, 욕망, 봉사, 마조, 키스", "키스상실",0, @"%ANAME(MASTER)%의 입술","","", "화간")
+					CALL FUCK(MASTER, "Ｃ, Ｂ, Ｍ, 욕망, 봉사, 마조, 키스", "키스상실",0, @"%ANAME(선택학생)%의 입술","","", "화간")
+					DVAR:학원방랑플래그 = 1
+				ENDIF
+			ELSE
+				;선택학생이 질이 없을경우
+			ENDIF
+		ENDIF
+	;"아니"의 경우
+	ELSEIF  RESULT == 1
+		CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+		PRINTW 「아… 그, 그렇구나…」
+		PRINTW 「그, 내,내가 너무 오래 붙잡고 있었네! 나,난 이만 가볼게!」
+		PRINTFORMW 잠시 멍하니 서있던 %조사처리(ANAME(선택학생),"은")% 등을 돌려 급히 떠나갔다.
+		PRINTFORMW 뒤돌아 달려가는 %ANAME(선택학생)%의 얼굴 옆으로 빛이 반짝였다.
+		IF 학원방랑거절플래그 == 1
+			PRINTL   · 
+			PRINTL   · 
+			PRINTL   · 
+			PRINTW 더 돌아다니기에는 시간이 늦었다.
+			PRINTW 근처 모텔에서 묵기로 했다.
+		ELSE
+			PRINTW 더 돌아다녀봅니까?
+			CALL ASK_YN
+			IF RESULT == 1
+				PRINTW 더 돌아다니기에는 시간이 늦었다.
+				PRINTW 근처 모텔에서 묵기로 했다.
+			ELSEIF RESULT == 0
+				학원방랑거절플래그 = 1
+				PRINTW 더 돌아다녀 보기로 했다.
+				GOTO 거절루프
+			ENDIF
+		ENDIF
+	;"입부하러왔다"의 경우
+	ELSE
+		;적어놓은 부분이 틀려서 수정함
+		;적어놓은 대로 하면 세력 수장의 경우 세력수장인 경우의 텍스트와 수장이 아닌경우의 텍스트가 둘 다 출력됨
+		IF 선택학생 == 해당세력수장
+			;이 부분 수정이 필요할 듯
+			;메인 시나리오에서는 동아리가 아니라 학원기준으로 나뉘어져 있으니 우리 동아리에? 는 어색함 동아리 대신 학원, 입부 대신에 협력 정도가 좋을듯
+			;메인 시나리오 아이디가 1 동아리 집결 아이디가 20이니
+			;IF SCENARIOID == 1 같은 식으로 구분 하면 될 듯
+			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+			PRINTW 「가입, 우리동아리에?」
+			PRINTL
+			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+			PRINTW 「잘 생각했어! 정말 잘 생각했어! 우리 동아리에 어서와!」
+			PRINTL
+		ELSE
+			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+			PRINTW 「가입, 우리동아리에?」
+			PRINTL
+			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+			PRINTW 「물론이지! 잠시만, 회장님께 물어보고 올게! 걱정마! 바로 허락해주실거야!」
+			PRINTL
+			IF 해당세력수장 == 임시저장
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
+				PRINTW 「...뭐?」
+				PRINTL
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+				PRINTFORMW 「%조사처리(ANAME(MASTER),"이")% 저희 동아리에 가입하고 싶다고...」
+				PRINTL
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
+				PRINTW 「...」
+				PRINTL
+				PRINTW 「...」
+				PRINTL
+				PRINTW 「......」
+				PRINTL
+				PRINTL
+				PRINTL
+				CALL FACE_IMAGE_N(@"얼굴_의복_분노_{임시저장}")
+				SETCOLOR 칼라_빨강
+				PRINTW 「그 말이 왜 네 입에서 나와?」
+				PRINTL
+				PRINTW 입부 신청은 반려되었습니다.
+			ELSE
+				PRINTFORMW 간부인 %ANAME(선택학생)%의 노력 덕분에 입부 신청을 순식간에 수리되었다.
+				PRINTFORMW %조사처리(ANAME(MASTER),"이")% %ANAME(해당세력수장)%의 세력에 입부했습니다.
+			ENDIF
+			;여기도 위와 마찬가지임 리턴은 함수내에 하나만 있는게 한 눈에 보기에 편함
+			RETURN 1
+		ENDIF
+	ENDIF
+;복종 혹은 예속의 경우
+ELSEIF TALENT:선택학생:복종 || TALENT:선택학생:예속
+;초면인 경우
+ELSEIF !CFLAG:선택학생:안면
+	IF TALENT:선택학생:거만함 || TALENT:선택학생:반항적 || TALENT:선택학생:츤데레 || TALENT:선택학생:고고함 || TALENT:선택학생:프라이드높음
+		;적어놓은 그대로 옮기면 호감도 10001부터 49999 까지가 비어있음
+		SELECTCASE CFLAG:선택학생:호감도
+		CASE IS <= -500
+			CALL FACE_IMAGE_N(@"얼굴_의복_분노_{선택학생}")
+			PRINTW 「네놈, 대체 무슨 낯짝으로 여길 돌아다니는 거지?」
+			PRINTW 「썩 꺼져. 이 도시에서 나가라고.」
+			PRINTL   · 
+			PRINTL   · 
+			PRINTL   · 
+			PRINTW 도시에서 쫒겨났습니다.
+			RETURN 1
+		CASE IS <= -50
+			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+			PRINTW 「너, 어디서 봤다 했더니...」
+			PRINTW 「...쯧, 사고나 치지 마. 그랬다간 가만 안 둘 테니까.」
+		CASE IS <= 50
+			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+			PRINTW 「너는...?」
+			PRINTW 「아니, 아무것도 아니야. ...잘 둘러보다 가라고.」
+		CASE IS <= 500
+			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+			PRINTFORMW 「왠지 어디서 본 것 같더라니, %ANAME(MASTER)%였군.」
+			PRINTL
+			CALL ASK_MULTI("날 알아?","안녕","이름을 알려줘")
+			PRINTL
+			IF RESULT == 0
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+				PRINTW 「알지. 그렇게 잘 아는 편은 아니지만.」
+				PRINTW 「...아무튼 잘 있다 가라고.」
+			ELSEIF RESULT == 1
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+				PRINTW 「...그래, 안녕.」
+			ELSEIF RESULT == 2
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+				PRINTW 「내 이름? 아, 하긴. 내 쪽에서만 일방적으로 알고 있었지.」
+				CALL ICPRINT(@"<%ANAME(선택학생)%>%조사만처리(ANAME(선택학생),"야")% 잊지 말라고.","W",칼라_노랑)
+			ENDIF
+		CASE IS <= 5000
+		CASE IS <= 10000
+		CASE IS >= 50000
+			PRINTW 「히약?!」
+			PRINTFORMW %조사처리(ANAME(선택학생),"와")% 눈이 마주친 순간, 짧은 비명 소리와 함께 %조사처리(ANAME(선택학생),"이")% 손으로 얼굴을 가리고 뒤돌아 주저앉았다.
+			PRINTW 갑작스러운 비명 소리에 주변 행인들이 모두 이쪽을 바라봤다.
+			PRINTFORMW 그것을 눈치채지 못한 것인지, %조사처리(ANAME(선택학생),"이")% 고개를 살짝 돌려 붉은 얼굴로 이쪽을 돌아봤다.
+			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+			PRINTFORMW 「...%ANAME(MASTER)%...?」
+			CALL ASK_MULTI("날 알아?","안녕","누구세요?")
+		CASEELSE
+			SELECTCASE RAND:3
+			CASE 0
+				PRINTW 「거기, 우리 학원 학생은 아닌 것 같은데, 누구야?」
+			CASE 1
+				PRINTW 「처음 보는 녀석이군. 넌 누구지?」
+			CASE 2
+				PRINTW 「이봐, 거기 너. 우리 학원 학생이 아닌 것 같은데.」
+			ENDSELECT
+		ENDSELECT
+	ENDIF
+	PRINTW 초면테스트
+;구면이면서 복종예속, 연모친애가 아닌경우
+ELSE
+PRINTW 구면테스트
+ENDIF
+RETURN 1
+
+
+
+;해당 세력에서 랜덤한 학생을 뽑는 함수
+;첫번째 인자에 해당 세력의 번호넣으면 됨
+@학생선택함수(ARG:0)
+#DIM 해당세력학생수
+#DIM 랜덤선택
+#DIM 선택학생
+;해당 세력의 학생 수를 알아 내기 위한 부분
+LOCAL = 0
+FOR LOCAL, 0, CHARANUM
+	;대상이 남자, 남자(후타), 오토코노코, 오토코노코(후타) 일 경우 넘김
+	SIF TALENT:LOCAL:성별 == 0 || TALENT:LOCAL:성별 == 3 || TALENT:LOCAL:성별 == 4 || TALENT:LOCAL:성별 == 5
+	CONTINUE
+	;대상의 세력이 선택한 세력이 아닐 경우 넘김
+	SIF CFLAG:LOCAL:소속 != ARG:0
+	CONTINUE
+	해당세력학생수 ++
+NEXT
+;여기가 랜덤 학생을 뽑는 부분
+FOR 랜덤선택, 0, CHARANUM
+	LOCAL:1 = (RAND:해당세력학생수) + 1
+	SIF LOCAL:1 == LOCAL:2
+	BREAK
+	;대상이 남자, 남자(후타), 오토코노코, 오토코노코(후타) 일 경우 넘김
+	SIF TALENT:랜덤선택:성별 == 0 || TALENT:랜덤선택:성별 == 3 || TALENT:랜덤선택:성별 == 4 || TALENT:랜덤선택:성별 == 5
+	CONTINUE
+	;대상의 세력이 선택한 세력이 아닐 경우 넘김
+	SIF CFLAG:랜덤선택:소속 != ARG:0
+	CONTINUE
+	LOCAL:2 ++
+	선택학생 = 랜덤선택
+NEXT
+RETURN 선택학생
+
+
+;방랑중에도 발생하게 해주는 함수임 이거 없으면 방랑중엔 발생 안함
+@EVENT_DAILY_WANDERING_ALLOW_WHEN_WANDERING()
+RETURN 1

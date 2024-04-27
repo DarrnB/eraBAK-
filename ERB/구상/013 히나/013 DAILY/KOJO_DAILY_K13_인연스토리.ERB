@@ -409,7 +409,7 @@ ELSEIF KDVAR:대상:히나_인연스토리_진행도 == 3
 		PRINTFORML
 		PRINTFORMW 결국 그 날은 히나가 원하는대로 밤새 계속 몸을 겹쳤다.
 		PRINTFORML
-		CALL FUCK(대상, "Ｃ, Ｂ, Ｖ, Ｍ, 욕망, 성교, 봉사, 정애, 펠라티오, 키스, Ｖ성교", "처녀상실, 키스상실, 질내사정", GET_ID(MASTER), @"%ANAME(MASTER)%의 \@RAND:2 ? 페니스 # 입술\@", ANAME(MASTER), "", "화간")
+		CALL FUCK(대상, "Ｃ, Ｂ, Ｖ, Ｍ, 욕망, 성교, 봉사, 정애, 펠라티오, 키스, Ｖ성교", "처녀상실, 키스상실, 질내사정", GET_SPERM_ID(MASTER), @"%ANAME(MASTER)%의 \@RAND:2 ? 페니스 # 입술\@", ANAME(MASTER), "", "화간")
 		CALL FUCK(MASTER, "Ｃ,욕망, 성교, 봉사, 키스, 사정, Ｖ삽입", "동정상실, 키스상실", 0,@"%ANAME(대상)%의 입술" , "", @"%ANAME(대상)%의 질", "화간")
 		PRINTFORMW
 		KDVAR:대상:히나_인연스토리_진행도 = 4
