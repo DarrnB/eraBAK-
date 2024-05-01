@@ -36,10 +36,10 @@ RETURN 1
 FIRST_LINE = LINECOUNT
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 「～야말로!   이키가 좋은 것을 가지런히 하고 있어요?」
+PRINTFORML 「～날마다 오지 않는 기회! 품질 좋은 상품이 들어와 있습니다!」
 PRINTFORML %조사처리(ANAME(MASTER),"는")% 노예시장을 찾아왔다
-PRINTFORML 너덜너덜의 옷을 입은 여자들이 우리에 넣어져 늘어놓여지고 있다
-PRINTFORML 계의 사람은, 사용할 수 있을 것 같은 노예의 리스트를 건네주었다……
+PRINTFORML 다 헤진 옷을 입은 여자들이 철창에 갇힌 채 진열되어 있다
+PRINTFORML 직원처럼 보이는 로봇이 다가와, 판매중인 노예의 리스트를 건네주었다……
 PRINTFORML 소지금:{MONEY}
 CALL SINGLE_DRAWLINE
 
@@ -106,16 +106,16 @@ ENDIF
 
 대상 = ID_TO_CHARA(SLAVEMARKET_GOODS:RESULT)
 대상첨자 = RESULT
-PRINTFORML 「헤헤, 그 녀석은 %조사처리(NAME_FORMAL(대상),"라")%는 노예로 말야」
-PRINTFORML 「지금이라면{SLAVEMARKET_PRICE:대상첨자}로 양보해 있었고 야」
+PRINTFORML 「헤헤, 그 녀석은 %조사처리(NAME_FORMAL(대상),"라")%는 노예인데 말입죠」
+PRINTFORML 「지금이라면 손님 얼굴을 봐서 {SLAVEMARKET_PRICE:대상첨자} 정도만 받아드립죠, 예」
 SIF 대상첨자 == SLAVEMARKET_SPECIALGOODS
-	PRINTFORML 「조금 "뭔가 있음"로 하고, 특매라는 것으로 가격인하해도」
+	PRINTFORML 「살짝 "특이사항이 있는" 녀석이라, 특별 할인으로 가격도 깎아드립죠」
 IF IS_LOVER(대상)
-	PRINTFORML 「……응?   높다는?」
-	PRINTFORML 「그렇다면 물론, 이 녀석이 너의 "이것"라도 알고 있기 때문 되어 있는 것이겠지?」
-	PRINTFORML 「높다는 것이라면, 자신의 여자가 다른 남자에 팔리는 곳에서도 보고 있구나, 히힉!」
+	PRINTFORML 「……예? 비싸다굽쇼?」
+	PRINTFORML 「그야 물론, 이 녀석이 당신의 "이것" 이라는 걸 알고 있기 때문 아니겠습니까? 예」
+	PRINTFORML 「이 정도도 비싸시다면야, 어쩌면 소중한 여자가 다른 남자에게 팔려버릴지도 모른다굽쇼? 키, 히힉!」
 ENDIF
-PRINTFORML 「그래서?   어떻게 하십니까?」
+PRINTFORML 「그래서?   어떻게 하실 겁니까?」
 PRINTL
 CALL ASK_MULTI_JUDGE(@"%조사처리(ANAME(대상),"를")% 산다", MONEY >= SLAVEMARKET_PRICE:대상첨자, "그만둔다", 1)
 IF RESULT == 1
@@ -124,70 +124,70 @@ IF RESULT == 1
 ENDIF
 
 MONEY -= SLAVEMARKET_PRICE:대상첨자
-PRINTFORMW 「히히, 그러면 상담 성립이다」
-PRINTFORMW 「그러면, 가져 가 훈 이룰 수 있는」
+PRINTFORMW 「히히, 그렇다면 협상 성립입니다」
+PRINTFORMW 「자, 가져가시지요」
 
 ;확률로 에로이 밴트  특매라면 확정
 IF IS_FEMALE(대상) && (20 > RAND:100 || 대상첨자 == SLAVEMARKET_SPECIALGOODS)
 	PRINTFORML
 	PRINTFORMW ……남자가 데려 온 %ANAME(대상)%의 모습을 보고, %조사처리(ANAME(MASTER),"는")% 눈을 의심했다
-	PRINTFORML 벌거숭이의 %조사처리(ANAME(대상),"는")% 눈가리개를 되어 손발에는 형벌 도구를 끼워지고 있다
-	PRINTFORMW 노출의 신체에는, 딱한 피어스가 장착되고 있다
-	PRINTFORML 전신 백탁 투성이가 되어 있어 구멍으로부터도 끈적거리는 국물이 질척질척흘러넘치고 있다
-	PRINTFORMW 여기저기에 쓰여진 정의 글자가, %조사처리(ANAME(대상),"가")% 된 것을 이야기하고 있었다
-	PRINTFORMW 그렇게 비참한 같다고 말하는데, %ANAME(대상)%파리에들 네에들과 웃고 있다
-	PRINTFORMW ……이것은 즐거워서 웃고 있는 것은 아니다. 뭔가 이상한 듯한 약의 작용이다……
+	PRINTFORML 실오라기 하나 걸치지 못한 %조사처리(ANAME(대상),"는")% 눈가리개를 쓴 채 손발에는 족쇄를 차고 있다
+	PRINTFORMW 노출된 몸에는, 음란한 피어스가 박혀 있다
+	PRINTFORML 전신이 백탁 투성이에, 구멍에서도 끈적거리는 액체가 질척질척 흘러내리고 있다
+	PRINTFORMW 여기저기에 쓰여진 바를 정 자가, %조사처리(ANAME(대상),"가")% 범해졌음을 말해주고 있었다
+	PRINTFORMW 굉장히 비참한 모습이었지만, %조사처리(ANAME(대상),"는")% 헤실헤실 웃고 있다
+	PRINTFORMW ……이것은 즐거워서 웃고 있는 것이 아니다. 뭔가 이상한 약의 작용이다……
 	PRINTFORML
-	PRINTFORML 「아～, 시장에 늘어놓고 있는 동안도, 노예로서 해들이 사용하도록 해 받고 있기에」
-	PRINTFORML 「세정은 셀프서비스로 해결되어, 죄송합니다만 말야」
-	PRINTFORMW 「어이쿠, 반품은 받아들이지 않아요, 유감이지만 말이죠」
+	PRINTFORML 「아～, 시장에 진열해 두고 있는 동안에는, 제 처지를 꺠닫도록 노예로서 부하들이 사용하도록 해서 말이죠」
+	PRINTFORML 「세척은 셀프입니다 손님. 죄송합니다만, 예」
+	PRINTFORMW 「아차차, 저희는 반품은 받지 않습니다. 그게 이 바닥 문화라 말입죠, 예」
 	SIF 대상 == SLAVEMARKET_SPECIALGOODS
-		PRINTFORMW 「뭐, 특매가 되려면 그만한 이유가 있다는 것이에요, 헤헤헤」
+		PRINTFORMW 「뭐, 특별 할인에는 그만한 이유가 있다는 겁니다, 헤헤헤」
 	IF IS_LOVER(대상)
-		PRINTFORMW 「별로 상관없지요～?   연인과 칸드노사이카이가 생긴 것이니까」
-		PRINTFORMW 「이것에 질리면, 좀 더 소중히 해 줄 것입니다,!」
+		PRINTFORMW 「딱히 상관없지 않습니까～?   연인과 뗄레야 뗼 수 없는 사이가 된 것 아닙니까?」
+		PRINTFORMW 「혹시 겨우 이걸로 정이 떨어지셨습니까? 연인 사이라면 좀 더 소중히 보듬어 주셔야지요!」
 	ENDIF
-	PRINTFORMW 남을 베어 버려 주고 싶지만, 이 시장에는 많은 위병이 있다. 날뛰면 자신이 위험함
-	PRINTFORMW 이빨을 악물면서, %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 받았다……
+	PRINTFORMW 당장 눈앞의 노예상을 쏴버리고 싶지만, 이곳에는 경비병들이 빼곡히 깔려 있다. 날뛰면 내가 위험하다
+	PRINTFORMW 이를 악물고, %조사처리(ANAME(MASTER),"는")% %조사처리(ANAME(대상),"를")% 받았다……
 	CALL FUCK_GANGBANG(대상, GET_SPERM_ID("노예 상인"), @"노예 상인의 \@RAND:2 ? 페니스 # 입술\@", "노예 상인")
 	CFLAG:대상:약물의존 += RAND(30, 50)
 	CALL SET_PIERCE_RANDOM(대상, 0)
 ENDIF
 
 IF IS_LOVER(대상)
-	PRINTFORMW 「히히, 이것에 질리면, 좀 더 소중히 해 줄 것입니다, 햐햐햐!」
+	PRINTFORMW 「키히히, 이 정도로 정이 떨어지셨습니까? 연인 사이라면 좀 더 소중히 보듬어 주셔야지요! 캬하하!」
 ELSE
-	PRINTFORML 「엣헤헤헤, 매번」
-	PRINTFORMW 「그 장난감과 사이 좋게 할 것입니다!   에에에」
+	PRINTFORML 「엣헤헤헤, 매번 감사합니다」
+	PRINTFORMW 「그 장난감과 행복하십쇼! 예」
 ENDIF
 
 
 
-PRINTFORMW %조사처리(ANAME(대상),"를")% 받아, 시장을 뒤로 했다……
+PRINTFORMW %조사처리(ANAME(대상),"를")% 받아들고, 노예시장을 뒤로 했다……
 ;별 세력에 소속（특수 세력 이외）
 IF IS_COUNTRY(CFLAG:대상:소속) && !IS_SP_COUNTRY(CFLAG:대상:소속) && CFLAG:대상:소속 != CFLAG:MASTER:소속
-	PRINTFORMW ……%조사처리(ANAME(대상),"는")% %ANAME(GET_COUNTRY_BOSS(CFLAG:대상:소속))%의 소속이다
-	PRINTFORMW 돌려주는 것이 사람의 길인 것처럼 생각되지만……
+	PRINTFORMW ……%조사처리(ANAME(대상),"는")% %ANAME(GET_COUNTRY_BOSS(CFLAG:대상:소속))% 소속이다
+	PRINTFORMW 돌려주는 것이 인간의 도리인 것 같다만……
 	PRINTFORML 어떻게 합니까?
 	CALL SINGLE_DRAWLINE
-	CALL ASK_MULTI("돌려준다", "사관으로서 일해 받는다", "노예로서 감금한다")
+	CALL ASK_MULTI("돌려준다", "부원으로 받아들인다", "노예로서 감금한다")
 	IF RESULT == 0
-		PRINTFORMW %조사처리(ANAME(대상),"를")% %ANAME(GET_COUNTRY_BOSS(CFLAG:대상:소속))%에 돌려주기로 했다
-		PRINTFORMW %ANAME(GET_COUNTRY_BOSS(CFLAG:대상:소속))%로부터 깊게 감사받았다……
+		PRINTFORMW %조사처리(ANAME(대상),"를")% %ANAME(GET_COUNTRY_BOSS(CFLAG:대상:소속))%에게 돌려주기로 했다
+		PRINTFORMW %ANAME(GET_COUNTRY_BOSS(CFLAG:대상:소속))%에게 깊게 감사받았다……
 		CALL CHANGE_RELATION_C_TO_C(CFLAG:대상:소속, CFLAG:MASTER:소속, 600, -600)
 		CFLAG:대상:호감도 = MAX(500, CFLAG:대상:호감도 + 500)
 		CFLAG:대상:종속도 = MAX(500, CFLAG:대상:종속도 + 500)
 		CFLAG:대상:의존도 = MAX(100, CFLAG:대상:의존도 + 100)
 		CALL CAPTURE(대상, 0)
 	ELSEIF RESULT == 1
-		PRINTFORMW %ANAME(GET_COUNTRY_BOSS(CFLAG:대상:소속))%가짜나 구 산 것을 공짜로 돌려줄 정도의 의리는 없다
-		PRINTFORMW 사관으로서의 대우를 조건으로, %ANAME(대상)%에 협력을 약속시켰다……
+		PRINTFORMW %ANAME(GET_COUNTRY_BOSS(CFLAG:대상:소속))%에게 내가 산 것을 공짜로 돌려줄 정도의 의리는 없다
+		PRINTFORMW 간부 대우를 해 주는 조건으로, %ANAME(대상)%에게 협력을 약속받았다……
 		CALL CHANGE_COUNTRY(대상, CFLAG:MASTER:소속, 1)
 		CFLAG:대상:호감도 = MAX(0, CFLAG:대상:호감도 + 500)
 		CFLAG:대상:종속도 = MAX(0, CFLAG:대상:종속도 + 500)
 		CFLAG:대상:의존도 = MAX(0, CFLAG:대상:의존도 + 100)
 	ELSE
-		PRINTFORMW 아니아니, 돈을 내 산 것이니까, 이제(이미/벌써/더는/정말)%조사처리(ANAME(대상),"는")% 자신의 것이다
+		PRINTFORMW 아니, 돈을 내고 샀으니까, 이제 %조사처리(ANAME(대상),"는")% 내 것이다
 		PRINTFORMW 어떻게 사용해 줄까 생각하면서, %조사처리(ANAME(MASTER),"는")% 시장을 뒤로 했다……
 		CALL CHANGE_COUNTRY(LOCAL:0, 0, 1)
 		CALL CAPTURE(대상, CFLAG:MASTER:소속)
@@ -196,15 +196,15 @@ IF IS_COUNTRY(CFLAG:대상:소속) && !IS_SP_COUNTRY(CFLAG:대상:소속) && CFL
 ELSEIF CFLAG:대상:소속 != CFLAG:MASTER:소속
 	PRINTFORML ……%ANAME(대상)%의 대우는 어떻게 하지?
 	CALL SINGLE_DRAWLINE
-	CALL ASK_YN("사관으로서 맞아들인다", "감금해 둔다")
+	CALL ASK_YN("부원으로 받아들인다", "감금해 둔다")
 	IF RESULT == 0
-		PRINTFORMW %조사처리(ANAME(대상),"는")% %ANAME(GET_COUNTRY_BOSS(CFLAG:MASTER:소속))%의 사관으로서 일하는 일이 되었다……
+		PRINTFORMW %조사처리(ANAME(대상),"는")% %ANAME(GET_COUNTRY_BOSS(CFLAG:MASTER:소속))%의 부원으로 입부하게 되었다……
 		CALL CHANGE_COUNTRY(대상, CFLAG:MASTER:소속, 1)
 		CFLAG:대상:호감도 = MAX(500, CFLAG:대상:호감도 + 500)
 		CFLAG:대상:종속도 = MAX(500, CFLAG:대상:종속도 + 500)
 		CFLAG:대상:의존도 = MAX(100, CFLAG:대상:의존도 + 100)
 	ELSE
-		PRINTFORMW %조사처리(ANAME(대상),"를")% 도망치기 시작하지 않게 감금해 두기로 했다……
+		PRINTFORMW %조사처리(ANAME(대상),"를")% 도망치지 못하도록 감금해 두기로 했다……
 		CALL CHANGE_COUNTRY(대상, 0, 1)
 		CALL CAPTURE(대상, CFLAG:MASTER:소속)
 	ENDIF
@@ -234,12 +234,12 @@ SLAVEMARKET_GOODS:대상첨자 = 0
 #DIM 합계액
 
 FIRST_LINE = LINECOUNT
-PRINTFORML 「히히, 누구를 팔아 줄래?」
+PRINTFORML 「히히, 누구를 파실 겁니까?」
 CALL SINGLE_DRAWLINE
 CALL SELECT_CHARA_LIST_MULTI_ONLY_LOGIC_SEX(-1, "SLAVEMARKET_SELL_CHARA", "SLAVEMARKET_SELL_CHARA")
 
 IF SELECTED_CHARA_NUM == 0
-	PRINTFORMW 「이런, 그 녀석은 유감, 히힛」
+	PRINTFORMW 「이런, 유감이군요, 히힛」
 	RETURN 0
 ENDIF
 
@@ -251,17 +251,17 @@ FOR LOCAL, 0, SELECTED_CHARA_NUM
 	대상매각액 = SLAVEMARKET_CALC_PRICE(대상) / 5
 	합계액 += 대상매각액
 NEXT
-PRINTFORML 담당의 남자는 %ANAME(대상, SELECTED_CHARA_NUM)%를, 욕망을 드러내로 한 눈으로 품평 한다……
-PRINTFORML 「아-……닫아{합계액}가 되어」
+PRINTFORML 담당자는 %조사처리(ANAME(대상, SELECTED_CHARA_NUM),"를")%, 욕망에 찬 눈으로 품평하듯 바라봤다……
+PRINTFORML 「흐음…… 한 {합계액} 정도면 어떠십니까?」
 
 CALL ASK_YN("매각", "그만둔다")
 IF RESULT == 1
-	PRINTFORMW 「이, 이제 와서 양심에서도 솟아 오른 것입니다?」
+	PRINTFORMW 「쳇, 이제 와서 양심에 찔리기라도 한 겁니까?」
 	CLEARLINE FIRST_LINE - LINECOUNT
 	RESTART
 ENDIF
 
-PRINTFORML 「히힛, 매번 있어!」
+PRINTFORML 「히힛, 매번 감사합니다!」
 PRINTFORML %ANAME(대상, SELECTED_CHARA_NUM)%들은 형벌 도구를 끼울 수 있어 어딘가로 데려가졌다……
 
 MONEY += 합계액
@@ -312,8 +312,8 @@ ELSE
 	RESETCOLOR
 	PRINTFORM  판매액:{SLAVEMARKET_PRICE:번호, 8, LEFT}
 	SIF SLAVEMARKET_SPECIALGOODS == 번호
-		CALL COLOR_PRINT("특매!   ", 칼라_핑크)
-	CALL COLOR_PRINT("자금부족이기 때문에 구입 불가", 칼라_경고)
+		CALL COLOR_PRINT("특별 할인!   ", 칼라_핑크)
+	CALL COLOR_PRINT("자금이 부족하므로 구입 불가", 칼라_경고)
 ENDIF
 PRINTL
 PRINT 성지식:

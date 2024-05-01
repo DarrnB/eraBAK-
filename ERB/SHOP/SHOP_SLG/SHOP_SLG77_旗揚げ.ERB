@@ -35,7 +35,7 @@ RETURN 1
 #DIM 신세력
 
 CALL SINGLE_DRAWLINE
-PRINTL 신세력시작 도시를 선택해 주세요
+PRINTL 새로운 세력을 일으킬 도시를 선택해 주세요
 CALL SINGLE_DRAWLINE
 CALL SET_CITY_COLOR_COUNTRY
 CALL DRAWMAP
@@ -67,13 +67,13 @@ IF CITY_TYPE:도시 == 1 || GET_RELAYNAME(도시) == "무명"
 ENDIF
 
 IF IS_COUNTRY(도시소지세력) && GET_OWN_CITY(도시소지세력) == 1
-	PRINTFORMW 나머지 도시수가 1의 세력으로부터 도시를 빼앗을 수 없습니다
+	PRINTFORMW 남은 도시가 하나뿐인 세력에서 도시를 빼앗을 수 없습니다
 	CLEARLINE 1
 	GOTO INPUT_LOOP
 ENDIF
 
 
-PRINTFORML %GET_RELAYNAME(도시)%로 개양 합니까?
+PRINTFORML %GET_RELAYNAME(도시)%에서 개양합니까?
 CALL ASK_MULTI("신세력시작", "캔슬", "돌아온다")
 
 IF RESULT == 1

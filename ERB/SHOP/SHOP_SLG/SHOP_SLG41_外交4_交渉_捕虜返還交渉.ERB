@@ -43,7 +43,7 @@ LOCAL:21 = MAX(LOCAL:20 - 1, 0) / 20 + 1
 $SHOW_LOOP_INIT
 
 CALL SINGLE_DRAWLINE
-PRINTL ★★서로의 해방하는 포로를 선택해 주세요★★
+PRINTL ★★서로 해방시킬 포로를 선택해 주세요★★
 CALL SINGLE_DRAWLINE
 PRINTFORML 【붙잡고 있는 포로】%TOSTR_SPACE(11)%가치   【붙잡혀 있는 포로】%TOSTR_SPACE(7)%가치
 
@@ -207,21 +207,21 @@ FOR LOCAL:0, 0, CHARANUM
 NEXT
 
 IF LOCAL:40
-	PRINTBUTTON "  0[차분을 군사로 보충해 정산]", 0
+	PRINTBUTTON "  0[부족분을 군사로 보충해 정산]", 0
 	PRINT     
-	PRINTBUTTON "  1[차분을 경제력으로 보충해 정산]", 1
+	PRINTBUTTON "  1[부족분을 경제력으로 보충해 정산]", 1
 	PRINT     
 	IF LOCAL:39 >= 0
-	PRINTBUTTON "  2[상관하지 않고 반환]", 2
+	PRINTBUTTON "  2[부족분을 무시하고 반환]", 2
 	ELSE
 	SETCOLOR 칼라_선택불가
-	PRINTPLAIN   2[상관하지 않고 반환]
+	PRINTPLAIN   2[부족분을 무시하고 반환]
 	RESETCOLOR
 	ENDIF
 	
 ELSE
 	SETCOLOR 칼라_선택불가
-	PRINTPLAIN   0[차분을 군사로 보충해 정산]      1[차분을 경제력으로 보충해 정산]      2[상관하지 않고 반환]
+	PRINTPLAIN   0[부족분을 군사로 보충해 정산]      1[부족분을 경제력으로 보충해 정산]      2[부족분을 무시하고 반환]
 	RESETCOLOR
 
 ENDIF
@@ -264,14 +264,14 @@ ELSEIF RESULT == 0 && LOCAL:40
 			WAIT
 		ENDIF
 	ELSEIF LOCAL:39 > 0
-		PRINTFORML %ANAME(LOCAL:5)%에게 군사{LOCAL:51}를 요구할 수가 있습니다
-		PRINTFORML 현재의 총병수:{LOCAL:52}(우리집 미할당병수:{COUNTRY_SOLDIER:(CFLAG:MASTER:소속)})
+		PRINTFORML %ANAME(LOCAL:5)%에게 용병 {LOCAL:51}을 요구할 수 있습니다
+		PRINTFORML 현재의 총 병력수:{LOCAL:52}(우리의 미할당 병력수:{COUNTRY_SOLDIER:(CFLAG:MASTER:소속)})
 		CALL ASK_YN("결정", "캔슬")
 		IF RESULT == 0
 			LOCAL:60 = 1
 			IF LOCAL:54 < LOCAL:51
-				PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% 요구를 채울 뿐(만큼)의 군사를 준비 할 수 없는 것 같다…(준비 가능:{LOCAL:54})
-				CALL ASK_YN("있을 뿐(만큼) 보내라!", "그렇다면 교섭은 결렬이다")
+				PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% 요구를 만족시킬 만큼의 병력을 준비 할 수 없는 것 같다…(준비 가능:{LOCAL:54})
+				CALL ASK_YN("있는 만큼만 보내라!", "그렇다면 교섭은 결렬이다")
 				IF RESULT == 0
 					LOCAL:51 = LOCAL:54
 				ELSE
@@ -283,21 +283,21 @@ ELSEIF RESULT == 0 && LOCAL:40
 				CALL PRISONER_TRADE_RELEASE(ARG:0)
 				;상대 세력으로부터 자국에 군사를 이동
 				CALL SHIFT_SOLDIER(ARG:0, CFLAG:MASTER:소속, LOCAL:51)
-				PRINTFORMW %ANAME(LOCAL:5)% 세력으로부터{LOCAL:51}의 군사를 받았습니다
+				PRINTFORMW %ANAME(LOCAL:5)% 세력으로부터 {LOCAL:51}의 용병을 받았습니다
 			ENDIF
 		ENDIF
 
 	ELSE
-		PRINTFORML %ANAME(LOCAL:5)%에 군사{LOCAL:51}를 건네줄 필요가 있습니다
-		PRINTFORML 현재의 총병수:{LOCAL:52}(우리집 미할당병수:{COUNTRY_SOLDIER:(CFLAG:MASTER:소속)})
+		PRINTFORML %ANAME(LOCAL:5)%에게 용병 {LOCAL:51}을 건네줄 필요가 있습니다
+		PRINTFORML 현재의 총 병력수:{LOCAL:52}(우리의 미할당 병력수:{COUNTRY_SOLDIER:(CFLAG:MASTER:소속)})
 		IF LOCAL:51 > LOCAL:52
 			CALL ASK_MULTI_JUDGE("결정", 0, "캔슬", 1)
 		ELSE
 			IF LOCAL:51 > COUNTRY_SOLDIER:(CFLAG:MASTER:소속)
 				IF LOCAL:11 > COUNTRY_SOLDIER:(CFLAG:MASTER:소속) + LOCAL:13
-					PRINTFORML ※요구병수가 현재의 미할당병수보다 많기 때문에, 전부대를 해산해, 방위에 도착해 있는 군사도 건네줄 필요가 있습니다
+					PRINTFORML ※요구병력수가 현재의 미할당병력수보다 많기 때문에, 모든 부대를 해산하고, 도시방위에 배치되어 있는 병력도 건네줄 필요가 있습니다
 				ELSE
-					PRINTFORML ※요구병수가 현재의 미할당병수보다 많기 때문에, 방위에 도착해 있는 군사도 건네줄 필요가 있습니다
+					PRINTFORML ※요구병력수가 현재의 미할당병력수보다 많기 때문에, 도시방위에 배치되어 있는 병력도 건네줄 필요가 있습니다
 				ENDIF
 			ENDIF
 			CALL ASK_YN("결정", "캔슬")
@@ -307,7 +307,7 @@ ELSEIF RESULT == 0 && LOCAL:40
 			CALL PRISONER_TRADE_RELEASE(ARG:0)
 			;자국으로부터 상대 세력에 군사를 이동
 			CALL SHIFT_SOLDIER(CFLAG:MASTER:소속, ARG:0, LOCAL:51)
-			PRINTFORMW %ANAME(LOCAL:5)% 세력에{LOCAL:51}의 군사를 인도했습니다
+			PRINTFORMW %ANAME(LOCAL:5)% 세력에 {LOCAL:51}의 병력을 인도했습니다
 		ENDIF
 	ENDIF
 
@@ -340,14 +340,14 @@ ELSEIF RESULT == 1 && LOCAL:40
 			WAIT
 		ENDIF
 	ELSEIF LOCAL:39 > 0
-		PRINTFORML %ANAME(LOCAL:5)%에게 경제력{LOCAL:52}를 요구할 수가 있습니다
+		PRINTFORML %ANAME(LOCAL:5)%에게 경제력 {LOCAL:52}을 요구할 수가 있습니다
 		PRINTFORML 현재의 경제력……%ANAME(LOCAL:4)%:{LOCAL:50}    %ANAME(LOCAL:5)%:{LOCAL:51}
 		CALL ASK_YN("결정", "캔슬")
 		IF RESULT == 0
 			LOCAL:60 = 1
 			IF LOCAL:54 < LOCAL:52
-				PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% 요구를 채울 뿐(만큼)의 경제력을 가지고 있지 않은 것 같다…(준비 가능:{LOCAL:54})
-				CALL ASK_YN("있을 뿐(만큼) 보내라!", "그렇다면 교섭은 결렬이다")
+				PRINTFORML %조사처리(ANAME(LOCAL:5),"는")% 요구를 만족시킬 만큼의 경제력을 가지고 있지 않은 것 같다…(준비 가능:{LOCAL:54})
+				CALL ASK_YN("있는 만큼만 보내라!", "그렇다면 교섭은 결렬이다")
 				IF RESULT == 0
 					LOCAL:52 = LOCAL:54
 				ELSE
@@ -359,11 +359,11 @@ ELSEIF RESULT == 1 && LOCAL:40
 				CALL PRISONER_TRADE_RELEASE(ARG:0)
 				;상대 세력으로부터 자국에 경제력을 이동
 				CALL SHIFT_ECONOMY(ARG:0, CFLAG:MASTER:소속, LOCAL:52 * 100)
-				PRINTFORMW %ANAME(LOCAL:5)% 세력으로부터 경제력{LOCAL:52}를 받아 소유 도시에 배분했습니다
+				PRINTFORMW %ANAME(LOCAL:5)% 세력으로부터 경제력 {LOCAL:52}을 받아 관할 도시에 배분했습니다
 			ENDIF
 		ENDIF
 	ELSE
-		PRINTFORML %ANAME(LOCAL:5)%에 경제력{LOCAL:52}를 건네줄 필요가 있습니다
+		PRINTFORML %ANAME(LOCAL:5)%에게 경제력 {LOCAL:52}을 건네줄 필요가 있습니다
 		PRINTFORML 현재의 경제력……%ANAME(LOCAL:4)%:{LOCAL:50}    %ANAME(LOCAL:5)%:{LOCAL:51}
 		IF LOCAL:52 > LOCAL:53
 			PRINTFORML ※주고 받을 수 있는 경제력의 한계는 {LOCAL:53}까지
@@ -376,7 +376,7 @@ ELSEIF RESULT == 1 && LOCAL:40
 			CALL PRISONER_TRADE_RELEASE(ARG:0)
 			;자국으로부터 상대 세력에 군사를 이동
 			CALL SHIFT_ECONOMY(CFLAG:MASTER:소속, ARG:0, LOCAL:52 * 100)
-			PRINTFORMW %ANAME(LOCAL:5)% 세력에{LOCAL:52}의 경제력을 주고 받았습니다
+			PRINTFORMW %ANAME(LOCAL:5)% 세력에게 {LOCAL:52}의 경제력을 주었습니다
 		ENDIF
 	ENDIF
 
@@ -394,7 +394,7 @@ ELSEIF RESULT == 2 && LOCAL:40
 			WAIT
 		ENDIF
 	ELSEIF LOCAL:39 > 0
-		PRINTFORML %ANAME(LOCAL:5)%에 포로를 반환합니다
+		PRINTFORML %ANAME(LOCAL:5)%에게 포로를 반환합니다
 		CALL ASK_YN("결정", "캔슬")
 		IF RESULT == 0
 			LOCAL:60 = 1  ;해방의 실시
@@ -408,7 +408,7 @@ ELSEIF RESULT == 2 && LOCAL:40
 			ENDIF
 		ENDIF
 	ELSE
-		PRINTFORML 자군이 우위의 경우만 선택할 수 있습니다	;나올 리가 없는 메세지
+		PRINTFORML 자군이 우위일 경우에만 선택할 수 있습니다	;나올 리가 없는 메세지
 	ENDIF
 	REDRAW 1
 	RESTART
@@ -449,18 +449,18 @@ FOR LOCAL:0, 0, CHARANUM
 		IF TALENT:(LOCAL:0):임신
 			SELECTCASE RAND:4
 				CASE 0
-					PRINTFORML 포로가 되어 있었던 %ANAME(LOCAL:0)%의 배에는 선물이 갖게하고 있다
+					PRINTFORML 포로가 되어 있었던 %ANAME(LOCAL:0)%의 배에는 선물이 들어 있었다
 				CASE 1
-					PRINTFORML %ANAME(LOCAL:0)%의 배의 아이에 대해 여러가지 억측이 흐르고 있다
+					PRINTFORML %ANAME(LOCAL:0)%의 배 속의 아이에 대해 여러 억측이 흐르고 있다
 				CASE 2
-					PRINTFORML 욕보일 수 있었던 위, 이런 모습으로 아군의 바탕으로 돌려주어지는 것을 %조사처리(ANAME(LOCAL:0),"는")% 울고 있다
+					PRINTFORML 부끄러운 모습으로 돌아가던 중, 이런 모습으로 아군에게 돌아가야 한다는 것에 %조사처리(ANAME(LOCAL:0),"는")% 울고 있다
 				CASE 3
-					PRINTFORML %조사처리(ANAME(LOCAL:0),"가")% 부풀어 오른 배는 반환식에 따라 온 병사들의 호기의 시선에 노출되고 있다
+					PRINTFORML %ANAME(LOCAL:0)%의 부풀어 오른 배는 반환식을 위해 온 용병들의 호기심 섞인 시선에 노출되었다
 			ENDSELECT
 		ELSEIF IS_LOVER(LOCAL:0)
-			PRINTFORML %조사처리(ANAME(LOCAL:0),"는")% 해방을 기뻐하면서도 %조사처리(ANAME(MASTER),"를")% 생각해, 몇 번이나 되돌아 보고 있다
+			PRINTFORML %조사처리(ANAME(LOCAL:0),"는")% 해방을 기뻐하면서도 %조사처리(ANAME(MASTER),"가")% 생각나, 몇 번이고 뒤를 돌아보았다
 		ELSEIF TALENT:(LOCAL:0):인기
-			PRINTFORML 인기가 있는 %ANAME(LOCAL:0)%의 귀환을 모두가 기뻐하고 있다
+			PRINTFORML 인기가 있는 덕분인지 %ANAME(LOCAL:0)%의 귀환에 모두가 기뻐하고 있다
 		ENDIF
 	ENDIF
 NEXT
@@ -469,11 +469,11 @@ FOR LOCAL:0, 0, CHARANUM
 		CALL CAPTURE(LOCAL:0, 0)
 		PRINTFORML %조사처리(ANAME(LOCAL:0),"는")% 해방되었습니다
 		IF IS_LOVER(LOCAL:0) || IS_SLAVED_BY(LOCAL:0)
-			PRINTFORML %조사처리(ANAME(LOCAL:0),"는")% %조사처리(ANAME(MASTER),"가")% 해방에 진력해 준 것을 기뻐하고 있다
+			PRINTFORML %조사처리(ANAME(LOCAL:0),"는")% %조사처리(ANAME(MASTER),"가")% 해방시켜 준 것에 기뻐하고 있다
 		ELSEIF IS_SLAVE(LOCAL:0)
-			PRINTFORML %조사처리(ANAME(LOCAL:0),"는")% %ANAME(MASTER)%에 포로가 되어 버린 것을 사과하고 있다
+			PRINTFORML %조사처리(ANAME(LOCAL:0),"는")% %ANAME(MASTER)%에게 포로가 되어 버린 것을 사과하고 있다
 		ELSEIF TALENT:(LOCAL:0):인기
-			PRINTFORML 인기가 있는 %ANAME(LOCAL:0)%의 귀환을 모두가 기뻐하고 있다
+			PRINTFORML 인기가 있는 덕분인지 %ANAME(LOCAL:0)%의 귀환에 모두가 기뻐하고 있다
 		ENDIF
 	ENDIF
 NEXT

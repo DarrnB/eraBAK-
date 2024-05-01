@@ -52,7 +52,7 @@ CALL SET_CITY_COLOR_UNIT
 CALL DRAWMAP
 CALL RESET_CITY_COLOR
 CALL SINGLE_DRAWLINE
-PRINTL 신세력시작 도시를 선택해 주세요
+PRINTL 새로운 세력을 일으킬 도시를 선택해 주세요
 PRINTL 현재 소속해 있는 세력의 도시만 지정 가능합니다
 CALL SINGLE_DRAWLINE
 PRINTBUTTON " 0[캔슬]", 0
@@ -71,7 +71,7 @@ ELSEIF RESULT >= 1001 && RESULT <= 1001 + CITY_NUM
 	;지정된 도시가 존재해, 주인공 세력의 지배하에 있는 경우
 	IF GET_RELAYNAME(도시) != "무명" && CITY_TYPE:(도시) == 0 && CITY_OWNER:(도시) == 구세력
 		REDRAW 1
-		PRINTFORMW %GET_RELAYNAME(도시)%로 개양 합니다
+		PRINTFORMW %GET_RELAYNAME(도시)%에서 개양합니다
 	ELSE
 		CLEARLINE 1
 		GOTO INPUT_LOOP_CITY
@@ -82,8 +82,8 @@ ELSE
 ENDIF
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 관계성의 깊은 캐릭터를 새로운 세력으로 이끌 수가 있습니다
-PRINTFORML 새로운 세력의 사관으로서 가세하는 캐릭터를 선택해 주세요
+PRINTFORML 관계가 깊은 캐릭터를 새로운 세력으로 끌어들일 수 있습니다
+PRINTFORML 새로운 세력의 간부로서 동참할 캐릭터를 선택해 주세요
 CALL SINGLE_DRAWLINE
 CALL SELECT_CHARA_LIST_MULTI_ONLY_LOGIC_SLG(-1, "PLAYER_INDEPENDENCE", "NONE")
 신세력 = GET_NEW_COUNTRY()
@@ -120,7 +120,7 @@ CALL CHANGE_COUNTRY_COLOR(신세력, 1)
 
 SETCOLOR 칼라_주의
 PRINTL 
-PRINTFORMW %조사처리(ANAME(MASTER),"는")% %GET_RELAYNAME(도시)%를 점거해 독립했습니다!
+PRINTFORMW %조사처리(ANAME(MASTER),"는")% %GET_RELAYNAME(도시)%를 점거하고 독립했습니다!
 PRINTL 
 RESETCOLOR
 

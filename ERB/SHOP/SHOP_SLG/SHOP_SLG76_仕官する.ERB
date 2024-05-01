@@ -32,12 +32,12 @@ LOCAL:10 = 0
 $SHOW_LOOP
 
 CALL SINGLE_DRAWLINE
-PRINTL 관직에 오름처의 국가를 선택해 주세요
-PRINT 한 번 임관한다와
+PRINTL 입부할 학원을 선택해 주세요
+PRINT 한 번 입부하면
 SETCOLOR 칼라_주의
 PRINT 5
 RESETCOLOR
-PRINTL 기의 사이, 하야 할 수가 없습니다
+PRINTL 턴 동안, 퇴부할 수 없습니다
 CALL SINGLE_DRAWLINE
 CALL SET_CITY_COLOR_COUNTRY
 CALL DRAWMAP
@@ -47,7 +47,7 @@ CALL SINGLE_DRAWLINE
 LOCAL:2 = ID_TO_CHARA(COUNTRY_BOSS:(LOCAL:10))
 
 IF LOCAL:2 < 0
-	PRINTL 도시를 클릭 하는 것으로, 그 세력의 정보를 얻을 수 있습니다
+	PRINTL 도시를 클릭해 그 세력의 정보를 얻을 수 있습니다
 	PRINTL 
 	PRINTBUTTON " 0[돌아온다]", 0
 	PRINTL 
@@ -56,17 +56,17 @@ ELSE
 	SETCOLOR COUNTRY_COLOR:(LOCAL:10)
 	PRINTFORM %NAME_FORMAL(LOCAL:2)%
 	RESETCOLOR
-	PRINTL  의 세력하에 있습니다
+	PRINTL  세력의 관할 하에 있습니다
 	IF COUNTRY_IS_CLOSED:(LOCAL:10)
 		SETCOLOR 칼라_선택불가
-		PRINTFORM  X[이 세력에는 관직에 오름 할 수 없습니다]
+		PRINTFORM  X[이 세력에는 입부할 수 없습니다]
 		RESETCOLOR
 	ELSEIF FINDELEMENT(COUNTRY_PLAYER_BELONGED, LOCAL:10) != -1
 		SETCOLOR 칼라_선택불가
-		PRINTFORM  X[세력으로부터 이탈한지 얼마되지 않았습니다]
+		PRINTFORM  X[세력에서 이탈한지 얼마 되지 않았습니다]
 		RESETCOLOR
 	ELSE
-		PRINTBUTTON " 1[이 세력에 임관한다]", 1
+		PRINTBUTTON " 1[이 세력에 입부한다]", 1
 	ENDIF
 	PRINTL 
 	PRINTBUTTON " 0[돌아온다]", 0
@@ -84,7 +84,7 @@ ELSEIF RESULT == 1 && !COUNTRY_IS_CLOSED:(LOCAL:10) && FINDELEMENT(COUNTRY_PLAYE
 	IF LOCAL:2 >= 0
 		CALL CHANGE_COUNTRY(MASTER, LOCAL:10)
 		TIME = 0
-		PRINTFORMW %ANAME(LOCAL:2)% 세력에 관직에 오름 합니다
+		PRINTFORMW %ANAME(LOCAL:2)% 세력에 입부합니다
 		PLAYER_HIRED_COUNTER  = 5
 		RETURN
 	ENDIF

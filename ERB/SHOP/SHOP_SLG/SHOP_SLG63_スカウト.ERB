@@ -41,10 +41,10 @@ FOR LOCAL, 0, VARSIZE("SCOUT_CANDIDATES")
 NEXT
 
 CALL SINGLE_DRAWLINE
-PRINTFORML  자국의 강화를 위해서(때문에), 재야의 인재를 스카우트 해 오자……
-PRINTFORML  지금 후보에 오르고 있는 인재는 이하와 같지만, 누구를 스카우트 할까……
+PRINTFORML  학원의 강화를 위해, 재야의 인재들을 스카우트 해 오자……
+PRINTFORML  지금 후보에 올라 있는 인재는 아래와 같다. 누구를 스카우트 할까……
 SIF !SCOUT_COUNT
-	CALL COLOR_PRINTL("첫회 스카우트를 위해서(때문에),★6 이하의 캐릭터의 제시액이 대폭 할인（외교 해금까지! ）", 칼라_주의)
+	CALL COLOR_PRINTL("첫 스카우트이므로, ★6 이하의 캐릭터의 제시액이 대폭 할인（외교 해금까지! ）", 칼라_주의)
 SETCOLOR 칼라_선택불가
 PRINTFORM  소지금:
 SETCOLOR 칼라_선택중
@@ -108,8 +108,8 @@ IF 대상 == -1
 	GOTO INPUT_LOOP
 ENDIF
 
-PRINTFORML %ANAME(대상)%에 관직에 오름 하지 않을까 꺼냈다……
-PRINTFORML %조사처리(ANAME(대상),"는")% 돈 %NUM_FORMAT(SCOUT_PRICE:대상첨자)%를 요구했다
+PRINTFORML %ANAME(대상)%에게 입부 제안을 보냈다……
+PRINTFORML %조사처리(ANAME(대상),"는")% %NUM_FORMAT(SCOUT_PRICE:대상첨자)%크레딧을 요구했다
 PRINTL
 CALL ASK_MULTI_JUDGE("요구액수를 지불한다", SCOUT_PRICE:대상첨자 <= MONEY, "지불금액을 입력한다", 1, "그만둔다", 1)
 IF RESULT == 2
@@ -120,7 +120,7 @@ ENDIF
 IF RESULT == 0
 	LOCAL = SCOUT_PRICE:대상첨자
 ELSE
-	PRINTFORM 아무리 지불해……? (소지금:{MONEY}) 요구액:
+	PRINTFORM 얼마나 지불할까……? (소지금:{MONEY}) 요구액:
 	PRINTBUTTON @"[{SCOUT_PRICE:대상첨자}]", SCOUT_PRICE:대상첨자
 	$PAYMENT_LOOP
 	INPUT
@@ -130,18 +130,18 @@ ELSE
 ENDIF
 
 IF !SCOUT_JUDGE_PAYMENT_DISCOUNT(대상, SCOUT_PRICE:대상첨자, LOCAL)
-	PRINTFORMW %ANAME(대상)%에, 그런 액으로는 관직에 오름 할 수 없으면 돌려주어졌다……
+	PRINTFORMW %조사처리(ANAME(대상),"는")%, 그 정도 액수로는 입부할 수 없다며 돈을 돌려줬다……
 	SCOUT_CANDIDATES:대상첨자 = 0
 	RESTART
 ENDIF
 
-PRINTFORML 전력 보강을 위해서라면 싼 것이다……
-PRINTFORML %ANAME(대상)%에 돈{LOCAL}를 지불했다
+PRINTFORML 전력 보강을 위해서라면 싼 값이다……
+PRINTFORML %ANAME(대상)%에게 {LOCAL}크레딧을 지불했다
 
 LOCAL:1 = SCOUT_JUDGE_PAYMENT_PLUS(대상, SCOUT_PRICE:대상첨자, LOCAL)
 
 IF LOCAL:1 && SCOUT_COUNT
-	PRINTFORML %조사처리(ANAME(대상),"는")% 이렇게 받을 수 있다니!   와 기뻐하고 있는 것 같다……
+	PRINTFORML %조사처리(ANAME(대상),"는")% 이렇게나 많이 주다니!   하고 기뻐하고 있는 것 같다……
 	PRINTFORML %ANAME(대상)%의 능력이 상승했다
 	FOR LOCAL:2, 0, LOCAL:1
 		SELECTCASE RAND:6
@@ -161,7 +161,7 @@ IF LOCAL:1 && SCOUT_COUNT
 	NEXT
 ENDIF
 
-PRINTFORML %조사처리(ANAME(대상),"와")% 단단한 악수를 주고 받았다……
+PRINTFORML %조사처리(ANAME(대상),"와")% 단단히 악수했다……
 CALL COLOR_PRINTW(@"%조사처리(ANAME(대상),"가")% 동료가 되었습니다", 칼라_주의)
 
 MONEY -= LOCAL
