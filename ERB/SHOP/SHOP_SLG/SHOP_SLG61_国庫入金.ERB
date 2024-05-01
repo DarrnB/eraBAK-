@@ -33,14 +33,14 @@ RETURN 1
 레이트 = GET_SUM_ECONOMY(CFLAG:MASTER:소속) / 100000 + 1
 FIRST_LINE = LINECOUNT
 CALL SINGLE_DRAWLINE
-PRINTFORML 개인 자금을 국고에 입금할 수가 있습니다
-PRINTFORML 다만, 국고를 개인 자금으로 해서 인출할 수 없습니다
-PRINTFORM 현재의 레이트는 개인 자금
+PRINTFORML 개인 자금을 학원 예산으로 입금할 수 있습니다
+PRINTFORML 다만, 예산을 개인 자금으로 인출할 수는 없습니다
+PRINTFORM 현재의 교환비는 개인 자금
 CALL COLOR_PRINT(@"{레이트}", 칼라_주의)
-PRINTFORM 에 대해, 국고
+PRINTFORM 에, 예산
 CALL COLOR_PRINT("1", 칼라_주의)
 PRINTFORML 입니다
-PRINTFORML 국고로 하고 있고 창고를 얻습니까? (0, 음수 입력으로 캔슬)
+PRINTFORML 예산에 얼마를 추가합니까? (0, 음수 입력으로 캔슬)
 CALL SINGLE_DRAWLINE
 FOR LOCAL, 1, 10
 	SIF 레이트 * POWER(10, LOCAL) <= MONEY
@@ -55,15 +55,15 @@ ELSEIF RESULT * 레이트 <= MONEY
 	LOCAL = RESULT
 	PRINTFORM 개인 자금
 	CALL COLOR_PRINT(@"{레이트 * LOCAL}", 칼라_주의)
-	PRINTFORM 를 입금해, 국고
+	PRINTFORM 을 입금해, 예산
 	CALL COLOR_PRINT(@"{LOCAL}", 칼라_주의)
-	PRINTFORML 를 얻습니다
+	PRINTFORML 을 얻습니다
 	PRINTFORML 좋습니까?
 	CALL ASK_YN()
 	IF RESULT == 1
 		RESTART
 	ELSE
-		PRINTFORM 국고
+		PRINTFORM 예산
 		CALL COLOR_PRINT(@"{LOCAL}", 칼라_주의)
 		PRINTFORML 를 얻었습니다
 		MONEY -= LOCAL * 레이트

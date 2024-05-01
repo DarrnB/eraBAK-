@@ -48,9 +48,9 @@ RETURN 1
 #DIM 세력
 #DIM 군주
 #DIM 국양도플래그
-PRINTFORML 현재의 군주를 잡아 새로운 군주를 세웁니다
-PRINTFORML 만약 현재의 군주가 강하고 함락 하고 있다면, 평화뒤에 대가 바뀜 할 수 있겠지요
-PRINTFORML 신군주는 %ANAME(MASTER)%자신이 되는지, 함락 하고 있는 사관중에서 선택할 수 있습니다
+PRINTFORML 현재의 회장을 끌어내리고 새로운 회장을 세웁니다
+PRINTFORML 만약 현재의 회장이 완전히 함락되어 있다면, 평화롭게 정권을 교체할 수 있습니다
+PRINTFORML 새로운 회장은 %ANAME(MASTER)% 자신이 될지, 함락되어 있는 간부 중 하나가 될지 선택할 수 있습니다
 PRINTFORML 정말로 쿠데타를 실행합니까?
 
 CALL ASK_YN()
@@ -68,7 +68,7 @@ CALL CLEAR_ALL_UNIT(CFLAG:MASTER:소속, 1)
 CVARSET CFLAG, 6, 0
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 새로운 군주를 결정해 주세요 캔슬로 %조사처리(ANAME(MASTER),"가")% 취임합니다
+PRINTFORML 새로운 회장을 결정해 주세요. 캔슬시 %조사처리(ANAME(MASTER),"가")% 취임합니다
 CALL SINGLE_DRAWLINE
 CALL SELECT_CHARA_LIST_ONLY_LOGIC_SLG("PLAYER_INDEPENDENCE", "NONE")
 
@@ -77,7 +77,7 @@ RESULT = MASTER
 
 COUNTRY_BOSS:(CFLAG:MASTER:소속) = GET_ID(RESULT)
 
-CALL COLOR_PRINTW(@"%ANAME(GET_COUNTRY_BOSS(CFLAG:MASTER:소속))%가 새로운 군주가 되었습니다!", 칼라_주의)
+CALL COLOR_PRINTW(@"%ANAME(GET_COUNTRY_BOSS(CFLAG:MASTER:소속))%가 새로운 회장이 되었습니다!", 칼라_주의)
 
 CALL SINGLE_DRAWLINE
 PRINTL 새로운 세력의 색을 선택해 주세요
@@ -87,8 +87,8 @@ CALL SINGLE_DRAWLINE
 
 PRINTL 
 SETCOLOR 칼라_주의
-PRINTFORMW 혼란의 영향으로, 우리 세력의 병력이 감소했습니다
-PRINTFORMW 군을 재편하기 위해(때문에), 우리 군의 전부대를 해산시켰습니다
+PRINTFORMW 혼란한 와중, 우리와 계약 중이던 용병 몇이 도주했습니다
+PRINTFORMW 부대의 재편을 위해, 우리 군의 모든 부대를 해산시켰습니다
 RESETCOLOR
 
 FOR LOCAL:0, 0, MAX_CITY
@@ -105,18 +105,18 @@ DIPLOMACY_HATE += 10
 CALL FORCE_FREE(군주)
 
 IF 국양도플래그
-	CALL COLOR_PRINTW(@"%ANAME(MASTER)%의 설득으로, %조사처리(ANAME(군주),"는")% 대가 바뀜에 동의 했다……", 칼라_주의)
+	CALL COLOR_PRINTW(@"%ANAME(MASTER)%의 설득으로, %조사처리(ANAME(군주),"는")% 정권 교체에 동의 했다……", 칼라_주의)
 ELSEIF MIN(MAX(ABL:군주:무투, ABL:군주:방위, ABL:군주:지략, ABL:군주:정치), 80) < RAND:100
-	CALL COLOR_PRINTW(@"현군주인 %ANAME(군주)%의 신병을 확보했다!", 칼라_주의)
+	CALL COLOR_PRINTW(@"현 학생회장인 %ANAME(군주)%의 신병을 확보했다!", 칼라_주의)
 	PRINTFORML 
 	CALL CHANGE_COUNTRY(군주, 0, 1)
 	CALL SELECT_PRISONER_TREATMENT(군주, CFLAG:군주:소속, 세력)
 ;군주가 도망
 ELSE
-	CALL COLOR_PRINTL(@"현군주인 %ANAME(군주)%의 확보에 실패했습니다…", 칼라_주의)
+	CALL COLOR_PRINTL(@"현 학생회장인 %ANAME(군주)%의 확보에 실패했습니다…", 칼라_주의)
 	IF GET_NEW_COUNTRY() == -1 || ABL:군주:야심 < RAND:100
 		$INDEPENDENCE_FAILED
-		PRINTFORMW %조사처리(ANAME(군주),"는")% 방랑한 모양입니다
+		PRINTFORMW %조사처리(ANAME(군주),"는")% 학원을 떠나 방랑을 시작한 모양입니다
 		CALL CHANGE_COUNTRY(군주, 0, 1)
 		CALL CHANGE_RELATION_O_TO_C(군주, CFLAG:MASTER:소속, -500, 1000)
 	ELSE

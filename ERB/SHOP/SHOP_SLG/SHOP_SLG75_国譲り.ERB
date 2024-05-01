@@ -3,7 +3,7 @@
 ;-------------------------------------------------
 @SHOP_SLG_NAME75
 RESULTS:0 '= "나라 양도"
-
+;--------------이거 권력 이양으로 하고 싶은데 이름만 바꾸면 오류날 것 같아서 못하는중
 ;-------------------------------------------------
 ;「나라 양도」의 선택 가부
 ;-------------------------------------------------
@@ -33,9 +33,9 @@ RETURN 1
 #DIM 군주
 #DIM 국양도플래그
 CALL SINGLE_DRAWLINE
-PRINTFORML 군주로부터 물러나, 새로운 군주를 세웁니다
-PRINTFORML 신군주는 함락 하고 있는 사관중에서 선택할 수 있습니다
-PRINTFORML 정말로 나라 양도를 실행합니까?
+PRINTFORML 회장직에서 물러나고, 새로운 회장을 세웁니다
+PRINTFORML 새로운 회장은 함락되어 있는 부원들 중에서 선택할 수 있습니다
+PRINTFORML 정말로 권력 이양을 실행합니까?
 
 CALL ASK_YN()
 SIF RESULT == 1
@@ -52,7 +52,7 @@ CALL CLEAR_ALL_UNIT(CFLAG:MASTER:소속, 1)
 CVARSET CFLAG, 6, 0
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 새로운 군주를 결정해 주세요
+PRINTFORML 새로운 회장을 결정해 주세요
 CALL SINGLE_DRAWLINE
 CALL SELECT_CHARA_LIST_ONLY_LOGIC_SLG("PLAYER_INDEPENDENCE", "NONE")
 
@@ -61,5 +61,5 @@ SIF RESULT == -1
 
 COUNTRY_BOSS:(CFLAG:MASTER:소속) = GET_ID(RESULT)
 
-CALL COLOR_PRINTW(@"%ANAME(GET_COUNTRY_BOSS(CFLAG:MASTER:소속))%가 새로운 군주가 되었습니다!", 칼라_주의)
+CALL COLOR_PRINTW(@"%ANAME(GET_COUNTRY_BOSS(CFLAG:MASTER:소속))%가 새로운 회장이 되었습니다!", 칼라_주의)
 

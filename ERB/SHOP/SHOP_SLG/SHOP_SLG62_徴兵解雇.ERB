@@ -48,11 +48,11 @@ PRINTFORM %"레이트:" + NUM_FORMAT(SLG_EXTRA_DRAFT_CALC_RATE(CFLAG:MASTER:소�
 병수 = COUNTRY_SOLDIER:(CFLAG:MASTER:소속)
 $SHOW_LOOP
 CALL SINGLE_DRAWLINE
-PRINTFORML 국고를 소비해 임시에 징병할 수가 있습니다
+PRINTFORML 예산을 소비해 용병을 고용할 수 있습니다
 PRINTFORML 음수를 입력하면 해고해 자금을 얻을 수도 있습니다
-PRINTFORML 몇 사람 고용/해고합니까? (0을 입력하면 돌아온다)
+PRINTFORML 얼마나 고용/해고합니까? (0을 입력하면 돌아온다)
 
-PRINTFORM 현재의 국고:
+PRINTFORM 현재의 예산:
 SETCOLOR 칼라_선택중
 PRINTFORM {MONEY:(CFLAG:MASTER:소속)}
 RESETCOLOR
@@ -69,39 +69,39 @@ PRINTFORM {해고레이트}
 RESETCOLOR
 PRINTFORM /군사
 PRINT    
-PRINTFORM 현재의 병수（방위·부대 소속 제외하다）:
+PRINTFORM 현재 병력수（방위병·부대 소속 제외）:
 SETCOLOR 칼라_선택중
 PRINTFORM {병수}
 RESETCOLOR
 PRINTL 
 CALL SINGLE_DRAWLINE
 IF MONEY:(CFLAG:MASTER:소속) - 100 * 고용레이트 > 0
-	PRINTFORM [{100, 8}] {100, 8}징병
-	PRINTFORML   병 수:{병수, 10} + {100, 10} = {병수 + 100, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {100 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 100 * 고용레이트, 10}
+	PRINTFORM [{100, 8}] {100, 8}고용
+	PRINTFORML   병력수:{병수, 10} + {100, 10} = {병수 + 100, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {100 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 100 * 고용레이트, 10}
 ELSE
 	SETCOLOR 칼라_선택불가
-	PRINTPLAINFORM [{100, 8}] {100, 8}징병
-	PRINTFORML   병 수:{병수, 10} + {100, 10} = {병수 + 100, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {100 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 100 * 고용레이트, 10}
+	PRINTPLAINFORM [{100, 8}] {100, 8}고용
+	PRINTFORML   병력수:{병수, 10} + {100, 10} = {병수 + 100, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {100 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 100 * 고용레이트, 10}
 	RESETCOLOR
 ENDIF
 
 IF MONEY:(CFLAG:MASTER:소속) - 1000 * 고용레이트 > 0
-	PRINTFORM [{1000, 8}] {1000, 8}징병
-	PRINTFORML   병 수:{병수, 10} + {1000, 10} = {병수 + 1000, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {1000 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 1000 * 고용레이트, 10}
+	PRINTFORM [{1000, 8}] {1000, 8}고용
+	PRINTFORML   병력수:{병수, 10} + {1000, 10} = {병수 + 1000, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {1000 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 1000 * 고용레이트, 10}
 ELSE
 	SETCOLOR 칼라_선택불가
-	PRINTPLAINFORM [{1000, 8}] {1000, 8}징병
-	PRINTFORML   병 수:{병수, 10} + {1000, 10} = {병수 + 1000, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {1000 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 1000 * 고용레이트, 10}
+	PRINTPLAINFORM [{1000, 8}] {1000, 8}고용
+	PRINTFORML   병력수:{병수, 10} + {1000, 10} = {병수 + 1000, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {1000 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 1000 * 고용레이트, 10}
 	RESETCOLOR
 ENDIF
 
 IF MONEY:(CFLAG:MASTER:소속) - 10000 * 고용레이트 > 0
-	PRINTFORM [{10000, 8}] {10000, 8}징병
-	PRINTFORML   병 수:{병수, 10} + {10000, 10} = {병수 + 10000, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {10000 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 10000 * 고용레이트, 10}
+	PRINTFORM [{10000, 8}] {10000, 8}고용
+	PRINTFORML   병력수:{병수, 10} + {10000, 10} = {병수 + 10000, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {10000 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 10000 * 고용레이트, 10}
 ELSE
 	SETCOLOR 칼라_선택불가
-	PRINTPLAINFORM [{10000, 8}] {10000, 8}징병
-	PRINTFORML   병 수:{병수, 10} + {10000, 10} = {병수 + 10000, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {10000 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 10000 * 고용레이트, 10}
+	PRINTPLAINFORM [{10000, 8}] {10000, 8}고용
+	PRINTFORML   병력수:{병수, 10} + {10000, 10} = {병수 + 10000, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {10000 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 10000 * 고용레이트, 10}
 	RESETCOLOR
 ENDIF
 
@@ -109,11 +109,11 @@ ENDIF
 LOCALS:0 = 한계까지
 IF 고용병수한계 > 0
 	PRINTFORM [{고용병수한계, 8}] %LOCALS:0, 8%징병
-	PRINTFORML   병 수:{병수, 10} + {고용병수한계, 10} = {병수 + 고용병수한계, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {고용병수한계 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 고용병수한계 * 고용레이트, 10}
+	PRINTFORML   병력수:{병수, 10} + {고용병수한계, 10} = {병수 + 고용병수한계, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {고용병수한계 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 고용병수한계 * 고용레이트, 10}
 ELSE
 	SETCOLOR 칼라_선택불가
 	PRINTPLAINFORM [{고용병수한계, 8}] %LOCALS:0, 8%징병
-	PRINTFORML   병 수:{병수, 10} + {고용병수한계, 10} = {병수 + 고용병수한계, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {고용병수한계 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 고용병수한계 * 고용레이트, 10}
+	PRINTFORML   병력수:{병수, 10} + {고용병수한계, 10} = {병수 + 고용병수한계, 10}  자금:{MONEY:(CFLAG:MASTER:소속), 10} - {고용병수한계 * 고용레이트, 10} = {MONEY:(CFLAG:MASTER:소속) - 고용병수한계 * 고용레이트, 10}
 	RESETCOLOR
 ENDIF
 CALL SINGLE_DRAWLINE
@@ -125,12 +125,12 @@ INPUT 0
 IF 입력치 == 0
 	RETURN
 ELSEIF 입력치 > 0 && MONEY:(CFLAG:MASTER:소속) >= 고용레이트 * 입력치
-	CALL ICPRINT(@"국고로부터<{입력치 * 고용레이트}>를 거출해, {입력치}의 군사를 고용합니다.", "L", 칼라_주의)
-	CALL ICPRINT(@"고용 후의 국고 자금은 {MONEY:(CFLAG:MASTER:소속) - 입력치 * 고용레이트}입니다. 좋습니까?", "L", 칼라_주의)
+	CALL ICPRINT(@"예산에서 <{입력치 * 고용레이트}>을 각출해, {입력치}명의 용병을 고용합니다.", "L", 칼라_주의)
+	CALL ICPRINT(@"고용 후의 학원 예산은 {MONEY:(CFLAG:MASTER:소속) - 입력치 * 고용레이트}입니다. 좋습니까?", "L", 칼라_주의)
 	CALL ASK_YN
 	IF RESULT == 0
-		PRINTFORML 병을{입력치}인 고용했습니다!
-		PRINTFORML 병 수:{병수} → {병수 + 입력치}
+		PRINTFORML 용병을 {입력치}명 고용했습니다!
+		PRINTFORML 병력수:{병수} → {병수 + 입력치}
 		PRINTFORMW 자금:{MONEY:(CFLAG:MASTER:소속)} → {MONEY:(CFLAG:MASTER:소속) - 입력치 * 고용레이트}
 		COUNTRY_SOLDIER:(CFLAG:MASTER:소속) += 입력치
 		MONEY:(CFLAG:MASTER:소속) -= 입력치 * 고용레이트
@@ -140,19 +140,19 @@ ELSEIF 입력치 > 0 && MONEY:(CFLAG:MASTER:소속) >= 고용레이트 * 입력�
 	RETURN
 ELSEIF 입력치 < 0 && 입력치 * -1 <= 병수
 	입력치 *= -1
-	PRINTFORM 병
+	PRINTFORM 용병
 	CALL COLOR_PRINT(@"{입력치}", 칼라_주의)
-	PRINTFORM 를 해고해,
+	PRINTFORM 을 해고해,
 	CALL COLOR_PRINT(@"{입력치 * 해고레이트}", 칼라_주의)
-	PRINTFORML 의 자금을 얻습니다.
-	PRINTFORM 해고 후의 자금은
+	PRINTFORML 만큼의 예산을 얻습니다.
+	PRINTFORM 해고 후의 예산은
 	CALL COLOR_PRINT(@"{MONEY:(CFLAG:MASTER:소속) + 입력치 * 해고레이트}", 칼라_주의)
 	PRINTFORML 입니다.
 	PRINTFORML 좋습니까?
 	CALL ASK_YN
 	IF RESULT == 0
-		PRINTFORML 병을{입력치}인 해고했습니다!
-		PRINTFORML 병 수:{병수} → {병수 - 입력치}
+		PRINTFORML 용병을 {입력치}명 해고했습니다!
+		PRINTFORML 병력수:{병수} → {병수 - 입력치}
 		PRINTFORMW 자금:{MONEY:(CFLAG:MASTER:소속)} → {MONEY:(CFLAG:MASTER:소속) + 입력치 * 해고레이트}
 		COUNTRY_SOLDIER: (CFLAG:MASTER:소속) -= 입력치
 		MONEY:(CFLAG:MASTER:소속) += 입력치 * 해고레이트
@@ -161,11 +161,11 @@ ELSEIF 입력치 < 0 && 입력치 * -1 <= 병수
 	ENDIF
 	RETURN
 ELSEIF 입력치 > 0 && MONEY:(CFLAG:MASTER:소속) < 고용레이트 * 입력치
-	PRINTFORML 필요 자금은 {입력치 * 고용레이트}입니다만, 그렇게 자금이 없습니다
+	PRINTFORML 필요 예산은 {입력치 * 고용레이트}입니다만, 그만한 예산이 없습니다
 	GOTO SHOW_LOOP
 ELSEIF 입력치 < 0 && 입력치 * -1 > 병수
 	입력치 *= -1
-	PRINTFORML {입력치}해고하려고 했습니다만, 그렇게 군사를 가지고 있지 않습니다
+	PRINTFORML {입력치}명을 해고하려고 했습니다만, 그만한 병력을 가지고 있지 않습니다
 	GOTO SHOW_LOOP
 ELSE
 ENDIF
