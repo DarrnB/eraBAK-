@@ -112,6 +112,8 @@ RETURN 데일리_장르_고용
 ;방문하는 세력을 선택하는 방법
 ;랜덤으로 방문하는 방법 두개 다 만들어 놓음 필요한 부분만 쓰면 됨
 
+;---------------게임 시작할 때 방랑을 선택해서 할 건지 물어보고,
+;---------------그 결과에 따라 학원방랑직접선택플래그 값 바꿔서 선택여부 고르게 만드는게 좋을듯
 ;----------방문세력을 선택하는 부분임-----------
 ;최대 세력 수 만큼 반복
 [SKIPSTART]
@@ -156,20 +158,20 @@ NEXT
 랜덤선택세력 = (RAND:세력수) + 1
 해당세력수장 = GET_COUNTRY_BOSS(랜덤선택세력)
 
-PRINTFORMW %ANAME(해당세력수장)% 의 세력으로 간다
+PRINTFORMW %ANAME(해당세력수장)%의 세력으로 간다
 ;------여기까지 방문세력을 랜덤으로 뽑는 부분임-------
 $거절루프
 IF 학원방랑거절플래그 == 0
 	CALL 학생선택함수(랜덤선택세력)
 	;해당 세력의 랜덤 학생을 선택학생에 저장
 	선택학생 = RESULT
-	PRINTFORMW %ANAME(해당세력수장)% 의 세력이 지배하고 있는 도시를 돌아다니던 중, %조사처리(ANAME(선택학생),"을")% 만났다.
+	PRINTFORMW %ANAME(해당세력수장)%의 세력이 지배하고 있는 도시를 돌아다니던 중, %조사처리(ANAME(선택학생),"을")% 만났다.
 ELSE 
 CALL 학생선택함수(랜덤선택세력)
 	;학생선택함수에서 뽑은 랜덤 학생 번호가 이미 저장 돼있는 선택학생과 일치할 경우
 	IF 선택학생 == RESULT
 		PRINTFORMW 얼마나 거리를 걸었을까, 눈가가 붉어진 %조사처리(ANAME(선택학생),"을")% 길에서 다시 마주쳤다.
-		PRINTFORMW %조사처리(ANAME(MASTER),"와")%와 다시 마주치자 깜짝 놀라 우물쭈물하던 %조사처리(ANAME(선택학생),"은")%, 이내 자신의 얼굴을 옆으로 돌리더니, 고개를 숙이고 %ANAME(MASTER)%의 옆을 스쳐지나갔다.
+		PRINTFORMW %조사처리(ANAME(MASTER),"와")% 다시 마주치자 깜짝 놀라 우물쭈물하던 %조사처리(ANAME(선택학생),"은")%, 이내 시선을 옆으로 돌리더니, 고개를 숙이고 %ANAME(MASTER)%의 옆을 스쳐지나갔다.
 		;일단 적어놓은대로 구현하려고 RETURN 1 을 사용하긴 했는데 함수 끝내려고 여기저기다 RETURN 넣는거 안좋은 방식임 
 		;IF문 좀더 정교하게 수정해서 RETURN은 최후에 한번만 사용하게 수정하는게 좋을듯
 		RETURN 1
@@ -181,16 +183,16 @@ CALL 학생선택함수(랜덤선택세력)
 	;굳이 선택학생을 1,2 로 나누지 않아도 됨
 	PRINTFORMW 한동안 거리를 걷던 중, %조사처리(ANAME(선택학생),"을")% 만났다.
 ENDIF
-CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 ;연모 혹은 친애의 경우
 IF TALENT:선택학생:연모 || TALENT:선택학생:친애
-	PRINTFORMW 「앗, %ANAME(MASTER)%?! 여긴 어쩐 일이야? 혹시,날 만나러 와준거야...?」
+	CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+	PRINTFORMW 「앗, %ANAME(MASTER)%?! 여긴 어쩐 일이야? 혹시, 날 만나러 와준거야...?」
 	PRINTL
-	CALL ASK_MULTI("그래","아니","입부하러 왔다")
+	CALL ASK_MULTI("그래","아니","입학하러 왔다")
 	PRINTL
 	;"그래"의 경우
 	IF RESULT == 0
-		CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+		CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
 		PRINTW 「나도… 보고싶었어…」
 		;선택학생이 하루나일 경우 /하루나인 경우인데 %ANAME(선택학생)%을 쓸 필요가 있나?
 		IF 선택학생 == 17
@@ -210,9 +212,9 @@ IF TALENT:선택학생:연모 || TALENT:선택학생:친애
 			ENDSELECT
 		ENDIF
 		PRINTFORMW %ANAME(선택학생)%도 %조사처리(ANAME(MASTER),"와")% 함께해서 즐거웠던 것 같다.
-		CALL ASK_MULTI("모텔로간다","헤어진다")
+		CALL ASK_MULTI("모텔로 간다","헤어진다")
 		IF RESULT == 1
-			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
 			PRINTW 「오늘 즐거웠어…」
 			PRINTFORMW %조사처리(ANAME(MASTER),"와")%  %조사처리(ANAME(선택학생),"은")% 헤어졌다.
 			CFLAG:선택학생:호감도 += 500
@@ -226,7 +228,7 @@ IF TALENT:선택학생:연모 || TALENT:선택학생:친애
 			;이부분 선택 학생에게 페니스가 없을 경우라고 적어놨던데 이렇게 쓰는게 더 자연스러워서 바꿈
 			IF HAS_VAGINA(선택학생)
 				IF HAS_PENIS(MASTER)
-					PRINTFORML 은은한 조명이 어둑하게 비치는 방 안, 두 사람의 그림자가 침대 옆의 벽에서 격렬하게 흔들린다.
+					PRINTFORML 은은한 조명이 어둑하게 비치는 방 안, 벽에 비친 두 사람의 그림자가 격렬하게 흔들린다.
 					PRINTFORML 침대에 엎어지듯 쓰러져 엉덩이만을 겨우 들어올린  %ANAME(선택학생)%의 뒤에서, %조사처리(ANAME(MASTER),"은")% 격렬하게 허리를 처박으며 뜨거운 한숨을 내뱉었다.
 					PRINTFORML 격한 애무로 달아오른 두 사람의 몸은 땀과 체액으로 흠뻑 젖어, 서로의 살이 맞닿을 때마다 철썩거리는 음란한 물소리가 났다.
 					PRINTFORML 이윽고, %조사처리(ANAME(MASTER),"이")% %ANAME(선택학생)%의 허리를 붙잡고 강하게 허리를 찔러넣으며 사정하자, %조사처리(ANAME(선택학생),"은")% 밀려드는 쾌락에 붙잡힌 허리를 마구 튕기며 교성을 내질렀다.
@@ -280,55 +282,73 @@ IF TALENT:선택학생:연모 || TALENT:선택학생:친애
 	ELSE
 		;적어놓은 부분이 틀려서 수정함
 		;적어놓은 대로 하면 세력 수장의 경우 세력수장인 경우의 텍스트와 수장이 아닌경우의 텍스트가 둘 다 출력됨
-		IF 선택학생 == 해당세력수장
-			;이 부분 수정이 필요할 듯
-			;메인 시나리오에서는 동아리가 아니라 학원기준으로 나뉘어져 있으니 우리 동아리에? 는 어색함 동아리 대신 학원, 입부 대신에 협력 정도가 좋을듯
-			;메인 시나리오 아이디가 1 동아리 집결 아이디가 20이니
-			;IF SCENARIOID == 1 같은 식으로 구분 하면 될 듯
+		IF FINDELEMENT(COUNTRY_PLAYER_BELONGED, 랜덤선택세력) != -1
 			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
-			PRINTW 「가입, 우리동아리에?」
+			PRINTW 「입학, 우리 학원에?」
+			PRINTFORMW 「으음... 그, 절대로 내가 %조사처리(ANAME(MASTER),"를")% 싫어해서 하는 말이 아닌데...」
+			PRINTW 「아직 우리 애들이 좀... 머리에 열이 덜 빠졌다고 할까...」
+			PRINTW 「미안... 아무래도 힘들 것 같아...」
 			PRINTL
-			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
-			PRINTW 「잘 생각했어! 정말 잘 생각했어! 우리 동아리에 어서와!」
-			PRINTL
+			PRINTW 입학 신청은 반려되었습니다.
 		ELSE
-			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
-			PRINTW 「가입, 우리동아리에?」
-			PRINTL
-			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
-			PRINTW 「물론이지! 잠시만, 회장님께 물어보고 올게! 걱정마! 바로 허락해주실거야!」
-			PRINTL
-			IF 해당세력수장 == 임시저장
-				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
-				PRINTW 「...뭐?」
-				PRINTL
+			IF 선택학생 == 해당세력수장
+				;이 부분 수정이 필요할 듯
+				;메인 시나리오에서는 동아리가 아니라 학원기준으로 나뉘어져 있으니 우리 동아리에? 는 어색함 동아리 대신 학원, 입부 대신에 협력 정도가 좋을듯
+				;메인 시나리오 아이디가 1 동아리 집결 아이디가 20이니
+				;IF SCENARIOID == 1 같은 식으로 구분 하면 될 듯
 				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
-				PRINTFORMW 「%조사처리(ANAME(MASTER),"이")% 저희 동아리에 가입하고 싶다고...」
+				PRINTW 「입학, 우리 학원에?」
 				PRINTL
-				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
-				PRINTW 「...」
+				CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+				PRINTW 「잘 생각했어! 정말 잘 생각했어! 우리 학원에 어서와!」
 				PRINTL
-				PRINTW 「...」
-				PRINTL
-				PRINTW 「......」
-				PRINTL
-				PRINTL
-				PRINTL
-				CALL FACE_IMAGE_N(@"얼굴_의복_분노_{임시저장}")
-				SETCOLOR 칼라_빨강
-				PRINTW 「그 말이 왜 네 입에서 나와?」
-				PRINTL
-				PRINTW 입부 신청은 반려되었습니다.
 			ELSE
-				PRINTFORMW 간부인 %ANAME(선택학생)%의 노력 덕분에 입부 신청을 순식간에 수리되었다.
-				PRINTFORMW %조사처리(ANAME(MASTER),"이")% %ANAME(해당세력수장)%의 세력에 입부했습니다.
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+				PRINTW 「입학, 우리 학원에?」
+				PRINTL
+				CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+				PRINTW 「물론이지! 잠시만, 회장님께 물어보고 올게! 걱정마! 바로 허락해주실거야!」
+				PRINTL
+				IF 해당세력수장 == 임시저장
+					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
+					PRINTW 「...뭐?」
+					PRINTL
+					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+					PRINTFORMW 「%조사처리(ANAME(MASTER),"이")% 저희 학원에 입학하고 싶다고...」
+					PRINTL
+					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
+					PRINTW 「...」
+					PRINTL
+					PRINTW 「...」
+					PRINTL
+					PRINTW 「......」
+					PRINTL
+					PRINTL
+					PRINTL
+					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}") ;------분노가 내가 생각한 그 표정이 아니었음ㅋㅋㅋ--------
+					SETCOLOR 칼라_빨강
+					PRINTW 「그 말이 왜 네 입에서 나와?」
+					PRINTL
+					PRINTW 입학 신청은 반려되었습니다.
+				ELSE
+					PRINTFORMW 간부인 %ANAME(선택학생)%의 노력 덕분에 입학 신청은 순식간에 수리되었다.
+					CALL CHANGE_COUNTRY(MASTER, 랜덤선택세력)
+					TIME = 0
+					PLAYER_HIRED_COUNTER  = 5
+					PRINTFORMW %조사처리(ANAME(MASTER),"이")% %ANAME(해당세력수장)%의 세력에 참여했습니다.
+					;---------------입학 이렇게 시키는거 맞음?------------
+				ENDIF
 			ENDIF
-			;여기도 위와 마찬가지임 리턴은 함수내에 하나만 있는게 한 눈에 보기에 편함
-			RETURN 1
 		ENDIF
 	ENDIF
 ;복종 혹은 예속의 경우
 ELSEIF TALENT:선택학생:복종 || TALENT:선택학생:예속
+	CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+	PRINTFORMW 「앗, 주── ...%ANAME(MASTER)%님...? 여긴 어쩐 일이세요...? 혹시, 절 만나주시려고...?」
+	CALL ASK_MULTI("그래","아니","입학하러 왔다")
+	IF RESULT == 0
+	ELSEIF RESULT == 1
+	ELSEIF RESULT == 2
 ;초면인 경우
 ELSEIF !CFLAG:선택학생:안면
 	IF TALENT:선택학생:거만함 || TALENT:선택학생:반항적 || TALENT:선택학생:츤데레 || TALENT:선택학생:고고함 || TALENT:선택학생:프라이드높음
@@ -342,7 +362,6 @@ ELSEIF !CFLAG:선택학생:안면
 			PRINTL   · 
 			PRINTL   · 
 			PRINTW 도시에서 쫒겨났습니다.
-			RETURN 1
 		CASE IS <= -50
 			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 			PRINTW 「너, 어디서 봤다 했더니...」
@@ -367,10 +386,154 @@ ELSEIF !CFLAG:선택학생:안면
 			ELSEIF RESULT == 2
 				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 				PRINTW 「내 이름? 아, 하긴. 내 쪽에서만 일방적으로 알고 있었지.」
-				CALL ICPRINT(@"<%ANAME(선택학생)%>%조사만처리(ANAME(선택학생),"야")% 잊지 말라고.","W",칼라_노랑)
+				CALL ICPRINT(@"<%ANAME(선택학생)%>%조사만처리(ANAME(선택학생),"야")%. 잊지 말라고.","W",칼라_노랑)
 			ENDIF
-		CASE IS <= 5000
+		CASE IS <= 1000
+			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+			PRINTFORMW 「%ANAME(MASTER)%...?」
+			PRINTW 「아, 역시. 잘못 본 게 아니었군.」
+			CALL ASK_MULTI("날 알아?","안녕","누구?")
+			PRINTL
+			IF RESULT == 0
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+				PRINTW 「물론이지. 나뿐만 아니라 동아리 간부들 중에서 널 모르는 사람은 없을걸?」
+				PRINTW 「뭐, 그냥 아는 얼굴이길래 불러봤을 뿐. 특혜를 줄 생각은 없으니까 기대하진 마.」
+				PRINTW 「그럼, 바빠서 이만.」
+			ELSEIF RESULT == 1
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+				PRINTW 「이런 곳에서 널 만날 줄은 몰랐는데, 반가워.」
+				PRINTW 「우리 학원엔 무슨 일이야? 관광?」
+				CALL ASK_MULTI("응","아니")
+				IF RESULT == 0
+					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+					PRINTW 「역시 그런가.」
+					PRINTW 「그래, 잘 놀다 가.」
+				ELSE
+					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+					PRINTW 「흐음...?」
+					PRINTW 「...뭐, 사고만 치지 말라고.」
+				ENDIF
+			ELSEIF RESULT == 2
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+				CALL ICPRINT(@"<%ANAME(선택학생)%>%조사만처리(ANAME(선택학생),"야")%. 너는 꽤 얼굴이 알려진 편이라 알고 있었지.","W",칼라_노랑)
+				PRINTW 「아, 딱히 용건이 있어서 붙잡은 건 아니니까 신경쓰지 마.」
+				PRINTW 「그럼, 난 이만.」
+			ENDIF
 		CASE IS <= 10000
+			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+			PRINTFORMW 「혹시 너, %ANAME(MASTER)%인가?」
+			CALL ASK_MULTI("날 알아?","안녕","누구?")
+				IF RESULT == 0
+					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+					PRINTW 「물론이지. 너는 꽤 유명인사니까.」
+					PRINTW 「우리 학원엔 무슨 일이야? 역시 관광인가? 아니면... 입부?」
+					CALL ASK_MULTI("관광","휴식","입부")
+						IF RESULT == 0
+							CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+							PRINTW 「음, 마침 잘 됐네. 나도 시간이 남던 참이었거든.」
+							PRINTW 「원한다면 내가 가이드를 해 줄 수 있는데, 어떄?」
+							CALL ASK_MULTI("부탁해","괜찮아")
+							IF RESULT == 0
+								CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+								PRINTW 「좋아, 그럼 가볼까?」
+								PRINTW 「떨어지지 않도록 손 잘 잡고 있어야 해? 알았지?」
+								PRINTW
+								PRINTFORMW 이후, 노을이 질 때까지 %조사처리(ANAME(선택학생),"과")% 손을 잡고 도시를 구석구석 돌아다녔다.
+								PRINTW
+								CFLAG:선택학생:호감도 += 500
+								CALL ICPRINT(@"<%ANAME(선택학생)%>의 호감도가 500 올랐다.","W",칼라_노랑)
+							ELSE
+								CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+								PRINTW 「흠. 뭐어, 혼자서 여행하는데 억지로 끼는 것도 좋진 않겠지.」
+								PRINTW 「응, 그럼 좋은 시간 보내.」
+							ENDIF
+						ELSEIF RESULT == 1 ;휴식일 경우
+							CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+							PRINTW 「휴식? 휴식이라면 내가 괜찮은 곳을 알지.」
+							PRINTW 「어때? 내가 추천 좀 해줄까?」
+							CALL ASK_MULTI("부탁해","괜찮아")
+							IF RESULT == 0
+								CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+								PRINTW 「후후, 그 선택 후회하지 않을 거야.」
+								SELECTCASE RAND:5
+								CASE 0
+									PRINTFORMW %조사처리(ANAME(선택학생),"와")% 함께 편안한 분위기의 식당에 왔다.
+									PRINTFORMW %조사처리(ANAME(선택학생),"가")% 말하길, 자신이 데려왔으니 비용은 자신이 내주겠다고 한다.
+									PRINTW
+									CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+									PRINTW 「나쁘지 않은 식당이지?」
+									PRINTW 「편하게 식사하고 가기에는 이만한 곳이 없어.」
+									CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+									PRINTW 「너한테만 알려주는 거야. 알았지?」
+									CFLAG:선택학생:호감도 += 500
+									CALL ICPRINT(@"<%ANAME(선택학생)%>의 호감도가 500 올랐다.","W",칼라_노랑)
+								CASE 1
+									PRINTFORMW %조사처리(ANAME(선택학생),"와")% 함께 온천 여관에 왔다.
+									PRINTFORMW %ANAME(선택학생)%에게 듣기로, 온천개발부가 만든 것을 사실상 떠맡겨진 신세지만, 예상 이상으로 이용객들의 반응이 좋아 계속 운영 중이라고 한다.
+									PRINTW
+									CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+									PRINTW 「후우...」
+									PRINTW 「어때, 꽤 피로가 풀리지 않아?」
+									CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+									PRINTW 「기분 탓이라고 할 수도 있겠지만, 아무렴 어때.」
+									CFLAG:선택학생:호감도 += 500
+									CALL ICPRINT(@"<%ANAME(선택학생)%>의 호감도가 500 올랐다.","W",칼라_노랑)
+								CASE 2
+									PRINTFORMW %조사처리(ANAME(선택학생),"와")% 함께 조용한 카페에 왔다.
+									PRINTFORMW %조사처리(ANAME(선택학생),"는")% 익숙한 듯 음료를 주문해 가져오더니, %ANAME(MASTER)%의 옆에 나란히 앉아 어깨를 기대왔다.
+									CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+									PRINTW 「쉿.」
+									PRINTW 「조용히. 지금 이 순간을 즐겨.」
+									CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+									PRINTW 「그렇지, 그러면 되는 거야.」
+									CFLAG:선택학생:호감도 += 500
+									CALL ICPRINT(@"<%ANAME(선택학생)%>의 호감도가 500 올랐다.","W",칼라_노랑)
+								CASE 3
+									PRINTFORMW %조사처리(ANAME(선택학생),"와")% 함께 한적한 공원에 왔다.
+									PRINTFORMW 공원에 놓인 벤치에 나란히 앉으니, 선선한 바람이 불어오며 %ANAME(선택학생)%의 향긋한 샴푸 향을 날랐다.
+									CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+									PRINTW 「혼자 있고 싶을 때 찾는 곳이야.」
+									PRINTW 「여기라면 보는 눈도 별로 없고, 조용하고, 공기도 좋아. 혼자서 편하게 쉬기엔 딱 좋지.」
+									CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+									PRINTW 「여기에 누굴 데려와보긴 처음인데, 나쁘진 않은 것 같네.」
+									CFLAG:선택학생:호감도 += 500
+									CALL ICPRINT(@"<%ANAME(선택학생)%>의 호감도가 500 올랐다.","W",칼라_노랑)
+								CASE 4
+									PRINTFORMW %조사처리(ANAME(선택학생),"와")% 함께 도시 전체가 내려다보이는 전망대에 왔다.
+									CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+									PRINTW 「어때, 이렇게 보니까 꽤 멋지지?」
+									PRINTW 「아무리 바쁘고 힘들어도, 이런 모습을 보면 또 힘이 나는게 신기하단 말야.」
+									CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+									PRINTW 「이것도 추억인데, 같이 사진 찍을까?」
+									CFLAG:선택학생:호감도 += 500
+									CALL ICPRINT(@"<%ANAME(선택학생)%>의 호감도가 500 올랐다.","W",칼라_노랑)
+									;'학원방랑플래그_기념사진' 같은거 넣어서 나중에 친애나 예속 달았을 때 몇 줄 추가하면 좋을듯
+									; 친애 달린 날 헤어질 때 사진보고 "기억하고 있었구나"라던가, 섹스 끝나고 "정액으로 뒤덮힌 그녀의 엉덩이 위에는 처음 만난 날의 사진이 놓여 있었다"같이
+								ENDSELECT
+							ELSE ;괜찮아일 경우
+								CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+								PRINTW 「그래? 그럼 어쩔 수 없지.」
+								PRINTW 「좋은 시간 보내~」
+							ENDIF
+						ELSEIF RESULT == 2 ;입부일 경우
+							CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+
+						ENDIF
+				ELSEIF RESULT == 1 ;안녕? 일 경우
+
+				ELSEIF RESULT == 2 ;누구? 일 경우
+
+				ENDIF
+		CASE IS < 50000
+			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+
+			IF RESULT == 0
+
+			ELSEIF RESULT == 1
+
+			ELSEIF RESULT == 2
+
+			ENDIF
 		CASE IS >= 50000
 			PRINTW 「히약?!」
 			PRINTFORMW %조사처리(ANAME(선택학생),"와")% 눈이 마주친 순간, 짧은 비명 소리와 함께 %조사처리(ANAME(선택학생),"이")% 손으로 얼굴을 가리고 뒤돌아 주저앉았다.
@@ -379,20 +542,45 @@ ELSEIF !CFLAG:선택학생:안면
 			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
 			PRINTFORMW 「...%ANAME(MASTER)%...?」
 			CALL ASK_MULTI("날 알아?","안녕","누구세요?")
-		CASEELSE
-			SELECTCASE RAND:3
-			CASE 0
-				PRINTW 「거기, 우리 학원 학생은 아닌 것 같은데, 누구야?」
-			CASE 1
-				PRINTW 「처음 보는 녀석이군. 넌 누구지?」
-			CASE 2
-				PRINTW 「이봐, 거기 너. 우리 학원 학생이 아닌 것 같은데.」
-			ENDSELECT
+				IF RESULT == 0
+
+				ELSEIF RESULT == 1
+
+				ELSEIF RESULT == 2
+
+				ENDIF
+		ENDSELECT
+	ELSEIF TALENT:선택학생:겁쟁이 || TALENT:선택학생:프라이드낮음 || TALENT:선택학생:수줍음
+		CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+		SELECTCASE RAND:3
+		CASE 0
+
+		CASE 1
+
+		CASE 2
+
+		ENDSELECT
+	ELSE	;-------------거만함, 반항적, 기타등등이 아닐 경우-----------------
+		CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+		SELECTCASE RAND:3
+		CASE 0
+			PRINTW 「거기, 우리 학원 학생은 아닌 것 같은데, 누구야?」
+		CASE 1
+			PRINTW 「처음 보는 녀석이군. 넌 누구지?」
+		CASE 2
+			PRINTW 「이봐, 거기 너. 우리 학원 학생이 아닌 것 같은데.」
 		ENDSELECT
 	ENDIF
-	PRINTW 초면테스트
+PRINTW 초면테스트
 ;구면이면서 복종예속, 연모친애가 아닌경우
 ELSE
+	IF TALENT:선택학생:거만함 || TALENT:선택학생:반항적 || TALENT:선택학생:츤데레 || TALENT:선택학생:고고함 || TALENT:선택학생:프라이드높음
+
+	ELSEIF TALENT:선택학생:겁쟁이 || TALENT:선택학생:프라이드낮음 || TALENT:선택학생:수줍음
+
+	ELSE ;구면이면서 거만, 반항, 기타등등 아닐 경우
+
+	ENDIF
 PRINTW 구면테스트
 ENDIF
 RETURN 1
@@ -435,5 +623,6 @@ NEXT
 RETURN 선택학생
 
 ;방랑중에도 발생하게 해주는 함수임 이거 없으면 방랑중엔 발생 안함
+;---------------이걸 맨 위에다가 넣어야 하는 거임? 아니면 아래에 있어도 되는거?-------------------
 @EVENT_DAILY_WANDERING_ALLOW_WHEN_WANDERING()
 RETURN 1
