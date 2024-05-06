@@ -341,7 +341,6 @@ IF TALENT:선택학생:연모 || TALENT:선택학생:친애
 			ENDIF
 		ENDIF
 	ENDIF
-ENDIF
 ;복종 혹은 예속의 경우
 ELSEIF TALENT:선택학생:복종 || TALENT:선택학생:예속
 	CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
@@ -350,6 +349,7 @@ ELSEIF TALENT:선택학생:복종 || TALENT:선택학생:예속
 	IF RESULT == 0
 	ELSEIF RESULT == 1
 	ELSEIF RESULT == 2
+	ENDIF
 ;초면인 경우
 ELSEIF !CFLAG:선택학생:안면
 	IF TALENT:선택학생:거만함 || TALENT:선택학생:반항적 || TALENT:선택학생:츤데레 || TALENT:선택학생:고고함 || TALENT:선택학생:프라이드높음
