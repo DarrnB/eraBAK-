@@ -1,0 +1,545 @@
+﻿;-------------------------------------------------
+;「총력전」의 명칭
+;-------------------------------------------------
+@SHOP_LIFE_NAME68
+RESULTS '= "총력전"
+
+;-------------------------------------------------
+;「총력전」의 선택 가부 판정
+;-------------------------------------------------
+@SHOP_LIFE_CHECK68
+SIF CFLAG:MASTER:포로처
+	RETURN 0
+RETURN 1
+
+;-------------------------------------------------
+;「총력전」의 선택 가능 캐릭터 존재 판정
+;-------------------------------------------------
+@SHOP_LIFE_CHECKCHARA68(ARG:0)
+;비주인공, 동일 세력, 포로가 아닌, 동물이 아닌, 통상 상태 또는 육아중
+RETURN CFLAG:(ARG:0):소속 == CFLAG:MASTER:소속 && CFLAG:(ARG:0):포로처 == 0 && !IS_ANIMAL(ARG:0) && GROUPMATCH(CFLAG:(ARG:0):행동불능상태, 0, 2) || TALENT:ARG:연모 || TALENT:ARG:복종
+
+;-------------------------------------------------
+;「총력전」의 왼쪽 컬럼 메뉴의 입력 처리
+;-------------------------------------------------
+@SHOP_LIFE_EVENTBUY68
+FLAG:거점페이즈페이지 = 1
+FLAG:요바이 = 0
+RETURN 0
+
+;-------------------------------------------------
+;「침실호출」의 오른쪽 컬럼 캐릭터 리스트 1의 버튼（함수미지정이라면 선택중색없음 표시）
+;-------------------------------------------------
+@SHOP_LIFE_LIST1_BUTTON68(ARG:0, ARG:1)
+;캐릭터, 선택중 칼라 표시 플래그, 버튼 번호에 추가하는 수치, CHECKCHARA의 반환값, 행동이 끝난 마크를 오프로 하는 플래그
+CALL COLUMN_RIGHT_CHARALIST_BUTTON(ARG:0, CFLAG:(ARG:0):총력전선택중, SHOP_LIFE_LIST1_ADD_INPUT, ARG:1)
+RETURN 0
+
+;-------------------------------------------------
+;「데이트」의 오른쪽 컬럼 표시 처리
+;-------------------------------------------------
+@SHOP_LIFE_EVENTBUY_SHOW68
+#DIM 선택인원수
+
+선택인원수 = 0
+
+FOR LOCAL:0, 0, CHARANUM
+	;선택 가능한지 판정
+	RESULT = 0
+	TRYCALLFORM SHOP_LIFE_CHECKCHARA{FLAG:거점페이즈선택커맨드}(LOCAL:0)
+	IF RESULT == 1
+		;선택중의 인원수를 센다
+		IF CFLAG:(LOCAL:0):총력전선택중
+			선택인원수 ++
+		ENDIF
+	ELSE
+		;조건을 채우지 않으면 강제적으로ＯＦＦ
+		CFLAG:(LOCAL:0):총력전선택중 = 0
+	ENDIF
+NEXT
+
+CALL COLUMN_RIGHT_TITLE("대상자 선택", TOSTR(선택인원수), "5", "0", "0", "자세력또는 함락 상대만 가능")
+CALL COLUMN_RIGHT_PRINTL
+CALL COLUMN_RIGHT_LINE
+CALL COLUMN_RIGHT_PRINTL
+;오른쪽 컬럼의 표준적인 캐릭터 리스트와 페이지 이동 호출
+IF 선택인원수 >= 1 && 총력전클리어플래그 == 0
+	PRINTBUTTON "[이 멤버로 결정]", 1
+	PRINTPLAIN   
+	PRINTBUTTON "[리셋]", 2
+ELSE
+	SETCOLOR 칼라_선택불가
+	PRINTPLAINFORM [이 멤버로 결정]
+	PRINTPLAIN   
+	PRINTPLAINFORM [리셋트]
+	RESETCOLOR
+ENDIF
+CALL COLUMN_RIGHT_PRINTL
+CALL COLUMN_RIGHT_LINE
+CALL COLUMN_RIGHT_PRINTL
+
+CALL COLUMN_RIGHT_CHARALIST
+RETURN
+
+@SHOP_LIFE_EVENTBUY_SUB68(ARG)
+;이 멤버로 결정
+IF ARG == 1
+	CALL 대상설정
+	IF !RESULT
+		RETURN 0
+	ENDIF
+;멤버를 리셋트
+ELSEIF ARG == 2
+	CALL 총력전_멤버_리셋
+ENDIF
+RETURN 0
+;-------------------------------------------------
+;「총력전」의 리스트 1 입력 처리
+;-------------------------------------------------
+@SHOP_LIFE_USERSHOP68(ARG:0)
+;참가 캐릭터의 수를 센다
+LOCAL:5 = 0
+FOR LOCAL:0, 0, CHARANUM
+	IF CFLAG:(LOCAL:0):총력전선택중
+		LOCAL:5 ++
+	ENDIF
+NEXT
+IF CFLAG:(ARG:0):총력전선택중 || LOCAL:5 < 5
+	CFLAG:(ARG:0):총력전선택중 = !CFLAG:(ARG:0):총력전선택중
+ENDIF
+RETURN 0
+;-------------------------------------------------
+;「총력전」 보스 설정
+;-------------------------------------------------
+@대상설정
+#DIM FIRST_LINE
+#DIM 보스
+
+FIRST_LINE = LINECOUNT
+CALL SINGLE_DRAWLINE
+PRINTL 토벌할 대상을 선택하세요
+CALL SINGLE_DRAWLINE 
+PRINTL
+CALL 보스_선택_이미지
+INPUT
+보스 = RESULT
+CLEARLINE LINECOUNT - FIRST_LINE
+CALL 난이도설정(보스)
+
+;-------------------------------------------------
+;「총력전」 난이도 설정
+;-------------------------------------------------
+@난이도설정(보스)
+#DIM FIRST_LINE
+#DIM 보스
+
+
+FIRST_LINE = LINECOUNT
+CLEARLINE 1
+$난이도루프
+CALL SINGLE_DRAWLINE
+PRINTL 난이도를 선택하세요
+CALL SINGLE_DRAWLINE
+TRYCALLFORM 총력전_보스_이름_{보스}
+PRINTFORML [%RESULTS,17,LEFT%]
+PRINTL
+PRINT 선택한 난이도 : 
+SELECTCASE 총력전_보스_난이도
+	CASE 0
+		SETCOLOR 칼라_초록
+		PRINTL [ HARD ]
+		RESETCOLOR
+	CASE 1
+		SETCOLOR 칼라_시안
+		PRINTL [ HARDCORE ]
+		RESETCOLOR
+	CASE 2
+		SETCOLOR 칼라_오렌지
+		PRINTL [ EXTREME ]
+		RESETCOLOR
+	CASE 3
+		SETCOLOR 칼라_파빨강
+		PRINTL [ INSANE ]
+		RESETCOLOR
+	CASE 4
+		SETCOLOR 칼라_경고
+		PRINTL [ TORMENT ]
+		RESETCOLOR
+ENDSELECT
+PRINTL
+SETCOLOR 칼라_초록
+PRINTBUTTON " [ HARD      ]", 0
+RESETCOLOR
+PRINTL
+SETCOLOR 칼라_시안
+PRINTBUTTON " [ HARDCORE  ]", 1
+RESETCOLOR
+PRINTL
+SETCOLOR 칼라_오렌지
+PRINTBUTTON " [ EXTREME   ]", 2
+RESETCOLOR
+PRINTL
+SETCOLOR 칼라_파빨강
+PRINTBUTTON " [ INSANE    ]", 3
+RESETCOLOR
+PRINTL
+SETCOLOR 칼라_경고
+PRINTBUTTON " [ TORMENT   ]", 4
+RESETCOLOR
+PRINTL
+PRINTL
+CALL SINGLE_DRAWLINE
+PRINTBUTTON "[완료]", 100
+INPUT
+
+IF INRANGE(RESULT, 0, 4)
+	총력전_보스_난이도 = RESULT
+	SELECTCASE RESULT
+		CASE 0
+		총력전_보스_난이도 = 0
+		CASE 1
+		총력전_보스_난이도 = 1
+		CASE 2
+		총력전_보스_난이도 = 2
+		CASE 3
+		총력전_보스_난이도 = 3
+		CASE 4
+		총력전_보스_난이도 = 4
+	ENDSELECT
+	
+	CLEARLINE LINECOUNT - FIRST_LINE
+	GOTO 난이도루프
+ELSEIF RESULT == 100
+	CLEARLINE LINECOUNT - FIRST_LINE
+	CALL 총력전_멤버_선택(보스)
+ENDIF
+
+
+;-------------------------------------------------
+;「총력전」 인원의 처리
+;-------------------------------------------------
+@총력전_멤버_선택(보스)
+#DIM 보스
+#DIM FIRST_LINE
+#DIM 파티인원수
+#DIM 배치인원수
+#DIM 배치완료
+
+FIRST_LINE = LINECOUNT
+배치인원수 = 0
+배치완료 = 0
+;파티원 초기화
+LOCAL:2 = 0
+FOR LOCAL, 0, 5
+	총력전_파티_캐릭터:LOCAL = -1
+NEXT
+FOR LOCAL, 0, CHARANUM
+	IF CFLAG:LOCAL:총력전선택중
+		LOCAL:2 ++
+	ENDIF
+NEXT
+파티인원수 = LOCAL:2
+
+$캐릭터선택루프
+CLEARLINE LINECOUNT - FIRST_LINE
+FIRST_LINE = LINECOUNT
+PRINTFORML %TOSTR_SPACE(3)%|---------------------------------------------------------------------------------------------------------|
+CALL 총력전_파티선택_이미지
+PRINTL
+CALL SINGLE_DRAWLINE
+PRINTL 배치 할 캐릭터를 선택해 주세요
+CALL SINGLE_DRAWLINE
+PRINTL
+LOCAL:1 = 1
+FOR LOCAL, 0, CHARANUM
+	IF CFLAG:LOCAL:총력전선택중
+		LOCALS = %ANAME(LOCAL)%
+		PRINTBUTTON @"[%LOCALS, 10, LEFT%]",LOCAL
+		LOCAL:1 = 0
+	ENDIF
+NEXT
+PRINTFORM %TOSTR_SPACE(30)%
+PRINTBUTTON "[  리셋  ]",1000
+PRINTFORM %TOSTR_SPACE(3)%
+PRINTBUTTON "[  돌아간다  ]",1001
+PRINTFORM %TOSTR_SPACE(3)%
+PRINTL
+PRINTL
+PRINTL
+PRINTBUTTON "[  결정  ]",1002
+IF LOCAL:1
+	RETURN 0
+ENDIF
+INPUT
+IF RESULT == 1000
+	FOR LOCAL, 0, 5
+		총력전_파티_캐릭터:LOCAL = -1
+	NEXT
+	배치인원수 = 0
+	GOTO 캐릭터선택루프
+ELSEIF RESULT == 1002
+	IF 배치완료 == 1
+	CALL 총력전_실행(보스)
+	RETURN
+	ELSE
+	PRINTW 편성을 끝내야 합니다.
+	GOTO 캐릭터선택루프
+	ENDIF
+ELSEIF RESULT == 1001
+FOR LOCAL, 0, 5
+	총력전_파티_캐릭터:LOCAL = -1
+NEXT
+배치인원수 = 0
+RETURN 1
+ELSE
+	IF 파티인원수 == 1
+		총력전_파티_캐릭터:0 = RESULT
+		배치완료 = 1
+		GOTO 캐릭터선택루프
+	ENDIF
+
+	IF 파티인원수 == 2
+		IF 배치인원수 == 0
+			총력전_파티_캐릭터:0 = RESULT
+			배치인원수 ++
+			GOTO 캐릭터선택루프
+		ELSEIF 배치인원수 == 1
+			IF 총력전_파티_캐릭터:0 != RESULT
+			총력전_파티_캐릭터:1 = RESULT
+			배치인원수 ++
+			배치완료 = 1
+			ENDIF
+			GOTO 캐릭터선택루프
+		ENDIF
+	ENDIF
+
+	IF 파티인원수 == 3
+		IF 배치인원수 == 0
+			총력전_파티_캐릭터:0 = RESULT
+			배치인원수 ++
+			GOTO 캐릭터선택루프
+		ELSEIF 배치인원수 == 1
+			IF 총력전_파티_캐릭터:0 != RESULT
+			총력전_파티_캐릭터:1 = RESULT
+			배치인원수 ++
+			ENDIF
+			GOTO 캐릭터선택루프
+		ELSEIF 배치인원수 == 2
+			IF 총력전_파티_캐릭터:0 != RESULT && 총력전_파티_캐릭터:1 != RESULT
+			총력전_파티_캐릭터:2 = RESULT
+			배치인원수 ++
+			배치완료 = 1
+			ENDIF
+			GOTO 캐릭터선택루프
+		ENDIF
+	ENDIF
+
+	IF 파티인원수 == 4
+		IF 배치인원수 == 0
+			총력전_파티_캐릭터:0 = RESULT
+			배치인원수 ++
+			GOTO 캐릭터선택루프
+		ELSEIF 배치인원수 == 1
+			IF 총력전_파티_캐릭터:0 != RESULT
+			총력전_파티_캐릭터:1 = RESULT
+			배치인원수 ++
+			ENDIF
+			GOTO 캐릭터선택루프
+		ELSEIF 배치인원수 == 2
+			IF 총력전_파티_캐릭터:0 != RESULT && 총력전_파티_캐릭터:1 != RESULT
+			총력전_파티_캐릭터:2 = RESULT
+			배치인원수 ++
+			ENDIF
+			GOTO 캐릭터선택루프
+		ELSEIF 배치인원수 == 3
+			IF 총력전_파티_캐릭터:0 != RESULT && 총력전_파티_캐릭터:1 != RESULT && 총력전_파티_캐릭터:2 != RESULT
+			총력전_파티_캐릭터:3 = RESULT
+			배치인원수 ++
+			배치완료 = 1
+			ENDIF
+			GOTO 캐릭터선택루프
+		ENDIF
+	ENDIF
+
+	IF 파티인원수 == 5
+		IF 배치인원수 == 0
+			총력전_파티_캐릭터:0 = RESULT
+			배치인원수 ++
+			GOTO 캐릭터선택루프
+		ELSEIF 배치인원수 == 1
+			IF 총력전_파티_캐릭터:0 != RESULT
+			총력전_파티_캐릭터:1 = RESULT
+			배치인원수 ++
+			ENDIF
+			GOTO 캐릭터선택루프
+		ELSEIF 배치인원수 == 2
+			IF 총력전_파티_캐릭터:0 != RESULT && 총력전_파티_캐릭터:1 != RESULT
+			총력전_파티_캐릭터:2 = RESULT
+			배치인원수 ++
+			ENDIF
+			GOTO 캐릭터선택루프
+		ELSEIF 배치인원수 == 3
+			IF 총력전_파티_캐릭터:0 != RESULT && 총력전_파티_캐릭터:1 != RESULT && 총력전_파티_캐릭터:2 != RESULT
+			총력전_파티_캐릭터:3 = RESULT
+			배치인원수 ++
+			ENDIF
+			GOTO 캐릭터선택루프
+		ELSEIF 배치인원수 == 4
+			IF 총력전_파티_캐릭터:0 != RESULT && 총력전_파티_캐릭터:1 != RESULT && 총력전_파티_캐릭터:2 != RESULT && 총력전_파티_캐릭터:3 != RESULT
+			총력전_파티_캐릭터:4 = RESULT
+			배치인원수 ++
+			배치완료 = 1
+			ENDIF
+			GOTO 캐릭터선택루프
+		ENDIF
+	ENDIF
+ENDIF
+GOTO 캐릭터선택루프
+;행동 개시시의 공통 처리
+
+RETURN 1
+
+
+;-------------------------------------------------
+;「총력전」의 선택 멤버의 리셋트
+;-------------------------------------------------
+@총력전_멤버_리셋
+FOR LOCAL, 0, CHARANUM
+	IF CFLAG:(LOCAL:0):총력전선택중
+		CFLAG:(LOCAL):총력전선택중 = 0
+	ENDIF
+NEXT
+RETURN 0
+
+;-------------------------------------------------
+;파티 선택의 이미지 관리
+;-------------------------------------------------
+@총력전_파티선택_이미지(iSize = 8)
+#DIMS IMAGE, 5
+#DIM iEnter_Con
+#DIM iFont_Hei_mag
+#DIM iSize
+#DIM iCorrection
+#DIMS sHtml
+#DIM iYpos
+iEnter_Con = 0
+
+IF GETCONFIGS("描画インターフェース") == "GRAPHICS"
+	iCorrection = 5
+ELSE
+	iCorrection = 25
+ENDIF
+
+PRINTFORM %TOSTR_SPACE(3)%
+FOR LOCAL:0, 0, 5
+	IF LOCAL:0 != 0
+		PRINTFORM  
+	ENDIF
+	PRINTFORM |
+	SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
+	SETCOLOR 칼라_선택불가
+	SIF 총력전_캐릭터상태_대상지정:LOCAL == 1
+	SETCOLOR 칼라_빨강
+	PRINTFORM [%((총력전_파티_캐릭터:LOCAL != -1)?ANAME(총력전_파티_캐릭터:LOCAL)#""),17,LEFT%]
+	RESETCOLOR
+	SIF LOCAL:0 == 2
+		PRINTFORM  
+	RESETCOLOR
+NEXT
+PRINTFORML  |
+
+LOCALS = "   |                    |                    |                     |                    |                    |"
+
+FOR LOCAL, 0, 5
+	SIF 총력전_파티_캐릭터:LOCAL < 0
+		CONTINUE
+	IMAGE:LOCAL = %GET_IMAGE_NAME(총력전_파티_캐릭터:LOCAL)%
+	iFont_Hei_mag = GETCONFIG("一行の高さ") * (iSize * 100 - iCorrection) * 10 / GETCONFIG("フォントサイズ")
+	iFont_Hei_mag = (iFont_Hei_mag / 10) + (iFont_Hei_mag % 10 >= 5 ? 1 # 0)
+	
+	iYpos = -(iEnter_Con * 100)
+	IF LOCAL < 3
+		sHtml = <p align='left'>%SUBSTRING(LOCALS, 0, 8 + (21 * LOCAL))%<img src='%IMAGE:LOCAL%' height='{iFont_Hei_mag}' ypos='{iYpos}'>%SUBSTRING(LOCALS, 21 + (21 * LOCAL), STRLENS(LOCALS))%
+	ELSE
+		sHtml = <p align='left'>%SUBSTRING(LOCALS, 0, 9 + (21 * LOCAL))%<img src='%IMAGE:LOCAL%' height='{iFont_Hei_mag}' ypos='{iYpos}'>%SUBSTRING(LOCALS, 22 + (21 * LOCAL), STRLENS(LOCALS))%
+	ENDIF
+	sHtml = %REPLACE(sHtml, "\"", "")%
+	HTML_PRINT sHtml
+	iEnter_Con++
+NEXT
+
+FOR LOCAL, iEnter_Con, iSize
+	sHtml = %LOCALS%<br>
+	sHtml = %REPLACE(sHtml, "\"", "")%
+	HTML_PRINT sHtml
+NEXT
+
+PRINTFORM %TOSTR_SPACE(3)%
+
+FOR LOCAL:0, 0, 5
+	IF 총력전_파티_캐릭터:LOCAL < 0
+		PRINTFORM |%TOSTR_SPACE(20)%
+		SIF LOCAL:0 == 2
+			PRINTFORM  
+	ELSE
+		PRINTFORM |  
+		SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
+		SETCOLOR 칼라_선택불가
+		CALL 총력전_캐릭터_체력(총력전_파티_캐릭터:LOCAL)
+		RESETCOLOR
+		PRINTFORM     
+		SIF LOCAL:0 == 2
+			PRINTFORM  
+	ENDIF
+NEXT
+PRINTFORML |
+
+PRINTFORML %TOSTR_SPACE(3)%|---------------------------------------------------------------------------------------------------------|
+
+@보스_선택_이미지
+#DIMS IMAGE, 5
+#DIM iEnter_Con
+#DIMS sHtml
+#DIM iYpos
+FOR LOCAL, 0, 100
+	TRYCALLFORM 총력전_보스_이름_{LOCAL}
+	보스_이름:LOCAL = %RESULTS%
+	RESULTS = 
+NEXT
+
+iEnter_Con = -1
+PRINTL    |--------------------------------------------------------------------------------------------------------|
+LOCALS = "   |                    |                    |                    |                    |                    |"
+FOR LOCAL, 0, 5
+	IF STRLENS(보스_이름:LOCAL) == 0
+	IMAGE:LOCAL = 보스_더미
+	ELSE
+	IMAGE:LOCAL = %보스_이름:LOCAL%_F
+	ENDIF
+	iYpos = -(iEnter_Con * 100)
+	sHtml = <p align='left'>%SUBSTRING(LOCALS, 1, 4 + (21 * LOCAL))%<img src='%IMAGE:LOCAL%' height='800' ypos='{iYpos-50}'>%SUBSTRING(LOCALS, 24 + (21 * LOCAL), STRLENS(LOCALS))%
+	sHtml = %REPLACE(sHtml, "\"", "")%
+	HTML_PRINT sHtml
+	iEnter_Con++
+NEXT
+
+FOR LOCAL, iEnter_Con, 7
+	sHtml = %LOCALS%<br>
+	sHtml = %REPLACE(sHtml, "\"", "")%
+	HTML_PRINT sHtml
+NEXT
+PRINTL    |--------------------------------------------------------------------------------------------------------|
+PRINTFORM %TOSTR_SPACE(3)%
+
+FOR LOCAL, 0, 5
+	IF STRLENS(보스_이름:LOCAL) == 0
+		PRINTFORM |%TOSTR_SPACE(20)%
+	ELSE
+		LOCALS = %보스_이름:LOCAL%
+		PRINTFORM |
+		PRINTBUTTON @"[%SUBSTRING(LOCALS, 0, 17), 18, LEFT%]",LOCAL
+	ENDIF
+NEXT
+
+PRINTFORML |
+PRINTL    |--------------------------------------------------------------------------------------------------------|

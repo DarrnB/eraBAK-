@@ -1,0 +1,2966 @@
+﻿@총력전_실행(보스)
+#DIM 보스
+CALL 최초변수초기화
+
+;보스 스텟을 받아오는 부분
+CALLFORM 총력전_보스_이름_{보스}
+총력전_보스_이름 = %RESULTS%
+CALLFORM 총력전_보스_무투_{보스}(총력전_보스_난이도)
+총력전_보스_최초무투 = RESULT
+총력전_보스_무투 = 총력전_보스_최초무투
+CALLFORM 총력전_보스_방위_{보스}(총력전_보스_난이도)
+총력전_보스_방위 = RESULT
+CALLFORM 총력전_보스_체력_{보스}(총력전_보스_난이도)
+총력전_보스_최대체력 = RESULT
+총력전_보스_현재체력 = RESULT
+CALLFORM 총력전_보스_회피율_{보스}(총력전_보스_난이도)
+총력전_보스_회피율 = RESULT
+CALLFORM 총력전_보스_치명저항_{보스}(총력전_보스_난이도)
+총력전_보스_치명저항 = RESULT
+CALLFORM 총력전_보스_치명대미지저항_{보스}(총력전_보스_난이도)
+총력전_보스_치명대미지저항 = RESULT
+
+CALL 보스스텟관리
+;디버깅용
+;총력전_보스_현재체력 = 500
+
+CALLFORM 총력전_보스_스킬_%총력전_보스_이름%_스킬갯수
+총력전_보스_스킬갯수 = RESULT
+
+FOR LOCAL, 0, 총력전_보스_스킬갯수
+	TRYCALLFORM 총력전_보스_스킬_%총력전_보스_이름%_{LOCAL}_이름
+	총력전_보스_스킬이름:LOCAL = %RESULTS%
+	TRYCALLFORM 총력전_보스_스킬_%총력전_보스_이름%_{LOCAL}_쿨타임(총력전_보스_난이도)
+	총력전_보스_스킬쿨타임:LOCAL = RESULT
+	RESULTS =
+	RESULT = 0
+NEXT
+
+
+;파티 수 세는 부분
+FOR LOCAL, 0, 5
+SIF 총력전_파티_캐릭터:LOCAL < 0
+BREAK
+총력전_파티_캐릭터수 ++
+NEXT
+
+;캐릭터 스킬 이름 받아오는 부분
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	SIF 총력전_파티_캐릭터:LOCAL < 0
+	CONTINUE
+	TRYCALLFORM SKILL_{TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 + 1000}_SP_0_NAME
+	TRYCALLFORM SKILL_{TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 + 1000}_BASE_0_NAME
+	캐릭터_스킬이름:LOCAL = %RESULTS%
+	RESULTS = 
+NEXT
+
+;캐릭터 스킬 설명 받아오는 부분
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	SIF 총력전_파티_캐릭터:LOCAL < 0
+	CONTINUE
+	TRYCALLFORM SKILL_{TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 + 1000}_SP_0_EXPLANATION
+	TRYCALLFORM SKILL_{TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 + 1000}_BASE_0_EXPLANATION
+	TRYCALLFORM 총력전_스킬_{TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 + 1000}_설명
+	캐릭터_스킬설명:LOCAL = %RESULTS%
+	TRYCALLFORM 총력전_스킬_{TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 + 1000}_설명_1
+	캐릭터_스킬설명_1:LOCAL = %RESULTS%
+	RESULTS = 
+NEXT
+
+;캐릭터 스킬 코스트를 받아오는 부분
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	TRYCALLFORM 총력전_스킬_{TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 + 1000}_코스트
+	총력전_캐릭터_최초스킬코스트:LOCAL = RESULT
+	TRYCALLFORM 총력전_스킬_{TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 + 1000}_코스트_1
+	총력전_캐릭터_최초스킬코스트_1:LOCAL = RESULT
+	RESULT = 0
+	총력전_캐릭터_스킬코스트:LOCAL = 총력전_캐릭터_최초스킬코스트:LOCAL
+	총력전_캐릭터_스킬코스트_1:LOCAL = 총력전_캐릭터_최초스킬코스트_1:LOCAL
+NEXT
+;참가자 체력 회복
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	BASE:(총력전_파티_캐릭터:LOCAL):체력 = MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+NEXT
+
+CALL 전투스텟관리
+
+CALL 총력전_UI
+CALL 총력전_전투_시퀀스(총력전_보스_난이도)
+
+
+@총력전_UI
+#DIM FIRST_LINE
+CLEARLINE LINECOUNT - FIRST_LINE
+
+FIRST_LINE = LINECOUNT
+PRINTFORML %TOSTR_SPACE(3)%|---------------------------------------------------------------------------------------------------------|
+CALL 총력전_보스_인포
+PRINTFORML %TOSTR_SPACE(3)%|---------------------------------------------------------------------------------------------------------|
+CALL 총력전_턴
+PRINTFORML %TOSTR_SPACE(3)%|---------------------------------------------------------------------------------------------------------|
+CALL 총력전_전투_로그
+CALL 전투로그휠
+CALL 총력전_소환물
+PRINTFORML %TOSTR_SPACE(3)%|---------------------------------------------------------------------------------------------------------|
+CALL 총력전_파티_이미지
+
+
+REDRAW 2
+@총력전_소환물
+#DIM 소환물유무
+소환물유무 = 0
+
+FOR LOCAL, 0, 5
+	SIF 총력전_소환물체력:LOCAL > 0
+	소환물유무 = 1
+NEXT
+IF 소환물유무 == 1
+	PRINTFORML %TOSTR_SPACE(3)%|---------------------------------------------------------------------------------------------------------|
+	PRINTFORM %TOSTR_SPACE(3)%|
+	FOR LOCAL, 0, 5
+		SIF 총력전_소환물상태:LOCAL == 총력전_소환물상태_도발
+		SETCOLOR 칼라_파파랑
+		SIF 총력전_소환물상태_대상지정:LOCAL == 1
+		SETCOLOR 칼라_빨강
+		PRINTFORM [%((총력전_소환물체력:LOCAL > 0)?총력전_소환물이름:LOCAL#""),17,LEFT%]
+		RESETCOLOR
+		SIF LOCAL == 2
+			PRINTFORM  
+		PRINTFORM  |
+		RESETCOLOR
+	NEXT
+	PRINTL
+
+	PRINTFORM %TOSTR_SPACE(3)%
+	FOR LOCAL:0, 0, 5
+		IF 총력전_소환물체력:LOCAL <= 0
+			PRINTFORM |%TOSTR_SPACE(20)%
+			SIF LOCAL:0 == 2
+				PRINTFORM  
+		ELSE
+			PRINTFORM |  
+			CALL 총력전_소환물체력(LOCAL)
+			PRINTFORM     
+			SIF LOCAL:0 == 2
+				PRINTFORM  
+		ENDIF
+	NEXT
+	PRINTFORML |
+ENDIF
+
+@총력전_파티_이미지(iSize = 8)
+#DIMS IMAGE, 5
+#DIM iEnter_Con
+#DIM iFont_Hei_mag
+#DIM iSize
+#DIM iCorrection
+#DIMS sHtml
+#DIM iYpos
+#DIM 쉴드유무
+#DIM 엄폐물유무
+
+쉴드유무 = 0
+엄폐물유무 = 0
+iEnter_Con = 0
+
+IF GETCONFIGS("描画インターフェース") == "GRAPHICS"
+	iCorrection = 5
+ELSE
+	iCorrection = 25
+ENDIF
+
+PRINTFORM %TOSTR_SPACE(3)%
+FOR LOCAL:0, 0, 5
+	IF LOCAL:0 != 0
+		PRINTFORM  
+	ENDIF
+	PRINTFORM |
+	SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_도발
+	SETCOLOR 칼라_파파랑
+	SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
+	SETCOLOR 칼라_선택불가
+	SIF 총력전_캐릭터상태_대상지정:LOCAL == 1
+	SETCOLOR 칼라_빨강
+	SIF 버프대상선택:LOCAL == 1
+	SETCOLOR 칼라_노랑
+	PRINTBUTTON @"[%((총력전_파티_캐릭터:LOCAL != -1)?ANAME(총력전_파티_캐릭터:LOCAL)#""),17,LEFT%]",LOCAL+2000
+	RESETCOLOR
+	SIF LOCAL:0 == 2
+		PRINTFORM  
+	RESETCOLOR
+NEXT
+PRINTFORML  |
+
+
+;--------------------------캐릭터 화상 출력부분--------------------------
+LOCALS = "   |                    |                    |                     |                    |                    |"
+
+FOR LOCAL, 0, 5
+	SIF 총력전_파티_캐릭터:LOCAL < 0
+		CONTINUE
+	IMAGE:LOCAL = %GET_IMAGE_NAME(총력전_파티_캐릭터:LOCAL)%
+	iFont_Hei_mag = GETCONFIG("一行の高さ") * (iSize * 100 - iCorrection) * 10 / GETCONFIG("フォントサイズ")
+	iFont_Hei_mag = (iFont_Hei_mag / 10) + (iFont_Hei_mag % 10 >= 5 ? 1 # 0)
+	
+	iYpos = -(iEnter_Con * 100)
+	IF LOCAL < 3
+		sHtml = <p align='left'>%SUBSTRING(LOCALS, 0, 8 + (21 * LOCAL))%<img src='%IMAGE:LOCAL%' height='{iFont_Hei_mag}' ypos='{iYpos}'>%SUBSTRING(LOCALS, 21 + (21 * LOCAL), STRLENS(LOCALS))%
+	ELSE
+		sHtml = <p align='left'>%SUBSTRING(LOCALS, 0, 9 + (21 * LOCAL))%<img src='%IMAGE:LOCAL%' height='{iFont_Hei_mag}' ypos='{iYpos}'>%SUBSTRING(LOCALS, 22 + (21 * LOCAL), STRLENS(LOCALS))%
+	ENDIF
+	sHtml = %REPLACE(sHtml, "\"", "")%
+	HTML_PRINT sHtml
+	iEnter_Con++
+NEXT
+
+FOR LOCAL, iEnter_Con, iSize
+	sHtml = %LOCALS%<br>
+	sHtml = %REPLACE(sHtml, "\"", "")%
+	HTML_PRINT sHtml
+NEXT
+;--------------------------캐릭터 스텟 출력부분--------------------------------
+
+PRINTFORM %TOSTR_SPACE(3)%
+
+FOR LOCAL:0, 0, 5
+	IF 총력전_파티_캐릭터:LOCAL < 0
+		PRINTFORM |%TOSTR_SPACE(20)%
+		SIF LOCAL:0 == 2
+			PRINTFORM  
+	ELSE
+		PRINTFORM |  
+		SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
+		SETCOLOR 칼라_선택불가
+		CALL 총력전_캐릭터_체력(총력전_파티_캐릭터:LOCAL)
+		RESETCOLOR
+		PRINTFORM     
+		SIF LOCAL:0 == 2
+			PRINTFORM  
+	ENDIF
+NEXT
+PRINTFORML |
+
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	SIF 총력전_엄폐물:LOCAL > 0
+	엄폐물유무 = 1
+NEXT
+
+IF 엄폐물유무 == 1
+PRINTFORM %TOSTR_SPACE(3)%
+	FOR LOCAL:0, 0, 5
+	IF 총력전_엄폐물:LOCAL <= 0
+		PRINTFORM |%TOSTR_SPACE(20)%
+		SIF LOCAL:0 == 2
+			PRINTFORM %TOSTR_SPACE(1)%
+	ELSE
+			PRINTFORM |%TOSTR_SPACE(2)%
+		SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
+		SETCOLOR 칼라_선택불가
+		CALL 총력전_캐릭터_엄폐물(LOCAL)
+		RESETCOLOR
+		PRINTFORM %TOSTR_SPACE(6)%
+		SIF LOCAL:0 == 2
+			PRINTFORM %TOSTR_SPACE(1)%
+	ENDIF
+	NEXT
+	PRINTFORML |
+ENDIF
+
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	SIF 총력전_쉴드:LOCAL > 0
+	쉴드유무 = 1
+NEXT
+
+IF 쉴드유무 == 1
+PRINTFORM %TOSTR_SPACE(3)%
+	FOR LOCAL:0, 0, 5
+	IF 총력전_쉴드:LOCAL <= 0
+		PRINTFORM |%TOSTR_SPACE(20)%
+		SIF LOCAL:0 == 2
+			PRINTFORM %TOSTR_SPACE(1)%
+	ELSE
+			PRINTFORM |%TOSTR_SPACE(2)%
+		SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
+		SETCOLOR 칼라_선택불가
+		CALL 총력전_캐릭터_쉴드(LOCAL)
+		RESETCOLOR
+		PRINTFORM %TOSTR_SPACE(6)%
+		SIF LOCAL:0 == 2
+			PRINTFORM %TOSTR_SPACE(1)%
+	ENDIF
+	NEXT
+	PRINTFORML |
+ENDIF
+
+PRINTFORM %TOSTR_SPACE(3)%
+FOR LOCAL:0, 0, 5
+	IF 총력전_파티_캐릭터:LOCAL < 0
+		PRINTFORM |%TOSTR_SPACE(20)%
+		SIF LOCAL:0 == 2
+			PRINTFORM  
+	ELSE
+		PRINTFORM |  
+		CALL 총력전_캐릭터_전투스탯(LOCAL)
+		SIF LOCAL:0 == 2
+			PRINTFORM  
+	ENDIF
+NEXT
+PRINTFORML |
+PRINTFORM %TOSTR_SPACE(3)%
+FOR LOCAL:0, 0, 5
+	IF 총력전_파티_캐릭터:LOCAL < 0
+		PRINTFORM |%TOSTR_SPACE(20)%
+		SIF LOCAL:0 == 2
+			PRINTFORM  
+	ELSE
+		PRINTFORM |  
+		CALL 총력전_캐릭터_전투스탯2(LOCAL)
+		SIF LOCAL:0 == 2
+			PRINTFORM  
+	ENDIF
+NEXT
+PRINTFORML |
+
+
+
+PRINTFORML %TOSTR_SPACE(3)%|---------------------------------------------------------------------------------------------------------|
+
+;--------------------------무기 이미지 출력부분--------------------------
+iEnter_Con = -1
+
+FOR LOCAL, 0, 5
+	IF 총력전_파티_캐릭터:LOCAL < 0
+	IMAGE:LOCAL = 웨폰_더미
+	ELSE
+	IMAGE:LOCAL = 웨폰_{TALENT:(총력전_파티_캐릭터:LOCAL):웨폰}
+	ENDIF
+	iYpos = -(iEnter_Con * 100)
+	IF LOCAL < 3
+		sHtml = <p align='left'>%SUBSTRING(LOCALS, 1, 4 + (21 * LOCAL))%<img src='%IMAGE:LOCAL%' height='249' ypos='{iYpos}'>%SUBSTRING(LOCALS, 24 + (21 * LOCAL), STRLENS(LOCALS))%
+	ELSE
+		sHtml = <p align='left'>%SUBSTRING(LOCALS, 1, 5 + (21 * LOCAL))%<img src='%IMAGE:LOCAL%' height='249' ypos='{iYpos}'>%SUBSTRING(LOCALS, 25 + (21 * LOCAL), STRLENS(LOCALS))%
+	ENDIF
+	sHtml = %REPLACE(sHtml, "\"", "")%
+	HTML_PRINT sHtml
+	iEnter_Con++
+NEXT
+;--------------------------------------------------------------------------
+PRINTFORM %TOSTR_SPACE(3)%
+	CALL 총력전_캐릭터_무기
+	CALL 스킬코스트출력
+PRINTFORML %TOSTR_SPACE(3)%|---------------------------------------------------------------------------------------------------------|
+
+
+@총력전_캐릭터_체력(대상)
+#DIM 대상
+PRINT 체력:
+IF BASE:대상:체력 >= 0
+	SIF BASE:대상:체력 < 1000
+		PRINT  
+	SIF BASE:대상:체력 < 100
+		PRINT 
+	SIF BASE:대상:체력 < 10
+		PRINT 
+	SIF BASE:대상:체력 < 1
+		PRINT 
+ELSE
+	SIF BASE:대상:체력 > -1000
+		PRINT 
+	SIF BASE:대상:체력 > -100
+		PRINT  
+	SIF BASE:대상:체력 > -10
+		PRINT 
+	SIF BASE:대상:체력 == -1
+		PRINT 
+ENDIF
+SIF MAXBASE:대상:체력 < BASE:대상:체력
+SETCOLOR 칼라_파파랑
+PRINTFORM {BASE:대상:체력, 3 ,LEFT}
+RESETCOLOR
+PRINTFORM /{MAXBASE:대상:체력, 3 ,LEFT}
+
+@총력전_소환물체력(대상)
+#DIM 대상
+PRINT 체력: 
+SIF 총력전_소환물체력:대상 < 1000
+	PRINT  
+SIF 총력전_소환물체력:대상 < 100
+	PRINT 
+SIF 총력전_소환물체력:대상 < 10
+	PRINT 
+SIF 총력전_소환물체력:대상 < 1
+	PRINT 
+SETCOLOR 칼라_파파랑
+PRINTFORM {총력전_소환물체력:대상, 3 ,LEFT}    
+RESETCOLOR
+
+@총력전_캐릭터_엄폐물(대상)
+#DIM 대상
+PRINT 엄폐물: 
+SIF 총력전_엄폐물:대상 < 1000
+	PRINT  
+SIF 총력전_엄폐물:대상 < 100
+	PRINT 
+SIF 총력전_엄폐물:대상 < 10
+	PRINT 
+SIF 총력전_엄폐물:대상 < 1
+	PRINT 
+SETCOLOR 칼라_파파랑
+PRINTFORM {총력전_엄폐물:대상, 3 ,LEFT}
+RESETCOLOR
+
+
+@총력전_캐릭터_쉴드(대상)
+#DIM 대상
+PRINT 쉴드량: 
+SIF 총력전_쉴드:대상 < 1000
+	PRINT  
+SIF 총력전_쉴드:대상 < 100
+	PRINT 
+SIF 총력전_쉴드:대상 < 10
+	PRINT 
+SIF 총력전_쉴드:대상 < 1
+	PRINT 
+SETCOLOR 칼라_파파랑
+PRINTFORM {총력전_쉴드:대상, 3 ,LEFT}
+RESETCOLOR
+
+@총력전_캐릭터_스탯(대상)
+#DIM 대상
+
+PRINT 무:
+PRINTFORM {ABL:대상:무투, 3, LEFT}
+PRINT 방:
+PRINTFORM {ABL:대상:방위, 3, LEFT}
+PRINT 지:
+PRINTFORM {ABL:대상:지략, 3, LEFT}
+
+@총력전_캐릭터_전투스탯(대상)
+#DIM 대상
+
+PRINT 공:
+SIF 총력전_최초공격력:대상 < 총력전_공격력:대상
+SETCOLOR 칼라_파파랑
+SIF 총력전_최초공격력:대상 > 총력전_공격력:대상
+SETCOLOR 칼라_파빨강
+PRINTFORM {총력전_공격력:대상, 3, LEFT}
+RESETCOLOR
+PRINT 방:
+SIF 총력전_최초방어력:대상 < 총력전_방어력:대상
+SETCOLOR 칼라_파파랑
+SIF 총력전_최초방어력:대상 > 총력전_방어력:대상
+SETCOLOR 칼라_파빨강
+PRINTFORM {총력전_방어력:대상, 3, LEFT}
+RESETCOLOR
+PRINT 회:
+SIF 총력전_최초회피율:대상 < 총력전_회피율:대상
+SETCOLOR 칼라_파파랑
+SIF 총력전_최초회피율:대상 > 총력전_회피율:대상
+SETCOLOR 칼라_파빨강
+PRINTFORM {총력전_회피율:대상, 3, LEFT}
+RESETCOLOR
+
+@총력전_캐릭터_전투스탯2(대상)
+#DIM 대상
+
+PRINT 확:
+SIF 총력전_최초치명타확률:대상 < 총력전_치명타확률:대상
+SETCOLOR 칼라_파파랑
+SIF 총력전_최초치명타확률:대상 > 총력전_치명타확률:대상
+SETCOLOR 칼라_파빨강
+PRINTFORM {총력전_치명타확률:대상, 3, LEFT}
+RESETCOLOR
+PRINT 피:
+SIF 총력전_최초치명타대미지:대상 < 총력전_치명타대미지:대상
+SETCOLOR 칼라_파파랑
+SIF 총력전_최초치명타대미지:대상 > 총력전_치명타대미지:대상
+SETCOLOR 칼라_파빨강
+PRINTFORM {총력전_치명타대미지:대상, 3, LEFT}
+RESETCOLOR
+PRINT 명:
+SIF 총력전_최초명중률:대상 < 총력전_명중률:대상
+SETCOLOR 칼라_파파랑
+SIF 총력전_최초명중률:대상 > 총력전_명중률:대상
+SETCOLOR 칼라_파빨강
+PRINTFORM {총력전_명중률:대상, 3, LEFT}
+RESETCOLOR
+
+@총력전_캐릭터_무기
+
+FOR LOCAL, 0, 5
+	IF 총력전_파티_캐릭터:LOCAL < 0
+		PRINTFORM |%TOSTR_SPACE(20)%
+		SIF LOCAL:0 == 2
+			PRINTFORM  
+	ELSE
+		LOCALS = %WEAPON_NAME(TALENT:(총력전_파티_캐릭터:LOCAL):웨폰)%
+		PRINTFORM |
+		SIF 총력전_캐릭터_스킬사용가능:LOCAL == 0
+		SETCOLOR 칼라_선택불가
+		SIF 총력전_캐릭터_선택스킬:LOCAL == 1
+		SETCOLOR 칼라_경고
+		SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
+		SETCOLOR 칼라_선택불가
+		SIF LOCAL:0 != 2
+		PRINTBUTTON @"[%SUBSTRING(LOCALS, 0, 17), 18, LEFT%]",LOCAL
+		RESETCOLOR
+		SIF 총력전_캐릭터_스킬사용가능:2 == 0
+		SETCOLOR 칼라_선택불가
+		SIF 총력전_캐릭터_선택스킬:2 == 1
+		SETCOLOR 칼라_경고
+		SIF 총력전_캐릭터상태:2 == 총력전_캐릭터상태_행동불능
+		SETCOLOR 칼라_선택불가
+		SIF LOCAL:0 == 2
+		PRINTBUTTON @"[%SUBSTRING(LOCALS, 0, 18), 19, LEFT%]",LOCAL
+		RESETCOLOR
+	ENDIF
+NEXT
+PRINTFORML |
+
+@스킬코스트출력
+PRINTFORM %TOSTR_SPACE(3)%
+FOR LOCAL, 0, 5
+	IF 총력전_파티_캐릭터:LOCAL < 0
+		PRINTFORM |%TOSTR_SPACE(20)%
+		SIF LOCAL:0 == 2
+			PRINTFORM  
+	ELSE
+		LOCALS = %WEAPON_NAME(TALENT:(총력전_파티_캐릭터:LOCAL):웨폰)%
+		PRINTFORM |    코스트:  
+		SIF 총력전_캐릭터_스킬사용가능:LOCAL == 0
+		SETCOLOR 칼라_선택불가
+		SIF 총력전_캐릭터_선택스킬:LOCAL == 1
+		SETCOLOR 칼라_경고
+		SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
+		SETCOLOR 칼라_선택불가
+		SIF 총력전_캐릭터_최초스킬코스트:LOCAL < 총력전_캐릭터_스킬코스트:LOCAL
+		SETCOLOR 칼라_파빨강
+		SIF 총력전_캐릭터_최초스킬코스트:LOCAL > 총력전_캐릭터_스킬코스트:LOCAL
+		SETCOLOR 칼라_파파랑
+		IF LOCAL:0 != 2
+			SIF 가변스킬관리:LOCAL == 0
+			PRINTFORM {총력전_캐릭터_스킬코스트:LOCAL, 7, LEFT}
+			SIF 가변스킬관리:LOCAL == 1
+			PRINTFORM {총력전_캐릭터_스킬코스트_1:LOCAL, 7, LEFT}
+		ENDIF
+		RESETCOLOR
+		SIF 총력전_캐릭터_스킬사용가능:2 == 0
+		SETCOLOR 칼라_선택불가
+		SIF 총력전_캐릭터_선택스킬:2 == 1
+		SETCOLOR 칼라_경고
+		SIF 총력전_캐릭터상태:2 == 총력전_캐릭터상태_행동불능
+		SETCOLOR 칼라_선택불가
+		SIF 총력전_캐릭터_최초스킬코스트:LOCAL < 총력전_캐릭터_스킬코스트:LOCAL
+		SETCOLOR 칼라_파빨강
+		SIF 총력전_캐릭터_최초스킬코스트:LOCAL > 총력전_캐릭터_스킬코스트:LOCAL
+		SETCOLOR 칼라_파파랑
+		IF LOCAL:0 == 2
+			SIF 가변스킬관리:LOCAL == 0
+			PRINTFORM {총력전_캐릭터_스킬코스트:LOCAL, 8, LEFT}
+			SIF 가변스킬관리:LOCAL == 1
+			PRINTFORM {총력전_캐릭터_스킬코스트_1:LOCAL, 8, LEFT}
+		ENDIF
+		RESETCOLOR
+	ENDIF
+NEXT
+PRINTFORML |
+
+
+@총력전_보스_인포
+#DIM 보스
+#DIM iSize
+#DIMS sHtml
+#DIM iEnter_Con
+#DIM iSpace
+
+PRINTFORM %TOSTR_SPACE(3)%|%TOSTR_SPACE(47)%
+CALL 난이도_출력
+PRINTFORML %TOSTR_SPACE(58 - RESULT)%|
+
+IF FLAG:화상설정
+	iEnter_Con = 0
+	sHtml =  <p align='left'><nobr>
+	sHtml += @"<shape type='space' param='{iSpace}'>%TOSTR_SPACE(3)%|<img src='%총력전_보스_이름%' height='850' ypos='0'>                                                      |"
+	HTML_PRINT sHtml
+ENDIF
+PRINTFORM %TOSTR_SPACE(3)%|%TOSTR_SPACE(62)%[%총력전_보스_이름,17,LEFT%]
+PRINTFORML %TOSTR_SPACE(24)%|
+PRINTFORML %TOSTR_SPACE(3)%|%TOSTR_SPACE(105)%|
+PRINTFORM %TOSTR_SPACE(3)%|%TOSTR_SPACE(62)%공격력: 
+SIF 총력전_보스_최초무투 > 총력전_보스_무투
+SETCOLOR 칼라_파빨강
+SIF 총력전_보스_최초무투 < 총력전_보스_무투
+SETCOLOR 칼라_파파랑
+PRINTFORM {총력전_보스_무투}
+RESETCOLOR
+IF 총력전_보스_무투 < 10
+PRINTFORML %TOSTR_SPACE(34)%|
+ELSEIF 총력전_보스_무투 < 100
+PRINTFORML %TOSTR_SPACE(33)%|
+ELSEIF 총력전_보스_무투 < 1000
+PRINTFORML %TOSTR_SPACE(32)%|
+ELSEIF 총력전_보스_무투 < 10000
+PRINTFORML %TOSTR_SPACE(31)%|
+ENDIF
+PRINTFORM %TOSTR_SPACE(3)%|%TOSTR_SPACE(62)%방어력: 
+SIF 총력전_보스_최초방어력 > 총력전_보스_방어력
+SETCOLOR 칼라_파빨강
+SIF 총력전_보스_최초방어력 < 총력전_보스_방어력
+SETCOLOR 칼라_파파랑
+PRINTFORM {총력전_보스_방어력}
+RESETCOLOR
+IF 총력전_보스_방어력 <= -10
+PRINTFORML %TOSTR_SPACE(32)%|
+ELSEIF 총력전_보스_방어력 < 0
+PRINTFORML %TOSTR_SPACE(33)%|
+ELSEIF 총력전_보스_방어력 < 10
+PRINTFORML %TOSTR_SPACE(34)%|
+ELSEIF 총력전_보스_방어력 < 100
+PRINTFORML %TOSTR_SPACE(33)%|
+ELSEIF 총력전_보스_방어력 < 1000
+PRINTFORML %TOSTR_SPACE(32)%|
+ELSEIF 총력전_보스_방어력 < 10000
+PRINTFORML %TOSTR_SPACE(31)%|
+ENDIF
+PRINTFORML %TOSTR_SPACE(3)%|%TOSTR_SPACE(105)%|
+PRINTFORML %TOSTR_SPACE(3)%|%TOSTR_SPACE(105)%|
+PRINTFORM %TOSTR_SPACE(3)%|%TOSTR_SPACE(62)%체력: {총력전_보스_현재체력}/{총력전_보스_최대체력}
+SIF 총력전_보스_현재체력 >= 0
+PRINTFORM %TOSTR_SPACE(2)%
+IF 총력전_보스_현재체력 <= -10000
+PRINTFORML %TOSTR_SPACE(25)%|
+ELSEIF 총력전_보스_현재체력 <= -1000
+PRINTFORML %TOSTR_SPACE(26)%|
+ELSEIF 총력전_보스_현재체력 <= -100
+PRINTFORML %TOSTR_SPACE(27)%|
+ELSEIF 총력전_보스_현재체력 <= -10
+PRINTFORML %TOSTR_SPACE(28)%|
+ELSEIF 총력전_보스_현재체력 < 0
+PRINTFORML %TOSTR_SPACE(29)%|
+ELSEIF 총력전_보스_현재체력 < 10
+PRINTFORML %TOSTR_SPACE(28)%|
+ELSEIF 총력전_보스_현재체력 < 100
+PRINTFORML %TOSTR_SPACE(27)%|
+ELSEIF 총력전_보스_현재체력 < 1000
+PRINTFORML %TOSTR_SPACE(26)%|
+ELSEIF 총력전_보스_현재체력 < 10000
+PRINTFORML %TOSTR_SPACE(25)%|
+ELSEIF 총력전_보스_현재체력 < 100000
+PRINTFORML %TOSTR_SPACE(24)%|
+ELSE
+PRINTFORML %TOSTR_SPACE(32)%|
+ENDIF
+PRINTFORM %TOSTR_SPACE(3)%| 
+CALL PRINT_COLORBAR(총력전_보스_현재체력, 총력전_보스_최대체력, 75, UNICODE(0x2585), UNICODE(0x2585), 0xDB0A00, 0x404040)
+PRINTL  |
+; @DUNGEON_STATUS_CHANGE_COLOR(상태)
+; #DIM 상태
+; SELECTCASE 상태
+; 	CASE 총력전_캐릭터상태_타겟
+; 		SETCOLOR 칼라_빨강
+; 	CASE 총력전_캐릭터상태_독
+; 		SETCOLOR 칼라_파보라
+; 	CASE 총력전_캐릭터상태_수면
+; 		SETCOLOR 칼라_파랑
+; 	CASE 총력전_캐릭터상태_마비
+; 		SETCOLOR 칼라_노랑
+; ENDSELECT
+@총력전_턴
+PRINTFORM %TOSTR_SPACE(3)%|  
+PRINT 턴: 
+IF 총력전_턴수 >= 25
+SETCOLOR 칼라_경고
+ELSEIF 총력전_턴수 >= 20
+SETCOLOR 칼라_노랑
+ENDIF
+PRINTFORM {총력전_턴수}/30
+RESETCOLOR
+IF 총력전_턴수 < 10
+PRINTFORM %TOSTR_SPACE(4)%
+ELSEIF 총력전_턴수 < 100
+PRINTFORM %TOSTR_SPACE(3)%
+ENDIF
+PRINTFORM 코스트: 
+SIF 총력전_스킬_코스트 == 10
+SETCOLOR 칼라_노랑
+PRINTFORM {총력전_스킬_코스트}
+PRINT /10
+RESETCOLOR
+IF 총력전_스킬_코스트 < 10
+PRINTFORM %TOSTR_SPACE(61)%
+ELSEIF 총력전_스킬_코스트 < 100
+PRINTFORM %TOSTR_SPACE(60)%
+ENDIF
+SIF 스킬설명변수 == 0
+SETCOLOR 칼라_선택불가
+SIF 스킬설명변수 == 1
+SETCOLOR 칼라_흰색
+PRINTBUTTON "[스킬설명]",98
+RESETCOLOR
+PRINTBUTTON "[넘기기]",99
+PRINTFORML | 
+
+@총력전_전투_로그
+FOR LOCAL, 총력전표시행수, 총력전전투텍스트최대행수
+	IF STRLENS(총력전전투텍스트:LOCAL) != 0
+		PRINTFORM %TOSTR_SPACE(3)%|
+		SETCOLOR 총력전전투텍스트색상:LOCAL
+		PRINTFORM %총력전전투텍스트:LOCAL%
+		RESETCOLOR
+		PRINTFORML %TOSTR_SPACE(105-(STRLENS(총력전전투텍스트:LOCAL)))%|
+	ELSE
+		PRINTFORML %TOSTR_SPACE(3)%|%TOSTR_SPACE(105)%|
+	ENDIF
+NEXT
+
+@전투로그휠
+PRINTFORML %TOSTR_SPACE(3)%|---------------------------------------------------------------------------------------------------------|
+PRINTFORM %TOSTR_SPACE(3)%|%TOSTR_SPACE(89)%
+PRINTBUTTON "[△]" , 3001
+PRINTBUTTON "[▽]" , 3002
+PRINTBUTTON "[나가기]" , 3003
+PRINTL |
+
+@총력전_전투_텍스트_추가(텍스트,색상 = -1)
+#DIMS 텍스트
+#DIM 색상
+총력전전투텍스트최대행수 = 200
+총력전표시행수 = 183
+
+
+총력전전투텍스트:200 = %텍스트%
+총력전전투텍스트색상:200 = 색상
+
+FOR LOCAL, 0, 200
+	IF STRLENS(총력전전투텍스트:(LOCAL+1)) != 0
+		총력전전투텍스트:(LOCAL) = %총력전전투텍스트:(LOCAL+1)%
+		총력전전투텍스트색상:(LOCAL) = 총력전전투텍스트색상:(LOCAL+1)
+	ENDIF
+NEXT
+CALL 총력전_UI
+WAIT
+
+@총력전_전투_시퀀스(난이도)
+#DIM 난이도
+#DIM 전투불능캐릭터세기
+#DIM 사용가능스킬수
+;최초 처리
+CALL 보스패시브스킬처리(난이도)
+CALL 아군패시브처리
+$전투루프
+IF 총력전나가기플래그 == 1
+	CALL 총력전_전투_텍스트_추가("3턴 안에 중단 시 재도전 가능합니다 토벌을 중단합니까?")
+	CALL ASK_YN("토벌중단","취소")
+	IF RESULT == 0
+		IF 총력전_턴수 > 3
+			CALL 토벌_종료_시퀀스(3)
+		ELSE 
+			CALL 토벌_종료_시퀀스(4)
+		ENDIF
+		RETURN
+	ELSE 
+	총력전나가기플래그 = 0
+	ENDIF
+ENDIF
+IF 총력전_전투단계 == 총력전_전투단계_최초단계
+	SIF 총력전_턴수 == 30
+	CALL 총력전_전투_텍스트_추가(@"------  %"마지막 턴 입니다",16,RIGHT%  ------",칼라_빨강)
+	SIF 총력전_턴수 < 30
+	CALL 총력전_전투_텍스트_추가(@"------  {총력전_턴수} 턴  ------",칼라_노랑)
+	CALL 지속힐처리
+	CALL 지속대미지처리
+	CALL 상대지속대미지처리
+	CALL 턴시작처리
+
+	전투불능캐릭터세기 = 0
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 == 0
+		전투불능캐릭터세기 ++
+	NEXT
+
+	IF 전투불능캐릭터세기 == 총력전_파티_캐릭터수
+		CALL 토벌_종료_시퀀스(2)
+		RETURN
+	ENDIF
+	;사용가능한 스킬 수를 세는 부분
+	사용가능스킬수 = 0
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+		SIF 총력전_캐릭터상태:LOCAL != 총력전_캐릭터상태_행동불능 && 총력전_캐릭터_스킬사용가능:LOCAL == 1
+		사용가능스킬수++
+	NEXT
+
+	IF 사용가능스킬수 >= 1
+		CALL 총력전_전투_텍스트_추가(@"------  %"스킬 선택 단계",14,RIGHT%  ------",칼라_노랑)
+		CALL 총력전_전투_텍스트_추가(@"사용할 스킬을 선택해 주세요")
+		총력전_전투단계 = 총력전_전투단계_스킬선택
+	ELSE 
+		총력전_전투단계 == 총력전_전투단계_자동전투
+	ENDIF
+ENDIF
+
+;스킬선택단계
+IF 총력전_전투단계 == 총력전_전투단계_스킬선택
+	CALL 총력전_전투_시퀀스_스킬선택
+	GOTO 전투루프
+ENDIF
+
+;스킬사용단계
+IF 총력전_전투단계 == 총력전_전투단계_스킬사용
+	SIF 총력전_캐릭터_선택스킬개수 >= 1
+	CALL 총력전_전투_텍스트_추가(@"------  %"스킬 발동",9,RIGHT%  ------",칼라_노랑)
+	CALL 스킬사용처리
+	IF 총력전_보스_현재체력 <= 0
+	CALL 토벌_종료_시퀀스(1)
+	RETURN
+	ENDIF
+	총력전_전투단계 = 총력전_전투단계_자동전투
+ENDIF
+
+;자동전투단계
+IF 총력전_전투단계 == 총력전_전투단계_자동전투
+	CALL 총력전_전투_텍스트_추가(@"------  %"전투 단계",9,RIGHT%  ------",칼라_노랑)
+	CALL 자동전투_대미지계산
+	IF 총력전_보스_현재체력 <= 0
+	CALL 토벌_종료_시퀀스(1)
+	RETURN
+	ENDIF
+	총력전_전투단계 = 총력전_전투단계_상대스킬
+ENDIF
+
+;상대턴단계
+IF 총력전_턴수 == 30
+		CALL 토벌_종료_시퀀스(2)
+		RETURN
+ENDIF
+IF 총력전_전투단계 == 총력전_전투단계_상대스킬
+	전투불능캐릭터세기 = 0
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 == 0
+		전투불능캐릭터세기 ++
+	NEXT
+	SIF 전투불능캐릭터세기 != 총력전_파티_캐릭터수
+	CALL 상대턴처리(난이도)
+	CALL 턴종료처리
+	SIF 총력전_보스_현재체력 <= 0
+	CALL 토벌_종료_시퀀스(1)
+	IF 총력전_턴수 <= 30
+		총력전_전투단계 = 총력전_전투단계_최초단계
+		GOTO 전투루프
+	ENDIF
+ENDIF
+
+@총력전_전투_시퀀스_스킬선택
+
+INPUT
+LOCAL = RESULT
+SIF RESULT >= 2000
+LOCAL = RESULT - 2000
+IF LOCAL == 99
+총력전_전투단계 = 총력전_전투단계_스킬사용
+스킬설명변수 = 0
+ELSEIF RESULT == 3001
+	IF 총력전표시행수 > 0 && STRLENS(총력전전투텍스트:총력전표시행수) != 0
+		총력전표시행수 --
+		총력전전투텍스트최대행수 --
+		CALL 총력전_UI
+	ELSE
+		CLEARLINE 1
+	ENDIF
+ELSEIF RESULT == 3002
+	IF 총력전표시행수 < 183 && 총력전전투텍스트최대행수 < 200
+		총력전표시행수 ++
+		총력전전투텍스트최대행수 ++
+		CALL 총력전_UI
+	ELSE
+		CLEARLINE 1
+	ENDIF
+ELSEIF RESULT == 3003
+	총력전나가기플래그 = 1
+	CLEARLINE 1
+ELSEIF LOCAL == 98
+	IF 스킬설명변수 == 0
+		스킬설명변수 = 1
+		CALL 총력전_전투_텍스트_추가(@"설명이 필요한 스킬을 선택해 주세요")
+	ELSEIF 스킬설명변수 == 1
+		스킬설명변수 = 0
+		CALL 총력전_전투_텍스트_추가(@"사용할 스킬을 선택해 주세요")	
+	ENDIF
+ELSEIF LOCAL < 5
+	IF 총력전_캐릭터_스킬사용가능:LOCAL == 0 && 스킬설명변수 == 0
+		CALL 총력전_전투_텍스트_추가("아직 사용할 수 없습니다")
+		CALL 총력전_전투_텍스트_추가(@"남은 쿨타임: {총력전_캐릭터_스킬쿨타임:LOCAL}")
+	ELSE
+		IF 스킬설명변수 == 0
+			IF 총력전_캐릭터_선택스킬:LOCAL == 0
+				IF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
+					CALL 총력전_전투_텍스트_추가("행동 불능 캐릭터의 스킬은 사용할 수 없습니다",칼라_빨강)
+				ELSEIF 총력전_스킬_코스트 - 총력전_캐릭터_스킬코스트:LOCAL - 총력전_캐릭터_선택스킬코스트 < 0 && 가변스킬관리:LOCAL == 0
+					CALL 총력전_전투_텍스트_추가(@"코스트가 부족합니다        필요 코스트: {총력전_캐릭터_스킬코스트:LOCAL}",칼라_노랑)
+				ELSEIF 총력전_스킬_코스트 - 총력전_캐릭터_스킬코스트_1:LOCAL - 총력전_캐릭터_선택스킬코스트 < 0 && 가변스킬관리:LOCAL == 1
+					CALL 총력전_전투_텍스트_추가(@"코스트가 부족합니다        필요 코스트: {총력전_캐릭터_스킬코스트_1:LOCAL}",칼라_노랑)
+				ELSE
+					총력전_캐릭터_선택스킬:LOCAL = 1
+					총력전_캐릭터_선택스킬개수 += 1
+					SIF 가변스킬관리:LOCAL == 0
+					총력전_캐릭터_선택스킬코스트 += 총력전_캐릭터_스킬코스트:LOCAL
+					SIF 가변스킬관리:LOCAL == 1
+					총력전_캐릭터_선택스킬코스트 += 총력전_캐릭터_스킬코스트_1:LOCAL
+					CALL 총력전_전투_텍스트_추가(@"%캐릭터_스킬이름:LOCAL% 선택")
+				ENDIF
+			ELSEIF 총력전_캐릭터_선택스킬:LOCAL == 1
+				SIF 가변스킬관리:LOCAL == 0
+				총력전_캐릭터_선택스킬코스트 -= 총력전_캐릭터_스킬코스트:LOCAL
+				SIF 가변스킬관리:LOCAL == 1
+				총력전_캐릭터_선택스킬코스트 -= 총력전_캐릭터_스킬코스트_1:LOCAL
+				총력전_캐릭터_선택스킬:LOCAL = 0
+				총력전_캐릭터_선택스킬개수 -= 1
+				CALL 총력전_전투_텍스트_추가(@"%캐릭터_스킬이름:LOCAL% 해제")
+			ENDIF
+		ELSE 
+			IF 총력전_캐릭터_선택스킬:LOCAL < 0
+			ELSE
+				CALL SINGLE_DRAWLINE
+				PRINTL
+				SETCOLOR 칼라_노랑
+				PRINTFORML %캐릭터_스킬이름:LOCAL%
+				RESETCOLOR
+				IF 가변스킬관리:LOCAL == 0
+				PRINTL
+				PRINTFORML %캐릭터_스킬설명:LOCAL%
+				PRINT 코스트: 
+				SIF 총력전_캐릭터_스킬코스트:LOCAL < 총력전_캐릭터_최초스킬코스트:LOCAL
+				SETCOLOR 칼라_파파랑
+				PRINTFORML {총력전_캐릭터_스킬코스트:LOCAL}
+				RESETCOLOR
+				ELSE
+				PRINTL
+				PRINTFORML %캐릭터_스킬설명_1:LOCAL%
+				PRINT 코스트: 
+				SIF 총력전_캐릭터_스킬코스트_1:LOCAL < 총력전_캐릭터_최초스킬코스트_1:LOCAL
+				SETCOLOR 칼라_파파랑
+				PRINTFORML {총력전_캐릭터_스킬코스트_1:LOCAL}
+				RESETCOLOR
+				PRINTL
+				ENDIF
+				CALL SINGLE_DRAWLINE
+				PRINTW
+				CLEARLINE 9
+				CALL 총력전_전투_시퀀스_스킬선택
+			ENDIF
+		ENDIF
+	ENDIF
+ELSE
+CLEARLINE 1
+ENDIF
+SIF 총력전_캐릭터_선택스킬개수 == 3
+총력전_전투단계 = 총력전_전투단계_스킬사용
+
+;전투단계 넘어갈때 로그초기화
+IF 총력전_전투단계 == 총력전_전투단계_스킬사용
+
+ENDIF
+@전투스텟관리
+#DIM 함락계수
+FOR LOCAL, 0, 5
+	함락계수 = 100
+	SIF 총력전_파티_캐릭터:LOCAL < 0
+		CONTINUE
+	SIF TALENT:(총력전_파티_캐릭터:LOCAL):친구
+	함락계수 += 5
+	SIF TALENT:(총력전_파티_캐릭터:LOCAL):연모
+	함락계수 += 5
+	SIF TALENT:(총력전_파티_캐릭터:LOCAL):친애
+	함락계수 += 10
+	SIF TALENT:(총력전_파티_캐릭터:LOCAL):정실
+	함락계수 += 15
+	SIF TALENT:(총력전_파티_캐릭터:LOCAL):첩
+	함락계수 += 10
+	SIF TALENT:(총력전_파티_캐릭터:LOCAL):복종
+	함락계수 += 5
+	SIF TALENT:(총력전_파티_캐릭터:LOCAL):예속
+	함락계수 += 10
+	;공격력 지략보정 지략 100일때 최대 2배 50 이하일때 1배
+	총력전_최초공격력:LOCAL = ABL:(총력전_파티_캐릭터:LOCAL):무투 * MAX(MIN(ABL:(총력전_파티_캐릭터:LOCAL):지략 * 2 , 200) , 100) / 100 * 함락계수 / 100
+	;치명타 확률 기본 10% 지략 100일때 최대 60%
+	총력전_최초치명타확률:LOCAL = LIMIT(ABL:(총력전_파티_캐릭터:LOCAL):지략, 1 , 100) / 2 + 10
+	;치명타 대미지 기본 150%
+	총력전_최초치명타대미지:LOCAL = 150
+	;회피율 지략,방위합 200일때 최대 20%
+	총력전_최초회피율:LOCAL = LIMIT(ABL:(총력전_파티_캐릭터:LOCAL):지략 + ABL:(총력전_파티_캐릭터:LOCAL):방위 , 1 , 200) / 10
+	;방어력 방위 100일때 최대 50%
+	총력전_최초방어력:LOCAL = LIMIT(ABL:(총력전_파티_캐릭터:LOCAL):방위, 1 , 100) / 2 * 함락계수 / 100
+	;치유력 지략 1당 2
+	총력전_최초치유력:LOCAL = ABL:(총력전_파티_캐릭터:LOCAL):지략 * 2 * 함락계수 / 100
+	;명중률 기본 95%
+	총력전_최초명중률:LOCAL = 95
+NEXT
+
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+총력전_공격력:LOCAL = 총력전_최초공격력:LOCAL
+총력전_치명타확률:LOCAL = 총력전_최초치명타확률:LOCAL
+총력전_치명타대미지:LOCAL = 총력전_최초치명타대미지:LOCAL 
+총력전_명중률:LOCAL = 총력전_최초명중률:LOCAL
+총력전_회피율:LOCAL = 총력전_최초회피율:LOCAL
+총력전_방어력:LOCAL = 총력전_최초방어력:LOCAL
+총력전_치유력:LOCAL = 총력전_최초치유력:LOCAL
+NEXT
+
+@보스스텟관리
+;방위 1100일때 80
+총력전_보스_최초방어력 = LIMIT(1000 * SQRT(11 * 총력전_보스_방위) / 1375 , 1, 100)
+총력전_보스_방어력 = 총력전_보스_최초방어력
+
+@난이도_출력
+SELECTCASE 총력전_보스_난이도
+	CASE 0
+		SETCOLOR 칼라_초록
+		LOCALS = [ HARD ]
+		PRINT [ HARD ]
+		RESETCOLOR
+	CASE 1
+		SETCOLOR 칼라_시안
+		LOCALS = [ HARDCORE ]
+		PRINT [ HARDCORE ]
+		RESETCOLOR
+	CASE 2
+		SETCOLOR 칼라_오렌지
+		LOCALS = [ EXTREME ]
+		PRINT [ EXTREME ]
+		RESETCOLOR
+	CASE 3
+		SETCOLOR 칼라_파빨강
+		LOCALS = [ INSANE ]
+		PRINT [ INSANE ]
+		RESETCOLOR
+	CASE 4
+		SETCOLOR 칼라_경고
+		LOCALS = [ TORMENT ]
+		PRINT [ TORMENT ]
+		RESETCOLOR
+ENDSELECT
+
+RETURN STRLENS(LOCALS)
+
+@스킬사용처리
+
+FOR LOCAL, 0, 5
+	SIF 총력전_캐릭터_선택스킬:LOCAL == 0
+	CONTINUE
+	IF 가변스킬관리:LOCAL == 0
+		CALL 총력전_전투_텍스트_추가(@"『%캐릭터_스킬이름:LOCAL%』 발동",칼라_노랑)
+		TRYCALLFORM 총력전_스킬_{TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 + 1000}_발동(LOCAL)	
+	ELSEIF 가변스킬관리:LOCAL == 1
+		CALL 총력전_전투_텍스트_추가(@"『%캐릭터_스킬이름:LOCAL%』 발동",칼라_노랑)
+		TRYCALLFORM 총력전_스킬_{TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 + 1000}_발동_1(LOCAL)
+	ENDIF
+	총력전_캐릭터_스킬사용가능:LOCAL = 0
+	총력전_캐릭터_스킬쿨타임:LOCAL = 2
+	총력전_캐릭터_선택스킬:LOCAL = 0
+	총력전_스킬_코스트 -= 총력전_캐릭터_스킬코스트:LOCAL
+	;유카리 기원처리
+	IF 기원 >= 0
+		기원 += 총력전_캐릭터_스킬코스트:LOCAL
+		SIF 기원 > 20
+		기원 = 20
+		CALL 총력전_전투_텍스트_추가(@"기원: {기원}/20",칼라_선택불가)
+	ENDIF
+	IF 총력전_캐릭터_스킬코스트:LOCAL != 총력전_캐릭터_최초스킬코스트:LOCAL
+		코스트횟수감소:LOCAL --
+		IF 코스트횟수감소:LOCAL == 0
+			총력전_캐릭터_스킬코스트:LOCAL = 총력전_캐릭터_최초스킬코스트:LOCAL
+			총력전_캐릭터_스킬코스트_1:LOCAL = 총력전_캐릭터_최초스킬코스트_1:LOCAL
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 스킬 코스트가 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+NEXT
+총력전_캐릭터_선택스킬개수 = 0
+총력전_캐릭터_선택스킬코스트 = 0
+
+@자동전투_대미지계산
+#DIM 대미지
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
+	CONTINUE
+	대미지 = 총력전_공격력:LOCAL * (100 - 총력전_보스_방어력) / 100
+	CALL 공격판정처리(대미지,LOCAL)
+	;추가공격처리
+	SIF 총력전_공격속도:LOCAL > 0
+	총력전_추가공격:LOCAL += 총력전_공격속도:LOCAL
+	IF 총력전_추가공격:LOCAL >= 100
+		CALL 총력전_전투_텍스트_추가("추가공격!",칼라_노랑)
+		CALL 공격판정처리(대미지,LOCAL)
+		총력전_추가공격:LOCAL -= 100
+	ENDIF
+	;소환물 공격처리
+	IF 총력전_소환물체력:LOCAL > 0 && 총력전_소환물공격:LOCAL == 1
+		대미지 = 총력전_소환물공격력:LOCAL * (100 - 총력전_보스_방어력) / 100
+		CALL 공격판정처리(대미지,LOCAL+5)
+	ENDIF
+NEXT
+
+
+
+@상대턴처리(난이도)
+#DIM 난이도
+#DIM 대미지
+;기본공격처리
+IF 총력전_보스상태 == 총력전_보스상태_기절
+	CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"은")% 기절중이라 아무것도 할 수 없다")
+RETURN
+ENDIF
+CALL 기본공격타겟팅처리
+대미지 = 총력전_보스_무투 * (100 - 총력전_방어력:RESULT) / 100
+CALL 피격판정처리(대미지,RESULT)
+
+CALL 보스스킬처리(난이도)
+
+@기본공격타겟팅처리
+#DIM 대상
+대상 = 0
+
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	SIF 총력전_캐릭터상태:대상 == 총력전_캐릭터상태_행동불능
+	대상 ++
+NEXT
+
+FOR LOCAL, 0, 10
+	IF LOCAL < 5
+		SIF 총력전_파티_캐릭터:LOCAL < 0
+		CONTINUE
+		SIF 총력전_캐릭터상태:LOCAL != 총력전_캐릭터상태_행동불능 && 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_도발
+		대상 = LOCAL
+	ELSE
+		SIF 총력전_소환물체력:(LOCAL - 5) > 0 && 총력전_소환물상태:(LOCAL - 5) == 총력전_소환물상태_도발
+		대상 = LOCAL
+	ENDIF
+NEXT
+
+RETURN 대상
+
+@상대스킬타겟팅처리(대상수)
+#DIM 대상수
+#DIM 대상지정
+대상지정 = 0
+CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 스킬을 준비하고 있다",칼라_빨강)
+
+IF 대상수 == 1
+
+ELSEIF 대상수 == 2
+	;소환물 타겟팅(도발이 없으면 타겟팅 하지 않는다)
+	FOR LOCAL, 0, 5
+		SIF 대상지정 > 1
+		BREAK
+		IF 총력전_소환물체력:LOCAL > 0 && 총력전_소환물상태:LOCAL == 총력전_소환물상태_도발
+		총력전_소환물상태_대상지정:LOCAL = 1
+		대상지정 ++
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_소환물이름:LOCAL,"을")% 노리고 있다!")
+		ENDIF
+	NEXT
+	;도발이 있는 캐릭터 우선 타겟팅
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+		SIF 대상지정 > 1
+		BREAK
+		IF 총력전_캐릭터상태:LOCAL != 총력전_캐릭터상태_행동불능 && 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_도발
+		총력전_캐릭터상태_대상지정:LOCAL = 1
+		대상지정 ++
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"을")% 노리고 있다!")
+		ENDIF
+	NEXT
+
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+		SIF 대상지정 > 1
+		BREAK
+		IF 총력전_캐릭터상태:LOCAL != 총력전_캐릭터상태_행동불능
+		총력전_캐릭터상태_대상지정:LOCAL = 1
+		대상지정 ++
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"을")% 노리고 있다!")
+		ENDIF
+	NEXT
+ELSEIF 대상수 == 3
+
+ELSEIF 대상수 == 4
+	;소환물 타겟팅(도발이 없으면 타겟팅 하지 않는다)
+	FOR LOCAL, 0, 5
+		SIF 대상지정 > 3
+		BREAK
+		IF 총력전_소환물체력:LOCAL > 0 && 총력전_소환물상태:LOCAL == 총력전_소환물상태_도발
+		총력전_소환물상태_대상지정:LOCAL = 1
+		대상지정 ++
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_소환물이름:LOCAL,"을")% 노리고 있다!")
+		ENDIF
+	NEXT
+	;도발이 있는 캐릭터 우선 타겟팅
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+		SIF 대상지정 > 3
+		BREAK
+		IF 총력전_캐릭터상태:LOCAL != 총력전_캐릭터상태_행동불능 && 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_도발
+		총력전_캐릭터상태_대상지정:LOCAL = 1
+		대상지정 ++
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"을")% 노리고 있다!")
+		ENDIF
+	NEXT
+
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+		SIF 대상지정 > 3
+		BREAK
+		IF 총력전_캐릭터상태:LOCAL != 총력전_캐릭터상태_행동불능
+		총력전_캐릭터상태_대상지정:LOCAL = 1
+		대상지정 ++
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"을")% 노리고 있다!")
+		ENDIF
+	NEXT
+
+ELSEIF 대상수 == 5
+	FOR LOCAL, 0, 5
+		IF 총력전_소환물체력:LOCAL > 0
+			총력전_소환물상태_대상지정:LOCAL = 1
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_소환물이름:LOCAL,"을")% 노리고 있다!")
+		ENDIF
+	NEXT
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+		IF 총력전_캐릭터상태:LOCAL != 총력전_캐릭터상태_행동불능
+		총력전_캐릭터상태_대상지정:LOCAL = 1
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"을")% 노리고 있다!")
+		ENDIF
+	NEXT
+	총력전_보스_전체공격 = 1
+ENDIF
+
+;명중판정이 필요한 공격의 경우에 사용
+;대상은 피격 대상이 아니라 공격자
+@공격판정처리(대미지,대상,확정치명=0)
+#DIM 대미지
+#DIM 대상
+#DIM 확정치명
+#DIM 치명타대미지
+
+IF 대상 <= 4
+	SELECTCASE RAND:100
+	CASE IS <= 총력전_명중률:대상 - 총력전_보스_회피율
+		LOCAL = RAND:100
+		IF LOCAL <= 총력전_치명타확률:대상 - 총력전_보스_치명저항 || 확정치명 == 1
+			;식이 길어지니까 알수없는 이유로 계산이 제대로 안돼서 부득이하게 식이 기묘해짐
+			;대충 요약하면 "총력전_보스_치명대미지저항"이 올라갈수록 대미지와 치명타대미지가 비슷해짐 
+			;단 치명타데미지저항이 100이상일 경우 결과값이 이상해지니 주의
+			치명타대미지 = (총력전_치명타대미지:대상 - 100) * (100 - 총력전_보스_치명대미지저항) / 100
+			대미지 = 대미지 * (치명타대미지 + 100) / 100
+			총력전_보스_현재체력 -= 대미지
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:대상),"가")% {대미지} 대미지를 줬다!",칼라_노랑)
+		ELSE
+			총력전_보스_현재체력 -= 대미지
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:대상),"가")% {대미지} 대미지를 줬다!")
+		ENDIF
+		;메루 약점 공격
+		IF 총력전_보스_디버프:1423 > 0
+			총력전_보스_현재체력 -= 메루약점대미지
+			CALL 총력전_전투_텍스트_추가(@"약점공격 추가 대미지 {메루약점대미지}",칼라_선택불가)
+		ENDIF
+		;메루 약점 공격
+		IF 총력전_보스_디버프:2102 > 0
+			총력전_보스_현재체력 -= 미유약점대미지
+			CALL 총력전_전투_텍스트_추가(@"약점공격 추가 대미지 {미유약점대미지}",칼라_선택불가)
+		ENDIF
+		;사쿠라코 추댐
+		IF	총력전_보스_디버프:1123 > 0
+			총력전_보스_현재체력 -= 대미지 * 18 / 100
+			CALL 총력전_전투_텍스트_추가(@"추가 대미지 {대미지 * 18 / 100}",칼라_선택불가)
+		ENDIF
+		;카요코 추댐
+		IF	총력전_보스_디버프:1418 > 0
+			총력전_보스_현재체력 -= 대미지 * 20 / 100
+			CALL 총력전_전투_텍스트_추가(@"추가 대미지 {대미지 * 20 / 100}",칼라_선택불가)
+		ENDIF
+		;칸나 축적댐
+		IF 총력전_보스_디버프:1404 > 0
+			칸나축적대미지 += 대미지
+			SIF 칸나축적대미지 > 칸나최대축적대미지
+			칸나축적대미지 = 칸나최대축적대미지
+		ENDIF
+		;와카모 축적딜
+		IF 총력전_보스_디버프:2113 > 0
+			와카모축적대미지 += 대미지
+			SIF 와카모축적대미지 > 와카모최대축적대미지
+			와카모축적대미지 = 와카모최대축적대미지
+		ENDIF
+	CASEELSE
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)%의 공격이 빗나갔다...",칼라_선택불가)
+	ENDSELECT
+;대상이 5이상일때, 소환물 전용 공격처리
+ELSE
+	SELECTCASE RAND:100
+	CASE IS <= 95 - 총력전_보스_회피율
+		LOCAL = RAND:100
+		IF LOCAL <= 30 - 총력전_보스_치명저항 || 확정치명 == 1
+			치명타대미지 = 50 * (100 - 총력전_보스_치명대미지저항) / 100
+			대미지 = 대미지 * (치명타대미지 + 100) / 100
+			총력전_보스_현재체력 -= 대미지
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_소환물이름:(대상 - 5),"가")% {대미지} 대미지를 줬다!",칼라_노랑)
+		ELSE
+			총력전_보스_현재체력 -= 대미지
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_소환물이름:(대상 - 5),"가")% {대미지} 대미지를 줬다!")
+		ENDIF
+		;메루 약점 공격
+		IF 총력전_보스_디버프:1423 > 0
+			총력전_보스_현재체력 -= 메루약점대미지
+			CALL 총력전_전투_텍스트_추가(@"약점공격 추가 대미지 {메루약점대미지}",칼라_선택불가)
+		ENDIF
+		;메루 약점 공격
+		IF 총력전_보스_디버프:2102 > 0
+			총력전_보스_현재체력 -= 미유약점대미지
+			CALL 총력전_전투_텍스트_추가(@"약점공격 추가 대미지 {미유약점대미지}",칼라_선택불가)
+		ENDIF
+		;사쿠라코 추댐
+		IF	총력전_보스_디버프:1123 > 0
+			총력전_보스_현재체력 -= 대미지 * 18 / 100
+			CALL 총력전_전투_텍스트_추가(@"추가 대미지 {대미지 * 18 / 100}",칼라_선택불가)
+		ENDIF
+		;카요코 추댐
+		IF	총력전_보스_디버프:1418 > 0
+			총력전_보스_현재체력 -= 대미지 * 20 / 100
+			CALL 총력전_전투_텍스트_추가(@"추가 대미지 {대미지 * 20 / 100}",칼라_선택불가)
+		ENDIF
+		;칸나 축적딜
+		IF 총력전_보스_디버프:1404 > 0
+			칸나축적대미지 += 대미지
+			SIF 칸나축적대미지 > 칸나최대축적대미지
+			칸나축적대미지 = 칸나최대축적대미지
+		ENDIF
+		;와카모 축적딜
+		IF 총력전_보스_디버프:2113 > 0
+			와카모축적대미지 += 대미지
+			SIF 와카모축적대미지 > 와카모최대축적대미지
+			와카모축적대미지 = 와카모최대축적대미지
+		ENDIF
+	CASEELSE
+			CALL 총력전_전투_텍스트_추가(@"%총력전_소환물이름:(대상 - 5)%의 공격이 빗나갔다...",칼라_선택불가)
+	ENDSELECT
+ENDIF
+;회피판정이 필요한 피격의 경우에 사용
+@피격판정처리(대미지,대상)
+#DIM 대미지
+#DIM 대상
+IF 대상 >= 5
+	대상 -= 5
+	총력전_소환물체력:대상 -= 대미지
+	CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_소환물이름:대상,"은")% {대미지} 대미지를 받았다!",칼라_빨강)
+	IF 총력전_소환물체력:대상 <= 0 
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_소환물이름:대상,"은")% 파괴되었다!",칼라_빨강)
+		총력전_소환물체력:대상 = 0
+		총력전_소환물이름:대상 =
+		총력전_소환물상태:대상 = 0
+		총력전_소환물공격:대상 = 0
+		총력전_소환물체력:대상 = 0
+	ENDIF
+ELSE
+	SELECTCASE RAND:100
+	CASE IS <= 총력전_회피율:대상
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:대상),"은")% 공격을 회피했다!",칼라_노랑)
+	CASEELSE
+		IF 총력전_엄폐물:대상 > 0
+			총력전_엄폐물:대상 -= 대미지
+			SIF 총력전_엄폐물:대상 < 0
+			총력전_엄폐물:대상 = 0
+			CALL 총력전_전투_텍스트_추가(@"엄폐물에 {대미지} 대미지!")
+		ELSE
+			IF 총력전_쉴드:대상 > 0
+				총력전_쉴드:대상 -= 대미지
+				IF 총력전_쉴드:대상 < 0
+				BASE:(총력전_파티_캐릭터:대상):체력 += 총력전_쉴드:대상
+				총력전_쉴드:대상 = 0
+				ENDIF
+			ELSE
+				BASE:(총력전_파티_캐릭터:대상):체력 -= 대미지
+			ENDIF
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:대상),"가")% {대미지} 대미지를 받았다!",칼라_빨강)
+			IF BASE:(총력전_파티_캐릭터:대상):체력 <= 0
+				BASE:(총력전_파티_캐릭터:대상):체력 = 0
+				CALL 전투불능처리(대상)
+			ENDIF
+		ENDIF
+	ENDSELECT
+ENDIF
+
+@전투불능처리(대상)
+#DIM 대상
+IF 대상 < 5
+	IF 총력전_캐릭터상태:대상 == 총력전_캐릭터상태_불사
+		BASE:(총력전_파티_캐릭터:대상):체력 = 1
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:대상),"은")% 불사 상태!")
+	ELSE
+		총력전_캐릭터상태:대상 = 총력전_캐릭터상태_행동불능
+		총력전_캐릭터상태_대상지정:대상 = 0
+		총력전_비나_화상:대상 = -1
+		총력전_캐릭터_스킬사용가능:대상 = 1
+		총력전_캐릭터_스킬쿨타임:대상 = 0
+		CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)% 전투불능!",칼라_빨강)
+	ENDIF
+ENDIF
+
+@도발처리(대상,소환물=0,스킬번호=0)
+#DIM 대상
+#DIM 대상지정
+#DIM 소환물
+#DIM 스킬번호
+#DIM 지속시간
+TRYCALLFORM 총력전_스킬_{스킬번호}_도발지속
+지속시간 = RESULT
+
+대상지정 = 0
+
+IF 소환물 == 0
+	총력전_캐릭터상태:대상 = 총력전_캐릭터상태_도발
+ELSE
+	총력전_소환물상태:대상 = 총력전_소환물상태_도발
+ENDIF
+
+
+;전체공격이면 도발처리 안함
+IF 총력전_보스_전체공격 == 0
+	;타겟이 된 캐릭터 세기
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+		SIF 총력전_캐릭터상태_대상지정:LOCAL == 1
+		대상지정 ++
+	NEXT
+	;캐릭터인경우
+	IF 소환물 == 0
+		;대상지정된 캐릭터가 있고 대상이 대상지정이 아닐경우
+		IF 대상지정 > 1 && 총력전_캐릭터상태_대상지정:대상 == 0
+			;대상지정된 캐릭터를 뒤에서부터 뽑기 위해 이런식으로 작성함
+			FOR LOCAL, 0, 총력전_파티_캐릭터수
+				IF 총력전_캐릭터상태_대상지정:LOCAL == 1
+					대상지정 --
+				ENDIF
+				IF 대상지정 == 0
+					총력전_캐릭터상태_대상지정:LOCAL = 0
+					총력전_캐릭터상태_대상지정:대상 = 1
+				ENDIF
+			NEXT
+		ENDIF
+		도발지속:대상 = 지속시간
+	;소환물인경우
+	ELSE
+		IF 대상지정 > 1
+			FOR LOCAL, 0, 총력전_파티_캐릭터수
+				IF 총력전_캐릭터상태_대상지정:LOCAL == 1
+					대상지정 --
+				ENDIF
+				IF 대상지정 == 0
+					총력전_캐릭터상태_대상지정:LOCAL = 0
+					총력전_소환물상태_대상지정:대상 = 1
+				ENDIF
+			NEXT
+		ENDIF
+	ENDIF
+ENDIF
+
+@소환물처리(소환물체력,이름,스킬번호,지속시간,도발 = 0,공격 = 0,공격력 = 0)
+#DIM 소환물체력
+#DIMS 이름
+#DIM 스킬번호
+#DIM 도발
+#DIM 공격
+#DIM 공격력
+#DIM 지속시간
+
+FOR LOCAL, 0, 5
+	;폭죽발사장치용 예외처리, 여러개 소환 가능하게
+	IF 스킬번호 == 1125
+		SIF 총력전_소환물체력:LOCAL > 0
+		CONTINUE
+		총력전_소환물체력:LOCAL = 소환물체력
+		총력전_소환물이름:LOCAL = %이름%
+		소환물_지속시간:LOCAL = 지속시간
+		;보스가 전체공격 시전중 소환되면 타겟으로 추가 됨
+		SIF 총력전_보스_전체공격 == 1
+		총력전_소환물상태_대상지정:LOCAL = 1
+		IF 공격 == 1
+			총력전_소환물공격:LOCAL = 1
+			총력전_소환물공격력:LOCAL = 공격력
+		ENDIF
+		SIF 도발 == 1
+		CALL 도발처리(LOCAL,1)
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_소환물이름:LOCAL,"이")% 소환됐다!")
+		BREAK
+	ELSEIF 총력전_소환물이름:LOCAL == 이름
+		총력전_소환물체력:LOCAL = 소환물체력
+		소환물_지속시간:LOCAL = 지속시간
+		;보스가 전체공격 시전중 소환되면 타겟으로 추가 됨
+		SIF 총력전_보스_전체공격 == 1
+		총력전_소환물상태_대상지정:LOCAL = 1
+		IF 공격 == 1
+			총력전_소환물공격:LOCAL = 1
+			총력전_소환물공격력:LOCAL = 공격력
+		ENDIF
+		SIF 도발 == 1
+		CALL 도발처리(LOCAL,1)
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_소환물이름:LOCAL,"이")% 소환됐다!")
+		BREAK
+	ELSE
+		SIF 총력전_소환물체력:LOCAL > 0
+		CONTINUE
+		총력전_소환물체력:LOCAL = 소환물체력
+		총력전_소환물이름:LOCAL = %이름%
+		소환물_지속시간:LOCAL = 지속시간
+		;보스가 전체공격 시전중 소환되면 타겟으로 추가 됨
+		SIF 총력전_보스_전체공격 == 1
+		총력전_소환물상태_대상지정:LOCAL = 1
+		IF 공격 == 1
+			총력전_소환물공격:LOCAL = 1
+			총력전_소환물공격력:LOCAL = 공격력
+		ENDIF
+		SIF 도발 == 1
+		CALL 도발처리(LOCAL,1)
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_소환물이름:LOCAL,"이")% 소환됐다!")
+		BREAK
+	ENDIF
+NEXT
+
+@엄폐물처리(엄폐물체력)
+#DIM 엄폐물체력
+
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
+	CONTINUE
+	총력전_엄폐물:LOCAL = 엄폐물체력
+	BREAK
+NEXT
+
+@디버프부여처리(디버프,스킬번호,지속시간,발동자,추가처리변수=0)
+#DIMS 디버프
+#DIM 스킬번호
+#DIM 지속시간
+#DIM 발동자
+#DIM 추가처리변수
+
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	SIF 버프지속:LOCAL:스킬번호 == 0
+	버프지속:LOCAL:스킬번호 = -1
+NEXT
+
+IF 디버프 == "기절"
+	IF 총력전_보스_기절저항값 == 0
+		총력전_보스상태 = 총력전_보스상태_기절
+		총력전_보스_디버프:스킬번호 = 지속시간
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"가")% 기절 상태가 됐다!")
+	ELSEIF 30 -총력전_턴수 < 총력전_보스_기절저항
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"은")% 기절에 면역이다")
+	ELSE 
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"은")% 아직 기절에 면역이다    남은 턴: {총력전_보스_기절저항값}")
+	ENDIF
+ELSEIF 디버프 == "화상"
+	IF 총력전_보스_디버프:스킬번호 <= 0
+		총력전_보스_디버프대미지 += 추가처리변수
+	ENDIF
+	총력전_보스_디버프:스킬번호 = 지속시간
+ELSEIF 디버프 == "약점"
+	총력전_보스_디버프:스킬번호 = 지속시간
+ELSEIF 디버프 == "축적"
+	총력전_보스_디버프:스킬번호 = 지속시간
+ELSEIF 디버프 == "방깎"
+	SIF 총력전_보스_디버프:스킬번호 <= 0
+	총력전_보스_방어력 -= 총력전_보스_최초방어력 * 추가처리변수 / 100
+	CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 방어력이 {총력전_보스_최초방어력 * 추가처리변수 / 100} 감소했다!")
+	총력전_보스_디버프:스킬번호 = 지속시간
+ELSEIF 디버프 == "공깎"
+	SIF 총력전_보스_디버프:스킬번호 <= 0
+	총력전_보스_무투 -= 추가처리변수
+	CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 공격력이 {추가처리변수} 감소했다!")
+	총력전_보스_디버프:스킬번호 = 지속시간
+ELSEIF 디버프 == "치댐저깎"
+	SIF 총력전_보스_디버프:스킬번호 <= 0
+	총력전_보스_치명대미지저항 -= 추가처리변수
+	CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 치명대미지저항이 {추가처리변수} 감소했다!")
+	총력전_보스_디버프:스킬번호 = 지속시간
+ENDIF
+
+;대상은 대상이 정해져있는경우 ex.발동자 그외엔 비워놓음
+;코스트감소 50이면 반감 그외의 경우 수치 만큼 감소 횟수는 감소 횟수
+@버프처리(버프갯수,공격속도증가량=0,코스트감소=0,치유량=0,쉴드량=0,공격력증가량=0,치명타확률증가량=0,치명타대미지증가량=0,명중률증가량=0,회피율증가량=0,방어력증가량=0,치유력증가량=0,대상수=0,스킬번호=0,횟수=0,대상=0,디버프해제=0)
+#DIM 버프갯수
+#DIM 버프갯수세기
+#DIM 공격속도증가량
+#DIM 코스트감소
+#DIM 치유량
+#DIM 쉴드량
+#DIM 공격력증가량
+#DIM 치명타확률증가량
+#DIM 치명타대미지증가량
+#DIM 명중률증가량
+#DIM 회피율증가량
+#DIM 방어력증가량
+#DIM 치유력증가량
+#DIM 설정대상수
+#DIM 횟수
+#DIM 대상
+#DIM 대상수
+#DIM 대상설정완료
+#DIM 스킬번호
+#DIM 지속시간
+#DIM 디버프해제
+#DIM 넘기기
+#DIM 디버프해제사용,5
+
+TRYCALLFORM 총력전_스킬_{스킬번호}_버프지속
+지속시간 = RESULT
+
+IF 대상수 == 0
+	IF 공격속도증가량 > 0
+		SIF 버프지속:대상:스킬번호 <= 0
+		총력전_공격속도:대상 += 공격속도증가량
+		버프갯수 --
+		CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)%의 공격속도가 {공격속도증가량} 증가했다!")
+		SIF 버프갯수 == 0
+		버프지속:대상:스킬번호 = 지속시간
+	ENDIF
+
+	IF 치유량 > 0
+		BASE:(총력전_파티_캐릭터:대상):체력 += 치유량
+		SIF BASE:(총력전_파티_캐릭터:대상):체력 > MAXBASE:(총력전_파티_캐릭터:대상):체력
+		BASE:(총력전_파티_캐릭터:대상):체력 = MAXBASE:(총력전_파티_캐릭터:대상):체력
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:대상),"은")% {치유량} 회복됐다!",칼라_노랑)
+	ENDIF
+
+	IF 쉴드량 > 0
+		IF 버프지속:대상:스킬번호 <= 0
+			총력전_쉴드:대상 += 쉴드량
+		ELSEIF 버프지속:대상:스킬번호 > 0
+			총력전_쉴드:대상 = 쉴드량
+		ENDIF
+		CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)%의 쉴드가 {쉴드량} 증가했다!")
+		버프갯수 --
+		SIF 버프갯수 <= 0
+		버프지속:대상:스킬번호 = 지속시간
+	ENDIF
+
+	IF 공격력증가량 > 0
+		SIF 버프지속:대상:스킬번호 <= 0 
+		총력전_공격력:대상 += 공격력증가량
+		;----------코유키용 버프처리----------
+		IF 버프지속:대상:스킬번호 > 0 && 스킬번호 == 1511
+			SIF 코유키랜덤 == 0
+			총력전_공격력:대상 -= 35
+			SIF 코유키랜덤 == 1
+			총력전_공격력:대상 -= 32
+			SIF 코유키랜덤 == 2
+			총력전_공격력:대상 -= 26
+			총력전_공격력:대상 += 공격력증가량
+		ENDIF
+		IF 스킬번호 == 1511
+			SIF 공격력증가량 == 35
+			코유키랜덤 = 0
+			SIF 공격력증가량 == 32
+			코유키랜덤 = 1
+			SIF 공격력증가량 == 26
+			코유키랜덤 = 2
+		ENDIF
+		;-------------------------------------
+		버프갯수 --
+		CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)%의 공격력이 {공격력증가량} 증가했다!")
+		SIF 버프갯수 == 0
+		버프지속:대상:스킬번호 = 지속시간
+	ENDIF
+
+	IF 치명타확률증가량 > 0
+		SIF 버프지속:대상:스킬번호 <= 0
+		총력전_치명타확률:대상 += 치명타확률증가량
+		버프갯수 --
+		CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)%의 치명타확률이 {치명타확률증가량} 증가했다!")
+		SIF 버프갯수 == 0
+		버프지속:대상:스킬번호 = 지속시간
+	ENDIF
+
+	IF 치명타대미지증가량 > 0
+		SIF 버프지속:대상:스킬번호 <= 0
+		총력전_치명타대미지:대상 += 치명타대미지증가량
+		버프갯수 --
+		CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)%의 치명대미지가 {치명타대미지증가량} 증가했다!")
+		SIF 버프갯수 == 0
+		버프지속:대상:스킬번호 = 지속시간
+	ENDIF
+
+	IF 명중률증가량 > 0
+		SIF 버프지속:대상:스킬번호 <= 0
+		총력전_명중률:대상 += 명중률증가량
+		버프갯수 --
+		CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)%의 명중률이 {명중률증가량} 증가했다!")
+		SIF 버프갯수 == 0
+		버프지속:대상:스킬번호 = 지속시간
+	ENDIF
+
+	IF 회피율증가량 > 0
+		SIF 버프지속:대상:스킬번호 <= 0 
+		총력전_회피율:대상 += 회피율증가량
+		버프갯수 --
+		CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)%의 회피율이 {회피율증가량} 증가했다!")
+		SIF 버프갯수 == 0
+		버프지속:대상:스킬번호 = 지속시간
+	ENDIF
+
+	IF 방어력증가량 > 0
+		SIF 버프지속:대상:스킬번호 <= 0 
+		총력전_방어력:대상 += 총력전_최초방어력:대상 * 방어력증가량 / 100
+		버프갯수 --
+		CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)%의 방어력이 {총력전_최초방어력:대상 * 방어력증가량 / 100} 증가했다!")
+		SIF 버프갯수 == 0
+		버프지속:대상:스킬번호 = 지속시간
+	ENDIF
+
+	IF 디버프해제 == 1
+		SIF 총력전_비나_화상:대상 > 0
+		총력전_비나_화상:대상 = 0
+		IF 총력전_비나_방어력감소:대상 > 0
+			총력전_비나_방어력감소:대상 = -1
+			총력전_방어력:대상 += 20
+		ENDIF
+		SIF 총력전_보스_난이도 >= 3 && 디버프해제사용:대상 == 0
+		총력전_명중률:대상 += 20
+		CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)%의 모든 해로운 효과가 사라졌다!")
+		디버프해제사용:대상 = 1
+	ENDIF
+ENDIF
+
+SIF 대상수 != 5 && 대상수 != 0
+CALL 총력전_전투_텍스트_추가("대상을 선택해 주세요")
+$버프대상루프
+대상설정완료 = 0
+설정대상수 = 0
+
+IF 대상수 == 5
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+		버프대상선택:LOCAL = 1
+	NEXT
+	대상설정완료 = 1
+ENDIF
+
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	SIF 버프대상선택:LOCAL == 1
+	설정대상수 ++
+NEXT
+
+SIF 설정대상수 == 대상수 || 설정대상수 == 총력전_파티_캐릭터수 || 넘기기 == 1
+대상설정완료 = 1
+
+IF 대상설정완료 == 1
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+	버프갯수세기 = 버프갯수
+	IF 버프대상선택:LOCAL == 1
+
+		IF 공격속도증가량 > 0
+			SIF 버프지속:LOCAL:스킬번호 <= 0
+			총력전_공격속도:LOCAL += 공격속도증가량
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격속도가 {공격속도증가량} 증가했다!")
+			버프갯수세기 --
+			SIF 버프갯수세기 == 0
+			버프지속:LOCAL:스킬번호 = 지속시간
+		ENDIF
+
+		IF 코스트감소 > 0
+			IF 코스트감소 == 50
+				IF 총력전_캐릭터_스킬코스트:LOCAL > 총력전_캐릭터_최초스킬코스트:LOCAL / 2
+					총력전_캐릭터_스킬코스트:LOCAL = 총력전_캐릭터_최초스킬코스트:LOCAL / 2
+					총력전_캐릭터_스킬코스트_1:LOCAL = 총력전_캐릭터_최초스킬코스트_1:LOCAL / 2
+					CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 스킬 코스트가 50％ 감소했다!",칼라_노랑)
+					코스트횟수감소:LOCAL = 횟수
+				ENDIF
+			ELSE
+				IF 총력전_캐릭터_스킬코스트:LOCAL > 총력전_캐릭터_최초스킬코스트:LOCAL - 코스트감소
+					총력전_캐릭터_스킬코스트:LOCAL = 총력전_캐릭터_최초스킬코스트:LOCAL - 코스트감소
+					총력전_캐릭터_스킬코스트_1:LOCAL = 총력전_캐릭터_최초스킬코스트_1:LOCAL - 코스트감소
+					CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 스킬 코스트가 {코스트감소} 감소했다!",칼라_노랑)
+					코스트횟수감소:LOCAL = 횟수
+				ENDIF
+			ENDIF
+		버프갯수세기 --
+		ENDIF
+	
+		IF 치유량 > 0
+			BASE:(총력전_파티_캐릭터:LOCAL):체력 += 치유량
+			SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 > MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+			BASE:(총력전_파티_캐릭터:LOCAL):체력 = MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"은")% {치유량} 회복됐다!",칼라_노랑)
+			;지속힐 몇개 안돼서 그냥 따로 추가하기로 함
+			IF 스킬번호 == 1119
+				총력전_하나에_지속힐:LOCAL = 2
+				총력전_하나에_힐량 = 치유량
+			ENDIF
+			버프갯수세기 --
+			SIF 버프갯수세기 == 0
+			버프지속:LOCAL:스킬번호 = 지속시간
+		ENDIF
+
+		IF 쉴드량 > 0
+			IF 버프지속:LOCAL:스킬번호 <= 0
+				총력전_쉴드:LOCAL += 쉴드량
+			ELSEIF 버프지속:LOCAL:스킬번호 > 0
+				총력전_쉴드:LOCAL = 쉴드량
+			ENDIF
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 쉴드가 {쉴드량} 증가했다!")
+			버프갯수세기 --
+			SIF 버프갯수세기 <= 0
+			버프지속:LOCAL:스킬번호 = 지속시간
+		ENDIF
+
+		IF 공격력증가량 > 0
+			SIF 버프지속:LOCAL:스킬번호 <= 0
+			총력전_공격력:LOCAL += 공격력증가량
+			버프갯수세기 --
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 {공격력증가량} 증가했다!")
+			SIF 버프갯수세기 == 0
+			버프지속:LOCAL:스킬번호 = 지속시간
+		ENDIF
+
+		IF 치명타확률증가량 > 0
+			SIF 버프지속:LOCAL:스킬번호 <= 0
+			총력전_치명타확률:LOCAL += 치명타확률증가량
+			버프갯수세기 --
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 치명타확률이 {치명타확률증가량} 증가했다!")
+			SIF 버프갯수세기 == 0
+			버프지속:LOCAL:스킬번호 = 지속시간
+		ENDIF
+
+		IF 치명타대미지증가량 > 0
+			SIF 버프지속:LOCAL:스킬번호 <= 0
+			총력전_치명타대미지:LOCAL += 치명타대미지증가량
+			버프갯수세기 --
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 치명대미지가 {치명타대미지증가량} 증가했다!")
+			SIF 버프갯수세기 == 0
+			버프지속:LOCAL:스킬번호 = 지속시간
+		ENDIF
+
+		IF 명중률증가량 > 0
+			SIF 버프지속:LOCAL:스킬번호 <= 0
+			총력전_명중률:LOCAL += 명중률증가량
+			버프갯수세기 --
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 명중률이 {명중률증가량} 증가했다!")
+			SIF 버프갯수세기 == 0
+			버프지속:LOCAL:스킬번호 = 지속시간
+		ENDIF
+
+		IF 회피율증가량 > 0
+			SIF 버프지속:LOCAL:스킬번호 <= 0 
+			총력전_회피율:LOCAL += 회피율증가량
+			버프갯수세기 --
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 회피율이 {회피율증가량} 증가했다!")
+			SIF 버프갯수세기 == 0
+			버프지속:LOCAL:스킬번호 = 지속시간
+		ENDIF
+
+		IF 방어력증가량 > 0
+			SIF 버프지속:LOCAL:스킬번호 <= 0
+			총력전_방어력:LOCAL += 총력전_최초방어력:LOCAL * 방어력증가량 / 100
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 방어력이 {총력전_최초방어력:LOCAL * 방어력증가량 / 100} 증가했다!")
+			버프갯수세기 --
+			SIF 버프갯수세기 <= 0
+			버프지속:LOCAL:스킬번호 = 지속시간
+		ENDIF 
+		
+		;일단 하드코딩 하긴 했는데 추후 디버프갯수 많아지면 고쳐야함
+		IF 디버프해제 == 1
+			SIF 총력전_비나_화상:LOCAL > 0
+			총력전_비나_화상:LOCAL = 0
+			IF 총력전_비나_방어력감소:LOCAL > 0
+				총력전_비나_방어력감소:LOCAL = -1
+				총력전_방어력:LOCAL += 20
+			ENDIF
+			SIF 총력전_보스_난이도 >= 3 && 디버프해제사용:LOCAL == 0
+			총력전_명중률:LOCAL += 20
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 모든 해로운 효과가 사라졌다!")
+			디버프해제사용:LOCAL = 1
+		ENDIF
+        버프대상선택:LOCAL = 0
+	ENDIF
+	NEXT
+	넘기기 = 0
+ELSE
+INPUT
+대상 = RESULT - 2000
+	IF RESULT == 99
+		넘기기 = 1
+		GOTO 버프대상루프
+	ELSEIF RESULT == 3001
+		IF 총력전표시행수 > 0 && STRLENS(총력전전투텍스트:총력전표시행수) != 0
+			총력전표시행수 --
+			총력전전투텍스트최대행수 --
+			CALL 총력전_UI
+		ELSE
+			CLEARLINE 1
+		ENDIF
+	ELSEIF RESULT == 3002
+		IF 총력전표시행수 < 183 && 총력전전투텍스트최대행수 < 200
+			총력전표시행수 ++
+			총력전전투텍스트최대행수 ++
+			CALL 총력전_UI
+		ELSE
+			CLEARLINE 1
+		ENDIF
+	ELSEIF RESULT == 3003
+		CLEARLINE 1
+	ELSEIF 대상 >= 0 && 대상 <= 4
+		IF 총력전_캐릭터상태:대상 != 총력전_캐릭터상태_행동불능
+			IF 버프대상선택:대상 == 0
+				버프대상선택:대상 = 1
+				CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)% 선택")
+			ELSEIF 버프대상선택:대상 == 1
+				버프대상선택:대상 = 0
+				CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:대상)% 선택해제")
+			ENDIF
+		ENDIF
+	ELSE
+	CLEARLINE 1
+	ENDIF
+	GOTO 버프대상루프
+ENDIF
+
+;지속힐 몇개 안돼서 그냥 하드코딩함
+@지속힐처리
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	SIF 총력전_캐릭터상태 == 총력전_캐릭터상태_행동불능
+	CONTINUE
+	IF 총력전_하나코_지속힐:LOCAL > 0
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 <= 0
+		CONTINUE
+		BASE:(총력전_파티_캐릭터:LOCAL):체력 += 지속치유량:LOCAL
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 > MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+		BASE:(총력전_파티_캐릭터:LOCAL):체력 = MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"은")% {지속치유량:LOCAL} 회복됐다!",칼라_노랑)
+		총력전_하나코_지속힐:LOCAL --
+	ENDIF
+	IF 총력전_하나에_지속힐:LOCAL > 0
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 <= 0
+		CONTINUE
+		BASE:(총력전_파티_캐릭터:LOCAL):체력 += 총력전_하나에_힐량
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 > MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+		BASE:(총력전_파티_캐릭터:LOCAL):체력 = MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"은")% {총력전_하나에_힐량} 회복됐다!",칼라_노랑)
+		총력전_하나에_지속힐:LOCAL --
+	ENDIF
+	IF 총력전_세나_지속힐:LOCAL > 0
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 <= 0
+		CONTINUE
+		BASE:(총력전_파티_캐릭터:LOCAL):체력 += 총력전_세나_힐량
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 > MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+		BASE:(총력전_파티_캐릭터:LOCAL):체력 = MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"은")% {총력전_세나_힐량} 회복됐다!",칼라_노랑)
+		총력전_세나_지속힐:LOCAL --
+	ENDIF
+	IF 총력전_에이미_지속힐:LOCAL > 0
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 <= 0
+		CONTINUE
+		LOCAL:1 = (총력전_치유력:LOCAL / 2) + (MAXBASE:(총력전_파티_캐릭터:LOCAL):체력 - BASE:(총력전_파티_캐릭터:LOCAL):체력) * 30 / 100
+		BASE:(총력전_파티_캐릭터:LOCAL):체력 += LOCAL:1
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 > MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+		BASE:(총력전_파티_캐릭터:LOCAL):체력 = MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"은")% {LOCAL:1} 회복됐다!",칼라_노랑)
+		총력전_에이미_지속힐:LOCAL --
+	ENDIF
+	IF 총력전_츠쿠요_지속힐:LOCAL > 0
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 <= 0
+		CONTINUE
+		LOCAL:1 = (총력전_치유력:LOCAL * 112 / 100)
+		BASE:(총력전_파티_캐릭터:LOCAL):체력 += LOCAL:1
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 > MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+		BASE:(총력전_파티_캐릭터:LOCAL):체력 = MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"은")% {LOCAL:1} 회복됐다!",칼라_노랑)
+		총력전_츠쿠요_지속힐:LOCAL --
+	ENDIF
+	IF 총력전_아츠코_지속힐:LOCAL > 0
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 <= 0
+		CONTINUE
+		BASE:(총력전_파티_캐릭터:LOCAL):체력 += 총력전_아츠코_힐량
+		SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 > MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+		BASE:(총력전_파티_캐릭터:LOCAL):체력 = MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"은")% {총력전_아츠코_힐량} 회복됐다!",칼라_노랑)
+		총력전_아츠코_지속힐:LOCAL --
+	ENDIF
+NEXT
+
+@지속대미지처리
+FOR LOCAL, 0, 10
+	IF LOCAL >= 5
+		LOCAL:1 = LOCAL - 5
+		IF 총력전_비나_화상:LOCAL > 0
+			총력전_소환물체력:(LOCAL:1) -= 총력전_보스_무투 / 2
+			총력전_비나_화상:LOCAL --
+			IF 총력전_소환물체력:(LOCAL:1) <= 0
+				총력전_소환물체력:(LOCAL:1) = 0
+				총력전_비나_화상:LOCAL = 0
+			ENDIF
+		ENDIF
+	ELSE
+		SIF 총력전_파티_캐릭터:LOCAL < 0
+		CONTINUE
+		IF 총력전_비나_화상:LOCAL > 0
+			BASE:(총력전_파티_캐릭터:LOCAL):체력 -= 총력전_보스_무투 / 2
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"은")% 화상으로 {총력전_보스_무투 / 2} 대미지를 받았다",칼라_빨강)
+			총력전_비나_화상:LOCAL --
+			IF BASE:(총력전_파티_캐릭터:LOCAL):체력 <= 0
+				BASE:(총력전_파티_캐릭터:LOCAL):체력 = 0
+				CALL 전투불능처리(LOCAL)
+			ENDIF
+		ENDIF
+	ENDIF
+NEXT
+
+@상대지속대미지처리
+;구조적으로는 문제가 있는데 작동에는 문제가 전혀 없어서 수정 안함
+	;메루화상대미지
+	IF 총력전_보스_디버프:1423 > 0
+		총력전_보스_현재체력 -= 메루화상대미지
+		총력전_보스_디버프:1423 --
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 화상으로 {메루화상대미지} 대미지를 받았다!")
+		SIF 총력전_보스_디버프:1423 == 0
+		총력전_보스_디버프대미지 -= 메루화상대미지
+	ENDIF
+	;모모이화상대미지
+	IF 총력전_보스_디버프:1117 > 0
+		총력전_보스_현재체력 -= 모모이화상대미지
+		총력전_보스_디버프:1117 --
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 화상으로 {모모이화상대미지} 대미지를 받았다!")
+		SIF 총력전_보스_디버프:1117 == 0
+		총력전_보스_디버프대미지 -= 모모이화상대미지
+	ENDIF
+	;사키화상대미지
+	IF 총력전_보스_디버프:1501 > 0
+		총력전_보스_현재체력 -= 사키화상대미지
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 화상으로 {사키화상대미지} 대미지를 받았다!")
+		SIF 총력전_보스_디버프:1501 == 0
+		총력전_보스_디버프대미지 -= 사키화상대미지
+	ENDIF
+	;미도리중독대미지
+	IF 총력전_보스_디버프:2116 > 0
+		총력전_보스_현재체력 -= 미도리중독대미지
+		총력전_보스_디버프:2116 --
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 중독으로 {미도리중독대미지} 대미지를 받았다!")
+		SIF 총력전_보스_디버프:2116 == 0
+		총력전_보스_디버프대미지 -= 미도리중독대미지
+	ENDIF
+	;치세화상대미지
+	IF 총력전_보스_디버프:1301 > 0
+		총력전_보스_현재체력 -= 치세화상대미지
+		총력전_보스_디버프:1301 --
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 화상으로 {치세화상대미지} 대미지를 받았다!")
+		SIF 총력전_보스_디버프:1301 == 0
+		총력전_보스_디버프대미지 -= 치세화상대미지
+	ENDIF
+	;시구레화상대미지
+	IF 총력전_보스_디버프:1305 > 0
+		총력전_보스_현재체력 -= 시구레화상대미지
+		총력전_보스_디버프:1305 --
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 화상으로 {시구레화상대미지} 대미지를 받았다!")
+		SIF 총력전_보스_디버프:1305 == 0
+		총력전_보스_디버프대미지 -= 시구레화상대미지
+	ENDIF
+	;모에화상대미지
+	IF 총력전_보스_디버프:1401 > 0
+		총력전_보스_현재체력 -= 모에화상대미지
+		총력전_보스_디버프:1401 --
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 화상으로 {모에화상대미지} 대미지를 받았다!")
+		SIF 총력전_보스_디버프:1401 == 0
+		총력전_보스_디버프대미지 -= 모에화상대미지
+	ENDIF
+	;사야중독대미지
+	IF 총력전_보스_디버프:1402 > 0
+		총력전_보스_현재체력 -= 사야중독대미지
+		총력전_보스_디버프:1402 --
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 중독으로 {사야중독대미지} 대미지를 받았다!")
+		SIF 총력전_보스_디버프:1402 == 0
+		총력전_보스_디버프대미지 -= 사야중독대미지
+	ENDIF
+	;미사키화상대미지
+	IF 총력전_보스_디버프:1801 > 0
+		총력전_보스_현재체력 -= 미사키화상대미지
+		총력전_보스_디버프:1801 --
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 화상으로 {미사키화상대미지} 대미지를 받았다!")
+		SIF 총력전_보스_디버프:1801 == 0
+		총력전_보스_디버프대미지 -= 미사키화상대미지
+	ENDIF
+	;주리중독대미지
+	IF 총력전_보스_디버프:1903 > 0
+		총력전_보스_현재체력 -= 주리중독대미지
+		총력전_보스_디버프:1903 --
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 중독으로 {주리중독대미지} 대미지를 받았다!")
+		SIF 총력전_보스_디버프:1903 == 0
+		총력전_보스_디버프대미지 -= 주리중독대미지
+	ENDIF
+	;미치루화상대미지
+	IF 총력전_보스_디버프:1905 > 0
+		총력전_보스_현재체력 -= 미치루화상대미지
+		총력전_보스_디버프:1905 --
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 화상으로 {미치루화상대미지} 대미지를 받았다!")
+		SIF 총력전_보스_디버프:1905 == 0
+		총력전_보스_디버프대미지 -= 미치루화상대미지
+	ENDIF
+	;렌게화상대미지
+	IF 총력전_보스_디버프:2120 > 0
+		총력전_보스_현재체력 -= 렌게화상대미지
+		총력전_보스_디버프:2120 --
+		CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 화상으로 {렌게화상대미지} 대미지를 받았다!")
+		SIF 총력전_보스_디버프:2120 == 0
+		총력전_보스_디버프대미지 -= 렌게화상대미지
+	ENDIF
+;기타 턴 시작시 필요한 처리
+@턴시작처리
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	;미노리스킬 코스트 증가처리
+	IF TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 == 126
+		SIF 총력전_스킬_코스트 >= 7
+		총력전_캐릭터_스킬코스트:LOCAL = 7
+		SIF 총력전_스킬_코스트 == 6
+		총력전_캐릭터_스킬코스트:LOCAL = 6
+		SIF 총력전_스킬_코스트 == 5
+		총력전_캐릭터_스킬코스트:LOCAL = 5
+		SIF 총력전_스킬_코스트 <= 4
+		총력전_캐릭터_스킬코스트:LOCAL = 4
+	ENDIF
+	;이부키 토라마루 스킬
+	IF TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 == 120
+		;토라마루 존재유무 확인
+		FOR COUNT, 0, 5
+			IF 총력전_소환물이름:COUNT == "토라마루"
+				가변스킬관리:LOCAL = 1
+				BREAK
+			ENDIF
+			가변스킬관리:LOCAL = 0
+		NEXT
+	ENDIF
+NEXT
+@아군패시브처리
+FOR LOCAL, 0, 총력전_파티_캐릭터수
+	IF TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 == 1106
+		CALL 총력전_전투_텍스트_추가(@"『모두 집중하세요!』 발동",칼라_노랑)
+		총력전_스킬_코스트 += 3
+		CALL 총력전_전투_텍스트_추가(@"스킬 코스트 3증가!",칼라_노랑)
+	ENDIF
+	IF TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 == 414
+		CALL 총력전_전투_텍스트_추가(@"『이것이 수염의 권위다!』 발동",칼라_노랑)
+		스킬_코스트_회복력 ++
+		CALL 총력전_전투_텍스트_추가(@"턴당 스킬 코스트 증가량이 증가한다")
+	ENDIF
+	IF TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 == 410
+		CALL 총력전_전투_텍스트_추가(@"『초천재병약미소녀해커의 진면목』 발동",칼라_노랑)
+		스킬_코스트_회복력 ++
+		CALL 총력전_전투_텍스트_추가(@"턴당 스킬 코스트 증가량이 증가한다")
+	ENDIF
+	IF TALENT:(총력전_파티_캐릭터:LOCAL):웨폰 == 1119
+	기원 = 1
+	ENDIF
+NEXT
+
+@보스패시브스킬처리(난이도)
+#DIM 난이도
+FOR LOCAL, 0, 총력전_보스_스킬갯수
+	SIF 총력전_보스_스킬쿨타임:LOCAL < 0
+	CALLFORM 총력전_보스_스킬_%총력전_보스_이름%_{LOCAL}_사용(난이도)
+NEXT
+
+@보스스킬처리(난이도)
+#DIM 난이도
+;사용할 스킬을 고르는 부분
+;번호가 낮은 스킬을 우선으로 사용, 사용할 수 있는 스킬이 여러개일 경우 번호가 낮은 스킬만 사용
+FOR LOCAL, 0, 총력전_보스_스킬갯수
+SIF 총력전_보스_스킬쿨타임:LOCAL == 0
+CALLFORM 총력전_보스_스킬_%총력전_보스_이름%_{LOCAL}_사용(난이도)
+NEXT
+
+@턴종료처리
+#DIM 대미지
+IF 총력전_턴수 <= 30
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+		;행동불능일 경우 넘김
+		SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
+		CONTINUE
+		;쿨타임 감소 처리
+		SIF 총력전_캐릭터_스킬쿨타임:LOCAL > 0
+		총력전_캐릭터_스킬쿨타임:LOCAL --
+		IF 총력전_캐릭터_스킬쿨타임:LOCAL == 0 && 총력전_캐릭터_스킬사용가능:LOCAL == 0
+		총력전_캐릭터_스킬사용가능:LOCAL = 1
+		총력전_캐릭터_스킬쿨타임:LOCAL = 2
+		ENDIF
+		;버프시간 감소 처리
+		;시미코 방어력버프
+		SIF 버프지속:LOCAL:1104 > 0
+		버프지속:LOCAL:1104 --
+		IF 버프지속:LOCAL:1104 == 0
+			FOR LOCAL:1, 0, 총력전_파티_캐릭터수
+				SIF 버프지속:(LOCAL:1):1104 != 0
+				CONTINUE
+				버프지속:(LOCAL:1):1104 = -1
+				총력전_방어력:(LOCAL:1) -= 총력전_최초방어력:LOCAL * 26 / 100
+			NEXT
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 방어력이 원래대로 돌아왔다")
+		ENDIF
+		;아스나 공속버프
+		SIF 버프지속:LOCAL:1109 > 0
+			버프지속:LOCAL:1109 --
+		SIF 버프지속:LOCAL:1109 == 2
+			총력전_회피율:LOCAL -= 43
+		IF 버프지속:LOCAL:1109 == 0
+			총력전_공격속도:LOCAL -= 57
+			버프지속:LOCAL:1109 = -1
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격속도가 원래대로 돌아왔다")
+		ENDIF
+		;세리카 공격력버프
+		IF 버프지속:LOCAL:1114 > 0
+			버프지속:LOCAL:1114 --
+			IF 버프지속:LOCAL:1114 == 0
+				총력전_공격력:LOCAL -= 67
+				총력전_공격속도:LOCAL -= 100
+				CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;이부키 공격력버프
+		SIF 버프지속:LOCAL:1120 > 0
+			버프지속:LOCAL:1120 --
+		IF 버프지속:LOCAL:1120 == 0
+			총력전_공격력:LOCAL -= 50
+			버프지속:LOCAL:1120 = -1
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+		ENDIF
+		;메구 공격력버프
+		IF 버프지속:LOCAL:1201 > 0
+			버프지속:LOCAL:1201 --
+			IF 버프지속:LOCAL:1201 == 0
+			총력전_공격력:LOCAL -= 20
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			총력전_공격속도:LOCAL -= 100
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격속도가 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;세나 공격력버프
+		IF 버프지속:LOCAL:1302 > 0
+			버프지속:LOCAL:1302 --
+			IF 버프지속:LOCAL:1302 == 0
+			;세나찾기
+			FOR COUNT, 0, 총력전_파티_캐릭터수
+				IF TALENT:(총력전_파티_캐릭터:COUNT):웨폰 == 302
+					LOCAL:1 = COUNT
+					BREAK
+				ENDIF
+			NEXT
+			총력전_쉴드:(LOCAL:1) -= MAXBASE:(총력전_파티_캐릭터:(LOCAL:1)):체력 * 25 / 100
+			SIF 총력전_쉴드:(LOCAL:1) < 0
+			총력전_쉴드:(LOCAL:1) = 0
+			총력전_공격력:LOCAL -= 22
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;유즈 치댐버프
+		IF 버프지속:LOCAL:1303 > 0
+			버프지속:LOCAL:1303 --
+			IF 버프지속:LOCAL:1303 == 0
+			총력전_치명타대미지:LOCAL -= 69
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 치명대미지가 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;미모리 공속버프
+		IF 버프지속:LOCAL:1405 > 0
+			버프지속:LOCAL:1405 --
+			IF 버프지속:LOCAL:1405 == 0
+			총력전_공격속도:LOCAL -= 38
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격속도가 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;코타마 공격력버프
+		IF 버프지속:LOCAL:1409 > 0
+			버프지속:LOCAL:1409 --
+			IF 버프지속:LOCAL:1409 == 0
+			총력전_공격력:LOCAL -= 47
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			총력전_명중률:LOCAL -= 25
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 명중률이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;히마리 공격력버프
+		IF 버프지속:LOCAL:1410 > 0
+			버프지속:LOCAL:1410 --
+			IF 버프지속:LOCAL:1410 == 0
+			총력전_공격력:LOCAL -= 105
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;키리노 회피율버프
+		IF 버프지속:LOCAL:1411 > 0
+			버프지속:LOCAL:1411 --
+			IF 버프지속:LOCAL:1411 == 0
+			총력전_회피율:LOCAL -= 30
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 회피율이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;마리 쉴드
+		IF 버프지속:LOCAL:1415 > 0
+			버프지속:LOCAL:1415 --
+			IF 버프지속:LOCAL:1415 == 0
+			;마리찾기
+			FOR COUNT, 0, 총력전_파티_캐릭터수
+				IF TALENT:(총력전_파티_캐릭터:COUNT):웨폰 == 415
+					LOCAL:1 = COUNT
+					BREAK
+				ENDIF
+			NEXT
+			총력전_쉴드:LOCAL -= 총력전_치유력:(LOCAL:1) * 328 /100
+			SIF 총력전_쉴드:LOCAL < 0
+			총력전_쉴드:LOCAL = 0
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 쉴드가 사라졌다")
+			ENDIF
+		ENDIF
+		;카에데 쉴드
+		IF 버프지속:LOCAL:1416 > 0
+			버프지속:LOCAL:1416 --
+			IF 버프지속:LOCAL:1416 == 0
+			;카에데찾기
+			FOR COUNT, 0, 총력전_파티_캐릭터수
+				IF TALENT:(총력전_파티_캐릭터:COUNT):웨폰 == 416
+					LOCAL:1 = COUNT
+					BREAK
+				ENDIF
+			NEXT
+			총력전_쉴드:LOCAL -= 총력전_치유력:(LOCAL:1) * 275 /100
+			SIF 총력전_쉴드:LOCAL < 0
+			총력전_쉴드:LOCAL = 0
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 쉴드가 사라졌다")
+			총력전_방어력:LOCAL -= 총력전_최초방어력:LOCAL * 20 / 100
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 방어력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;아코 치댐버프
+		IF 버프지속:LOCAL:1417 > 0
+			버프지속:LOCAL:1417 --
+			IF 버프지속:LOCAL:1417 == 0
+			총력전_치명타확률:LOCAL -= 40
+			총력전_치명타대미지:LOCAL -= 73
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 치명타확률과 치명대미지가 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;미나 버프
+		IF 버프지속:LOCAL:1420 > 0
+			버프지속:LOCAL:1420 --
+			IF 버프지속:LOCAL:1420 == 0
+			총력전_공격력:LOCAL -= 35
+			총력전_회피율:LOCAL -= 35
+			총력전_명중률:LOCAL -= 35
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력,명중률,회피율이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;나기사 치댐버프
+		IF 버프지속:LOCAL:1422 > 0
+			버프지속:LOCAL:1422 --
+			IF 버프지속:LOCAL:1422 == 0
+			총력전_치명타대미지:LOCAL -= 20
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 치명대미지가 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;카즈사 공격력버프
+		IF 버프지속:LOCAL:1504 > 0
+			버프지속:LOCAL:1504 --
+			IF 버프지속:LOCAL:1504 == 0
+			총력전_공격력:LOCAL -= 49
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;노노미 치댐버프
+		IF 버프지속:LOCAL:1505 > 0
+			버프지속:LOCAL:1505 --
+			IF 버프지속:LOCAL:1505 == 0
+			총력전_치명타대미지:LOCAL -= 30
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 치명대미지가 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;마키 공격력버프
+		IF 버프지속:LOCAL:1506 > 0
+			버프지속:LOCAL:1506 --
+			IF 버프지속:LOCAL:1506 == 0
+			총력전_공격력:LOCAL -= 54
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;피나 버프
+		IF 버프지속:LOCAL:1507 > 0
+			버프지속:LOCAL:1507 --
+			IF 버프지속:LOCAL:1507 == 0
+			총력전_공격력:LOCAL -= 46
+			총력전_공격속도:LOCAL -= 100
+			총력전_치명타확률:LOCAL -= 26
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력,공격속도,치명타확률이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;코유키 공격력버프
+		IF 버프지속:LOCAL:1511 > 0
+			버프지속:LOCAL:1511 --
+			IF 버프지속:LOCAL:1511 == 0
+			SIF 코유키랜덤 == 0
+			총력전_공격력:LOCAL -= 35
+			SIF 코유키랜덤 == 1
+			총력전_공격력:LOCAL -= 32
+			SIF 코유키랜덤 == 2
+			총력전_공격력:LOCAL -= 26
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;코토리 쉴드
+		IF 버프지속:LOCAL:1510 > 0
+			버프지속:LOCAL:1510 --
+			IF 버프지속:LOCAL:1510 == 0
+			;코토리찾기
+			FOR COUNT, 0, 총력전_파티_캐릭터수
+				IF TALENT:(총력전_파티_캐릭터:COUNT):웨폰 == 510
+					LOCAL:1 = COUNT
+					BREAK
+				ENDIF
+			NEXT
+			총력전_쉴드:LOCAL -= 총력전_치유력:(LOCAL:1) * 225 /100
+			SIF 총력전_쉴드:LOCAL < 0
+			총력전_쉴드:LOCAL = 0
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 쉴드가 사라졌다")
+			ENDIF
+		ENDIF
+		;아리스 치댐버프
+		IF 버프지속:LOCAL:1701 > 0
+			버프지속:LOCAL:1701 --
+			IF 버프지속:LOCAL:1701 == 0
+			SIF 아리스에너지 == 1
+			총력전_치명타확률:LOCAL -= 22
+			SIF 아리스에너지 == 2
+			총력전_치명타확률:LOCAL -= 33
+			SIF 아리스에너지 == 3
+			총력전_치명타확률:LOCAL -= 44
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 치명타확률이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;호시노 쉴드
+		IF 버프지속:LOCAL:1901 > 0
+			버프지속:LOCAL:1901 --
+			IF 버프지속:LOCAL:1901 == 0
+				총력전_쉴드:LOCAL -= MAXBASE:(총력전_파티_캐릭터:LOCAL):체력 * 35 / 100
+				SIF 총력전_쉴드:LOCAL < 0
+				총력전_쉴드:LOCAL = 0
+				CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 쉴드가 사라졌다")
+			ENDIF
+		ENDIF
+		;미네 명중률버프
+		IF 버프지속:LOCAL:1902 > 0
+			버프지속:LOCAL:1902 --
+			IF 버프지속:LOCAL:1902 == 0
+			총력전_명중률:LOCAL -= 26
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 명중률이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;츠루기 공격력버프
+		IF 버프지속:LOCAL:1907 > 0
+			버프지속:LOCAL:1907 --
+			SELECTCASE RAND:2
+			CASE 1
+			버프지속:LOCAL:1907 ++
+			CALL 총력전_전투_텍스트_추가(@"『기괴멸렬』 지속시간 증가",칼라_노랑)
+			CALL 총력전_전투_텍스트_추가(@"『격정』 발동",칼라_노랑)
+			BASE:(총력전_파티_캐릭터:LOCAL):체력 += 총력전_치유력:LOCAL * 240 /100
+			SIF BASE:(총력전_파티_캐릭터:LOCAL):체력 == MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+			BASE:(총력전_파티_캐릭터:LOCAL):체력 = MAXBASE:(총력전_파티_캐릭터:LOCAL):체력
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(ANAME(총력전_파티_캐릭터:LOCAL),"은")% {총력전_치유력:LOCAL * 240 /100} 회복됐다!",칼라_노랑)
+			ENDSELECT
+			IF 버프지속:LOCAL:1907 == 0
+				총력전_공격력:LOCAL -= 90
+				총력전_공격속도:LOCAL -= 100
+				CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;하루카 방어력버프
+		IF 버프지속:LOCAL:1908 > 0
+			버프지속:LOCAL:1908 --
+			IF 버프지속:LOCAL:1908 == 0
+			총력전_방어력:LOCAL -= 총력전_최초방어력:LOCAL * 36 / 100
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 방어력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;시즈코 명중률
+		IF 버프지속:LOCAL:1909 > 0
+			버프지속:LOCAL:1909 --
+			IF 버프지속:LOCAL:1909 == 0
+			총력전_명중률:LOCAL -= 21
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 명중률이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;도발지속
+		IF 도발지속:LOCAL > 0
+			도발지속:LOCAL --
+			IF 도발지속:LOCAL == 0
+				총력전_캐릭터상태:LOCAL = 총력전_캐릭터상태_보통
+				CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 도발상태가 사라졌다")
+			ENDIF
+		ENDIF
+		;불사지속
+		IF 불사지속:LOCAL > 0
+			불사지속:LOCAL --
+			IF 불사지속:LOCAL == 0
+				총력전_캐릭터상태:LOCAL = 총력전_캐릭터상태_보통
+				CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 불사상태가 사라졌다")
+			ENDIF
+		ENDIF
+		;유우카 쉴드
+		IF 버프지속:LOCAL:2003 > 0
+			버프지속:LOCAL:2003 --
+			IF 버프지속:LOCAL:2003 == 0
+				총력전_쉴드:LOCAL -= (총력전_치유력:LOCAL * 250 / 100)
+				SIF 총력전_쉴드:LOCAL < 0
+				총력전_쉴드:LOCAL = 0
+				CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 쉴드가 사라졌다")
+			ENDIF
+		ENDIF
+		;노도카 명중률버프
+		IF 버프지속:LOCAL:2006 > 0
+			버프지속:LOCAL:2006 --
+			IF 버프지속:LOCAL:2006 == 0
+			총력전_명중률:LOCAL -= 47
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 명중률이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;아스나 공속버프
+		IF 버프지속:LOCAL:2009 > 0
+			버프지속:LOCAL:2009 --
+			IF 버프지속:LOCAL:2009 == 0
+				총력전_공격속도:LOCAL -= 52
+				CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격속도가 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;미야코 방어력버프
+		IF 버프지속:LOCAL:2013 > 0
+			버프지속:LOCAL:2013 --
+			IF 버프지속:LOCAL:2013 == 0
+			총력전_방어력:LOCAL -= 총력전_최초방어력:LOCAL * 36 / 100
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 방어력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;하루나 공격력버프
+		IF 버프지속:LOCAL:2101 > 0
+			버프지속:LOCAL:2101 --
+			IF 버프지속:LOCAL:2101 == 0
+			총력전_공격력:LOCAL -= 20
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;우이 공격력버프
+		IF 버프지속:LOCAL:2103 > 0
+			버프지속:LOCAL:2103 --
+			IF 버프지속:LOCAL:2103 == 0
+			총력전_공격력:LOCAL -= 16
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;토모에 치댐버프
+		IF 버프지속:LOCAL:2104 > 0
+			버프지속:LOCAL:2104 --
+			IF 버프지속:LOCAL:2104 == 0
+			총력전_치명타확률:LOCAL -= 20
+			총력전_치명타대미지:LOCAL -= 20
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 치명타확률과 치명대미지가 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;슌 공격력버프
+		IF 버프지속:LOCAL:2106 > 0
+			버프지속:LOCAL:2106 --
+			IF 버프지속:LOCAL:2106 == 0
+			총력전_공격력:LOCAL -= 93
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;아루 치명타확률버프
+		IF 버프지속:LOCAL:2108 > 0
+			버프지속:LOCAL:2108 --
+			IF 버프지속:LOCAL:2108 == 0
+			총력전_치명타확률:LOCAL -= 38
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 치명대미지가 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;하스미 치명타대미지버프
+		IF 버프지속:LOCAL:2109 > 0
+			버프지속:LOCAL:2109 --
+			IF 버프지속:LOCAL:2109 == 0
+			총력전_치명타대미지:LOCAL -= 30
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 치명대미지가 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;후부키 공격력버프
+		IF 버프지속:LOCAL:2112 > 0
+			버프지속:LOCAL:2112 --
+			IF 버프지속:LOCAL:2112 == 0
+			총력전_공격력:LOCAL -= 100
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;키쿄 공격력버프
+		IF 버프지속:LOCAL:2118 > 0
+			버프지속:LOCAL:2118 --
+			IF 버프지속:LOCAL:2118 == 0
+			총력전_공격력:LOCAL -= 32
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+		;렌게 공격력버프
+		IF 버프지속:LOCAL:2120 > 0
+			버프지속:LOCAL:2120 --
+			IF 버프지속:LOCAL:2120 == 0
+			총력전_공격력:LOCAL -= 63
+			CALL 총력전_전투_텍스트_추가(@"%ANAME(총력전_파티_캐릭터:LOCAL)%의 공격력이 원래대로 돌아왔다")
+			ENDIF
+		ENDIF
+	NEXT
+	FOR LOCAL, 0, 총력전_파티_캐릭터수
+	;디버프시간 감소 처리
+	IF 총력전_비나_방어력감소:LOCAL > 0
+		총력전_비나_방어력감소:LOCAL --
+		IF 총력전_비나_방어력감소:LOCAL == 0
+			FOR COUNT, 0, 총력전_파티_캐릭터수
+				SIF 총력전_비나_방어력감소:COUNT == -1
+				CONTINUE
+				총력전_방어력:COUNT += 20
+				총력전_비나_방어력감소:COUNT = 0
+			NEXT
+			CALL 총력전_전투_텍스트_추가("감소한 방어력이 원래대로 돌아왔다")
+			BREAK
+		ENDIF
+	ENDIF
+	NEXT
+
+	;소환물 스킬
+	FOR LOCAL, 0, 5
+		SIF 소환물_지속시간:LOCAL > 0
+		소환물_지속시간:LOCAL --
+		IF 총력전_소환물이름:LOCAL == "토라마루"
+			IF 소환물_지속시간:LOCAL == 4 || 소환물_지속시간:LOCAL == 2 || 소환물_지속시간:LOCAL == 0
+				CALL 총력전_전투_텍스트_추가(@"『주포 조준, 발사』 발동",칼라_노랑)
+				대미지 = 주포대미지 * (100 - 총력전_보스_방어력) / 100
+				CALL 공격판정처리(대미지,LOCAL+5)
+			ENDIF
+		ENDIF
+		IF 소환물_지속시간:LOCAL == 0 && 총력전_소환물체력:LOCAL > 0
+			IF 총력전_소환물상태_대상지정:LOCAL == 1
+				;소환물이 타겟인 상태로 사라질때 타겟을 캐릭터로 옮김
+				FOR LOCAL:1, 0, 총력전_파티_캐릭터수
+					SIF 총력전_캐릭터상태_대상지정:(LOCAL:1) == 1
+					CONTINUE
+					총력전_캐릭터상태_대상지정:(LOCAL:1) = 1
+					BREAK
+				NEXT
+				총력전_소환물상태_대상지정:LOCAL = 0
+			ENDIF
+			총력전_소환물체력:(LOCAL) = 0
+			총력전_소환물상태:(LOCAL) = 0
+			소환물_지속시간:LOCAL = -1
+			IF 총력전_소환물이름:LOCAL == "폭죽 발사장치"
+				CALL 총력전_전투_텍스트_추가(@"『불꽃…… 놀이예요!』 발동",칼라_노랑)
+				CALL 공격판정처리(불꽃놀이대미지,LOCAL+5)
+			ENDIF
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_소환물이름:LOCAL,"이")% 사라졌다",칼라_선택불가)
+			총력전_소환물이름:(LOCAL) =
+		ENDIF
+	NEXT
+
+	;스킬 코스트 증가 처리
+	총력전_스킬_코스트 += 스킬_코스트_회복력
+	SIF 총력전_스킬_코스트 > 10
+	총력전_스킬_코스트 = 10
+	;상대 디버프 시간 감소 처리
+	;아즈사 방깎
+	IF 총력전_보스_디버프:1101 > 0
+		총력전_보스_디버프:1101 --
+		IF 총력전_보스_디버프:1101 == 0
+			총력전_보스_방어력 += 총력전_보스_최초방어력 * 24 / 100
+			CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 방어력이 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+	;치히로 스턴
+	IF 총력전_보스_디버프:1108 > 0
+		총력전_보스_디버프:1108 --
+		IF 총력전_보스_디버프:1108 == 0
+			총력전_보스상태 = 총력전_보스상태_보통
+			총력전_보스_기절저항값 = 총력전_보스_기절저항
+			총력전_보스_기절저항 = 총력전_보스_기절저항 * 2
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 기절상태에서 회복했다")
+		ENDIF
+	ENDIF
+	;스즈미 스턴
+	IF 총력전_보스_디버프:1110 > 0
+		총력전_보스_디버프:1110 --
+		IF 총력전_보스_디버프:1110 == 0
+			총력전_보스상태 = 총력전_보스상태_보통
+			총력전_보스_기절저항값 = 총력전_보스_기절저항
+			총력전_보스_기절저항 = 총력전_보스_기절저항 * 2
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 기절상태에서 회복했다")
+		ENDIF
+	ENDIF
+	;요시미 스턴
+	IF 총력전_보스_디버프:1112 > 0
+		총력전_보스_디버프:1112 --
+		IF 총력전_보스_디버프:1112 == 0
+			총력전_보스상태 = 총력전_보스상태_보통
+			총력전_보스_기절저항값 = 총력전_보스_기절저항
+			총력전_보스_기절저항 = 총력전_보스_기절저항 * 2
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 기절상태에서 회복했다")
+		ENDIF
+	ENDIF
+	;미야코 스턴
+	IF 총력전_보스_디버프:2013 > 0
+		총력전_보스_디버프:2013 --
+		IF 총력전_보스_디버프:2013 == 0
+			총력전_보스상태 = 총력전_보스상태_보통
+			총력전_보스_기절저항값 = 총력전_보스_기절저항
+			총력전_보스_기절저항 = 총력전_보스_기절저항 * 2
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 기절상태에서 회복했다")
+		ENDIF
+	ENDIF
+	;사쿠라코 추댐
+	IF 총력전_보스_디버프:1123 > 0
+		총력전_보스_디버프:1123 --
+	ENDIF
+	;칸나 축적댐
+	IF 총력전_보스_디버프:1404 > 0
+		총력전_보스_디버프:1404 --
+		IF 총력전_보스_디버프:1404 == 0
+			칸나축적대미지 = 칸나축적대미지 * (100 - 총력전_보스_방어력) / 100
+			총력전_보스_현재체력 -= 칸나축적대미지
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"은")% 축적된 대미지를 {칸나축적대미지} 받았다!")
+			칸나축적대미지 = 0
+		ENDIF
+	ENDIF
+	;와카모 축적댐
+	IF 총력전_보스_디버프:2113 > 0
+		총력전_보스_디버프:2113 --
+		IF 총력전_보스_디버프:2113 == 0
+			와카모축적대미지 = 와카모축적대미지 * (100 - 총력전_보스_방어력) / 100
+			총력전_보스_현재체력 -= 와카모축적대미지
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"은")% 축적된 대미지를 {와카모축적대미지} 받았다!")
+			와카모축적대미지 = 0
+		ENDIF
+	ENDIF
+	;노아 방깎
+	IF 총력전_보스_디버프:1407 > 0
+		총력전_보스_디버프:1407 --
+		IF 총력전_보스_디버프:1407 == 0
+			총력전_보스_방어력 += 총력전_보스_최초방어력 * 40 / 100
+			CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 방어력이 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+	;아카네 방깎
+	IF 총력전_보스_디버프:1412 > 0
+		총력전_보스_디버프:1412 --
+		IF 총력전_보스_디버프:1412 == 0
+			총력전_보스_방어력 += 총력전_보스_최초방어력 * 37 / 100
+			CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 방어력이 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+	;체리노 치댐저깎
+	IF 총력전_보스_디버프:1414 > 0
+		총력전_보스_디버프:1414 --
+		IF 총력전_보스_디버프:1414 == 0
+			총력전_보스_치명대미지저항 += 35
+			CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 치명대미지저항이 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+	;카요코 추댐
+	IF 총력전_보스_디버프:1418 > 0
+		총력전_보스_디버프:1418 --
+	ENDIF
+	;미나 공깎
+	IF 총력전_보스_디버프:1420 > 0
+		총력전_보스_디버프:1420 --
+		IF 총력전_보스_디버프:1420 == 0
+			총력전_보스_무투 += 총력전_보스_최초무투 * 30 / 100
+			CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 공격력이 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+	;카스미 방깎
+	IF 총력전_보스_디버프:1421 > 0
+		총력전_보스_디버프:1421 --
+		IF 총력전_보스_디버프:1421 == 0
+			총력전_보스_방어력 += 총력전_보스_최초방어력 * 37 / 100
+			CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 방어력이 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+	;나기사 방깎
+	IF 총력전_보스_디버프:1422 > 0
+		총력전_보스_디버프:1422 --
+		IF 총력전_보스_디버프:1422 == 0
+			총력전_보스_방어력 += 총력전_보스_최초방어력 * 40 / 100
+			CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 방어력이 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+	;사키 스턴
+	IF 총력전_보스_디버프:1501 > 0
+		총력전_보스_디버프:1501 --
+		IF 총력전_보스_디버프:1501 == 2 && 총력전_보스상태 == 총력전_보스상태_기절
+			총력전_보스상태 = 총력전_보스상태_보통
+			총력전_보스_기절저항값 = 총력전_보스_기절저항
+			총력전_보스_기절저항 = 총력전_보스_기절저항 * 2
+			CALL 총력전_전투_텍스트_추가(@"%조사처리(총력전_보스_이름,"이")% 기절상태에서 회복했다")
+		ENDIF
+	ENDIF
+	;마키 방깎
+	IF 총력전_보스_디버프:1506 > 0
+		총력전_보스_디버프:1506 --
+		IF 총력전_보스_디버프:1506 == 0
+			총력전_보스_방어력 += 총력전_보스_최초방어력 * 34 / 100
+			CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 방어력이 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+	;아이리 공깎
+	IF 총력전_보스_디버프:2007 > 0
+		총력전_보스_디버프:2007 --
+		IF 총력전_보스_디버프:2007 == 0
+			총력전_보스_무투 += 총력전_보스_최초무투 * 26 / 100
+			CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 공격력이 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+	;히요리 방깎
+	IF 총력전_보스_디버프:2107 > 0
+		총력전_보스_디버프:2107 --
+		IF 총력전_보스_디버프:2107 == 0
+			;아리우스 스쿼드 찾기
+			FOR COUNT, 0, 총력전_파티_캐릭터수
+			SIF 총력전_파티_캐릭터:COUNT == 113 || 총력전_파티_캐릭터:COUNT == 114 || 총력전_파티_캐릭터:COUNT == 115 || 총력전_파티_캐릭터:COUNT == 116
+			LOCAL:1 ++
+			NEXT
+			LOCAL:2 = 30
+			SIF LOCAL:1 >= 2
+			LOCAL:2 = 51
+			총력전_보스_방어력 += 총력전_보스_최초방어력 * LOCAL:2 / 100
+			CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 방어력이 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+	;마코토 방깎
+	IF 총력전_보스_디버프:2117 > 0
+		총력전_보스_디버프:2117 --
+		IF 총력전_보스_디버프:2117 == 0
+			총력전_보스_방어력 += 총력전_보스_최초방어력 * 15 / 100
+			CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 방어력이 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+	;키쿄 방깎
+	IF 총력전_보스_디버프:2118 > 0
+		총력전_보스_디버프:2118 --
+		IF 총력전_보스_디버프:2118 == 0
+			총력전_보스_방어력 += 총력전_보스_최초방어력 * 28 / 100
+			CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름%의 방어력이 원래대로 돌아왔다")
+		ENDIF
+	ENDIF
+	IF 총력전_보스_디버프:2102 > 0
+		총력전_보스_디버프:2102 --
+	ENDIF
+	;보스 디버프 저항값 감소 처리
+	SIF 총력전_보스_기절저항값 > 0
+	총력전_보스_기절저항값 --
+
+	;보스 스킬 쿨타임 감소 처리
+	FOR LOCAL, 0, 총력전_보스_스킬갯수
+		SIF 총력전_보스_스킬쿨타임:LOCAL > 0
+		총력전_보스_스킬쿨타임:LOCAL --
+	NEXT
+
+
+	총력전_턴수 ++
+ENDIF
+
+@최초변수초기화
+FOR LOCAL, 0, 5
+	;스킬변수 초기화
+	총력전_하나코_지속힐:LOCAL = -1
+	버프지속:LOCAL:1104 = -1
+	버프지속:LOCAL:1108 = -1
+	버프지속:LOCAL:1109 = -1
+	버프지속:LOCAL:1120 = -1
+NEXT
+스킬_코스트_회복력 = 3
+기원 = -1
+;카스미스킬 횟수 초기화
+CALL 총력전_스킬_1421_발동(0,1)
+총력전_파티_캐릭터수 = 0
+
+;ARG:0 = 토벌 성공유무 ARG = 1 일때 성공 2일때 실패 3,4는 중단 아무것도 안넣으면 초기화만
+@토벌_종료_시퀀스(ARG = 0)
+CALL 총력전_전투_텍스트_추가("---------------------------------------------------------------------------------------------------------")
+IF ARG == 1
+CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름% 토벌에 성공했다!",칼라_파파랑)
+;여기에 보상 추가해야함
+;CALL 총력전_전투_텍스트_추가(@"보상~~~",칼라_파파랑)
+;CALL 총력전_전투_텍스트_추가(@"%텍스트~~~",칼라_파파랑)
+ELSEIF ARG == 2
+CALL 총력전_전투_텍스트_추가(@"%총력전_보스_이름% 토벌에 실패했다...",칼라_파빨강)
+ELSEIF ARG == 3 || ARG == 4
+CALL 총력전_전투_텍스트_추가(@"토벌을 중단했습니다")
+ENDIF
+CALL 총력전_전투_텍스트_추가("---------------------------------------------------------------------------------------------------------")
+;로그 초기화
+FOR LOCAL, 0, 총력전전투텍스트최대행수
+	총력전전투텍스트:LOCAL = 
+NEXT
+
+FOR LOCAL, 0, 5
+	;캐릭터에 관련된 변수 초기화
+	총력전_파티_캐릭터:LOCAL = -1
+	총력전_캐릭터상태_대상지정:LOCAL = 0
+	총력전_캐릭터상태:LOCAL = 총력전_캐릭터상태_보통
+	총력전_캐릭터_스킬사용가능:LOCAL = 1
+	총력전_캐릭터_스킬쿨타임:LOCAL = 2
+	총력전_캐릭터_선택스킬:LOCAL = 0
+	가변스킬관리:LOCAL = 0
+	가변스킬횟수관리:LOCAL = 0
+	총력전_추가공격:LOCAL = 0
+	총력전_공격속도:LOCAL = 0
+	;버프 관련 변수 초기화
+	지속치유량:LOCAL = 0
+	총력전_하나코_지속힐:LOCAL = -1
+	버프지속:LOCAL:1104 = -1
+	버프대상선택:LOCAL = 0
+	;상대 디버프 관련 변수 초기화
+	버프지속:LOCAL:1108 = -1
+	;소환물 관련 변수 초기화
+	총력전_소환물체력:LOCAL = 0
+	총력전_소환물이름:LOCAL =
+	총력전_소환물상태_대상지정:LOCAL = 0
+NEXT
+;소환물 초기화
+FOR LOCAL, 0, 5
+	소환물_지속시간:LOCAL = -1
+NEXT
+
+;소환물도 적용받는 디버프 변수 초기화
+FOR LOCAL, 0, 10
+	총력전_비나_화상:LOCAL = -1
+NEXT
+
+;보스에 관련된 변수 초기화
+FOR LOCAL, 0, 총력전_보스_스킬갯수
+	총력전_보스_스킬이름:LOCAL = 
+	총력전_보스_스킬쿨타임:LOCAL = 0
+	총력전_보스_스킬발동:LOCAL = 0
+NEXT
+총력전_보스_스킬갯수 = 0
+
+;기타 변수 초기화
+아리스에너지 = 0
+총력전_파티_캐릭터수 = 0
+총력전_스킬_코스트 = 5
+총력전_캐릭터_선택스킬코스트 = 0
+총력전_캐릭터_선택스킬개수 = 0
+스킬설명변수 = 0
+총력전_턴수 = 1
+총력전_전투단계 = 총력전_전투단계_최초단계
+총력전_엄폐물 = 0
+총력전표시행수 = 183
+총력전전투텍스트최대행수 = 200
+총력전_보스상태 = 0
+총력전_보스_기절저항 = 2
+총력전_보스_기절저항값 = 0
+총력전나가기플래그 = 0
+;상대 디버프 변수 초기화
+FOR COUNT, 0, 3000
+	총력전_보스_디버프:COUNT = 0
+NEXT
+칸나축적대미지 = 0
+
+;클리어할경우, 클리어 실패한 경우
+SIF ARG == 1 || ARG == 2
+총력전클리어플래그 = 1
+;중단했지만 3턴이 넘은경우
+SIF ARG == 3
+총력전클리어플래그 = 1
+
+INPUT

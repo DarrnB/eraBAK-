@@ -113,3 +113,16 @@ FOR LOCAL, 0, BATTLE_COMMANDER_NUM:발동측
 	ENDIF
 NEXT
 RETURNF 0
+
+@총력전_스킬_1124_코스트
+RETURN 5
+
+@총력전_스킬_1124_설명
+RESULTS = 적에게 공격력 1500％ 대미지
+
+@총력전_스킬_1124_발동(LOCAL)
+#DIM 대미지
+#DIM 막타대미지
+대미지 = (총력전_공격력:LOCAL * 1500 / 100) * (100 - 총력전_보스_방어력) / 100
+
+CALL 공격판정처리(대미지,LOCAL)
