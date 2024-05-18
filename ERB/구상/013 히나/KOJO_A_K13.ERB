@@ -6345,53 +6345,56 @@ ENDIF
 ;야한 이야기를 한다
 ;-------------------------------------------------
 IF SELECTCOM == 309
-	;이 캐릭터가 주도권을 가지고 있다
-	IF IS_INITIATIVE(TARGET)
-	;이 캐릭터가 주도권을 가지고 있지 않다
-	ELSE
-		;처음
-		IF IS_COM_FIRST()
-			PRINTFORMW 「무,무슨 소리를 하는거야!」
-		;2회째 이후
+	IF TFLAG:17
+		;이 캐릭터가 주도권을 가지고 있다
+		IF IS_INITIATIVE(TARGET)
+		;이 캐릭터가 주도권을 가지고 있지 않다
 		ELSE
-			;연인 혹은 친애
-			IF TALENT:연모 && TALENT:연인 || TALENT:친애
-				SELECTCASE RAND:4
-					CASE 0
-						PRINTFORMW 「정말 선생님은...」
-						IF !TALENT:처녀
-							PRINTFORMW 「오늘은 시간 괜찮으니까...」
-						ENDIF
-					CASE 1
-						IF !TALENT:키스미경험
-							PRINTFORMW 　창피한 이야기를 꺼내자 히나는 부끄러워 하는듯 하면서도 이쪽으로 달려들었다.
-							PRINTFORMW 「응츄, 푸아, 하앗, 하아… 다 선생님 때문이니까… 이런 야한 아이는 싫어…?」
-							EXP:(MPLY:0):키스경험 += 1
-							EXP:(MTAR:0):키스경험 += 1
-						ENDIF
-					CASE 2
-						PRINTFORMW 「이런거 다른 학생한텐 절대 안되니까… 알겠지?」
-					CASE 3
-						PRINTFORMW 「정말 %조사처리(ANAME(MASTER),"은")% 이런 이야기를 아무렇지도 않게…」
-						PRINTFORMW 　히나는 얼굴을 붉히며 시선을 피했다
-				ENDSELECT
-			;연모지만 연인은 아닌 경우
-			ELSEIF TALENT:연모 && !TALENT:연인
-				SELECTCASE RAND:3
-					CASE 0
-						PRINTFORMW 「으읏… 그, 그쯤 해둬 선생님」
-					CASE 1
-						PRINTFORMW 「하, 학생한테 무슨 소리를 하는거야 선생님…!」
-					CASE 2
-						PRINTFORMW 「무,무슨 소리를 하는거야!」
-						PRINTFORMW 「그... 그런거 아직 이르다고...」
-				ENDSELECT
-			;그 이외
+			;처음
+			IF IS_COM_FIRST()
+				PRINTFORMW 「무,무슨 소리를 하는거야!」
+			;2회째 이후
 			ELSE
-				PRINTFORMW 「그만둬 선생이 학생에게 무슨 말을 하는거야..!」
-				PRINTFORMW 「%ANAME(MASTER)%의 정조관은 대체..」
+				;연인 혹은 친애
+				IF TALENT:연모 && TALENT:연인 || TALENT:친애
+					SELECTCASE RAND:4
+						CASE 0
+							PRINTFORMW 「정말 선생님은...」
+							IF !TALENT:처녀
+								PRINTFORMW 「오늘은 시간 괜찮으니까...」
+							ENDIF
+						CASE 1
+							IF !TALENT:키스미경험
+								PRINTFORMW 　창피한 이야기를 꺼내자 히나는 부끄러워 하는듯 하면서도 이쪽으로 달려들었다.
+								PRINTFORMW 「응츄, 푸아, 하앗, 하아… 다 선생님 때문이니까… 이런 야한 아이는 싫어…?」
+								EXP:(MPLY:0):키스경험 += 1
+								EXP:(MTAR:0):키스경험 += 1
+							ENDIF
+						CASE 2
+							PRINTFORMW 「이런거 다른 학생한텐 절대 안되니까… 알겠지?」
+						CASE 3
+							PRINTFORMW 「정말 %조사처리(ANAME(MASTER),"은")% 이런 이야기를 아무렇지도 않게…」
+							PRINTFORMW 　히나는 얼굴을 붉히며 시선을 피했다
+					ENDSELECT
+				;연모지만 연인은 아닌 경우
+				ELSEIF TALENT:연모 && !TALENT:연인
+					SELECTCASE RAND:3
+						CASE 0
+							PRINTFORMW 「으읏… 그, 그쯤 해둬 선생님」
+						CASE 1
+							PRINTFORMW 「하, 학생한테 무슨 소리를 하는거야 선생님…!」
+						CASE 2
+							PRINTFORMW 「무,무슨 소리를 하는거야!」
+							PRINTFORMW 「그... 그런거 아직 이르다고...」
+					ENDSELECT
+				;그 이외
+				ELSE
+					PRINTFORMW 「그만둬 선생이 학생에게 무슨 말을 하는거야..!」
+					PRINTFORMW 「%ANAME(MASTER)%의 정조관은 대체..」
+				ENDIF
 			ENDIF
 		ENDIF
+	ELSE
 	ENDIF
 ENDIF
 
