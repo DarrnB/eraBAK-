@@ -65,8 +65,11 @@ RETURN 1
 #DIM 대상부대
 대상측 = !발동측
 ; PRINTFORML "이, 이건 압수한 물건이니까~!"
+LOCAL = ABL:발동자:성지식
+SIF LOCAL == 0
+LOCAL = 1
 CALL DECREASE_SOLDIER(대상세력, 대상부대, RAND(ABL:발동자:무투*5, ABL:발동자:무투*10), 1)
-CALL INCREASE_SOLDIER(발동세력, 발동부대, RAND(ABL:발동자:성지식*200, ABL:발동자:성지식*300), 1)
+CALL INCREASE_SOLDIER(발동세력, 발동부대, RAND(LOCAL*200, LOCAL*300), 1)
 
 
 @SKILL_2110_SP_0_EXPLANATION
