@@ -125,7 +125,6 @@ INPUT
 보스 = RESULT
 CLEARLINE LINECOUNT - FIRST_LINE
 CALL 난이도설정(보스)
-
 ;-------------------------------------------------
 ;「총력전」 난이도 설정
 ;-------------------------------------------------
@@ -280,6 +279,7 @@ IF RESULT == 1000
 ELSEIF RESULT == 1002
 	IF 배치완료 == 1
 	CALL 총력전_실행(보스)
+	CALL SYSTEM_AUTOSAVE
 	RETURN
 	ELSE
 	PRINTW 편성을 끝내야 합니다.
