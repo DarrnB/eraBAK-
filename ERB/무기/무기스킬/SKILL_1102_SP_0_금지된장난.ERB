@@ -67,8 +67,11 @@ RETURN 1
 ; PRINTFORML "어디⋯어머?! ⋯우후훗."
 ; PRINTFORML 하나코의 가슴을 본 병사들이 회복되었다!
 LOCAL:1 = RAND(1, 4)
+LOCAL:2 = ABL:발동자:성지식
+SIF LOCAL:2 == 0
+LOCAL:2 = 1
 FOR LOCAL, 0, LOCAL:1
-	CALL INCREASE_SOLDIER(발동세력, 발동부대, RAND(ABL:발동자:성지식*100, ABL:발동자:성지식*180), 1)
+	CALL INCREASE_SOLDIER(발동세력, 발동부대, RAND(LOCAL:2*100, LOCAL:2*180), 1)
 NEXT
 
 
