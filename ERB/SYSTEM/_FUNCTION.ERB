@@ -63,6 +63,12 @@ CALL SKILL_INIT(ARG:0)
 CALL CLOTH_INIT(ARG:0)
 
 CALL WEAPON_INIT(ARG:0)
+;모든 캐릭터 장비 초기화
+FOR LOCAL, 0, 200
+	FOR COUNT, 0, 3
+		착용장비:LOCAL:COUNT = -1
+	NEXT
+NEXT
 
 ;범용 캐릭터라면 구상 패턴을 설정
 IF IS_CHILD(ARG:0) || IS_RANDOM_CHARA(ARG:0)
@@ -3031,6 +3037,8 @@ RETURN CHARANUM - 1
 #FUNCTION
 #DIMS 랭크
 SELECTCASE 랭크
+	CASE "R"
+		RETURNF 0XFFFFFF
 	CASE "S"
 		RETURNF 칼라_파보라
 	CASE "A"
@@ -3077,17 +3085,17 @@ RESETCOLOR
 #DIMS 랭크
 SELECTCASE 분류
 	CASE 랭크_ＳＬＧ
-		FOR LOCAL, 랭크_S, 랭크_무 + 1
+		FOR LOCAL, 랭크_S, 랭크_R + 1
 			SIF 치 >= 랭크역치:랭크_ＳＬＧ:LOCAL
 				RETURNF 랭크문자열:LOCAL
 		NEXT
 	CASE 랭크_부대
-		FOR LOCAL, 랭크_S, 랭크_무
+		FOR LOCAL, 랭크_S, 랭크_R
 			SIF 치 >= 랭크역치:랭크_부대:LOCAL
 				RETURNF 랭크문자열:LOCAL
 		NEXT
 	CASE 랭크_그외
-		FOR LOCAL, 랭크_S, 랭크_무
+		FOR LOCAL, 랭크_S, 랭크_R
 			SIF 치 >= 랭크역치:랭크_그외:LOCAL
 				RETURNF 랭크문자열:LOCAL
 		NEXT

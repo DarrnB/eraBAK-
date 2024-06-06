@@ -1,0 +1,836 @@
+﻿@장비이름(ARG)
+#FUNCTIONS
+SELECTCASE ARG
+	CASE -1
+		LOCALS = 없음
+	CASE 0
+		LOCALS = 무지 캡모자
+	CASE 1
+		LOCALS = 스포츠용 장갑
+	CASE 2
+		LOCALS = 핑크 스니커즈
+	CASE 3
+		LOCALS = 방수 스포츠백
+	CASE 4
+		LOCALS = 서벌 금속 배지
+	CASE 5
+		LOCALS = 테니스 헤어밴드
+	CASE 6
+		LOCALS = 교통안전 부적
+	CASE 7
+		LOCALS = 방수 디지털 시계
+	CASE 8
+		LOCALS = 블루투스 목걸이
+	CASE 9
+		LOCALS = 니트 털모자
+	CASE 10
+		LOCALS = 니트 벙어리 장갑
+	CASE 11
+		LOCALS = 어그 부츠
+	CASE 12
+		LOCALS = 방한용 크로스백
+	CASE 13
+		LOCALS = 마나슬루 펠트 배지
+	CASE 14
+		LOCALS = 헤어 슈슈
+	CASE 15
+		LOCALS = 발열팩
+	CASE 16
+		LOCALS = 가죽 손목 시계
+	CASE 17
+		LOCALS = 눈꽃 펜던트
+	CASE 18
+		LOCALS = 빅 브라더 페도라
+	CASE 19
+		LOCALS = 페로로 오븐 장갑
+	CASE 20
+		LOCALS = 핑키파카 슬리퍼
+	CASE 21
+		LOCALS = 페로로 백팩
+	CASE 22
+		LOCALS = 앵그리 아델리 원형 배지
+	CASE 23
+		LOCALS = 모모 헤어핀
+	CASE 24
+		LOCALS = 페로로의 깃털
+	CASE 25
+		LOCALS = 웨이브캣 손목시계
+	CASE 26
+		LOCALS = 니콜라이 로켓
+	CASE 27
+		LOCALS = 리본 베레모
+	CASE 28
+		LOCALS = 가죽 글러브
+	CASE 29
+		LOCALS = 엔티크 에나멜 로퍼
+	CASE 30
+		LOCALS = 감색 스쿨백
+	CASE 31
+		LOCALS = 베로니카 자수 배지
+	CASE 32
+		LOCALS = 날개 헤어핀
+	CASE 33
+		LOCALS = 십자가
+	CASE 34
+		LOCALS = 엔티크 회중 시계
+	CASE 35
+		LOCALS = 십자가 초커
+	CASE 36
+		LOCALS = 방탄 헬멧
+	CASE 37
+		LOCALS = 택티컬 글러브
+	CASE 38
+		LOCALS = 전술 부츠
+	CASE 39
+		LOCALS = 전술 란도셀
+	CASE 40
+		LOCALS = 카제야마 벨크로 패치
+	CASE 41
+		LOCALS = 다목적 헤어핀
+	CASE 42
+		LOCALS = 카모 달마
+	CASE 43
+		LOCALS = 방진 손목 시계
+	CASE 44
+		LOCALS = 도그택	
+	CASE 45
+		LOCALS = 프릴 미니 햇
+	CASE 46
+		LOCALS = 레이스 글러브
+	CASE 47
+		LOCALS = 펌프스 힐
+	CASE 48
+		LOCALS = 데빌 윙 토트백
+	CASE 49
+		LOCALS = 코코데빌 실버 배지
+	CASE 50
+		LOCALS = 박쥐 헤어핀
+	CASE 51
+		LOCALS = 저주 인형
+	CASE 52
+		LOCALS = 고딕풍 손목 시계
+	CASE 53
+		LOCALS = 펑크초커
+	CASE 54
+		LOCALS = 버킷 햇
+	CASE 55
+		LOCALS = 팔 토시
+	CASE 56
+		LOCALS = 캐주얼 스니커즈
+	CASE 57
+		LOCALS = 스트릿 백
+	CASE 58
+		LOCALS = 스트릿 배지
+	CASE 59
+		LOCALS = 캘리그라피 헤어핀
+	CASE 60
+		LOCALS = 휴대용 탈취제
+	CASE 61
+		LOCALS = 스트릿 패션 시계
+	CASE 62
+		LOCALS = 체인 목걸이
+	CASE 63
+		LOCALS = 리프 리본 페도라
+	CASE 64
+		LOCALS = 진주 털실 장갑
+	CASE 65
+		LOCALS = 방수 등산 부츠
+	CASE 66
+		LOCALS = 버터플라이 숄더백
+	CASE 67
+		LOCALS = 로렐라이 배지
+	CASE 68
+		LOCALS = 나뭇잎 헤어핀
+	CASE 69
+		LOCALS = 드림캐쳐
+	CASE 70
+		LOCALS = 로렐라이 시계
+	CASE 71
+		LOCALS = 그린리프 목걸이	
+	CASE 72
+		LOCALS = 세일러 햇
+	CASE 73
+		LOCALS = 세일링 글러브
+	CASE 74
+		LOCALS = 아쿠아 샌들
+	CASE 75
+		LOCALS = 슬링 드라이백
+	CASE 76
+		LOCALS = 하르피아 플렉시블 배지
+	CASE 77
+		LOCALS = 앵커 헤어핀
+ENDSELECT
+RETURNF LOCALS
+
+@장비효과(ARG)
+#FUNCTIONS
+SELECTCASE ARG
+	CASE 0
+		LOCALS = 무투 + 8
+	CASE 1
+		LOCALS = 무투 + 7
+	CASE 2
+		LOCALS = 무투 + 4
+	CASE 3
+		LOCALS = 최대체력 + 120
+	CASE 4
+		LOCALS = 최대체력 + 160
+	CASE 5
+		LOCALS = 최대체력 + 80
+	CASE 6
+		LOCALS = 치명저항 + 8
+	CASE 7
+		LOCALS = 치명타확률 + 2
+	CASE 8
+		LOCALS = 지략 + 6, 치유력 + 8
+	CASE 9
+		LOCALS = 무투 + 14
+	CASE 10
+		LOCALS = 무투 + 11
+	CASE 11
+		LOCALS = 무투 + 7
+	CASE 12
+		LOCALS = 최대체력 + 195
+	CASE 13
+		LOCALS = 최대체력 + 260
+	CASE 14
+		LOCALS = 최대체력 + 130
+	CASE 15
+		LOCALS = 치명저항 + 13
+	CASE 16
+		LOCALS = 치명타확률 + 4
+	CASE 17
+		LOCALS = 지략 + 10, 치유력 + 13
+	CASE 18
+		LOCALS = 무투 + 20
+	CASE 19
+		LOCALS = 무투 + 16
+	CASE 20
+		LOCALS = 무투 + 10
+	CASE 21
+		LOCALS = 최대체력 + 270
+	CASE 22
+		LOCALS = 최대체력 + 360
+	CASE 23
+		LOCALS = 최대체력 + 180
+	CASE 24
+		LOCALS = 치명저항 + 18
+	CASE 25
+		LOCALS = 치명타확률 + 6
+	CASE 26
+		LOCALS = 지략 + 14, 치유력 + 18
+	CASE 18
+		LOCALS = 무투 + 20
+	CASE 19
+		LOCALS = 무투 + 16
+	CASE 20
+		LOCALS = 무투 + 10
+	CASE 21
+		LOCALS = 최대체력 + 270
+	CASE 22
+		LOCALS = 최대체력 + 360
+	CASE 23
+		LOCALS = 최대체력 + 180
+	CASE 24
+		LOCALS = 치명저항 + 18
+	CASE 25
+		LOCALS = 치명타확률 + 6
+	CASE 26
+		LOCALS = 지략 + 14, 치유력 + 18
+	CASE 27
+		LOCALS = 무투 + 27, 치명대미지 + 40
+	CASE 28
+		LOCALS = 무투 + 22, 치명타확률 + 2
+	CASE 29
+		LOCALS = 무투 + 13, 최대체력 + 120
+	CASE 30
+		LOCALS = 방위 + 32, 최대체력 + 375
+	CASE 31
+		LOCALS = 최대체력 + 500
+	CASE 32
+		LOCALS = 지략 + 8, 최대체력 + 250
+	CASE 33
+		LOCALS = 치명저항 + 25, 치명대미지저항 + 20
+	CASE 34
+		LOCALS = 치명대미지 + 50, 치명타확률 + 8
+	CASE 35
+		LOCALS = 지략 + 19, 치유력 + 25
+	CASE 36
+		LOCALS = 무투 + 33, 치명대미지 + 60
+	CASE 37
+		LOCALS = 무투 + 27, 치명타확률 + 6
+	CASE 38
+		LOCALS = 무투 + 22, 최대체력 + 180
+	CASE 39
+		LOCALS = 방위 + 34, 최대체력 + 700
+	CASE 40
+		LOCALS = 최대체력 + 1100
+	CASE 41
+		LOCALS = 지략 + 17, 최대체력 + 600
+	CASE 42
+		LOCALS = 치명타확률 + 4, 치명저항 + 28, 치명대미지저항 + 31
+	CASE 43
+		LOCALS = 최대체력 + 100, 치명대미지 + 75, 치명타확률 + 9
+	CASE 44
+		LOCALS = 무투 + 4, 지략 + 22, 치유력 + 28
+	CASE 45
+		LOCALS = 무투 + 38, 치명대미지 + 80
+	CASE 46
+		LOCALS = 무투 + 33, 치명타확률 + 10, 명중률 + 3
+	CASE 47
+		LOCALS = 무투 + 27, 최대체력 + 240
+	CASE 48
+		LOCALS = 방위 + 37, 최대체력 + 1100
+	CASE 49
+		LOCALS = 최대체력 + 1660
+	CASE 50
+		LOCALS = 지략 + 21, 최대체력 + 900
+	CASE 51
+		LOCALS = 치명타확률 + 5, 치명저항 + 32, 치명대미지저항 + 37
+	CASE 52
+		LOCALS = 최대체력 + 140, 치명대미지 + 90, 치명타확률 + 10
+	CASE 53
+		LOCALS = 무투 + 6, 지략 + 25, 치유력 + 32
+	CASE 54
+		LOCALS = 무투 + 44, 치명대미지 + 90
+	CASE 55
+		LOCALS = 무투 + 38, 치명타확률 + 11, 명중률 + 20
+	CASE 56
+		LOCALS = 무투 + 33, 최대체력 + 270
+	CASE 57
+		LOCALS = 방위 + 40, 최대체력 + 1500
+	CASE 58
+		LOCALS = 최대체력 + 2340, 회피율 + 20
+	CASE 59
+		LOCALS = 지략 + 24, 최대체력 + 1300
+	CASE 60
+		LOCALS = 치명타확률 + 6, 치명저항 + 36, 치명대미지저항 + 43
+	CASE 61
+		LOCALS = 최대체력 + 180, 치명대미지 + 105, 치명타확률 + 12
+	CASE 62
+		LOCALS = 무투 + 8, 지략 + 27, 치유력 + 35
+	CASE 63
+		LOCALS = 무투 + 50, 치명대미지 + 100
+	CASE 64
+		LOCALS = 무투 + 44, 치명타확률 + 12, 명중률 + 22
+	CASE 65
+		LOCALS = 무투 + 38, 최대체력 + 300
+	CASE 66
+		LOCALS = 방위 + 43, 최대체력 + 1900
+	CASE 67
+		LOCALS = 최대체력 + 2880, 회피율 + 20
+	CASE 68
+		LOCALS = 지략 + 28, 최대체력 + 1700
+	CASE 69
+		LOCALS = 치명타확률 + 6, 치명저항 + 38, 치명대미지저항 + 50
+	CASE 70
+		LOCALS = 최대체력 + 220, 치명대미지 + 120, 치명타확률 + 13
+	CASE 71
+		LOCALS = 무투 + 11, 지략 + 30, 치유력 + 38
+	CASE 72
+		LOCALS = 무투 + 53, 치명대미지 + 100
+	CASE 73
+		LOCALS = 무투 + 51, 치명타확률 + 15, 명중률 + 22
+	CASE 74
+		LOCALS = 무투 + 46, 최대체력 + 350
+	CASE 75
+		LOCALS = 방위 + 50, 최대체력 + 2500
+	CASE 76
+		LOCALS = 최대체력 + 3300, 회피율 + 20
+	CASE 77
+		LOCALS = 지략 + 30, 최대체력 + 2200, 치명타확률 + 5
+ENDSELECT
+RETURNF LOCALS
+
+@장비티어(ARG)
+#FUNCTIONS
+SELECTCASE ARG
+	CASE 0 TO 8
+		LOCALS = T1
+	CASE 9 TO 17
+		LOCALS = T2
+	CASE 18 TO 26
+		LOCALS = T3
+	CASE 27 TO 35
+		LOCALS = T4
+	CASE 36 TO 44
+		LOCALS = T5
+	CASE 45 TO 53
+		LOCALS = T6
+	CASE 54 TO 62
+		LOCALS = T7
+	CASE 63 TO 71
+		LOCALS = T8
+	CASE 72 TO 80
+		LOCALS = T9
+ENDSELECT
+RETURNF LOCALS
+
+@강회비용코인(ARG)
+#FUNCTION
+SELECTCASE ARG
+	CASE 0 TO 8
+	RETURNF 3
+	CASE 9 TO 17
+	RETURNF 5
+	CASE 18 TO 26
+	RETURNF 5
+	CASE 27 TO 35
+	RETURNF 10
+	CASE 36 TO 44
+	RETURNF 12
+	CASE 45 TO 53
+	RETURNF 12
+	CASE 54 TO 62
+	RETURNF 15
+	CASE 63 TO 71
+	RETURNF 15
+	CASE 72 TO 80
+	RETURNF 15
+ENDSELECT
+RETURNF -1
+
+@강회비용상급코인(ARG)
+#FUNCTION
+SELECTCASE ARG
+	CASE 0 TO 8
+	RETURNF 0
+	CASE 9 TO 17
+	RETURNF 0
+	CASE 18 TO 26
+	RETURNF 0
+	CASE 27 TO 35
+	RETURNF 5
+	CASE 36 TO 44
+	RETURNF 10
+	CASE 45 TO 53
+	RETURNF 10
+	CASE 54 TO 62
+	RETURNF 15
+	CASE 63 TO 71
+	RETURNF 25
+	CASE 72 TO 80
+	RETURNF 30
+ENDSELECT
+RETURNF -1
+
+@강화비용크레딧(ARG)
+#FUNCTION
+SELECTCASE ARG
+	CASE 0 TO 8
+	RETURNF 7500
+	CASE 9 TO 17
+	RETURNF 7500
+	CASE 18 TO 26
+	RETURNF 15000
+	CASE 27 TO 35
+	RETURNF 15000
+	CASE 36 TO 44
+	RETURNF 19000
+	CASE 45 TO 53
+	RETURNF 19000
+	CASE 54 TO 62
+	RETURNF 23000
+	CASE 63 TO 71
+	RETURNF 30000
+	CASE 72 TO 80
+	RETURNF 45000
+ENDSELECT
+RETURNF -1
+
+@장비슬롯(ARG)
+#FUNCTIONS
+LOCAL = ARG % 9
+SELECTCASE LOCAL
+	CASE 0 TO 2
+		LOCALS = 1슬롯
+	CASE 3 TO 5
+		LOCALS = 2슬롯
+	CASE 6 TO 8
+		LOCALS = 3슬롯
+ENDSELECT
+RETURNF LOCALS
+
+@장비타입(ARG)
+#FUNCTIONS
+LOCAL = ARG % 9
+SELECTCASE LOCAL
+	CASE 0
+		LOCALS = 모자
+	CASE 1
+		LOCALS = 장갑
+	CASE 2
+		LOCALS = 신발
+	CASE 3
+		LOCALS = 가방
+	CASE 4
+		LOCALS = 배지
+	CASE 5
+		LOCALS = 헤어핀
+	CASE 6
+		LOCALS = 부적
+	CASE 7
+		LOCALS = 손목시계
+	CASE 8
+		LOCALS = 목걸이
+ENDSELECT
+RETURNF LOCALS
+
+@타입설명(ARG)
+#FUNCTIONS
+LOCAL = ARG % 9
+LOCALS = 
+SELECTCASE LOCAL
+	CASE 0
+		LOCALS = 강화시 무투, 치명대미지가 증가한다
+	CASE 1
+		LOCALS = 강화시 무투, 치명타확률, 명중률이 증가한다
+	CASE 2
+		LOCALS = 강화시 무투, 최대체력이 증가한다
+	CASE 3
+		LOCALS = 강화시 방위, 최대체력이 증가한다
+	CASE 4
+		LOCALS = 강화시 최대체력, 회피율이 증가한다
+	CASE 5
+		LOCALS = 강화시 지략, 최대체력, 치명타확률이 증가한다
+	CASE 6
+		LOCALS = 강화시 치명타확률, 치명타저항, 치명대미지저항이 증가한다
+	CASE 7
+		LOCALS = 강화시 최대체력, 치명대미지, 치명타확률이 증가한다
+	CASE 8
+		LOCALS = 강화시 무투, 지략, 치유력이 증가한다
+ENDSELECT
+RETURNF LOCALS
+
+@장비변경슬롯선택(대상)
+#DIM 대상
+#DIM 선택장비
+
+CALL SINGLE_DRAWLINE
+CALL ICPRINT(@"현재 <%ANAME(대상)%>의 장비", "L", 칼라_주의)
+CALL SINGLE_DRAWLINE
+CALL 착용장비이미지(대상)
+
+@장비변경종류선택(대상,슬롯종류)
+#DIM 대상
+#DIM 슬롯종류
+#DIM FIRST_LINE
+$타입선택루프
+FIRST_LINE = LINECOUNT
+CLEARLINE LINECOUNT - FIRST_LINE
+CALL SINGLE_DRAWLINE
+SETCOLOR 칼라_주석
+PRINTL 장비 종류 선택
+RESETCOLOR
+CALL SINGLE_DRAWLINE
+IF 슬롯종류 == 0
+	PRINTBUTTON  @"[%"모자", 20, LEFT%]",0
+	PRINTL
+	PRINTBUTTON  @"[%"장갑", 20, LEFT%]",1
+	PRINTL
+	PRINTBUTTON  @"[%"신발", 20, LEFT%]",2
+ELSEIF 슬롯종류 == 1
+	PRINTBUTTON  @"[%"가방", 20, LEFT%]",0
+	PRINTL
+	PRINTBUTTON  @"[%"배지", 20, LEFT%]",1
+	PRINTL
+	PRINTBUTTON  @"[%"헤어핀", 20, LEFT%]",2
+ELSEIF 슬롯종류 == 2
+	PRINTBUTTON  @"[%"부적", 20, LEFT%]",0
+	PRINTL
+	PRINTBUTTON  @"[%"손목시계", 20, LEFT%]",1
+	PRINTL
+	PRINTBUTTON  @"[%"목걸이", 20, LEFT%]",2
+ENDIF
+PRINTL
+IF 착용장비:대상:슬롯종류 >= 0
+PRINTBUTTON @"[%"착용 해제", 20, LEFT%]", 998
+PRINTL
+ENDIF
+SETCOLOR 칼라_선택불가
+CALL SINGLE_DRAWLINE
+RESETCOLOR
+PRINTBUTTON @"[%"돌아온다", MAX_CHARANAME_LENGTH, LEFT%]", 999
+PRINTL
+INPUT 
+$종류선택루프
+LOCAL:1 = 0
+IF RESULT == 0
+ARG = (슬롯종류 * 3) + RESULT
+CLEARLINE LINECOUNT - FIRST_LINE
+CALL SINGLE_DRAWLINE
+SETCOLOR 칼라_주석
+PRINTFORMD  %장비타입(ARG)%   
+PRINTFORML %타입설명(ARG)%
+RESETCOLOR
+CALL SINGLE_DRAWLINE
+FOR COUNT, 0, 81
+	LOCAL = COUNT % 9
+	IF 슬롯종류 == 0
+		SIF LOCAL != 0
+		CONTINUE
+	ELSEIF 슬롯종류 == 1
+		SIF LOCAL != 3
+		CONTINUE
+	ELSEIF 슬롯종류 == 2
+		SIF LOCAL != 6
+		CONTINUE
+	ENDIF
+	IF 장비:COUNT <= 0
+		LOCAL:1 ++
+		IF LOCAL:1 >= 9
+			PRINTW 사용 가능한 장비가 없습니다
+			RETURN
+		ENDIF
+		CONTINUE
+	ENDIF
+	PRINTBUTTON @"[%장비이름(COUNT), 20, LEFT%]",COUNT
+	PRINT    보유수: 
+	PRINTFORML {장비:COUNT}
+NEXT
+ELSEIF RESULT == 1
+ARG = (슬롯종류 * 3) + RESULT
+CLEARLINE LINECOUNT - FIRST_LINE
+CALL SINGLE_DRAWLINE
+SETCOLOR 칼라_주석
+PRINTFORMD  %장비타입(ARG)%   
+PRINTFORML %타입설명(ARG)%
+RESETCOLOR
+CALL SINGLE_DRAWLINE
+FOR COUNT, 0, 81
+	LOCAL = COUNT % 9
+	IF 슬롯종류 == 0
+	SIF LOCAL != 1
+	CONTINUE
+	ELSEIF 슬롯종류 == 1
+	SIF LOCAL != 4
+	CONTINUE
+	ELSEIF 슬롯종류 == 2
+	SIF LOCAL != 7
+	CONTINUE
+	ENDIF
+	IF 장비:COUNT <= 0
+		LOCAL:1 ++
+		IF LOCAL:1 >= 9
+			PRINTW 사용 가능한 장비가 없습니다
+			RETURN
+		ENDIF
+		CONTINUE
+	ENDIF
+	PRINTBUTTON @"[%장비이름(COUNT), 20, LEFT%]",COUNT
+	PRINT    보유수: 
+	PRINTFORML {장비:COUNT}
+NEXT
+ELSEIF RESULT == 2
+ARG = (슬롯종류 * 3) + RESULT
+CLEARLINE LINECOUNT - FIRST_LINE
+CALL SINGLE_DRAWLINE
+SETCOLOR 칼라_주석
+PRINTFORMD  %장비타입(ARG)%   
+PRINTFORML %타입설명(ARG)%
+RESETCOLOR
+CALL SINGLE_DRAWLINE
+FOR COUNT, 0, 81
+	LOCAL = COUNT % 9
+	IF 슬롯종류 == 0
+	SIF LOCAL != 2
+	CONTINUE
+	ELSEIF 슬롯종류 == 1
+	SIF LOCAL != 5
+	CONTINUE
+	ELSEIF 슬롯종류 == 2
+	SIF LOCAL != 8
+	CONTINUE
+	ENDIF
+	IF 장비:COUNT <= 0
+		LOCAL:1 ++
+		IF LOCAL:1 >= 9
+			PRINTW 사용 가능한 장비가 없습니다
+			RETURN
+		ENDIF
+		CONTINUE
+	ENDIF
+	PRINTBUTTON @"[%장비이름(COUNT), 20, LEFT%]",COUNT
+	PRINT    보유수: 
+	PRINTFORML {장비:COUNT}
+NEXT
+ELSEIF RESULT == 998
+	CALL 총력전장비착용(대상,착용장비:대상:슬롯종류,슬롯종류,-1)
+	RETURN
+ELSEIF RESULT == 999
+	CLEARLINE LINECOUNT - FIRST_LINE + 21
+	RETURN
+ENDIF
+SETCOLOR 칼라_선택불가
+CALL SINGLE_DRAWLINE
+RESETCOLOR
+PRINTBUTTON @"[%"돌아온다", MAX_CHARANAME_LENGTH, LEFT%]", 999
+PRINTL
+INPUT
+LOCAL:2 = RESULT
+LOCAL:3 = RESULT % 9
+LOCAL:4 = LOCAL:3 % 3
+SELECTCASE LOCAL:3
+	CASE 0
+		LOCAL:4 = 0
+	CASE 1
+		LOCAL:4 = 1
+	CASE 2
+		LOCAL:4 = 2
+ENDSELECT
+IF RESULT < 81
+	CALL 총력전장비이미지(LOCAL:2)
+	PRINTBUTTON @"[%"착용한다", MAX_CHARANAME_LENGTH, LEFT%]",0
+	PRINTPLAIN  
+	PRINTBUTTON @"[%"돌아온다", MAX_CHARANAME_LENGTH, LEFT%]",1
+	INPUT
+	IF RESULT == 0
+		CALL 총력전장비착용(대상,LOCAL:2,슬롯종류,1)
+		CLEARLINE LINECOUNT - FIRST_LINE + 20
+	ELSE
+	CLEARLINE LINECOUNT - FIRST_LINE
+	RESULT = LOCAL:4
+	GOTO 종류선택루프
+	ENDIF
+ELSEIF RESULT == 999
+	CLEARLINE LINECOUNT - FIRST_LINE
+	RESULT = LOCAL:4
+	GOTO 타입선택루프
+ENDIF
+@착용장비이미지(대상)
+#DIM 대상
+#DIMS sHtml
+#DIM iSpace
+#DIM 총력전장비
+#DIM iYpos
+#DIM iEnter_Con
+iEnter_Con = -1
+PRINTL    |-----------------------------------------------------------|
+PRINTFORM %TOSTR_SPACE(3)%|
+FOR LOCAL, 0, 3
+	PRINTBUTTON @"[{LOCAL+1}%" 슬롯", 16, LEFT%]",LOCAL
+	PRINT |
+NEXT
+PRINTL
+PRINTL    |-------------------|-------------------|-------------------|
+LOCALS = "   |                   |                   |                   |"
+IF FLAG:이벤트화상
+	FOR LOCAL, 0, 3
+		iYpos = -(iEnter_Con * 100)
+		sHtml =  <p align='left'>%SUBSTRING(LOCALS, 1, 4 + (20 * LOCAL))% <img src='%장비이름(착용장비:대상:LOCAL)%' height='800' ypos='{iYpos-150}'>  %SUBSTRING(LOCALS, 24 + (20 * LOCAL), STRLENS(LOCALS))%
+		sHtml = %REPLACE(sHtml, "\"", "")%
+		HTML_PRINT sHtml
+		iEnter_Con++
+	NEXT
+ENDIF
+FOR COUNT, 0, 4
+	PRINTFORML %TOSTR_SPACE(3)%|%TOSTR_SPACE(19)%|%TOSTR_SPACE(19)%|%TOSTR_SPACE(19)%|
+NEXT
+PRINTL    |-------------------|-------------------|-------------------|
+PRINTFORM %TOSTR_SPACE(3)%|
+FOR LOCAL, 0, 3
+	LOCALS = %장비이름(착용장비:대상:LOCAL)%
+	SIF 착용장비:대상:LOCAL == -1
+	LOCALS = 없음
+	PRINTBUTTON @"[%SUBSTRING(LOCALS, 0, 16), 17, LEFT%]",LOCAL
+	PRINT |
+NEXT
+PRINTL
+PRINTL    |-----------------------------------------------------------|
+PRINT   착용 효과: 
+SETCOLOR 칼라_파파랑
+SIF 총력전장비스탯상승:대상:0 > 0
+PRINTFORM 무투: + {총력전장비스탯상승:대상:0}  
+SIF 총력전장비스탯상승:대상:4 > 0
+PRINTFORM 방위: + {총력전장비스탯상승:대상:4}  
+SIF (총력전장비스탯상승:대상:9) + (총력전장비스탯상승:대상:10) > 0
+PRINTFORM 지략: + {(총력전장비스탯상승:대상:9) + (총력전장비스탯상승:대상:10)}  
+SIF 총력전장비스탯상승:대상:3 > 0
+PRINTFORM 최대체력: + {총력전장비스탯상승:대상:3}  
+SIF 총력전장비스탯상승:대상:1 > 0
+PRINTFORM 치명대미지: + {총력전장비스탯상승:대상:1}  
+SIF 총력전장비스탯상승:대상:2 > 0
+PRINTFORM 치명타확률: + {총력전장비스탯상승:대상:2}  
+SIF 총력전장비스탯상승:대상:5 > 0
+PRINTFORM 회피: + {총력전장비스탯상승:대상:5}  
+SIF 총력전장비스탯상승:대상:6 > 0
+PRINTFORM 치유력: + {총력전장비스탯상승:대상:6}  
+SIF 총력전장비스탯상승:대상:7 > 0
+PRINTFORM 치명저항: + {총력전장비스탯상승:대상:7}  
+SIF 총력전장비스탯상승:대상:8 > 0
+PRINTFORM 치명대미지저항: + {총력전장비스탯상승:대상:8}  
+RESETCOLOR
+PRINTFORML 
+
+
+@총력전장비착용(대상,장비종류,슬롯,탈착)
+#DIM 대상
+#DIM 탈착
+#DIM 슬롯
+#DIM 장비종류
+
+IF 탈착 == 1
+	IF 착용장비:대상:슬롯 >= 0
+		장비:(착용장비:대상:슬롯) ++
+		CALLFORM 총력전장비장착_{착용장비:대상:슬롯}(대상,-탈착)
+	ENDIF
+	착용장비:대상:슬롯 = 장비종류
+	CALLFORM 총력전장비장착_{장비종류}(대상,탈착)
+	장비:장비종류 --
+ELSEIF 탈착 == -1
+	착용장비:대상:슬롯 = -1
+	CALLFORM 총력전장비장착_{장비종류}(대상,탈착)
+	장비:장비종류 ++
+ENDIF
+RETURN 
+
+@총력전장비이미지(총력전장비)
+#DIMS sHtml
+#DIM iSpace
+#DIM 총력전장비
+
+IF FLAG:이벤트화상
+	sHtml =  <p align='left'><nobr>
+	sHtml += @"<shape type='space' param='{iSpace}'><img src='%장비이름(총력전장비)%' height='800' ypos='0'>"
+	HTML_PRINT sHtml
+ENDIF
+SELECTCASE 총력전장비
+	CASE 0 TO 8
+	SETCOLOR 0Xbce9a9
+	CASE 9 TO 17
+	SETCOLOR 0Xe0e9a9
+	CASE 18 TO 26
+	SETCOLOR 0Xe9e6a9
+	CASE 27 TO 35
+	SETCOLOR 0Xe9d0a9
+	CASE 36 TO 44
+	SETCOLOR 0Xe9bfa9
+	CASE 45 TO 53
+	SETCOLOR 0Xe9a9a9
+	CASE 54 TO 62
+	SETCOLOR 0Xe66464
+	CASE 63 TO 71
+	SETCOLOR 0Xe664aa
+	CASE 72 TO 80
+	SETCOLOR 0Xe664cd
+ENDSELECT
+PRINTFORML %TOSTR_SPACE(18)%[%장비티어(총력전장비)%] [%장비슬롯(총력전장비)%] [%장비타입(총력전장비)%]
+RESETCOLOR
+PRINTFORML %TOSTR_SPACE(18)%[%장비이름(총력전장비)%]
+SETCOLOR 칼라_주석
+PRINTFORML %TOSTR_SPACE(18)%%타입설명(총력전장비)%
+RESETCOLOR
+PRINTFORM %TOSTR_SPACE(18)%
+CALL COLOR_LINE
+PRINTFORM %TOSTR_SPACE(18)%
+SETCOLOR 칼라_주석
+PRINTFORM %장비효과(총력전장비)%
+RESETCOLOR
+PRINTFORML %TOSTR_SPACE(18)%
+PRINTFORM %TOSTR_SPACE(18)%
+SETCOLOR 칼라_회색
+PRINTFORML {장비:총력전장비} 개 보유중
+RESETCOLOR
+SETCOLOR 칼라_회색
+CALL SINGLE_DRAWLINE
+RESETCOLOR

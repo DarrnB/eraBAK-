@@ -1,0 +1,17 @@
+﻿#DIM SAVEDATA 장비,81
+#DIM SAVEDATA 착용장비,200,3;200은 캐릭터 수
+#DIM SAVEDATA 총력전장비스탯상승,200,12;200은 캐릭터 수
+#DIM CONST 총력전장비무투           = 0
+#DIM CONST 총력전장비치명대미지     = 1
+#DIM CONST 총력전장비치명수치       = 2
+#DIM CONST 총력전장비최대체력       = 3
+#DIM CONST 총력전장비방위           = 4
+#DIM CONST 총력전장비회피수치       = 5
+#DIM CONST 총력전장비치유력         = 6
+#DIM CONST 총력전장비치명저항력     = 7
+#DIM CONST 총력전장비치명대미지저항률= 8
+#DIM CONST 총력전장비군중제어강화력 = 9
+#DIM CONST 총력전장비군중제어저항력 = 10
+#DIM CONST 총력전장비명중률         = 11
+
+#DIM 인포장비이미지

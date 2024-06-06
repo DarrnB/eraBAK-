@@ -1,0 +1,793 @@
+﻿;-------------------------------------------------
+;「아이템」의 명칭
+;-------------------------------------------------
+@SHOP_LIFE_NAME73
+RESULTS:0 '= "엔젤 24"
+
+;-------------------------------------------------
+;「아이템」의 선택 가부
+;-------------------------------------------------
+@SHOP_LIFE_CHECK73
+SIF CFLAG:MASTER:포로처
+	RETURN 0
+RETURN 1
+
+;-------------------------------------------------
+;「아이템의 왼쪽 컬럼 메뉴의 입력 처리
+;-------------------------------------------------
+@SHOP_LIFE_EVENTBUY73
+CALL 총력전상점
+RETURN 1
+
+;-------------------------------------------------
+;「아이템」의 오른쪽 컬럼 오프 판정
+;-------------------------------------------------
+@SHOP_LIFE_EVENTBUY_COLUMN_RIGHT_OFF_CHECK73
+
+;-------------------------------------------------
+;「아이템」의 처리
+;-------------------------------------------------
+@총력전상점
+#DIM 상점단계
+#DIM 첫번째
+#DIM 두번째
+#DIM 총력전장비
+#DIM 장비선택
+#DIM 캐릭터선택
+#DIM 캐릭터선택장비
+#DIM 캐릭터선택장비슬롯
+#DIM 캐릭터선택장비선택
+#DIM 장비강화캐릭터선택
+#DIM FIRST_LINE_ITEM_MAIN
+FIRST_LINE_ITEM_MAIN = LINECOUNT
+상점단계 = 0
+첫번째 = 0
+두번째 = 0
+총력전장비 = 0
+장비선택 = 0
+캐릭터선택 = 0
+캐릭터선택장비 = 0
+캐릭터선택장비슬롯 = 0
+캐릭터선택장비선택 = 0
+장비강화캐릭터선택 = 0
+;타이틀
+$상점루프
+CALL SINGLE_DRAWLINE
+PRINTPLAIN  
+CALL COLUMN_RIGHT_TITLE("구입/강화하는 아이템을 선택")
+IF 상점단계 == 0
+CALL SINGLE_DRAWLINE
+PRINTL
+ELSEIF 상점단계 == 1 && 첫번째 == 1
+PRINTL
+CALL COLOR_PRINTL("1슬롯 장비는 공격력 관련, 2슬롯 장비는 방어력 관련, 3슬롯 장비는 역할군 관련 스텟을 상승시켜준다",칼라_주석)
+ELSEIF 상점단계 == 2 && 첫번째 == 1
+PRINTL
+CALL COLOR_PRINTL("장비 선택 시 상세 설명",칼라_주석)
+ELSE
+PRINTL
+ENDIF
+CALL SINGLE_DRAWLINE
+
+LOCAL:1 = 999
+FOR LOCAL:0, 155, 157
+	IF ITEM:(LOCAL:0) >= 1
+		IF LOCAL:1 > 80
+			LOCAL:1 = 0
+			SETCOLOR 칼라_주석
+			PRINTFORM %TOSTR_SPACE(6)%보유중인 코인: 
+			RESETCOLOR
+		ENDIF
+		LOCALS:0 = %ITEMNAME:(LOCAL:0)%
+		IF ITEM:(LOCAL:0) >= 2
+			LOCALS:0 = %LOCALS:0%×{ITEM:(LOCAL:0)}
+		ENDIF
+		LOCALS:0 = %LOCALS:0, 18, LEFT%
+		LOCAL:1 += STRLENS(LOCALS:0) + 2
+		SIF LOCAL == 155
+		SETCOLOR 칼라_주의
+		SIF LOCAL == 156
+		SETCOLOR 0Xc14fc9
+		PRINTFORM %LOCALS:0%　
+		RESETCOLOR
+	ENDIF
+NEXT
+IF LOCAL:1 == 999
+	PRINTFORM %TOSTR_SPACE(6)%
+	CALL COLOR_PRINT(@"소지 아이템 없음", 칼라_선택불가)
+ENDIF
+PRINTL 
+
+SETCOLOR 칼라_회색
+CALL SINGLE_DRAWLINE
+RESETCOLOR
+IF 상점단계 == 0
+	PRINTBUTTON  @"[%"장비 구매", 20, LEFT%]",1
+	PRINTL
+	PRINTBUTTON  @"[%"장비 강화", 20, LEFT%]",2
+	PRINTL
+	PRINTBUTTON  @"[%"기타 재료", 20, LEFT%]",3
+	PRINTL
+	SETCOLOR 칼라_회색
+	CALL SINGLE_DRAWLINE
+	RESETCOLOR
+ELSEIF 상점단계 == 1
+	;----------------장비구매----------------
+		IF 첫번째 == 1
+		PRINTBUTTON  @"[%"1슬롯", 20, LEFT%]",11
+		PRINTL
+		PRINTBUTTON  @"[%"2슬롯", 20, LEFT%]",12
+		PRINTL
+		PRINTBUTTON  @"[%"3슬롯", 20, LEFT%]",13
+		PRINTL
+		SETCOLOR 칼라_회색
+		CALL SINGLE_DRAWLINE
+		RESETCOLOR
+	;----------------장비강화----------------
+	ELSEIF 첫번째 == 2
+		PRINTBUTTON  @"[%"보유 장비", 20, LEFT%]",31
+		PRINTL
+		PRINTBUTTON  @"[%"장착 중인 장비", 20, LEFT%]",32
+		PRINTL
+		SETCOLOR 칼라_회색
+		CALL SINGLE_DRAWLINE
+		RESETCOLOR
+	;----------------기타재료----------------
+	ELSEIF 첫번째 == 3
+		CALL 총력전기타재료상점
+		PRINTL
+		SETCOLOR 칼라_회색
+		CALL SINGLE_DRAWLINE
+		RESETCOLOR
+	ENDIF
+ELSEIF 상점단계 == 2
+	;----------------장비구매----------------
+	IF 두번째 == 11
+		PRINTBUTTON  @"[%"모자", 20, LEFT%]",20
+		PRINTL
+		PRINTBUTTON  @"[%"장갑", 20, LEFT%]",21
+		PRINTL
+		PRINTBUTTON  @"[%"신발", 20, LEFT%]",22
+		PRINTL
+		SETCOLOR 칼라_회색
+		CALL SINGLE_DRAWLINE
+		RESETCOLOR
+	ELSEIF 두번째 == 12
+		PRINTBUTTON  @"[%"가방", 20, LEFT%]",23
+		PRINTL
+		PRINTBUTTON  @"[%"배지", 20, LEFT%]",24
+		PRINTL
+		PRINTBUTTON  @"[%"헤어핀", 20, LEFT%]",25
+		PRINTL
+		SETCOLOR 칼라_회색
+		CALL SINGLE_DRAWLINE
+		RESETCOLOR
+	ELSEIF 두번째 == 13
+		PRINTBUTTON  @"[%"부적", 20, LEFT%]",26
+		PRINTL
+		PRINTBUTTON  @"[%"손목시계", 20, LEFT%]",27
+		PRINTL
+		PRINTBUTTON  @"[%"목걸이", 20, LEFT%]",28
+		PRINTL
+		SETCOLOR 칼라_회색
+		CALL SINGLE_DRAWLINE
+		RESETCOLOR
+	;----------------장비강화----------------
+	ELSEIF 두번째 == 31
+		IF 장비선택 == 0
+			CALL 총력전장비강화버튼
+		ELSEIF 장비선택 == 1
+			CALL 총력전장비강화장비이미지(총력전장비)
+		ENDIF
+		SETCOLOR 칼라_회색
+		CALL SINGLE_DRAWLINE
+		RESETCOLOR
+		IF 장비선택 == 1 && ITEM:155 >= 강회비용코인(총력전장비) && ITEM:156 >= 강회비용상급코인(총력전장비) && MONEY >= 강화비용크레딧(총력전장비)
+			PRINTBUTTON  @"[%"강화한다", MAX_CHARANAME_LENGTH, LEFT%]",총력전장비+6000
+		ELSEIF 장비선택 == 1
+			SETCOLOR 칼라_선택불가
+			PRINTFORM [%"강화한다", MAX_CHARANAME_LENGTH, LEFT%]
+			RESETCOLOR
+		ENDIF
+	ELSEIF 두번째 == 32
+		CALL 총력전장비강화캐릭터버튼
+		IF 캐릭터선택 == 1
+			CALL 총력전장비강화캐릭터이미지(장비강화캐릭터선택)
+		ENDIF
+		IF 캐릭터선택장비선택 == 1
+			CALL 총력전장비강화장비이미지(캐릭터선택장비)
+		ENDIF
+		SETCOLOR 칼라_회색
+		CALL SINGLE_DRAWLINE
+		RESETCOLOR
+		IF 캐릭터선택장비선택 == 1 && ITEM:155 >= 강회비용코인(캐릭터선택장비) && ITEM:156 >= 강회비용상급코인(캐릭터선택장비) && MONEY >= 강화비용크레딧(캐릭터선택장비)
+			PRINTBUTTON  @"[%"강화한다", MAX_CHARANAME_LENGTH, LEFT%]",캐릭터선택장비+5000
+		ELSEIF 캐릭터선택장비선택 == 1
+			SETCOLOR 칼라_선택불가
+			PRINTFORM [%"강화한다", MAX_CHARANAME_LENGTH, LEFT%]
+			RESETCOLOR
+		ENDIF
+	;----------------기타재료----------------
+	;---------------------------------------
+	ENDIF
+ELSEIF 상점단계 == 3
+	CALL 총력전장비이미지(총력전장비)
+	CALL ICPRINT(@"가격 : <5> Coin", "L", 칼라_주의)
+	SETCOLOR 칼라_회색
+	CALL SINGLE_DRAWLINE
+	RESETCOLOR
+	IF ITEM:155 >= 5
+		PRINTBUTTON  @"[%"구입", MAX_CHARANAME_LENGTH, LEFT%]",총력전장비 + 1000
+	ELSE 
+		SETCOLOR 칼라_선택불가
+		PRINTFORM [%"구입", MAX_CHARANAME_LENGTH, LEFT%]
+		RESETCOLOR
+	ENDIF
+ENDIF
+PRINTPLAIN  
+PRINTBUTTON @"[%"돌아온다", MAX_CHARANAME_LENGTH, LEFT%]", 999
+PRINTL 
+
+REDRAW 0
+
+$INPUT_LOOP
+INPUT 999
+
+IF RESULT == 999
+	IF 상점단계 > 0
+		CLEARLINE LINECOUNT - FIRST_LINE_ITEM_MAIN
+		상점단계 --
+		캐릭터선택 = 0
+		캐릭터선택장비선택 = 0
+		장비선택 = 0
+		GOTO 상점루프
+	ENDIF
+	REDRAW 1
+	RETURN
+ELSEIF RESULT == 1 || RESULT == 2 || RESULT == 3 && 상점단계 == 0
+CLEARLINE LINECOUNT - FIRST_LINE_ITEM_MAIN
+첫번째 = RESULT
+상점단계 = 1
+GOTO 상점루프
+ELSEIF RESULT == 11 || RESULT == 12 || RESULT == 13 || RESULT == 31 || RESULT == 32 && 상점단계 == 1
+CLEARLINE LINECOUNT - FIRST_LINE_ITEM_MAIN
+두번째 = RESULT
+상점단계 = 2
+GOTO 상점루프
+ELSEIF RESULT >= 20 && RESULT <= 28 && 상점단계 == 2
+CLEARLINE LINECOUNT - FIRST_LINE_ITEM_MAIN
+총력전장비 = RESULT - 20 
+상점단계 = 3
+GOTO 상점루프
+ELSEIF RESULT == 총력전장비 + 1000 && 상점단계 == 3
+	CLEARLINE 1
+	SETCOLOR 칼라_선택불가
+	CALL SINGLE_DRAWLINE
+	RESETCOLOR
+	PRINTFORML [%장비이름(총력전장비)%] 구매 하시겠습니까?
+	CALL ASK_YN
+	IF RESULT == 0
+		ITEM:155 -= 5
+		장비:총력전장비 ++
+	ELSE 
+		GOTO 상점루프
+	ENDIF
+ELSEIF RESULT >= 2000 && RESULT <= 2069 && 상점단계 == 2
+	CLEARLINE 1
+	IF 장비:(RESULT - 2000) > 0
+		CLEARLINE LINECOUNT - FIRST_LINE_ITEM_MAIN
+		총력전장비 = RESULT - 2000
+		장비선택 = 1
+		GOTO 상점루프
+	ELSE
+		PRINTW 유효하지 않은 입력입니다.
+	ENDIF
+ELSEIF RESULT >= 3000 && RESULT < 4000 && 상점단계 == 2
+	CLEARLINE LINECOUNT - FIRST_LINE_ITEM_MAIN
+	캐릭터선택 = 1
+	캐릭터선택장비선택 = 0
+	장비강화캐릭터선택 = RESULT - 3000
+	GOTO 상점루프
+ELSEIF RESULT == 4000 || RESULT == 4001 || RESULT == 4002 && 상점단계 == 2
+	CLEARLINE LINECOUNT - FIRST_LINE_ITEM_MAIN
+	IF 착용장비:장비강화캐릭터선택:(RESULT - 4000) >= 69
+		PRINTW 이미 최대로 강화된 장비입니다
+		GOTO 상점루프
+	ELSEIF 착용장비:장비강화캐릭터선택:(RESULT - 4000) >= 0
+		캐릭터선택 = 0
+		캐릭터선택장비슬롯 = RESULT - 4000
+		캐릭터선택장비선택 = 1
+		캐릭터선택장비 = 착용장비:장비강화캐릭터선택:캐릭터선택장비슬롯
+	ENDIF
+	GOTO 상점루프
+ELSEIF RESULT >= 5000 && RESULT < 6000 && 상점단계 == 2 && 캐릭터선택장비선택 == 1
+	CLEARLINE 1
+	SETCOLOR 칼라_선택불가
+	CALL SINGLE_DRAWLINE
+	RESETCOLOR
+	PRINTFORML [%장비이름(캐릭터선택장비)%]%조사만처리(장비이름(캐릭터선택장비),"을")% 강화 하시겠습니까?
+	PRINT 강화 비용: 
+	IF 강회비용코인(캐릭터선택장비) > 0
+		SETCOLOR 칼라_주의
+		PRINTFORM {강회비용코인(캐릭터선택장비)} 
+		PRINT Coin   
+		RESETCOLOR
+	ENDIF
+	IF 강회비용상급코인(캐릭터선택장비) > 0 
+		SETCOLOR 0Xc14fc9
+		PRINTFORM {강회비용상급코인(캐릭터선택장비)} 
+		PRINT Coin   
+		RESETCOLOR
+	ENDIF
+	IF 강화비용크레딧(캐릭터선택장비) > 0
+		PRINTFORM {강화비용크레딧(캐릭터선택장비)} 
+		PRINT 크레딧
+	ENDIF
+	PRINTL
+	PRINTL
+	CALL ASK_YN
+	IF RESULT == 0
+		CLEARLINE 1
+		ITEM:155 -= 강회비용코인(캐릭터선택장비)
+		ITEM:156 -= 강회비용상급코인(캐릭터선택장비)
+		MONEY -= 강화비용크레딧(캐릭터선택장비)
+		CALL 총력전장비착용(장비강화캐릭터선택,캐릭터선택장비,캐릭터선택장비슬롯,-1)
+		장비:캐릭터선택장비 --
+		장비:(캐릭터선택장비+9) ++
+		CALL 총력전장비착용(장비강화캐릭터선택,캐릭터선택장비+9,캐릭터선택장비슬롯,1)
+		PRINTFORMW [%장비이름(캐릭터선택장비)%]%조사만처리(장비이름(캐릭터선택장비),"이")% [%장비이름(캐릭터선택장비+9)%]%조사만처리(장비이름(캐릭터선택장비+9),"로")% 강화되었습니다
+	ELSE 
+		캐릭터선택장비선택 = 0
+		CLEARLINE LINECOUNT - FIRST_LINE_ITEM_MAIN
+		GOTO 상점루프
+	ENDIF
+ELSEIF RESULT >= 6000 && RESULT < 7000 && 상점단계 == 2 && 장비선택 == 1
+	CLEARLINE 1
+	SETCOLOR 칼라_선택불가
+	CALL SINGLE_DRAWLINE
+	RESETCOLOR
+	PRINTFORML [%장비이름(총력전장비)%]%조사만처리(장비이름(총력전장비),"을")% 강화 하시겠습니까?
+	PRINT 강화 비용: 
+	IF 강회비용코인(총력전장비) > 0
+		SETCOLOR 칼라_주의
+		PRINTFORM {강회비용코인(총력전장비)} 
+		PRINT Coin   
+		RESETCOLOR
+	ENDIF
+	IF 강회비용상급코인(총력전장비) > 0 
+		SETCOLOR 0Xc14fc9
+		PRINTFORM {강회비용상급코인(총력전장비)} 
+		PRINT Coin   
+		RESETCOLOR
+	ENDIF
+	IF 강화비용크레딧(총력전장비) > 0
+		PRINTFORM {강화비용크레딧(총력전장비)} 
+		PRINT 크레딧
+	ENDIF
+	PRINTL
+	PRINTL
+	CALL ASK_YN
+	IF RESULT == 0
+		CLEARLINE 1
+		ITEM:155 -= 강회비용코인(총력전장비)
+		ITEM:156 -= 강회비용상급코인(총력전장비)
+		MONEY -= 강화비용크레딧(총력전장비)
+		장비:총력전장비 --
+		장비:(총력전장비+9) ++
+		PRINTFORMW [%장비이름(총력전장비)%]%조사만처리(장비이름(총력전장비),"이")% [%장비이름(총력전장비+9)%]%조사만처리(장비이름(총력전장비+9),"로")% 강화되었습니다
+	ELSE 
+		장비선택 = 0
+		CLEARLINE LINECOUNT - FIRST_LINE_ITEM_MAIN
+		GOTO 상점루프
+	ENDIF
+ELSEIF RESULT == 7001 && ITEM:156 >= 1 && 상점단계 == 1
+	CLEARLINE 1
+	PRINTL 「총력전 코인×4」을 「상급 총력전 코인」으로 구매 하시겠습니까?
+	CALL ASK_YN
+	IF RESULT == 0
+		ITEM:156 -= 1
+		ITEM:155 += 4
+	ELSE
+		CLEARLINE LINECOUNT - FIRST_LINE_ITEM_MAIN
+		GOTO 상점루프
+	ENDIF
+ELSEIF RESULT == 7002 && ITEM:155 >= 5 && 상점단계 == 1
+	CLEARLINE 1
+	PRINTL 「상급 총력전 코인」을 「총력전 코인×5」으로 구매 하시겠습니까?
+	CALL ASK_YN
+	IF RESULT == 0
+		ITEM:155 -= 5
+		ITEM:155 += 1
+	ELSE
+		CLEARLINE LINECOUNT - FIRST_LINE_ITEM_MAIN
+		GOTO 상점루프
+	ENDIF
+ELSE
+	REUSELASTLINE 
+	REDRAW 2
+	GOTO INPUT_LOOP
+ENDIF
+
+@총력전장비강화버튼
+CALL COLOR_PRINTL("모자",칼라_주석)
+FOR COUNT, 0, 69
+	LOCAL = COUNT % 9
+	SIF 장비:COUNT <= 0
+	CONTINUE
+	IF LOCAL == 0
+		PRINTBUTTON @"[%장비이름(COUNT), 20, LEFT%]",COUNT + 2000
+		PRINT 　
+		PRINTFORM ×{장비:COUNT}
+		LOCAL:1 ++
+		IF LOCAL:1 == 4
+			PRINTL
+			LOCAL:1 = 0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+LOCAL:1 = 0
+CALL COLOR_LINE
+CALL COLOR_PRINTL("장갑",칼라_주석)
+FOR COUNT, 0, 69
+	LOCAL = COUNT % 9
+	SIF 장비:COUNT <= 0
+	CONTINUE
+	IF LOCAL == 1
+		PRINTBUTTON @"[%장비이름(COUNT), 20, LEFT%]",COUNT + 2000
+		PRINT 　
+		PRINTFORM ×{장비:COUNT}
+		LOCAL:1 ++
+		IF LOCAL:1 == 4
+			PRINTL
+			LOCAL:1 = 0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+LOCAL:1 = 0
+CALL COLOR_LINE
+CALL COLOR_PRINTL("신발",칼라_주석)
+FOR COUNT, 0, 69
+	LOCAL = COUNT % 9
+	SIF 장비:COUNT <= 0
+	CONTINUE
+	IF LOCAL == 2
+		PRINTBUTTON @"[%장비이름(COUNT), 20, LEFT%]",COUNT + 2000
+		PRINT 　
+		PRINTFORM ×{장비:COUNT}
+		LOCAL:1 ++
+		IF LOCAL:1 == 4
+			PRINTL
+			LOCAL:1 = 0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+LOCAL:1 = 0
+CALL COLOR_LINE
+CALL COLOR_PRINTL("가방",칼라_주석)
+FOR COUNT, 0, 69
+	LOCAL = COUNT % 9
+	SIF 장비:COUNT <= 0
+	CONTINUE
+	IF LOCAL == 3
+		PRINTBUTTON @"[%장비이름(COUNT), 20, LEFT%]",COUNT + 2000
+		PRINT 　
+		PRINTFORM ×{장비:COUNT}
+		LOCAL:1 ++
+		IF LOCAL:1 == 4
+			PRINTL
+			LOCAL:1 = 0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+LOCAL:1 = 0
+CALL COLOR_LINE
+CALL COLOR_PRINTL("배지",칼라_주석)
+FOR COUNT, 0, 69
+	LOCAL = COUNT % 9
+	SIF 장비:COUNT <= 0
+	CONTINUE
+	IF LOCAL == 4
+		PRINTBUTTON @"[%장비이름(COUNT), 20, LEFT%]",COUNT + 2000
+		PRINT 　
+		PRINTFORM ×{장비:COUNT}
+		LOCAL:1 ++
+		IF LOCAL:1 == 4
+			PRINTL
+			LOCAL:1 = 0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+LOCAL:1 = 0
+CALL COLOR_LINE
+CALL COLOR_PRINTL("헤어핀",칼라_주석)
+FOR COUNT, 0, 69
+	LOCAL = COUNT % 9
+	SIF 장비:COUNT <= 0
+		CONTINUE
+	IF LOCAL == 5
+		PRINTBUTTON @"[%장비이름(COUNT), 20, LEFT%]",COUNT + 2000
+		PRINT 　
+		PRINTFORM ×{장비:COUNT}
+		LOCAL:1 ++
+		IF LOCAL:1 == 4
+			PRINTL
+			LOCAL:1 = 0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+LOCAL:1 = 0
+CALL COLOR_LINE
+CALL COLOR_PRINTL("부적",칼라_주석)
+FOR COUNT, 0, 69
+	LOCAL = COUNT % 9
+	SIF 장비:COUNT <= 0
+		CONTINUE
+	IF LOCAL == 6
+		PRINTBUTTON @"[%장비이름(COUNT), 20, LEFT%]",COUNT + 2000
+		PRINT 　
+		PRINTFORM ×{장비:COUNT}
+		LOCAL:1 ++
+		IF LOCAL:1 == 4
+			PRINTL
+			LOCAL:1 = 0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+LOCAL:1 = 0
+CALL COLOR_LINE
+CALL COLOR_PRINTL("손목시계",칼라_주석)
+FOR COUNT, 0, 69
+	LOCAL = COUNT % 9
+	SIF 장비:COUNT <= 0
+		CONTINUE
+	IF LOCAL == 7
+		PRINTBUTTON @"[%장비이름(COUNT), 20, LEFT%]",COUNT + 2000
+		PRINT 　
+		PRINTFORM ×{장비:COUNT}
+		LOCAL:1 ++
+		IF LOCAL:1 == 4
+			PRINTL
+			LOCAL:1 = 0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+LOCAL:1 = 0
+CALL COLOR_LINE
+CALL COLOR_PRINTL("목걸이",칼라_주석)
+FOR COUNT, 0, 69
+	LOCAL = COUNT % 9
+	SIF 장비:COUNT <= 0
+		CONTINUE
+	IF LOCAL == 8
+		PRINTBUTTON @"[%장비이름(COUNT), 20, LEFT%]",COUNT + 2000
+		PRINT 　
+		PRINTFORM ×{장비:COUNT}
+		LOCAL:1 ++
+		IF LOCAL:1 == 4
+			PRINTL
+			LOCAL:1 = 0
+		ENDIF
+	ENDIF
+NEXT
+PRINTL
+LOCAL:1 = 0
+
+@총력전장비강화캐릭터버튼
+#DIM 장비착용캐릭터,200
+#DIM 장비착용캐릭터수
+FOR COUNT, 0, CHARANUM
+	FOR LOCAL, 0, 3
+		IF 착용장비:COUNT:LOCAL >= 0
+			장비착용캐릭터:COUNT = 1
+			장비착용캐릭터수 ++
+			BREAK
+		ENDIF
+	NEXT
+NEXT
+IF 장비착용캐릭터수 <= 0
+	PRINTW 장비를 착용한 캐릭터가 없습니다
+ELSE
+	LOCAL = 0
+	FOR COUNT, 0, CHARANUM
+		IF 장비착용캐릭터:COUNT == 1
+			PRINTBUTTON @"[%ANAME(COUNT), 20, LEFT%]",COUNT + 3000
+			PRINTPLAIN   
+			LOCAL ++
+			IF LOCAL == 4
+				PRINTL
+				LOCAL = 0
+			ENDIF
+		ENDIF
+	NEXT
+ENDIF
+PRINTL
+
+@총력전장비강화캐릭터이미지(대상)
+#DIM 대상
+#DIMS sHtml
+#DIM iSpace
+#DIM 총력전장비
+#DIM iYpos
+#DIM iEnter_Con
+iEnter_Con = -1
+SETCOLOR 칼라_회색
+CALL SINGLE_DRAWLINE
+RESETCOLOR
+PRINTL    |-----------------------------------------------------------|
+PRINTFORM %TOSTR_SPACE(3)%|
+FOR LOCAL, 0, 3
+	PRINTBUTTON @"[{LOCAL+1}%" 슬롯", 16, LEFT%]",LOCAL+4000
+	PRINT |
+NEXT
+PRINTL
+PRINTL    |-------------------|-------------------|-------------------|
+LOCALS = "   |                   |                   |                   |"
+FOR LOCAL, 0, 3
+	iYpos = -(iEnter_Con * 100)
+	sHtml =  <p align='left'>%SUBSTRING(LOCALS, 1, 4 + (20 * LOCAL))% <img src='%장비이름(착용장비:대상:LOCAL)%' height='800' ypos='{iYpos-150}'>  %SUBSTRING(LOCALS, 24 + (20 * LOCAL), STRLENS(LOCALS))%
+	sHtml = %REPLACE(sHtml, "\"", "")%
+	HTML_PRINT sHtml
+	iEnter_Con++
+NEXT
+FOR COUNT, 0, 4
+	PRINTFORML %TOSTR_SPACE(3)%|%TOSTR_SPACE(19)%|%TOSTR_SPACE(19)%|%TOSTR_SPACE(19)%|
+NEXT
+PRINTL    |-------------------|-------------------|-------------------|
+PRINTFORM %TOSTR_SPACE(3)%|
+FOR LOCAL, 0, 3
+	LOCALS = %장비이름(착용장비:대상:LOCAL)%
+	SIF 착용장비:대상:LOCAL == -1
+	LOCALS = 없음
+	PRINTBUTTON @"[%SUBSTRING(LOCALS, 0, 16), 17, LEFT%]",LOCAL+4000
+	PRINT |
+NEXT
+PRINTL
+PRINTL    |-----------------------------------------------------------|
+PRINTFORML 
+
+@총력전장비강화장비이미지(총력전장비)
+#DIMS sHtml
+#DIM iSpace
+#DIM 총력전장비
+
+SETCOLOR 칼라_회색
+CALL SINGLE_DRAWLINE
+RESETCOLOR
+CALL COLOR_PRINTL("현재 장비",칼라_주석)
+SETCOLOR 칼라_회색
+CALL SINGLE_DRAWLINE
+RESETCOLOR
+sHtml =  <p align='left'><nobr>
+sHtml += @"<shape type='space' param='{iSpace}'><img src='%장비이름(총력전장비)%' height='800' ypos='0'>"
+HTML_PRINT sHtml
+SELECTCASE 총력전장비
+	CASE 0 TO 8
+	SETCOLOR 0Xbce9a9
+	CASE 9 TO 17
+	SETCOLOR 0Xe0e9a9
+	CASE 18 TO 26
+	SETCOLOR 0Xe9e6a9
+	CASE 27 TO 35
+	SETCOLOR 0Xe9d0a9
+	CASE 36 TO 44
+	SETCOLOR 0Xe9bfa9
+	CASE 45 TO 53
+	SETCOLOR 0Xe9a9a9
+	CASE 54 TO 62
+	SETCOLOR 0Xe66464
+	CASE 63 TO 71
+	SETCOLOR 0Xe664aa
+	CASE 72 TO 80
+	SETCOLOR 0Xe664cd
+ENDSELECT
+PRINTL 
+PRINTFORML %TOSTR_SPACE(18)%[%장비티어(총력전장비)%] [%장비슬롯(총력전장비)%] [%장비타입(총력전장비)%]
+RESETCOLOR
+PRINTFORML %TOSTR_SPACE(18)%[%장비이름(총력전장비)%]
+SETCOLOR 칼라_주석
+PRINTFORML %TOSTR_SPACE(18)%%타입설명(총력전장비)%
+RESETCOLOR
+PRINTFORM %TOSTR_SPACE(18)%
+CALL COLOR_LINE
+PRINTFORM %TOSTR_SPACE(18)%
+SETCOLOR 칼라_주석
+PRINTFORM %장비효과(총력전장비)%
+RESETCOLOR
+PRINTFORML %TOSTR_SPACE(18)%
+PRINTFORM %TOSTR_SPACE(18)%
+PRINTL
+SETCOLOR 칼라_회색
+CALL SINGLE_DRAWLINE
+RESETCOLOR
+CALL COLOR_PRINT("강화 후 장비",칼라_주석)
+PRINTPLAIN  
+PRINTFORM /
+CALL COLOR_PRINT(" 강화비용:  ",칼라_주석)
+
+IF 강회비용코인(총력전장비) > 0
+	SETCOLOR 칼라_주의
+	PRINTFORM {강회비용코인(총력전장비)} 
+	PRINT Coin   
+	RESETCOLOR
+ENDIF
+IF 강회비용상급코인(총력전장비) > 0 
+	SETCOLOR 0Xc14fc9
+	PRINTFORM {강회비용상급코인(총력전장비)} 
+	PRINT Coin   
+	RESETCOLOR
+ENDIF
+IF 강화비용크레딧(총력전장비) > 0
+	PRINTFORM {강화비용크레딧(총력전장비)} 
+	PRINT 크레딧
+ENDIF
+PRINTL
+SETCOLOR 칼라_회색
+CALL SINGLE_DRAWLINE
+RESETCOLOR
+PRINTL
+sHtml =  <p align='left'><nobr>
+sHtml += @"<shape type='space' param='{iSpace}'><img src='%장비이름(총력전장비+9)%' height='800' ypos='0'>"
+HTML_PRINT sHtml
+SELECTCASE (총력전장비+9)
+	CASE 0 TO 8
+	SETCOLOR 0Xbce9a9
+	CASE 9 TO 17
+	SETCOLOR 0Xe0e9a9
+	CASE 18 TO 26
+	SETCOLOR 0Xe9e6a9
+	CASE 27 TO 35
+	SETCOLOR 0Xe9d0a9
+	CASE 36 TO 44
+	SETCOLOR 0Xe9bfa9
+	CASE 45 TO 53
+	SETCOLOR 0Xe9a9a9
+	CASE 54 TO 62
+	SETCOLOR 0Xe66464
+	CASE 63 TO 71
+	SETCOLOR 0Xe664aa
+	CASE 72 TO 80
+	SETCOLOR 0Xe664cd
+ENDSELECT
+PRINTFORML %TOSTR_SPACE(18)%[%장비티어(총력전장비+9)%] [%장비슬롯(총력전장비+9)%] [%장비타입(총력전장비+9)%]
+RESETCOLOR
+PRINTFORML %TOSTR_SPACE(18)%[%장비이름(총력전장비+9)%]
+SETCOLOR 칼라_주석
+PRINTFORML %TOSTR_SPACE(18)%%타입설명(총력전장비+9)%
+RESETCOLOR
+PRINTFORM %TOSTR_SPACE(18)%
+CALL COLOR_LINE
+PRINTFORM %TOSTR_SPACE(18)%
+SETCOLOR 칼라_주석
+PRINTFORML %장비효과(총력전장비+9)%
+RESETCOLOR
+PRINTL
+
+@총력전기타재료상점
+IF ITEM:156 >= 1
+	PRINTBUTTON @"[%"총력전 코인 ×4", 20, LEFT%]", 7001
+ELSE
+	SETCOLOR 칼라_선택불가
+	PRINTFORM [%"총력전 코인 ×4", MAX_CHARANAME_LENGTH + 6, LEFT%]
+ENDIF
+SETCOLOR 0Xc14fc9
+PRINTPLAINFORM %"1 Coin",8%
+PRINTPLAINFORM %TOSTR_SPACE(5)%
+RESETCOLOR
+IF ITEM:155 >= 5
+	PRINTBUTTON @"[%"상급 총력전 코인", 20, LEFT%]", 7002
+ELSE
+	SETCOLOR 칼라_선택불가
+	PRINTFORM [%"상급 총력전 코인", MAX_CHARANAME_LENGTH + 6, LEFT%]
+ENDIF
+SETCOLOR 칼라_주의
+PRINTPLAINFORM %"5 Coin",8%
+PRINTPLAINFORM %TOSTR_SPACE(5)%
+RESETCOLOR

@@ -149,7 +149,7 @@
 #DIM TMP_종속도, 10
 #DIM TMP_의존도, 10
 
-#DIM 랭크역치, 4, 9
+#DIM 랭크역치, 4, 10
 #DIM CONST 랭크_무 = 8
 #DIM CONST 랭크_G = 7
 #DIM CONST 랭크_F = 6
@@ -159,6 +159,7 @@
 #DIM CONST 랭크_B = 2
 #DIM CONST 랭크_A = 1
 #DIM CONST 랭크_S = 0
+#DIM CONST 랭크_R = 9
 #DIM CONST 랭크_ＳＬＧ = 0
 #DIM CONST 랭크_그외 = 1
 #DIM CONST 랭크_부대 = 2

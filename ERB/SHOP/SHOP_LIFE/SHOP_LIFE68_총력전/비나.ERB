@@ -53,6 +53,14 @@ RETURN 550 * 난이도계수 / 10
 #DIM 난이도
 RETURN 0
 
+@총력전_보스_치명타확률_0(난이도)
+#DIM 난이도
+RETURN 40
+
+@총력전_보스_치명대미지_0(난이도)
+#DIM 난이도
+RETURN 50
+
 @총력전_보스_치명저항_0(난이도)
 #DIM 난이도
 RETURN 20
@@ -71,6 +79,116 @@ SIF 난이도 >= 3
 
 RETURN 40 * 난이도계수 / 10
 
+@총력전_보스_보상_비나(난이도)
+#DIM 난이도
+IF 난이도 == 0
+ITEM:155 += 5
+CALL 총력전_전투_텍스트_추가(@"총력전 코인 5개 획득",칼라_주석)
+SELECTCASE RAND:100	
+CASE IS < 50
+	LOCAL = RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+SELECTCASE RAND:100	
+CASE IS < 10
+	LOCAL = 9 + RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+ELSEIF 난이도 == 1
+ITEM:155 += 7
+CALL 총력전_전투_텍스트_추가(@"총력전 코인 7개 획득",칼라_주석)
+ITEM:156 += 1
+CALL 총력전_전투_텍스트_추가(@"상급 총력전 코인 1개 획득",칼라_주석)
+SELECTCASE RAND:100	
+CASE IS < 75
+	LOCAL = RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+SELECTCASE RAND:100	
+CASE IS < 30
+	LOCAL = 9 + RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+SELECTCASE RAND:100	
+CASE IS < 10
+	LOCAL = 18 + RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+ELSEIF 난이도 == 2
+ITEM:155 += 10
+CALL 총력전_전투_텍스트_추가(@"총력전 코인 10개 획득",칼라_주석)
+ITEM:156 += 3
+CALL 총력전_전투_텍스트_추가(@"상급 총력전 코인 3개 획득",칼라_주석)
+SELECTCASE RAND:100	
+CASE IS < 50
+	LOCAL = 9 + RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+SELECTCASE RAND:100	
+CASE IS < 30
+	LOCAL = 18 + RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+ELSEIF 난이도 == 3
+ITEM:155 += 15
+CALL 총력전_전투_텍스트_추가(@"총력전 코인 15개 획득",칼라_주석)
+ITEM:156 += 6
+CALL 총력전_전투_텍스트_추가(@"상급 총력전 코인 6개 획득",칼라_주석)
+SELECTCASE RAND:100	
+CASE IS < 50
+	LOCAL = 18 + RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+SELECTCASE RAND:100	
+CASE IS < 30
+	LOCAL = 27 + RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+SELECTCASE RAND:100	
+CASE IS < 10
+	LOCAL = 36 + RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+ELSEIF 난이도 == 4
+ITEM:155 += 25
+CALL 총력전_전투_텍스트_추가(@"총력전 코인 25개 획득",칼라_주석)
+ITEM:156 += 10
+CALL 총력전_전투_텍스트_추가(@"상급 총력전 코인 10개 획득",칼라_주석)
+SELECTCASE RAND:100	
+CASE IS < 50
+	LOCAL = 27 + RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+SELECTCASE RAND:100	
+CASE IS < 30
+	LOCAL = 36 + RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+SELECTCASE RAND:100	
+CASE IS < 10
+	LOCAL = 45 + RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+SELECTCASE RAND:100	
+CASE IS < 5
+	LOCAL = 54 + RAND:9
+	장비:LOCAL ++
+	CALL 총력전_전투_텍스트_추가(@"%장비티어(LOCAL)% %장비타입(LOCAL)% 「%장비이름(LOCAL)%」 획득",칼라_주석)
+ENDSELECT
+ENDIF
 
 @총력전_보스_스킬_비나_스킬갯수
 RETURN 4
@@ -101,7 +219,10 @@ ELSEIF 총력전_보스_스킬발동:2 == 1
 			CONTINUE
 			SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
 			CONTINUE
-			대미지 = 최초대미지 * (100 - 총력전_방어력:LOCAL) / 100
+			LOCAL:1 = 100 - 총력전_방어력:LOCAL
+			SIF LOCAL:1 <= 0
+			LOCAL:1 = 1
+			대미지 = 최초대미지 * LOCAL:1 / 100
 			IF 총력전_캐릭터상태_대상지정:LOCAL == 1
 				총력전_캐릭터상태_대상지정:LOCAL = 0
 				총력전_보스_스킬쿨타임:2 = 2
@@ -158,7 +279,10 @@ ELSEIF 총력전_보스_스킬발동:1 == 1
 		IF LOCAL < 5
 			SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
 			CONTINUE
-			대미지 = 최초대미지 * (100 - 총력전_방어력:LOCAL) / 100
+			LOCAL:1 = 100 - 총력전_방어력:LOCAL
+			SIF LOCAL:1 <= 0
+			LOCAL:1 = 1
+			대미지 = 최초대미지 * LOCAL:1 / 100
 			IF 총력전_캐릭터상태_대상지정:LOCAL == 1
 				총력전_캐릭터상태_대상지정:LOCAL = 0
 				총력전_보스_스킬쿨타임:1 = 5
@@ -202,7 +326,10 @@ ELSEIF 총력전_보스_스킬발동:0 == 1
 		IF LOCAL < 5
 			SIF 총력전_캐릭터상태:LOCAL == 총력전_캐릭터상태_행동불능
 			CONTINUE
-			대미지 = 최초대미지 * (100 - 총력전_방어력:LOCAL) / 100
+			LOCAL:1 = 100 - 총력전_방어력:LOCAL
+			SIF LOCAL:1 <= 0
+			LOCAL:1 = 1
+			대미지 = 최초대미지 * LOCAL:1 / 100
 			IF 총력전_캐릭터상태_대상지정:LOCAL == 1
 				총력전_캐릭터상태_대상지정:LOCAL = 0
 				총력전_보스_스킬쿨타임:0 = 11

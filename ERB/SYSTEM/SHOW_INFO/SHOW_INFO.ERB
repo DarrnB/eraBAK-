@@ -52,6 +52,11 @@ IF FLAG:능력표시모드 == 0
 		CLEARLINE LINECOUNT - FIRST_LINE
 		RESTART
 	ENDIF
+	IF RESULT == 4000
+		인포장비이미지 = !인포장비이미지
+		CLEARLINE LINECOUNT - FIRST_LINE
+		RESTART
+	ENDIF
 ELSEIF FLAG:능력표시모드 == 1
 	;「성벽 설정」전용의 입력 처리
 	IF RESULT == 101
@@ -466,6 +471,7 @@ ENDIF
 #DIM iID
 #DIMS test
 #DIMS sName
+#DIM iYpos
 
 IF FLAG:화상설정
 	iFont_Hei_mag = GETCONFIG("一行の高さ") * iSize*10 / GETCONFIG("フォントサイズ")
@@ -535,10 +541,19 @@ IF FLAG:화상설정
 	iEnter_Con = 3
 	sHtml += @"ypos='-{iEnter_Con * 100}'>"
 	
-	SIF TALENT:iID:웨폰
+	IF TALENT:iID:웨폰 && 인포장비이미지 == 0
 		sHtml += @"<shape type='space' param='{iSpace * 13}'><img src='웨폰_{TALENT:iID:웨폰}' height='{iFont_Hei_mag - 50}' ypos='-{iEnter_Con * 125}'>"
 	HTML_PRINT sHtml
-
+	ELSEIF 인포장비이미지 == 1
+		iEnter_Con = 0
+		sHtml +=  @"%TOSTR_SPACE(18)%"
+		FOR LOCAL, 0, 3
+			iYpos = -(iEnter_Con * 10)
+			sHtml +=  @"%TOSTR_SPACE(9)%<img src='%장비이름(착용장비:iID:LOCAL)%' height='800' ypos='{iYpos-250}'>"
+			iEnter_Con++
+		NEXT
+		HTML_PRINT sHtml
+	ENDIF
 	Integer = GET_COUNTRY_BOSS(CFLAG:iID:소속)
 	IF Integer >= 0
 		String = %ANAME(Integer), MAX_CHARANAME_LENGTH, LEFT%
@@ -633,9 +648,14 @@ IF FLAG:화상설정
 	PRINTFORM %LOCALS:0, 6, LEFT%
 	RESETCOLOR
 	
-	IF TALENT:iID:웨폰
+	IF TALENT:iID:웨폰 && 인포장비이미지 == 0
 		PRINT 　　　　　　　　　　　　　
-		PRINTFORM 【 %WEAPON_NAME(TALENT:iID:웨폰)% 】
+		PRINTBUTTON @"【 %WEAPON_NAME(TALENT:iID:웨폰)% 】", 4000
+	ELSEIF 인포장비이미지 == 1
+		PRINT 　
+		PRINTBUTTON @"【 %장비이름(착용장비:iID:0), 18, LEFT% 】", 4000
+		PRINTBUTTON @"【 %장비이름(착용장비:iID:1), 18, LEFT% 】", 4000
+		PRINTBUTTON @"【 %장비이름(착용장비:iID:2), 18, LEFT% 】", 4000
 	ENDIF
 	PRINTL
 ELSE

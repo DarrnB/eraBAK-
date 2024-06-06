@@ -17,6 +17,10 @@ RETURN 1
 ;-------------------------------------------------
 @SHOP_LIFE_CHECKCHARA68(ARG:0)
 ;비주인공, 동일 세력, 포로가 아닌, 동물이 아닌, 통상 상태 또는 육아중
+SIF CFLAG:(ARG:0):특수상태 == 특수상태_방랑
+RETURN TALENT:(ARG:0):연모 || TALENT:(ARG:0):복종
+SIF CFLAG:(ARG:0):특수상태 == 특수상태_미등장 || CFLAG:(ARG:0):특수상태 == 특수상태_사망
+RETURN 0
 RETURN CFLAG:(ARG:0):소속 == CFLAG:MASTER:소속 && CFLAG:(ARG:0):포로처 == 0 && !IS_ANIMAL(ARG:0) && GROUPMATCH(CFLAG:(ARG:0):행동불능상태, 0, 2) || TALENT:ARG:연모 || TALENT:ARG:복종
 
 ;-------------------------------------------------
