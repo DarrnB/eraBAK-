@@ -447,7 +447,8 @@ ELSEIF TALENT:선택학생:복종 || TALENT:선택학생:예속
 		ELSEIF RESULT == 1
 			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 			PRINTW 「여기서… 인가요?」
-			IF TALENT:선택학생:노출증	;-------------노출증을 갖고 있을 경우를 이렇게 쓰는게 맞음?
+			;-------------노출증을 갖고 있을 경우를 이렇게 쓰는게 맞음?
+			IF TALENT:선택학생:노출증
 				CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
 				PRINTW 「…네, 주인님…♥」
 			ELSE
@@ -510,48 +511,47 @@ ELSEIF TALENT:선택학생:복종 || TALENT:선택학생:예속
 		ENDIF
 	ELSEIF RESULT == 2 ;입학하러 왔다 일 경우
 		IF 선택학생 == 해당세력수장
+			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+			PRINTW 「입학, 저희 학원에요?」
+			PRINTL
+			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+			PRINTW 「잘 생각하셨어요 주인님! 주인님이라면 언제든지 환영이에요!」
+			PRINTL
+		ELSE
+			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+			PRINTW 「입학, 저희 학원에요?」
+			PRINTL
+			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+			PRINTW 「물론이죠! 잠시만요, 회장님께 물어보고 올게요! 걱정하지 마세요! 바로 허락해주실거예요!」
+			PRINTL
+			IF 해당세력수장 == 임시저장
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
+				PRINTW 「...뭐?」
+				PRINTL
 				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
-				PRINTW 「입학, 저희 학원에요?」
+				PRINTFORMW 「%조사처리(ANAME(MASTER),"이")% 저희 학원에 입학하고 싶다고...」
 				PRINTL
-				CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
-				PRINTW 「잘 생각하셨어요 주인님! 주인님이라면 언제든지 환영이에요!」
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
+				PRINTW 「...」
 				PRINTL
+				PRINTW 「...」
+				PRINTL
+				PRINTW 「......」
+				PRINTL
+				PRINTL
+				PRINTL
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
+				SETCOLOR 칼라_빨강
+				PRINTW 「그 말이 왜 네 입에서 나와?」
+				RESETCOLOR
+				PRINTL
+				PRINTW 입학 신청은 반려되었습니다.
 			ELSE
-				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
-				PRINTW 「입학, 저희 학원에요?」
-				PRINTL
-				CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
-				PRINTW 「물론이죠! 잠시만요, 회장님께 물어보고 올게요! 걱정하지 마세요! 바로 허락해주실거예요!」
-				PRINTL
-				IF 해당세력수장 == 임시저장
-					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
-					PRINTW 「...뭐?」
-					PRINTL
-					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
-					PRINTFORMW 「%조사처리(ANAME(MASTER),"이")% 저희 학원에 입학하고 싶다고...」
-					PRINTL
-					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
-					PRINTW 「...」
-					PRINTL
-					PRINTW 「...」
-					PRINTL
-					PRINTW 「......」
-					PRINTL
-					PRINTL
-					PRINTL
-					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
-					SETCOLOR 칼라_빨강
-					PRINTW 「그 말이 왜 네 입에서 나와?」
-					RESETCOLOR
-					PRINTL
-					PRINTW 입학 신청은 반려되었습니다.
-				ELSE
-					PRINTFORMW 간부인 %ANAME(선택학생)%의 노력 덕분에 입학 신청은 순식간에 수리되었다.
-					CALL CHANGE_COUNTRY(MASTER, 랜덤선택세력)
-					TIME = 0
-					PLAYER_HIRED_COUNTER  = 5
-					PRINTFORMW %조사처리(ANAME(MASTER),"이")% %ANAME(해당세력수장)%의 세력에 참여했습니다.
-				ENDIF
+				PRINTFORMW 간부인 %ANAME(선택학생)%의 노력 덕분에 입학 신청은 순식간에 수리되었다.
+				CALL CHANGE_COUNTRY(MASTER, 랜덤선택세력)
+				TIME = 0
+				PLAYER_HIRED_COUNTER  = 5
+				PRINTFORMW %조사처리(ANAME(MASTER),"이")% %ANAME(해당세력수장)%의 세력에 참여했습니다.
 			ENDIF
 		ENDIF
 	ENDIF
