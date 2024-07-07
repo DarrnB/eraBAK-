@@ -222,10 +222,9 @@ IF TALENT:선택학생:연모 || TALENT:선택학생:친애
 	IF RESULT == 0
 		CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
 		PRINTW 「나도… 보고싶었어…」
-		PRINTL
-		;선택학생이 하루나일 경우 /하루나인 경우인데 %ANAME(선택학생)%을 쓸 필요가 있나?
-		IF 선택학생 == 17
-			PRINTW 이후, 하루나와 함께 거리를 걸으며 데이트했다.
+		PRINTL   .
+		PRINTL   .
+		PRINTL   .
 		ELSE
 			SELECTCASE RAND:5
 			CASE 0
@@ -241,7 +240,11 @@ IF TALENT:선택학생:연모 || TALENT:선택학생:친애
 			ENDSELECT
 		ENDIF
 		PRINTFORMW %ANAME(선택학생)%도 %조사처리(ANAME(MASTER),"와")% 함께해서 즐거웠던 것 같다.
+		PRINTW
+		PRINTW 늦은 시간이 되었다. 어떻게 할까?
+		PRINTL
 		CALL ASK_MULTI("모텔로 간다","헤어진다")
+		PRINTL
 		IF RESULT == 1
 			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
 			PRINTW 「오늘 즐거웠어…」
@@ -252,9 +255,9 @@ IF TALENT:선택학생:연모 || TALENT:선택학생:친애
 		ELSE
 			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
 			PRINTW 「…응」
-			PRINTW   · 
-			PRINTW   · 
-			PRINTW   · 
+			PRINTL   · 
+			PRINTL   · 
+			PRINTL   · 
 			;이부분 선택 학생에게 페니스가 없을 경우라고 적어놨던데 이렇게 쓰는게 더 자연스러워서 바꿈
 			IF HAS_VAGINA(선택학생)
 				IF HAS_PENIS(MASTER)
@@ -269,9 +272,9 @@ IF TALENT:선택학생:연모 || TALENT:선택학생:친애
 					DVAR:학원방랑플래그 = 1
 				ELSE
 					PRINTFORMW 은은한 조명이 어둑하게 비치는 방 안, 두 사람의 그림자가 침대 옆의 벽에서 격렬하게 흔들린다.
-					PRINTFORMW 침대에 누워 다리를 벌린 %ANAME(선택학생)%의 젖은 음부 위를,  %조사처리(ANAME(MASTER),"이")% 마찬가지로 젖어 있는 자신의 음부로 눌러 격렬하게 비볐다.
+					PRINTFORMW 침대에 누워 다리를 벌린 %ANAME(선택학생)%의 젖은 음부 위를, %조사처리(ANAME(MASTER),"이")% 마찬가지로 젖어 있는 자신의 음부로 눌러 격렬하게 비볐다.
 					PRINTFORMW 서로의 클리토리스가 스칠 때마다 허리를 튕기고 서로를 향해 조수를 뿜기를 반복한 탓에, 두 사람의 몸은 땀과 애액으로 흠뻑 젖어, 서로의 살이 맞닿을 때마다 철썩거리는 음란한 물소리가 났다.
-					PRINTFORMW 이윽고,  %조사처리(ANAME(MASTER),"이")% %ANAME(선택학생)%의 젖꼭지와 클리를 꼬집으며 허리를 격렬하게 비비자, %조사처리(ANAME(선택학생),"은")% 밀려드는 쾌락에 허리를 마구 튕기며 %ANAME(MASTER)%의 클리를 향해 세차게 조수를 내뿜었다.
+					PRINTFORMW 이윽고, %조사처리(ANAME(MASTER),"이")% %ANAME(선택학생)%의 젖꼭지와 클리를 꼬집으며 허리를 격렬하게 비비자, %조사처리(ANAME(선택학생),"은")% 밀려드는 쾌락에 허리를 마구 튕기며 %ANAME(MASTER)%의 클리를 향해 세차게 조수를 내뿜었다.
 					PRINTFORMW 그 자극으로 이미 한계에 달해 있던 %ANAME(MASTER)%도 함께 절정하며, 서로를 향해 조수를 뿜다가 %ANAME(선택학생)%의 위에 쓰러졌다.
 					PRINTFORMW %조사처리(ANAME(선택학생),"은")% 자신의 위에 쓰러진 %ANAME(MASTER)%의 녹아내린 얼굴을 사랑스럽게 바라보며, 그 입술에 입을 맞췄다...
 					;보빔에 마조를...?
@@ -287,7 +290,7 @@ IF TALENT:선택학생:연모 || TALENT:선택학생:친애
 	ELSEIF RESULT == 1
 		CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 		PRINTW 「아… 그, 그렇구나…」
-		PRINTW 「그, 내,내가 너무 오래 붙잡고 있었네! 나,난 이만 가볼게!」
+		PRINTW 「그, 내, 내가 너무 오래 붙잡고 있었네! 나, 난 이만 가볼게!」
 		PRINTFORMW 잠시 멍하니 서있던 %조사처리(ANAME(선택학생),"은")% 등을 돌려 급히 떠나갔다.
 		PRINTFORMW 뒤돌아 달려가는 %ANAME(선택학생)%의 얼굴 옆으로 빛이 반짝였다.
 		IF 학원방랑거절플래그 == 1
@@ -309,7 +312,7 @@ IF TALENT:선택학생:연모 || TALENT:선택학생:친애
 			ENDIF
 		ENDIF
 	;"입부하러왔다"의 경우
-	ELSE
+	ELSEIF RESULT == 2
 		IF FINDELEMENT(COUNTRY_PLAYER_BELONGED, 랜덤선택세력) != -1 ;세력을 탈퇴한지 얼마 되지 않았을 경우
 			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 			PRINTW 「입학, 우리 학원에?」
@@ -381,13 +384,176 @@ ELSEIF TALENT:선택학생:복종 || TALENT:선택학생:예속
 	PRINTL
 	CALL ASK_MULTI("그래","아니","입학하러 왔다")
 	IF RESULT == 0
-	ELSEIF RESULT == 1
-	ELSEIF RESULT == 2
 		CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
 		PRINTW 「저도… 보고싶었어요…」
+		PRINTL   .
+		PRINTL   .
+		PRINTL   .
+		SELECTCASE RAND:5
+			CASE 0
+				PRINTFORMW 이후, %조사처리(ANAME(선택학생),"와")% 함께 레스토랑에 들어가 식사를 했다.
+			CASE 1 
+				PRINTFORMW 이후, %조사처리(ANAME(선택학생),"와")% 함께 분식집에 들어가 식사를 했다.
+			CASE 2
+				PRINTFORMW 이후, %조사처리(ANAME(선택학생),"와")%  함께 포장마차에 들어가 식사를 했다.
+			CASE 3
+				PRINTFORMW 이후, %조사처리(ANAME(선택학생),"와")% 함께 디저트 가게에 들어가 디저트를 먹었다.
+			CASE 4
+				PRINTFORMW 이후, %조사처리(ANAME(선택학생),"와")% 함께 거리를 걸으며 데이트했다.
+			ENDSELECT
+		PRINTFORMW %ANAME(선택학생)%도 %조사처리(ANAME(MASTER),"와")% 함께해서 즐거웠던 것 같다.
+		PRINTW
+		PRINTW 늦은 시간이 되었다. 어떻게 할까?
 		PRINTL
+		CALL ASK_MULTI("모텔로 간다","수풀로 간다","헤어진다")
+		PRINTL
+		IF RESULT == 2
+			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+			PRINTW 「주인님… 기다릴게요…」
+			PRINTL
+			PRINTFORMW %조사처리(ANAME(MASTER),"와")%  %조사처리(ANAME(선택학생),"은")% 헤어졌다.
+			CFLAG:선택학생:호감도 += 500
+			CALL ICPRINT(@"<%ANAME(선택학생)%>의 호감도가 500 올랐다.","W",칼라_노랑)
+		ELSEIF RESULT == 0
+			CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+			PRINTW 「주인님…」
+			PRINTL   · 
+			PRINTL   · 
+			PRINTL   · 
+			IF HAS_VAGINA(선택학생)
+				IF HAS_PENIS(MASTER)
+					PRINTFORMW 은은한 조명이 어둑하게 비치는 방 안, 벽에 비친 두 사람의 그림자가 격렬하게 흔들린다.
+					PRINTFORMW 침대에 엎어지듯 쓰러져 엉덩이만을 겨우 들어올린  %ANAME(선택학생)%의 뒤에서, %조사처리(ANAME(MASTER),"은")% 격렬하게 허리를 처박으며 뜨거운 한숨을 내뱉었다.
+					PRINTFORMW 격한 애무로 달아오른 두 사람의 몸은 땀과 체액으로 흠뻑 젖어, 서로의 살이 맞닿을 때마다 철썩거리는 음란한 물소리가 났다.
+					PRINTFORMW 이윽고, %조사처리(ANAME(MASTER),"이")% %ANAME(선택학생)%의 허리를 붙잡고 강하게 허리를 찔러넣으며 사정하자, %조사처리(ANAME(선택학생),"은")% 밀려드는 쾌락에 붙잡힌 허리를 마구 튕기며 교성을 내질렀다.
+					PRINTFORMW 한계까지 절정에 달해 꼴사나운 얼굴로 헤일로를 꺼트린 %ANAME(선택학생)%에게, %조사처리(ANAME(MASTER),"은")% 다시 페니스를 입에 물리고 허리를 천천히 움직였다...
+					CALL FUCK(선택학생, "Ｃ, Ｂ, Ｖ, Ｍ, 욕망, 성교, 봉사, 정애, 마조, 키스, Ｖ성교", "처녀상실, 키스상실, 질내사정", GET_SPERM_ID(MASTER), @"%ANAME(MASTER)%의 입술",@"%ANAME(MASTER)%의 페니스", "", "화간")
+					CALL FUCK(MASTER, "Ｃ,욕망, 성교, 봉사, 키스, 사정, Ｖ삽입", "동정상실, 키스상실", 0,@"%ANAME(선택학생)%의 입술" , "", @"%ANAME(선택학생)%의 질", "화간")
+					DVAR:학원방랑플래그 = 1
+				ELSE
+					PRINTFORMW 은은한 조명이 어둑하게 비치는 방 안, 두 사람의 그림자가 침대 옆의 벽에서 격렬하게 흔들린다.
+					PRINTFORMW 침대에 누워 다리를 벌린 %ANAME(선택학생)%의 젖은 음부 위를, %조사처리(ANAME(MASTER),"이")% 마찬가지로 젖어 있는 자신의 음부로 눌러 격렬하게 비볐다.
+					PRINTFORMW 서로의 클리토리스가 스칠 때마다 허리를 튕기고 서로를 향해 조수를 뿜기를 반복한 탓에, 두 사람의 몸은 땀과 애액으로 흠뻑 젖어, 서로의 살이 맞닿을 때마다 철썩거리는 음란한 물소리가 났다.
+					PRINTFORMW 이윽고, %조사처리(ANAME(MASTER),"이")% %ANAME(선택학생)%의 젖꼭지와 클리를 꼬집으며 허리를 격렬하게 비비자, %조사처리(ANAME(선택학생),"은")% 밀려드는 쾌락에 허리를 마구 튕기며 %ANAME(MASTER)%의 몸에 세차게 조수를 내뿜었다.
+					PRINTFORMW 그 모습에 흥분한 %조사처리(ANAME(MASTER),"가")% %ANAME(선택학생)%의 얼굴에 비부를 문지르며 조수를 뿜었다.
+					PRINTFORMW %조사처리(ANAME(MASTER),"은")% 자신의 애액으로 범벅이 된 %ANAME(선택학생)%의 녹아내린 얼굴을 사랑스럽게 바라보며, 그 입술에 입을 맞췄다...
+					CALL FUCK(선택학생, "Ｃ, Ｂ, Ｍ, 욕망, 봉사, 마조, 키스", "키스상실",0, @"%ANAME(MASTER)%의 입술","","", "화간")
+					CALL FUCK(MASTER, "Ｃ, Ｂ, Ｍ, 욕망, 키스", "키스상실",0, @"%ANAME(선택학생)%의 입술","","", "화간")
+					DVAR:학원방랑플래그 = 1
+				ENDIF
+			ELSE
+				;선택학생이 질이 없을경우
+			ENDIF
+		ELSEIF RESULT == 1
+			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+			PRINTW 「여기서… 인가요?」
+			IF TALENT:선택학생:노출증	;-------------노출증을 갖고 있을 경우를 이렇게 쓰는게 맞음?
+				CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+				PRINTW 「…네, 주인님…♥」
+			ELSE
+				CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+				PRINTW 「주인님께서, 원하신다면…」
+			ENDIF
+			PRINTL   · 
+			PRINTL   · 
+			PRINTL   · 
+			IF HAS_VAGINA(선택학생)
+				IF HAS_PENIS(MASTER)
+					PRINTFORMW 어둠이 내리깔린 밤의 수풀 속에서, 요염한 교성이 흘러나온다.
+					PRINTFORMW 실오라기 하나 걸치지 않은 모습으로 개목걸이를 차고 흙바닥에 엎드려 있는 %ANAME(선택학생)%의 모습은, 그야말로 암캐 그 자체였다.
+					;---------------------
+					PRINTFORMW 격한 애무로 달아오른 두 사람의 몸은 땀과 체액으로 흠뻑 젖어, 서로의 살이 맞닿을 때마다 철썩거리는 음란한 물소리가 났다.
+					PRINTFORMW 이윽고, %조사처리(ANAME(MASTER),"이")% %ANAME(선택학생)%의 허리를 붙잡고 강하게 허리를 찔러넣으며 사정하자, %조사처리(ANAME(선택학생),"은")% 밀려드는 쾌락에 붙잡힌 허리를 마구 튕기며 교성을 내질렀다.
+					PRINTFORMW 한계까지 절정에 달해 꼴사나운 얼굴로 헤일로를 꺼트린 %ANAME(선택학생)%에게, %조사처리(ANAME(MASTER),"은")% 다시 페니스를 입에 물리고 허리를 천천히 움직였다...
+					;CALL FUCK(선택학생, "Ｃ, Ｂ, Ｖ, Ｍ, 욕망, 성교, 봉사, 정애, 마조, 키스, Ｖ성교", "처녀상실, 키스상실, 질내사정", GET_SPERM_ID(MASTER), @"%ANAME(MASTER)%의 입술",@"%ANAME(MASTER)%의 페니스", "", "화간")
+					;CALL FUCK(MASTER, "Ｃ,욕망, 성교, 봉사, 키스, 사정, Ｖ삽입", "동정상실, 키스상실", 0,@"%ANAME(선택학생)%의 입술" , "", @"%ANAME(선택학생)%의 질", "화간")
+					;
+					DVAR:학원방랑플래그 = 1
+				ELSE
+					PRINTFORMW 은은한 조명이 어둑하게 비치는 방 안, 두 사람의 그림자가 침대 옆의 벽에서 격렬하게 흔들린다.
+					PRINTFORMW 침대에 누워 다리를 벌린 %ANAME(선택학생)%의 젖은 음부 위를, %조사처리(ANAME(MASTER),"이")% 마찬가지로 젖어 있는 자신의 음부로 눌러 격렬하게 비볐다.
+					PRINTFORMW 서로의 클리토리스가 스칠 때마다 허리를 튕기고 서로를 향해 조수를 뿜기를 반복한 탓에, 두 사람의 몸은 땀과 애액으로 흠뻑 젖어, 서로의 살이 맞닿을 때마다 철썩거리는 음란한 물소리가 났다.
+					PRINTFORMW 이윽고, %조사처리(ANAME(MASTER),"이")% %ANAME(선택학생)%의 젖꼭지와 클리를 꼬집으며 허리를 격렬하게 비비자, %조사처리(ANAME(선택학생),"은")% 밀려드는 쾌락에 허리를 마구 튕기며 %ANAME(MASTER)%의 몸에 세차게 조수를 내뿜었다.
+					PRINTFORMW 그 모습에 흥분한 %조사처리(ANAME(MASTER),"가")% %ANAME(선택학생)%의 얼굴에 비부를 문지르며 조수를 뿜었다.
+					PRINTFORMW %조사처리(ANAME(MASTER),"은")% 자신의 애액으로 범벅이 된 %ANAME(선택학생)%의 녹아내린 얼굴을 사랑스럽게 바라보며, 그 입술에 입을 맞췄다...
+					CALL FUCK(선택학생, "Ｃ, Ｂ, Ｍ, 욕망, 봉사, 마조, 키스", "키스상실",0, @"%ANAME(MASTER)%의 입술","","", "화간")
+					CALL FUCK(MASTER, "Ｃ, Ｂ, Ｍ, 욕망, 키스", "키스상실",0, @"%ANAME(선택학생)%의 입술","","", "화간")
+					DVAR:학원방랑플래그 = 1
+				ENDIF
+			ELSE
+				;선택학생이 질이 없을경우
+			ENDIF
+		ENDIF
 	ELSEIF RESULT == 1 ;아니 일 경우
+		CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+		PRINTW 「아……」
+		PRINTW 「앗, 죄, 죄송해요! 저, 제가...... 죄송, 해요...」
+		PRINTFORMW 어쩔 줄 모르고 입술을 달싹거리던 %조사처리(ANAME(선택학생),"은")%, 연신 죄송하다는 말을 반복하다 등을 돌려 급히 떠나갔다.
+		PRINTFORMW 뒤돌아 달려가는 %ANAME(선택학생)%의 얼굴 옆으로 빛이 반짝였다.
+		IF 학원방랑거절플래그 == 1
+			PRINTL   · 
+			PRINTL   · 
+			PRINTL   · 
+			PRINTW 더 돌아다니기에는 시간이 늦었다.
+			PRINTW 근처 모텔에서 묵기로 했다.
+		ELSE
+			PRINTW 더 돌아다녀봅니까?
+			CALL ASK_YN
+			IF RESULT == 1
+				PRINTW 더 돌아다니기에는 시간이 늦었다.
+				PRINTW 근처 모텔에서 묵기로 했다.
+			ELSEIF RESULT == 0
+				학원방랑거절플래그 = 1
+				PRINTW 더 돌아다녀 보기로 했다.
+				GOTO 거절루프
+			ENDIF
+		ENDIF
 	ELSEIF RESULT == 2 ;입학하러 왔다 일 경우
+		IF 선택학생 == 해당세력수장
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+				PRINTW 「입학, 저희 학원에요?」
+				PRINTL
+				CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+				PRINTW 「잘 생각하셨어요 주인님! 주인님이라면 언제든지 환영이에요!」
+				PRINTL
+			ELSE
+				CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+				PRINTW 「입학, 저희 학원에요?」
+				PRINTL
+				CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
+				PRINTW 「물론이죠! 잠시만요, 회장님께 물어보고 올게요! 걱정하지 마세요! 바로 허락해주실거예요!」
+				PRINTL
+				IF 해당세력수장 == 임시저장
+					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
+					PRINTW 「...뭐?」
+					PRINTL
+					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
+					PRINTFORMW 「%조사처리(ANAME(MASTER),"이")% 저희 학원에 입학하고 싶다고...」
+					PRINTL
+					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
+					PRINTW 「...」
+					PRINTL
+					PRINTW 「...」
+					PRINTL
+					PRINTW 「......」
+					PRINTL
+					PRINTL
+					PRINTL
+					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{임시저장}")
+					SETCOLOR 칼라_빨강
+					PRINTW 「그 말이 왜 네 입에서 나와?」
+					RESETCOLOR
+					PRINTL
+					PRINTW 입학 신청은 반려되었습니다.
+				ELSE
+					PRINTFORMW 간부인 %ANAME(선택학생)%의 노력 덕분에 입학 신청은 순식간에 수리되었다.
+					CALL CHANGE_COUNTRY(MASTER, 랜덤선택세력)
+					TIME = 0
+					PLAYER_HIRED_COUNTER  = 5
+					PRINTFORMW %조사처리(ANAME(MASTER),"이")% %ANAME(해당세력수장)%의 세력에 참여했습니다.
+				ENDIF
+			ENDIF
+		ENDIF
 	ENDIF
 ;초면인 경우
 ELSEIF !CFLAG:선택학생:안면
@@ -412,7 +578,7 @@ ELSEIF !CFLAG:선택학생:안면
 			PRINTW 「아니, 아무것도 아니야. ...잘 둘러보다 가라고.」
 		CASE IS <= 500
 			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
-			PRINTFORMW 「왠지 어디서 본 것 같더라니, %ANAME(MASTER)%였군.」
+			PRINTFORMW 「왠지 어디서 본 것 같더라니, %ANAME(MASTER)%인가.」
 			PRINTL
 			CALL ASK_MULTI("날 알아?","안녕","이름을 알려줘")
 			PRINTL
@@ -432,7 +598,7 @@ ELSEIF !CFLAG:선택학생:안면
 		CASE IS <= 1000
 			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 			PRINTFORMW 「%ANAME(MASTER)%...?」
-			PRINTW 「아, 역시. 잘못 본 게 아니었군.」
+			PRINTW 「아, 역시. 잘못 본 게 아니였네.」
 			PRINTL
 			CALL ASK_MULTI("날 알아?","안녕","누구?")
 			PRINTL
@@ -453,7 +619,7 @@ ELSEIF !CFLAG:선택학생:안면
 					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 					PRINTW 「역시 그런가.」
 					PRINTW 「그래, 잘 놀다 가.」
-				ELSE
+				ELSEIF RESULT == 1
 					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 					PRINTW 「흐음...?」
 					PRINTW 「...뭐, 사고만 치지 말라고.」
@@ -467,38 +633,39 @@ ELSEIF !CFLAG:선택학생:안면
 			PRINTL
 		CASE IS <= 10000
 			CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
-			PRINTFORMW 「혹시 너, %ANAME(MASTER)%이야?」
+			PRINTFORMW 「혹시 너, %ANAME(MASTER)%인가?」
 			PRINTL
 			CALL ASK_MULTI("날 알아?","안녕","누구?")
 			PRINTL
 				IF RESULT == 0
 					CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 					PRINTW 「물론이지. 너는 꽤 유명인사니까.」
-					PRINTW 「우리 학원엔 무슨 일이야? 역시 관광인가? 아니면... 입부?」
+					PRINTW 「우리 학원엔 무슨 일이야? 역시 관광인가? 아니면... 입학?」
 					PRINTL
-					CALL ASK_MULTI("관광","휴식","입부")
+					CALL ASK_MULTI("관광","휴식","입학")
 					PRINTL
 						IF RESULT == 0
 							CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 							PRINTW 「음, 마침 잘 됐네. 나도 시간이 남던 참이었거든.」
-							PRINTW 「원한다면 내가 가이드를 해 줄 수 있는데, 어떄?」
+							PRINTW 「원한다면 내가 가이드를 해 줄 수도 있는데, 어떄?」
 							PRINTL
 							CALL ASK_MULTI("부탁해","괜찮아")
 							PRINTL
 							IF RESULT == 0
 								CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
 								PRINTW 「좋아, 그럼 가볼까?」
-								PRINTW 「떨어지지 않도록 손 잘 잡고 있어야 해? 알았지?」
+								PRINTW 「떨어지지 않도록 손 잘 잡고 있으라고.」
 								PRINTW
 								PRINTFORMW 이후, 노을이 질 때까지 %조사처리(ANAME(선택학생),"과")% 손을 잡고 도시를 구석구석 돌아다녔다.
-								PRINTFORMW %조사처리(ANAME(선택학생),"은")% 자신이 알고 있는 모든 유원지와 명소들을 소개하면서도 %ANAME(MASTER)%의 
+								PRINTFORMW %조사처리(ANAME(선택학생),"와")% 함께 수많은 유원지와 명소들을 돌아다니며 즐거운 시간을 보냈다.
 								PRINTW
 								CFLAG:선택학생:호감도 += 500
 								CALL ICPRINT(@"<%ANAME(선택학생)%>의 호감도가 500 올랐다.","W",칼라_노랑)
-							ELSE
+							ELSEIF RESULT == 1
 								CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 								PRINTW 「흠. 뭐어, 혼자서 여행하는데 억지로 끼는 것도 좋진 않겠지.」
 								PRINTW 「응, 그럼 좋은 시간 보내.」
+								PRINTL
 								;--------------세력 전체에 호감도 +50 가능?-----------------
 								PRINTW 도시를 돌아다니며 즐거운 시간을 보냈다.
 								PRINTFORMW %ANAME(해당세력수장)%세력의 간부들 사이에서 평판이 올랐다.
@@ -551,7 +718,7 @@ ELSEIF !CFLAG:선택학생:안면
 									PRINTW 「혼자 있고 싶을 때 찾는 곳이야.」
 									PRINTW 「여기라면 보는 눈도 별로 없고, 조용하고, 공기도 좋아. 혼자서 편하게 쉬기엔 딱 좋지.」
 									CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
-									PRINTW 「여기에 다른 사람을 데려와보긴 처음인데, 나쁘진 않은 것 같네.」
+									PRINTW 「하지만 꼭 혼자가 아니라도... 괜찮은 것 같아.」
 									CFLAG:선택학생:호감도 += 500
 									CALL ICPRINT(@"<%ANAME(선택학생)%>의 호감도가 500 올랐다.","W",칼라_노랑)
 								CASE 4
@@ -560,12 +727,12 @@ ELSEIF !CFLAG:선택학생:안면
 									PRINTW 「어때, 이렇게 보니까 꽤 멋지지?」
 									PRINTW 「아무리 바쁘고 힘들어도, 이런 모습을 보면 또 힘이 나는게 신기하단 말야.」
 									CALL FACE_IMAGE_N(@"얼굴_의복_미소_{선택학생}")
-									PRINTW 「이것도 추억인데, 같이 사진 찍을까?」
+									PRINTW 「이것도 추억인데, 같이 사진이라도 찍을까?」
 									CFLAG:선택학생:호감도 += 500
 									CALL ICPRINT(@"<%ANAME(선택학생)%>의 호감도가 500 올랐다.","W",칼라_노랑)
 									;'학원방랑플래그_기념사진' 같은거 넣어서 나중에 친애나 예속 달았을 때 몇 줄 추가하면 좋을듯
 									; 친애 달린 날에 대화 끝내고 헤어질 때, 만약 플래그 켜져 있으면 이날 찍은 사진보고 "기억하고 있었구나"라던가, 섹스 끝나고 "정액으로 뒤덮힌 그녀의 엉덩이 위에는 처음 만난 날의 사진이 놓여 있었다"같이
-									;투머치인 감이 있으니 일단 이건 보류
+									; 투머치인 감이 있으니 일단 이건 보류
 								ENDSELECT
 							ELSE ;괜찮아일 경우
 								CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
@@ -576,9 +743,10 @@ ELSEIF !CFLAG:선택학생:안면
 								;------------여기에 쿨타임 줄여주는 효과 붙이고 싶음------------1~2턴 정도
 								PRINTW 푹 쉬었더니 컨디션이 좋아졌다!
 							ENDIF
-						ELSEIF RESULT == 2 ;입부일 경우
+						ELSEIF RESULT == 2 ;입학일 경우
 							CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
-
+							PRINTW 「」
+							PRINTL
 						ENDIF
 				ELSEIF RESULT == 1 ;안녕? 일 경우
 
@@ -621,7 +789,7 @@ ELSEIF !CFLAG:선택학생:안면
 		CASE 2
 
 		ENDSELECT
-	ELSE	;-------------거만함, 반항적, 기타등등이 아닐 경우-----------------
+	ELSE	;-------------거만함, 반항적, 겁쟁이, 기타등등이 아닐 경우-----------------
 		CALL FACE_IMAGE_N(@"얼굴_의복_통상_{선택학생}")
 		SELECTCASE RAND:3
 		CASE 0
@@ -639,7 +807,7 @@ ELSE
 
 	ELSEIF TALENT:선택학생:겁쟁이 || TALENT:선택학생:프라이드낮음 || TALENT:선택학생:수줍음
 
-	ELSE ;구면이면서 거만, 반항, 기타등등 아닐 경우
+	ELSE ;구면이면서 거만, 반항, 겁쟁, 기타등등 아닐 경우
 
 	ENDIF
 PRINTW 구면테스트
