@@ -263,14 +263,14 @@ SIF CFLAG:배반자:호감도 <= 300
 
 CALL SINGLE_DRAWLINE
 PRINTFORML 어느 날, 갑자기 %조사처리(ANAME(배반자),"가")% 불러 찾아갔다.
-PRINTFORMW 주위 사람을 모두 물린 %PRONOUN(배반자)%의 방에서, %조사처리(ANAME(배반자),"가")% 다가와 속삭였다.
+PRINTFORMW 주위 사람들을 모두 물린 %PRONOUN(배반자)%의 방에서, %조사처리(ANAME(배반자),"가")% 다가와 속삭였다.
 PRINTFORML
 PRINTFORML 자신은 %조사처리(ANAME(배반전군주),"를")% 배반할 생각이다. %조사처리(ANAME(MASTER),"는")% 유능하니, 부디 데려가고 싶다.
-PRINTFORML 갑작스러운 소리이고, 주군을 배반하는 것이 내키지 않겠지만, 지금 바로 대답을 듣고 싶다.
+PRINTFORML 갑작스럽게 주군을 배반하라는 말이 내키지 않겠지만, 지금 바로 대답을 듣고 싶다.
 PRINTFORMW 대답하기 전까지는 돌려보내 줄 수 없다. %조사처리(ANAME(MASTER),"가")% %ANAME(배반전군주)%에게 밀고하지 않으리라고 장담할 수 없기 때문이다……
 PRINTFORML
-PRINTFORML 엄청난 것을 들어 버렸다. 이렇게 된 이상, 대답하기 전에는 돌아가지 못을 것이다.
-PRINTFORMW 미래의 운명이 달린 일인 만큼, 신중하게 선택해야 한다……
+PRINTFORML 엄청난 소리를 들어 버렸다. 이렇게 된 이상, 대답하기 전에는 돌아가지 못 할 것이다.
+PRINTFORMW 미래가 달린 일인 만큼, 신중하게 선택해야 한다……
 CALL ASK_MULTI(@"%ANAME(배반자)%에게 붙는다", @"%ANAME(배반전군주)%측에 남는다", "바보 같은 짓은 그만두라고 설득한다")
 IF RESULT == 0
 	CALL CHANGE_COUNTRY(MASTER, 신세력, 1)
@@ -279,8 +279,8 @@ IF RESULT == 0
 	PRINTFORMW 어쩐지 엄청난 일에 말려들어 버린 것 같다. 괜찮을까……
 	RETURN 대응_수락
 ELSEIF RESULT == 1
-	PRINTFORMW %ANAME(배반전군주)%를 배반할 수는 없다…… 그렇게 대답하자, %조사처리(ANAME(배반자),"는")% 노골적으로 실망한 표정을 띄웠다.
-	PRINTFORML 그렇다면 냉큼 꺼져라, 후회해도 늦었다, 지금부터 세울 나라는, 너희 나라 따위는 눈 깜짝할 사이에 무너뜨릴 거다, 라는 말을 들었다.
+	PRINTFORMW %조사처리(ANAME(배반전군주),"를")% 배반할 수는 없다…… 그렇게 대답하자, %조사처리(ANAME(배반자),"는")% 노골적으로 실망한 표정을 지었다.
+	PRINTFORML 그렇다면 냉큼 꺼져라. 후회해도 늦었다. 지금부터 세울 학원은, 너희들의 학원 따위 눈 깜짝할 사이에 무너뜨릴 테니, 라는 말을 들었다.
 	PRINTFORML 그 후로 %조사처리(ANAME(배반자),"는")% 이쪽에 흥미를 잃었는지, %조사처리(ANAME(MASTER),"를")% 외면했다.
 	PRINTFORMW 여기서 %조사처리(ANAME(MASTER),"를")% 해칠 생각은 없는 것 같지만, 다음에 만났을 땐 적이 되어 있을 것이다……
 	PRINTL
