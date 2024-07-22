@@ -39,7 +39,7 @@ CALL UNIFY_FREE_CITY(통치세력)
 통치군주 = GET_COUNTRY_BOSS(통치세력)
 
 PRINTL 
-CALL COLOR_PRINTW(@"%ANAME(통치군주)%가 천하를 통일했습니다!", 칼라_주의)
+CALL COLOR_PRINTW(@"%ANAME(통치군주)%가 키보토스를 통일했습니다!", 칼라_주의)
 PRINTL 
 CUSTOMDRAWLINE *-
 WAIT
@@ -88,9 +88,9 @@ FOR LOCAL:0, 0, 10
 NEXT
 
 SETCOLOR 칼라_주의
-PRINTFORMW 현시점에서의 데이터를 이용해, 「주회용 세이브」를 만들 수가 있습니다
-PRINTFORMW 주회용 세이브를 로드하는 것으로, 지금의 무장이나 아이템을 계승해 신규에 시나리오를 개시할 수 있습니다
-PRINTFORMW 주회용 세이브를 만들 수 있는 것은 지금 뿐입니다（클리어 후의 덤모드에 들어가면 이제 작성할 수 없습니다)
+PRINTFORMW 현시점의 데이터를 이용해, 「주회용 세이브」를 만들 수 있습니다
+PRINTFORMW 주회용 세이브를 로드하는 것으로, 지금의 무장이나 아이템을 계승해 새로운 시나리오로 시작할 수 있습니다
+PRINTFORMW 주회용 세이브를 만들 수 있는 것은 지금 뿐입니다（클리어 이후의 덤모드에 들어가면 더는 작성할 수 없습니다)
 RESETCOLOR
 
 FLAG:클리어직후플래그 = 1
@@ -109,11 +109,12 @@ CALL SINGLE_DRAWLINE
 
 ;처형
 IF FLAG:강제엔드플래그
-	PRINTFORMW 처형을 명령받은 %ANAME(MASTER)%의 목 언저리에, 썰렁 차가운 철의 칼을 꽉 누를 수 있다…
+	PRINTFORMW 처형을 명령받은 %ANAME(MASTER)%의 관자놀이에, 차가운 총구가 들이밀어졌다.
+	PRINTFORMW 천천히 내려가는 영원같은 찰나의 카운트다운이 끝나고, 귀를 울리는 먹먹한 소리와 함께 눈앞이 흐려져 갔다…
 ;전사
 ELSEIF FLAG:전사엔드플래그
-	PRINTFORMW 싸움 중(안)에서 치명상을 입었던 %조사처리(ANAME(MASTER),"는")%, 상처으로 대량의 피를 분출해 지면에 쓰러져 엎어지고 있었다
-	PRINTFORMW 말의 울음이나 칼이 접촉하는 금속음, 비명이나 광희의 뒤섞인 환성이 울리는 중, %ANAME(MASTER)%의 의식은 희미해져 간다…
+	PRINTFORMW 전투 중 치명상을 입었던 %조사처리(ANAME(MASTER),"는")%, 상처에서 대량의 피를 분출하며 지면에 쓰러져 엎어졌다
+	PRINTFORMW 전차의 굉음과 총칼이 부딫히는 금속음, 비명과 광희가 뒤섞인 환성이 울리는 전장 한복판에서, %ANAME(MASTER)%의 의식은 서서히 희미해져 갔다…
 ENDIF
 
 PRINTL 
@@ -138,14 +139,14 @@ IF LOCAL:1 >= 5000
 	RESULT = 0
 	CALL KOJO_DEAD_ENDING(LOCAL:2)
 	IF !RESULT
-		PRINTFORMW 여기에, %ANAME(MASTER)%의 역사는 막을 닫았다…
-		PRINTFORMW                             - 종 -
+		PRINTFORMW 여기에서, %ANAME(MASTER)%의 역사는 막을 내렸다…
+		PRINTFORMW                             - End -
 		WAIT
 	ENDIF
 ;호감도 5000이상의 캐릭터가 없는 경우
 ELSE
-	PRINTFORMW 여기에, %ANAME(MASTER)%의 역사는 막을 닫았다…
-	PRINTFORMW                             - 종 -
+	PRINTFORMW 여기에서, %ANAME(MASTER)%의 역사는 막을 내렸다…
+	PRINTFORMW                             - End -
 	WAIT
 ENDIF
 
@@ -165,15 +166,15 @@ FLAG:강제엔드플래그 = 1
 #DIM 군주
 #DIM 분할통치플래그
 군주 = GET_COUNTRY_BOSS(통치국)
-PRINTFORML 환상향을 다 굽듯이 불타고 퍼진 전란의 불길은,
+PRINTFORML 키보토스를 모조리 불태울 듯이 퍼진 전란의 불길은,
 IF 분할통치플래그
-	PRINTFORMW 한사람 영웅의 손에 의해 떨어졌다.
+	PRINTFORMW 한 영웅의 손에 떨어졌다.
 ELSE
-	PRINTFORMW 한사람 영웅의 손에 의해 수습할 수 있었다
+	PRINTFORMW 한 영웅의 손에 의해 수습되었다
 ENDIF
 PRINTFORMW 그 영웅의 이름은 %NAME_FORMAL(군주)%。
-PRINTFORMW %PRONOUN(군주)%의 위업은, 길게 후세에 구전되게 될 것이다.
-PRINTFORMW 여기에 천하는 정해져, 환상향에 잠깐의 평온의 시대가 찾아온 것이었다……
+PRINTFORMW %PRONOUN(군주)%의 위업은, 키보토스의 역사에 길이 남게 될 것이다.
+PRINTFORMW 마침내 키보토스는 안정되어, 학원과 청춘의 도시에 평온의 시대가 찾아오게 되었다……
 
 SIF 통치국 != CFLAG:MASTER:소속
 	RETURN
@@ -196,18 +197,18 @@ IF LOCAL:1 >= 5000
 	RESULT = 0
 	CALL KOJO_SINGLE_ENDING(LOCAL:2)
 	IF !RESULT
-		PRINTFORMW 고요하게 축하의 연회로부터 빠져 나간 %조사처리(ANAME(MASTER),"와")% %조사처리(ANAME(LOCAL:2),"는")%, 모두 밤하늘을 올려보고 있었다.
-		PRINTFORMW 여기에 올 때까지, 둘이서 여러가지 고난을 넘어 왔지만, 지금 생각하면 순식간이었던 것 같은 생각도 든다.
+		PRINTFORMW 조용히 축하연에서 빠져나온 %조사처리(ANAME(MASTER),"와")% %조사처리(ANAME(LOCAL:2),"는")%, 함께 밤하늘을 올려다 보았다.
+		PRINTFORMW 이곳에 오기까지, 둘이서 여러 고난을 넘어왔지만, 지금 생각하면 순식간이었던 것 같은 생각도 든다.
 		PRINTFORMW 하나의 시대가, 하나의 이야기가, 지금, 끝을 고한 것이다.
 		PRINTFORMW 갑자기, %조사처리(ANAME(LOCAL:2),"가")% %ANAME(MASTER)%의 손을, 꼬옥 하고 잡았다.
-		PRINTFORMW 그 손을 %ANAME(MASTER)%도 잡아 돌려준다.
+		PRINTFORMW 그 손을 %ANAME(MASTER)%도 마주 잡았다.
 		PRINTFORMW 결코 떨어지지 않도록, 결코 떼어 놓지 않도록……
 		IF TALENT:MASTER:3 || TALENT:(LOCAL:2):3
-			PRINTFORMW 상냥한 달빛에 비추어지면서―-
-			PRINTFORMW 두 명은 서로의 확실한 존재를 서로 느끼고 있었다.
+			PRINTFORMW 상냥하게 쏟아져 내리는 달빛 아래에서──
+			PRINTFORMW 두 사람은 서로의 존재를 확실하게 느끼고 있었다.
 		ELSE
-			PRINTFORMW 두 명은, 서로의 존재를 서로 확인하도록(듯이), 서로 껴안아―-
-			PRINTFORMW 살그머니 입술을 거듭했다.
+			PRINTFORMW 두 사람은, 서로의 존재를 확인하듯, 서로 껴안아──
+			PRINTFORMW 살며시 입술을 맞췄다.
 			;키스의 공통 처리
 			CALL KISS_COMMON(MASTER, @"%ANAME(LOCAL:2)%의 입술", "화간")
 			CALL KISS_COMMON(LOCAL:2, @"%ANAME(MASTER)%의 입술", "화간")
@@ -217,22 +218,22 @@ IF LOCAL:1 >= 5000
 	ENDIF
 ;호감도 5000이상의 캐릭터가 없는 경우
 ELSE
-	PRINTFORMW 고요하게 축하의 연회로부터 빠져 나간 %조사처리(ANAME(MASTER),"는")%, 일인하늘을 올려보고 있었다.
-	PRINTFORMW 천하가 정해진 것, 그 자체는 기쁜 것에 틀림없다.
-	PRINTFORMW 하지만, 쭉 전란 중(안)에서 있을 곳을 찾아내 온 %조사처리(ANAME(MASTER),"는")%, 마음의 어딘가에서 허무함을 느끼고 있었다.
-	PRINTFORMW 앞으로의 평온한 세상에, 자신이 있어야 할 장소는 있을까……?
+	PRINTFORMW 조용히 축하연에서 빠져나온 %조사처리(ANAME(MASTER),"는")%, 혼자서 하늘을 올려다보았다.
+	PRINTFORMW 학원도시가 안정된 것, 그 자체는 기쁜 일임이 틀림없다.
+	PRINTFORMW 하지만, 여태껏 전란 속을 헤치며 달려온 %조사처리(ANAME(MASTER),"는")%, 마음 속 어딘가에서 허무함을 느끼고 있었다.
+	PRINTFORMW 앞으로의 평온한 세상에, 자신이 설 장소는 있을까……?
 	PRINTL 
 	;호감도 50이상의 캐릭터가 있는 경우
 	IF LOCAL:1 >= 50
-		PRINTFORMW 누군가가 %조사처리(ANAME(MASTER),"를")% 부르는 소리가 난다.
+		PRINTFORMW 누군가가 %조사처리(ANAME(MASTER),"를")% 부르는 소리가 났다.
 		PRINTFORMW 아무래도 %조사처리(ANAME(LOCAL:2),"가")% %조사처리(ANAME(MASTER),"를")% 찾으러 온 것 같다.
-		PRINTFORMW 새로운 있을 곳……그런 것은 지금부터 찾아 가면 좋을 것이다.
-		PRINTFORMW 싸움은 끝났다. 시간은 얼마든지 있다.
-		PRINTFORMW %조사처리(ANAME(MASTER),"는")% %ANAME(LOCAL:2)%에 대답을 하면, 취해 무너질 각오로 연회의 자리에 돌아와 갔다.
+		PRINTFORMW 새로운 있을 곳…… 그건 지금부터 찾으면 되겠지.
+		PRINTFORMW 전쟁은 끝났다. 시간은 얼마든지 있다.
+		PRINTFORMW %조사처리(ANAME(MASTER),"는")% %ANAME(LOCAL:2)%에게 대답하고, 다음날 소화불량에 걸릴 각오로 연회장에 돌아갔다.
 	ELSE
 		PRINTFORMW 연회는 아직 계속되고 있는 것 같다.
-		PRINTFORMW ……이런 경사스러운 날에, 탐탁치 않은 일을 생각해도 어쩔 수 없다.
-		PRINTFORMW %조사처리(ANAME(MASTER),"는")% 취해 무너질 각오를 결정하면, 연회의 자리에 돌아와 갔다.
+		PRINTFORMW ……이런 경사스러운 날에, 불편한 생각을 해봤자 무슨 소용일까.
+		PRINTFORMW %조사처리(ANAME(MASTER),"는")% 다음날 소화불량에 걸릴 정도로 먹겠다 다짐하고, 연회장에 돌아갔다.
 	ENDIF
 ENDIF
 
@@ -285,10 +286,10 @@ FOR LOCAL:0, 0, MAX_CITY
 				LOCAL:2 = 0
 				PRINTL 
 				SETCOLOR 칼라_주의
-				PRINTFORMW 이미 여럿이 정했기 때문에, 무소속의 도시는 모두 우리 나라에 항복했습니다
+				PRINTFORMW 여러 학원들과 상의한 끝에, 무소속 상태인 도시가 모두 우리 학원에 항복했습니다
 				RESETCOLOR
 			ENDIF
-			PRINTFORML %GET_CITYNAME(LOCAL:0)%를 우리 나라의 지배하에 두었습니다
+			PRINTFORML %조사처리(GET_CITYNAME(LOCAL:0), "를")% 우리 학원의 지배하에 두었습니다
 		ENDIF
 		CITY_OWNER:(LOCAL:0) = ARG:0
 	ENDIF
@@ -310,7 +311,7 @@ IF ARG:0 == CFLAG:MASTER:소속
 			IF !LOCAL:9
 				LOCAL:9 = 1
 				SETCOLOR 칼라_주의
-				PRINTW 잔당 및 방랑중의 사관을 일제히 검거했습니다
+				PRINTW 잔당 및 방랑중인 학생을 일제히 검거했습니다
 				RESETCOLOR
 			ENDIF
 			PRINTFORML %조사처리(ANAME(LOCAL:0),"를")% 잡았습니다
@@ -318,7 +319,7 @@ IF ARG:0 == CFLAG:MASTER:소속
 	NEXT
 	IF LOCAL:9
 		PRINTL 
-		PRINTL 검거한 인간의 처우를 결정해 주세요
+		PRINTL 검거한 학생의 처우를 결정해 주세요
 		PRINTL [0] 전원을 등용
 		PRINTL [1] 전원을 투옥
 		PRINTL [2] 전원을 연금
@@ -330,7 +331,7 @@ IF ARG:0 == CFLAG:MASTER:소속
 		INPUT
 
 		IF RESULT == 0
-			PRINTW 전원을 우리 나라의 사관으로서 맞이했습니다
+			PRINTW 전원을 우리 학원의 학생으로서 맞이했습니다
 			FOR LOCAL:0, 0, CHARANUM
 				IF CFLAG:(LOCAL:0):특수상태 == 특수상태_방랑
 					CALL CHANGE_COUNTRY(LOCAL:0, CFLAG:MASTER:소속, 1)
@@ -345,7 +346,7 @@ IF ARG:0 == CFLAG:MASTER:소속
 				ENDIF
 			NEXT
 		ELSEIF RESULT == 2
-			PRINTW 전원을 포로로서 연금 했습니다
+			PRINTW 전원을 포로로서 연금했습니다
 			FOR LOCAL:0, 0, CHARANUM
 				IF CFLAG:(LOCAL:0):특수상태 == 특수상태_방랑
 					CALL CHANGE_COUNTRY(LOCAL:0, 0, 1)
@@ -401,7 +402,7 @@ FIRST_LINE = LINECOUNT
 $SHOW_LOOP
 
 CALL SINGLE_DRAWLINE
-PRINTFORML 각 사관의 처우를 결정해 주세요
+PRINTFORML 각 학생의 처우를 결정해 주세요
 CALL SINGLE_DRAWLINE
 
 LOCAL:7 = 0
