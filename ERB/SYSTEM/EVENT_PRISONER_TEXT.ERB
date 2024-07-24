@@ -8,7 +8,7 @@ IF TALENT:(ARG:0):붕괴 || TALENT:(ARG:0):공허
 ELSE
 	IF RAND:4
 		IF ABL:(ARG:0):지략 >= 70
-			PRINTFORML %조사처리(ANAME(ARG:0),"는")% 반성실 안에서 얌전하게 하고 있다…
+			PRINTFORML %조사처리(ANAME(ARG:0),"는")% 반성실 안에 얌전히 앉아 있다…
 		ELSEIF ABL:(ARG:0):무투 >= 70
 			PRINTFORML %조사처리(ANAME(ARG:0),"는")% 반성실 안에서 날뛰고 있다…
 		ELSEIF ABL:(ARG:0):정치 >= 70
@@ -19,7 +19,7 @@ ELSE
 	ELSE
 		SELECTCASE RAND:4
 			CASE 0
-				PRINTFORML %조사처리(ANAME(ARG:0),"는")% 반성실 안에서 가만히 앉아있다…
+				PRINTFORML %조사처리(ANAME(ARG:0),"는")% 반성실 안에 가만히 앉아있다…
 			CASE 1
 				PRINTFORML %조사처리(ANAME(ARG:0),"는")% 반성실 안에서 불평하고 있다…
 			CASE 2
@@ -64,7 +64,7 @@ SELECTCASE RAND:10
 		PRINTFORML 과연 아무리 헤일로를 가진 학생이라도, 이젠 손가락 까딱할 기력조차 남지 않은 것 같다……
 	CASE 9
 		PRINTFORML %조사처리(ANAME(ARG:0),"는")% 철로 된 기둥에 몸을 묶였다.
-		PRINTFORML 기둥의 정체는 발전소의 터빈을 돌릴 증기가 통과하는 관이었고, 그 뜨거운 증기가 지나는 기둥에 묶인 %조사처리(ANAME(ARG:0),"는")%, 몇 번이고 헤일로를 꺼트리며 살이 타는 고통을 느꼈다……
+		PRINTFORML 기둥의 정체는 발전소의 터빈을 돌릴 증기가 통과하는 관이었고, 그 뜨거운 증기가 지나는 기둥에 묶인 %조사처리(ANAME(ARG:0),"는")%, 몇 번이고 헤일로를 꺼트리며 살이 타는 고통에 몸부림쳤다……
 ENDSELECT
 
 ;-------------------------------------------------
@@ -139,7 +139,7 @@ ENDIF
 PRINTFORML %조사처리(ANAME(ARG:0),"는")% 간부들에게 설득을 받고 있다……
 
 ;-------------------------------------------------
-;성처리
+;성처리 ---------------여긴 미작업
 ;-------------------------------------------------
 @EVENT_PRISONER_TEXT5(ARG:0)
 IF IS_MALE(ARG:0)
