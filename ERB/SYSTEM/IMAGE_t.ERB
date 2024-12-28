@@ -32,201 +32,873 @@ ENDIF
 
 SELECTCASE 대상
 	CASE 1
-		;시로코(라이딩, 수영복, 체육복)
-		IF CLOTH:옷대상:의상부위_상하의 == 8
-			clothes = _라이딩
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 10
-			clothes = _수영복
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
+		;시로코(스페셜(라이딩), 체육복, 수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 1
+			clothes = _스페셜
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 2
 			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 2
 		;호시노(수영복, 체육복)
-		IF CLOTH:옷대상:의상부위_상하의 == 10
-			clothes = _수영복
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
+		IF CLOTH:옷대상:의상부위_상하의 == 2
 			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 3
-		;세리카(수영복, 정월, 체육복)
-		IF CLOTH:옷대상:의상부위_상하의 == 10
-			clothes = _수영복
+		;세리카(스페셜(알바), 체육복, 수영복, 전통복(새해))
+		IF CLOTH:옷대상:의상부위_상하의 == 1
+			clothes = _스페셜
 		ELSEIF CLOTH:옷대상:의상부위_상하의 == 2
-			clothes = _정월				
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
-			clothes = _체육복
+			clothes = _체육복	
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 4
 		;노노미(수영복, 체육복)
-		IF CLOTH:옷대상:의상부위_상하의 == 10
-			clothes = _수영복
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
+		IF CLOTH:옷대상:의상부위_상하의 == 2
 			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 5
-		;아야네
-		IF CLOTH:옷대상:의상부위_상하의 == 12
+		;아야네(샬레, (수영복, 체육복)+안경)
+		IF CLOTH:옷대상:의상부위_상하의 == 6
 			clothes = _샬레
-
 		ELSEIF CLOTH:옷대상:의상부위_악세서리 == 1
-				;아야네(수영복, 체육복)
-			IF CLOTH:옷대상:의상부위_상하의 == 10
-				clothes = _안경수영복
-			ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
+			IF CLOTH:옷대상:의상부위_상하의 == 2
 				clothes = _안경체육복
+			ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+				clothes = _안경수영복
 			ELSE
 				clothes = _안경의복
 			ENDIF
 		ELSE
-			;아야네(수영복, 체육복)
-			IF CLOTH:옷대상:의상부위_상하의 == 10
-				clothes = _수영복
-			ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
+			IF CLOTH:옷대상:의상부위_상하의 == 2
 				clothes = _체육복
+			ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+				clothes = _수영복
 			ELSE
 				clothes = _의복
 			ENDIF
 		ENDIF
 	CASE 9
-		;아루(정월)
-		IF CLOTH:옷대상:의상부위_상하의 == 2
-			clothes = _정월
+		;아루(전통복(새해))
+		IF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 10
-		;무츠키(정월)
-		IF CLOTH:옷대상:의상부위_상하의 == 2
-			clothes = _정월
+		;무츠키(전통복(새해))
+		IF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 11
-		;카요코(정월)
-		IF CLOTH:옷대상:의상부위_상하의 == 2
-			clothes = _정월
+		;카요코(샬레, 전통복(새해))
+		IF CLOTH:옷대상:의상부위_상하의 == 6
+			clothes = _샬레
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 12
-		;카요코(정월,샬레)
-		IF CLOTH:옷대상:의상부위_상하의 == 2
-			clothes = _정월
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 12
-			clothes = _샬레
+		;하루카(전통복(새해))
+		IF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
+		
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 13
-		;히나(수영복, 파자마)
-		IF CLOTH:옷대상:의상부위_상하의 == 6
+		;히나(학교수영복, 스페셜(파자마))
+		IF CLOTH:옷대상:의상부위_상하의 == 1
+			clothes = _스페셜
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 4
 			clothes = _학교수영복
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 13
-			clothes = _파자마
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 14
 		;아코(샬레, 체육복)
-		IF CLOTH:옷대상:의상부위_상하의 == 12
-			clothes = _샬레
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
+		IF CLOTH:옷대상:의상부위_상하의 == 2
 			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 6
+			clothes = _샬레
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 15
 		;이오리(수영복)
-		IF CLOTH:옷대상:의상부위_상하의 == 10
+		IF CLOTH:옷대상:의상부위_상하의 == 3
 			clothes = _수영복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 16
-		;치나츠(온천) 
-		IF CLOTH:옷대상:의상부위_상하의 == 3
-			clothes = _온천
+		;치나츠(전통복(온천))
+		IF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 17
-		;하루나(정월, 체육복)
+		;하루나(전통복(새해), 체육복)
 		IF CLOTH:옷대상:의상부위_상하의 == 2
-			clothes = _정월
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
 			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 18
-		;준코(정월, 체육복)
+		;준코(전통복(새해), 체육복)
 		IF CLOTH:옷대상:의상부위_상하의 == 2
-			clothes = _정월
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
 			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 19
-		;이즈미(정월, 체육복, 수영복)
+		;이즈미(전통복(새해), 체육복, 수영복)
 		IF CLOTH:옷대상:의상부위_상하의 == 2
-			clothes = _정월
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
 			clothes = _체육복
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 10
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
 			clothes = _수영복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 20
-		;아카리(정월, 체육복)
+		;아카리(전통복(새해), 체육복)
 		IF CLOTH:옷대상:의상부위_상하의 == 2
-			clothes = _정월
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
 			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
 		ELSE
 			clothes = _의복
 		ENDIF
 	CASE 21
-		;후우카(정월)
-		IF CLOTH:옷대상:의상부위_상하의 == 2
-			clothes = _정월
+		;후우카(전통복(새해))
+		IF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
 		ELSE
 			clothes = _의복
 		ENDIF
 
 	CASE 29
 		;노아(체육복)
-		IF CLOTH:옷대상:의상부위_상하의 == 9
+		IF CLOTH:옷대상:의상부위_상하의 == 2
 			clothes = _체육복
 		ELSE
 			clothes = _의복
 		ENDIF
 
 	CASE 30
-		;유우카(체육복)
-		IF CLOTH:옷대상:의상부위_상하의 == 9
+		;유우카(체육복, 샬레)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
 			clothes = _체육복
-		ELSEIF CLOTH:옷대상:의상부위_상하의 == 12
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 6
 			clothes = _샬레
 		ELSE
 			clothes = _의복
 		ENDIF
-
+	CASE 31
+		;코유키(레오타드(바니))
+		IF CLOTH:옷대상:의상부위_상하의 == 9
+			clothes = _레오타드
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 32
+		;아리스(메이드)
+		IF CLOTH:옷대상:의상부위_상하의 == 10
+			clothes = _메이드
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 33
+		;모모이(메이드)
+		IF CLOTH:옷대상:의상부위_상하의 == 10
+			clothes = _메이드
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 34
+		;미도리(메이드)
+		IF CLOTH:옷대상:의상부위_상하의 == 10
+			clothes = _메이드
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 35
+		;유즈(메이드)
+		IF CLOTH:옷대상:의상부위_상하의 == 10
+			clothes = _메이드
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 36
+		;히마리(샬레)
+		IF CLOTH:옷대상:의상부위_상하의 == 6
+			clothes = _샬레
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 37
+		;치히로(안경)
+		IF CLOTH:옷대상:의상부위_악세서리 == 1
+			clothes = _안경의복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 39
+		;마키(체육복)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 40
+		;코타마(안경)
+		IF CLOTH:옷대상:의상부위_악세서리 == 1
+			clothes = _안경의복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 41
+		;네루(레오타드(바니))
+		IF CLOTH:옷대상:의상부위_상하의 == 9
+			clothes = _레오타드
+		ELSE
+			clothes = _의복
+		ENDIF
 	CASE 42
-		;아스나(바니걸, 교복) 
+		;아스나(레오타드(바니), 메이드) 
+		IF CLOTH:옷대상:의상부위_상하의 == 9
+			clothes = _레오타드
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 10
+			clothes = _메이드
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 43
+		;카린(레오타드(바니), 메이드) 
+		IF CLOTH:옷대상:의상부위_상하의 == 9
+			clothes = _레오타드
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 10
+			clothes = _메이드
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 44
+		;아카네(레오타드(바니)+안경)
+		IF CLOTH:옷대상:의상부위_악세서리 == 1
+			IF CLOTH:옷대상:의상부위_상하의 == 9
+				clothes = _안경레오타드
+			ELSE
+				clothes = _안경의복
+			ENDIF
+		ELSE
+			IF CLOTH:옷대상:의상부위_상하의 == 9
+				clothes = _레오타드
+			ELSE
+				clothes = _의복
+			ENDIF
+		ENDIF
+	CASE 45
+		;토키(외투, 레오타드(바니))
+		IF CLOTH:옷대상:의상부위_상하의 == 9
+			clothes = _레오타드
+		ELSE
+			IF CLOTH:옷대상:의상부위_악세서리 == 5
+				clothes = _외투의복
+			ELSE
+				clothes = _의복
+			ENDIF
+		ENDIF
+	CASE 46
+		;우타하(응원단)
+		IF CLOTH:옷대상:의상부위_상하의 == 5
+			clothes = _응원단
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 47
+		;히비키(응원단)
+		IF CLOTH:옷대상:의상부위_상하의 == 5
+			clothes = _응원단
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 48
+		;코토리(체육복, 응원단+안경)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 5
+			IF CLOTH:옷대상:의상부위_악세서리 == 1
+				clothes = _안경응원단
+			ELSE
+				clothes = _응원단
+			ENDIF
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 51
+		;미카(체육복, 학교수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 4
+			clothes = _학교수영복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 53
+		;히후미(체육복, 수영복, 학교수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 4
+			clothes = _학교수영복
+		ELSE
+			IF CLOTH:옷대상:의상부위_악세서리 == 2
+				clothes = _마스크의복
+			ELSE
+				clothes = _의복
+			ENDIF
+		ENDIF
+	CASE 55
+		;아즈사(마스크, 체육복, 수영복, 학교수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 4
+			clothes = _학교수영복
+		ELSE
+			IF CLOTH:옷대상:의상부위_악세서리 == 2
+				clothes = _마스크의복
+			ELSE
+				clothes = _의복
+			ENDIF
+		ENDIF
+	CASE 56
+		;코하루(체육복, 수영복, 학교수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 4
+			clothes = _학교수영복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 61
+		;61 요시미(스페셜(할로윈), 응원단(밴드))
 		IF CLOTH:옷대상:의상부위_상하의 == 1
-			clothes = _바니걸
+			clothes = _스페셜
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 5
+			clothes = _응원단
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 62
+		;62 아이리(스페셜(할로윈), 응원단(밴드))
+		IF CLOTH:옷대상:의상부위_상하의 == 1
+			clothes = _스페셜
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 5
+			clothes = _응원단
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 63
+		;63 나츠(스페셜(할로윈), 체육복, 응원단(밴드))
+		IF CLOTH:옷대상:의상부위_상하의 == 1
+			clothes = _스페셜
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 5
+			clothes = _응원단
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 64
+		;64 카즈사(스페셜(할로윈), 응원단(밴드))
+		IF CLOTH:옷대상:의상부위_상하의 == 1
+			clothes = _스페셜
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 5
+			clothes = _응원단
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 65
+		;미네(응원단(아이돌)+마스크)
+		IF CLOTH:옷대상:의상부위_상하의 == 5
+			IF CLOTH:옷대상:의상부위_악세서리 == 2
+				clothes = _마스크응원단
+			ELSE
+				clothes = _응원단
+			ENDIF
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 66
+		;세리나(겨울(크리스마스), 스페셜(간호사))
+		IF CLOTH:옷대상:의상부위_상하의 == 1
+			clothes = _스페셜
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 8
+			clothes = _겨울
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 67
+		;하나에(응원단, 겨울(크리스마스))
+		IF CLOTH:옷대상:의상부위_상하의 == 5
+			clothes = _응원단
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 8
+			clothes = _겨울
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 68
+		;츠루기(체육복, 수영복, 드레스)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
 		ELSEIF CLOTH:옷대상:의상부위_상하의 == 11
-			clothes = _교복
+			clothes = _드레스
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 69
+		;하스미(체육복)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 70
+		;마시로(체육복, 수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 71
+		;이치카(정장)
+		IF CLOTH:옷대상:의상부위_상하의 == 12
+			clothes = _정장
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 72
+		;사쿠라코(응원단(아이돌)+마스크, 레오타드(각오))
+		IF CLOTH:옷대상:의상부위_상하의 == 5
+			IF CLOTH:옷대상:의상부위_악세서리 == 2
+				clothes = _마스크응원단
+			ELSE
+				clothes = _응원단
+			ENDIF
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
+			clothes = _레오타드
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 73
+		;히나타(수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 74
+		;마리(체육복, 응원단(아이돌)+마스크)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 5
+			IF CLOTH:옷대상:의상부위_악세서리 == 2
+				clothes = _마스크응원단
+			ELSE
+				clothes = _응원단
+			ENDIF
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 77
+		;치세(체육복, 수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 78
+		;시즈코(체육복, 수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 79
+		;피나(정장(가이드))
+		IF CLOTH:옷대상:의상부위_상하의 == 12
+			clothes = _정장
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 81
+		;츠바키(정장(가이드))
+		IF CLOTH:옷대상:의상부위_상하의 == 12
+			clothes = _정장
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 82
+		;미모리(수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 83
+		;카에데(정장(가이드))
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 12
+			clothes = _정장
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 85
+		;이즈나(체육복, 수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 86
+		;츠쿠요(체육복)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 87
+		;와카모(수영복+마스크, 전통복(키모노))
+		IF CLOTH:옷대상:의상부위_상하의 == 3
+			IF CLOTH:옷대상:의상부위_악세서리 == 2
+				clothes = _마스크수영복
+			ELSE
+				clothes = _수영복
+			ENDIF
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
+		ELSE
+			IF CLOTH:옷대상:의상부위_악세서리 == 2
+				clothes = _마스크의복
+			ELSE
+				clothes = _의복
+			ENDIF
+		ENDIF
+	CASE 89
+		;사야(스페셜(사복))
+		IF CLOTH:옷대상:의상부위_상하의 == 1
+			clothes = _스페셜
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 93
+		;루미(스페셜(어린이))
+		IF CLOTH:옷대상:의상부위_상하의 == 1
+			clothes = _스페셜
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 96
+		;체리노(학교수영복(온천),전통복(치파오)+가짜수염)
+		IF CLOTH:옷대상:의상부위_악세서리 == 6
+			IF CLOTH:옷대상:의상부위_상하의 == 4
+				clothes = _가짜수염학교수영복
+			ELSEIF CLOTH:옷대상:의상부위_상하의 == 7
+				clothes = _가짜수염전통복
+			ELSE
+				clothes = _가짜수염의복
+			ENDIF
+		ELSE
+			IF CLOTH:옷대상:의상부위_상하의 == 4
+				clothes = _학교수영복
+			ELSEIF CLOTH:옷대상:의상부위_상하의 == 7
+				clothes = _전통복
+			ELSE
+				clothes = _의복
+			ENDIF
+		ENDIF
+	CASE 97
+		;토모에(전통복(치파오))
+		IF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 98
+		;마리나(전통복(치파오))
+		IF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 99
+		;노도카(전통복(온천))
+		IF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 100
+		;시구레(전통복(온천))
+		IF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 102
+		;메루(전통복(온천))
+		IF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 104
+		;칸나(수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 105
+		;키리노(수영복, 응원단(아이돌))
+		IF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 5
+			clothes = _응원단
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 106
+		;후부키(학교수영복(수영복), 응원단(아이돌))
+		IF CLOTH:옷대상:의상부위_상하의 == 4
+			clothes = _학교수영복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 5
+			clothes = _응원단
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 107
+		;미야코(체육복, 수영복+헬멧)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			IF CLOTH:옷대상:의상부위_악세서리 == 3
+				clothes = _헬멧수영복
+			ELSE
+				clothes = _수영복
+			ENDIF
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 108
+		;사키(체육복, 수영복+헬멧)
+		IF CLOTH:옷대상:의상부위_악세서리 == 3
+			IF CLOTH:옷대상:의상부위_상하의 == 2
+				clothes = _헬멧체육복
+			ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+				clothes = _헬멧수영복
+			ELSE
+				clothes = _헬멧의복
+			ENDIF
+		ELSE
+			IF CLOTH:옷대상:의상부위_상하의 == 2
+				clothes = _체육복
+			ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+				clothes = _수영복
+			ELSE
+				clothes = _의복
+			ENDIF
+		ENDIF
+	CASE 109
+		;모에(체육복, 수영복+헬멧)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			IF CLOTH:옷대상:의상부위_악세서리 == 3
+				clothes = _헬멧수영복
+			ELSE
+				clothes = _수영복
+			ENDIF
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 110
+		;미유(체육복, 수영복+헬멧)
+		IF CLOTH:옷대상:의상부위_상하의 == 2
+			clothes = _체육복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 3
+			IF CLOTH:옷대상:의상부위_악세서리 == 3
+				clothes = _헬멧수영복
+			ELSE
+				clothes = _수영복
+			ENDIF
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 112
+		;니코(+무장)
+		IF CLOTH:옷대상:의상부위_악세서리 == 4
+			clothes = _무장의복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 113
+		;사오리(수영복+외투, 드레스+마스크)
+		IF CLOTH:옷대상:의상부위_상하의 == 3
+			IF CLOTH:옷대상:의상부위_악세서리 == 5
+				clothes = _외투수영복
+			ELSE
+				clothes = _수영복
+			ENDIF
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 11
+			IF CLOTH:옷대상:의상부위_악세서리 == 2
+				clothes = _마스크드레스
+			ELSE
+				clothes = _드레스
+			ENDIF
+		ELSE
+			IF CLOTH:옷대상:의상부위_악세서리 == 2
+				clothes = _마스크의복
+			ELSE
+				clothes = _의복
+			ENDIF
+		ENDIF
+	CASE 114
+		;아츠코(수영복, 레오타드)
+		IF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 9
+			IF CLOTH:옷대상:의상부위_악세서리 == 2
+				clothes = _마스크레오타드
+			ELSE
+				clothes = _레오타드
+			ENDIF
+		ELSE
+			IF CLOTH:옷대상:의상부위_악세서리 == 2
+				clothes = _마스크의복
+			ELSE
+				clothes = _의복
+			ENDIF
+		ENDIF
+	CASE 115
+		;미사키(+마스크, 수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSE
+			IF CLOTH:옷대상:의상부위_악세서리 == 2
+				clothes = _마스크의복
+			ELSE
+				clothes = _의복
+			ENDIF
+		ENDIF
+	CASE 116
+		;히요리(수영복)
+		IF CLOTH:옷대상:의상부위_상하의 == 3
+			clothes = _수영복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 120
+		;모모카(샬레)
+		IF CLOTH:옷대상:의상부위_상하의 == 6
+			clothes = _샬레
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 121
+		;아유무(샬레)
+		IF CLOTH:옷대상:의상부위_상하의 == 6
+			clothes = _샬레
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 126
+		;라브(수영복+헬멧)
+		IF CLOTH:옷대상:의상부위_상하의 == 3
+			IF CLOTH:옷대상:의상부위_악세서리 == 3
+				clothes = _헬멧수영복
+			ELSE
+				clothes = _수영복
+			ENDIF
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 127
+		;오토기(+무장)
+		IF CLOTH:옷대상:의상부위_악세서리 == 4
+			clothes = _무장의복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 128
+		;쿠루미(+무장)
+		IF CLOTH:옷대상:의상부위_악세서리 == 4
+			clothes = _무장의복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 132
+		;아키라(+마스크)
+		IF CLOTH:옷대상:의상부위_악세서리 == 2
+			clothes = _마스크의복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 139
+		;유카리(스페셜(중학생), 전통복(무녀))
+		IF CLOTH:옷대상:의상부위_상하의 == 1
+			clothes = _스페셜
+		ELSEIF CLOTH:옷대상:의상부위_상하의 == 7
+			clothes = _전통복
+		ELSE
+			clothes = _의복
+		ENDIF
+	CASE 142
+		;142 쿠로코(마스크의복)
+		IF CLOTH:옷대상:의상부위_악세서리 == 2
+			clothes = _마스크의복
 		ELSE
 			clothes = _의복
 		ENDIF
